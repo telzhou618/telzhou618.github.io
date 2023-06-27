@@ -1,22 +1,3 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
-  <channel>
-    <title>java on BLOG</title>
-    <link>https://telzhou618.github.io/tags/java/</link>
-    <description>Recent content in java on BLOG</description>
-    <generator>Hugo -- gohugo.io</generator>
-    <language>en-us</language>
-    <lastBuildDate>Tue, 27 Jun 2023 14:00:24 +0800</lastBuildDate><atom:link href="https://telzhou618.github.io/tags/java/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>Jvm</title>
-      <link>https://telzhou618.github.io/post/jvm/</link>
-      <pubDate>Tue, 27 Jun 2023 14:00:24 +0800</pubDate>
-      
-      <guid>https://telzhou618.github.io/post/jvm/</guid>
-      <description>jvm JVM（Java虚拟机）是Java平台的核心组件之一。它是一个执行Java字节码的虚拟机，提供了Java应用程序的运行环境。
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>java on BLOG</title><link>https://telzhou618.github.io/tags/java/</link><description>Recent content in java on BLOG</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Tue, 27 Jun 2023 14:00:24 +0800</lastBuildDate><atom:link href="https://telzhou618.github.io/tags/java/index.xml" rel="self" type="application/rss+xml"/><item><title>Jvm</title><link>https://telzhou618.github.io/post/jvm/</link><pubDate>Tue, 27 Jun 2023 14:00:24 +0800</pubDate><guid>https://telzhou618.github.io/post/jvm/</guid><description>jvm JVM（Java虚拟机）是Java平台的核心组件之一。它是一个执行Java字节码的虚拟机，提供了Java应用程序的运行环境。
 JVM的主要功能包括：
-字节码执行：JVM能够解释和执行Java字节码。Java源代码在编译后会生成字节码，这些字节码可以在任何支持JVM的平台上运行，实现了跨平台的特性。 内存管理：JVM负责管理Java应用程序的内存。它使用垃圾回收机制自动管理内存分配和释放，使开发人员无需手动管理内存。 类加载：JVM负责加载Java类和字节码文件。它按需加载类，并在需要时解析和链接类的依赖关系。 安全管理：JVM提供了安全管理机制，用于控制Java应用程序的访问权限和资源使用。它可以防止恶意代码的执行和对系统资源的滥用。 JIT编译器：JVM还包含即时编译器（Just-In-Time Compiler），用于将热点代码（频繁执行的代码）编译成本地机器码，以提高执行速度。 JVM的设计使得Java具有可移植性、安全性和高性能的特点。它为Java开发人员提供了一个统一的平台，使他们能够编写一次代码，并在不同的操作系统和硬件上运行。 </description>
-    </item>
-    
-  </channel>
-</rss>
+字节码执行：JVM能够解释和执行Java字节码。Java源代码在编译后会生成字节码，这些字节码可以在任何支持JVM的平台上运行，实现了跨平台的特性。 内存管理：JVM负责管理Java应用程序的内存。它使用垃圾回收机制自动管理内存分配和释放，使开发人员无需手动管理内存。 类加载：JVM负责加载Java类和字节码文件。它按需加载类，并在需要时解析和链接类的依赖关系。 安全管理：JVM提供了安全管理机制，用于控制Java应用程序的访问权限和资源使用。它可以防止恶意代码的执行和对系统资源的滥用。 JIT编译器：JVM还包含即时编译器（Just-In-Time Compiler），用于将热点代码（频繁执行的代码）编译成本地机器码，以提高执行速度。 JVM的设计使得Java具有可移植性、安全性和高性能的特点。它为Java开发人员提供了一个统一的平台，使他们能够编写一次代码，并在不同的操作系统和硬件上运行。</description></item></channel></rss>
