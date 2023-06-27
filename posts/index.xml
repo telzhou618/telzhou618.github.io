@@ -15,7 +15,7 @@
       <guid>https://telzhou618.github.io/posts/my-first-post/</guid>
       <description>Introduction This is bold text, and this is emphasized text.
 Visit the Hugo website!
-SQL select * from tb_user; --查询用户 </description>
+SQL select * from tb_user; --查询用户 shell cd /var/log/mysql </description>
     </item>
     
   </channel>
