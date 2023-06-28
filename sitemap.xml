@@ -2,37 +2,32 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
+    <loc>https://telzhou618.github.io/</loc>
+    <lastmod>2023-06-28T11:44:07+08:00</lastmod>
+  </url><url>
+    <loc>https://telzhou618.github.io/post/homebrew/</loc>
+    <lastmod>2023-06-28T11:44:07+08:00</lastmod>
+  </url><url>
+    <loc>https://telzhou618.github.io/post/</loc>
+    <lastmod>2023-06-28T11:44:07+08:00</lastmod>
+  </url><url>
+    <loc>https://telzhou618.github.io/post/linux/</loc>
+    <lastmod>2023-06-28T11:43:58+08:00</lastmod>
+  </url><url>
+    <loc>https://telzhou618.github.io/post/modify-env/</loc>
+    <lastmod>2023-06-28T11:40:09+08:00</lastmod>
+  </url><url>
+    <loc>https://telzhou618.github.io/post/shell-change/</loc>
+    <lastmod>2023-06-28T11:37:30+08:00</lastmod>
+  </url><url>
     <loc>https://telzhou618.github.io/about/</loc>
     <lastmod>2023-06-27T15:18:48+08:00</lastmod>
   </url><url>
-    <loc>https://telzhou618.github.io/tags/aws/</loc>
-    <lastmod>2023-06-27T14:00:24+08:00</lastmod>
-  </url><url>
-    <loc>https://telzhou618.github.io/</loc>
-    <lastmod>2023-06-27T14:00:24+08:00</lastmod>
-  </url><url>
-    <loc>https://telzhou618.github.io/categories/</loc>
-    <lastmod>2023-06-27T14:00:24+08:00</lastmod>
-  </url><url>
-    <loc>https://telzhou618.github.io/tags/java/</loc>
-    <lastmod>2023-06-27T14:00:24+08:00</lastmod>
-  </url><url>
-    <loc>https://telzhou618.github.io/categories/java/</loc>
-    <lastmod>2023-06-27T14:00:24+08:00</lastmod>
-  </url><url>
-    <loc>https://telzhou618.github.io/post/jvm/</loc>
-    <lastmod>2023-06-27T14:00:24+08:00</lastmod>
-  </url><url>
-    <loc>https://telzhou618.github.io/post/</loc>
-    <lastmod>2023-06-27T14:00:24+08:00</lastmod>
-  </url><url>
-    <loc>https://telzhou618.github.io/categories/spring/</loc>
-    <lastmod>2023-06-27T14:00:24+08:00</lastmod>
-  </url><url>
-    <loc>https://telzhou618.github.io/tags/</loc>
-    <lastmod>2023-06-27T14:00:24+08:00</lastmod>
-  </url><url>
     <loc>https://telzhou618.github.io/post/my-first-post/</loc>
     <lastmod>2023-06-27T13:20:25+08:00</lastmod>
+  </url><url>
+    <loc>https://telzhou618.github.io/categories/</loc>
+  </url><url>
+    <loc>https://telzhou618.github.io/tags/</loc>
   </url>
 </urlset>
