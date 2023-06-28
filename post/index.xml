@@ -6,7 +6,29 @@
     <description>Recent content in Posts on Home</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 28 Jun 2023 14:44:07 +0800</lastBuildDate><atom:link href="https://telzhou618.github.io/post/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 28 Jun 2023 17:39:37 +0800</lastBuildDate><atom:link href="https://telzhou618.github.io/post/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Otter数据同步2 - 配置同步</title>
+      <link>https://telzhou618.github.io/post/otter2/</link>
+      <pubDate>Wed, 28 Jun 2023 17:39:37 +0800</pubDate>
+      
+      <guid>https://telzhou618.github.io/post/otter2/</guid>
+      <description>待完善&amp;hellip;</description>
+    </item>
+    
+    <item>
+      <title>Otter数据同步1 - 环境搭建</title>
+      <link>https://telzhou618.github.io/post/otter1/</link>
+      <pubDate>Wed, 28 Jun 2023 17:39:33 +0800</pubDate>
+      
+      <guid>https://telzhou618.github.io/post/otter1/</guid>
+      <description>otter 官网介绍 名称：otter [&amp;lsquo;ɒtə(r)] 译意： 水獭，数据搬运工 语言： 纯java开发 定位： 基于数据库增量日志解析，准实时同步到本机房或异地机房的mysql/oracle数据库. 一个分布式数据库同步系统。 更多介绍查看Github：https://github.com/alibaba/otter
+架构及工作原理 Otter服务 包含以下组件或服务或组件：
+Canal, 负责监听Bin-log，类似MYSQL的从库，本质上实现了MYSQL的协议，伪装成从库读取bin-log日志。 Manager 管理Otter的配置的后台, 比如管理数据库表之间的映射关系，会把配置推送到 Node。 Node 实现同步功能的核心服务，同时把同步结果实时反馈给Manager。 Zookeepr, 分布式调度，监控节点状态，这个不用解释，分布式系统都会用到。 otter 需要以上四个服务才能工作，搭建比较麻烦，稍后详细说明。
+本次目标 假设要把tb_user表的数据同步到tb_user2, 用otter该如何实现？tb_user 表结构如下。
+create table tb_user ( id int(11) unsigned auto_increment comment &amp;#39;ID&amp;#39; primary key, username varchar(100) default &amp;#39;&amp;#39; not null comment &amp;#39;用户名&amp;#39;, age int default 0 not null comment &amp;#39;年龄&amp;#39;, email varchar(64) default &amp;#39;&amp;#39; not null comment &amp;#39;邮箱&amp;#39;, created_time datetime default CURRENT_TIMESTAMP not null comment &amp;#39;创建时间&amp;#39;, modified_time datetime default CURRENT_TIMESTAMP not null on update CURRENT_TIMESTAMP comment &amp;#39;更新时间&amp;#39;, is_deleted tinyint(2) default 0 not null comment &amp;#39;是否删除&amp;#39; ) comment &amp;#39;用户信息表&amp;#39; charset = utf8mb4; tb_user2 表结构和tb_user相同。</description>
+    </item>
+    
     <item>
       <title>Redis 从入门到入土</title>
       <link>https://telzhou618.github.io/post/redis/</link>
