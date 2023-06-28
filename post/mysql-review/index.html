@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<html
+  class="not-ready text-sm lg:text-base"
+  style="--bg: #faf6f1"
+  lang="en-us"
+>
+  <head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, shrink-to-fit=no"
+  />
+
+  
+  <title>MySQL 优化及索引设计规范 - Home</title>
+
+  
+  <meta name="theme-color" />
+
+  
+  
+  
+  <meta name="description" content="索引是帮助MySQL高效获取数据的排好序的数据结构。
+几个MySQL命令 mysql.server start // 启动MySQL mysql.server stop // 停止MYSQL ./mysqld_safe --data=../data // 从data备份中恢复数据 ./mysql_secure_installation // 修改管理员密码 索引的优缺点 优点
+索引大大减少了服务器需要扫描的数据量。 索引可以帮助服务器避免排序和临时表。 索引可以将随机IO变为顺序IO。 缺点
+创建索引和维护索引要耗费时间 ，这种时间随着数据量的增加而增加。 索引需要占物理空间 。 索引的分类 主键索引(聚簇索引、聚集索引)、二级索引（非聚集索引）。 普通索引、唯一索引、全文索引。 独立索引、复合索引、前缀索引。 B&#43;Tree 索引、Hash索引。 索引数据结构 常见的索引数据结构有Hash表、二叉树、平衡二叉树、红黑树、B-Tree、B&#43;Tree。 Hash 索引：Hash 表只能做等值匹配，效率很高。但是不支持范围查找和排序，因为取每个数据要做hash运算，只有取出来才能知道他是什么。 二叉树：二叉树极端情况下树会变成一个链表，也不适合做索引。 平衡二叉树：平衡二叉树无法支持很大的数据，数据量大时，树的高度依然很高，效率不高。 红黑树：红黑树通过限制节点的颜色控制数据变化时树的旋转次数，插入、删除数据时性能有一定提升，但树高依然无法控制，无法支持大数据量。 B-tree：非叶子节点存储真实数据，占用空间大，可存储的索引会减少。 B&#43;tree：所有数据存在叶子节点，非叶子节点只存索引，可容纳更多的索引数据。 SQL性能分析工具Explain 工具详解 在一条查询语句前加 explain 可以获得SQL语句的执行计划，可看到使用了什么索引，大致扫描了多少行等信息，从而分析出SQL语句的瓶颈在哪里。 explain select * from employees where name = &lsquo;Lucy&rsquo;; Explain 工具详解 在一条查询语句前加 explain 可以获得SQL语句的执行计划，可看到使用了什么索引，大致扫描了多少行等信息，从而分析出SQL语句的瓶颈在哪里。
+explain select * from employees where name = &#39;Lucy&#39;; 下面介绍下 Explain 中的列。" />
+  <meta name="author" content="telzhou618" />
+  
+
+  
+  
+  
+  
+  
+  
+  <link rel="preload stylesheet" as="style" href="https://telzhou618.github.io/main.min.css" />
+
+  
+
+  
+     
+  <link rel="preload" as="image" href="https://telzhou618.github.io/theme.png" />
+
+  
+  
+  
+  <link rel="preload" as="image" href="https://s.gravatar.com/avatar/9ff9514e4c37a5cb11be475190289857778d613942c4d6364c16e770a4cb66a0?s=80" />
+  
+  
+
+  
+  <link rel="preload" as="image" href="https://telzhou618.github.io/github.svg" />
+  
+  
+
+  
+  
+  <link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/katex@0.16.7/dist/katex.min.css"
+  integrity="sha384-3UiQGuEI4TTMaFmGIZumfRPtfKQ3trwQE2JgosJxCnGmQpL/lJdjpcHkaaFwHlcI"
+  crossorigin="anonymous"
+/>
+<script
+  defer
+  src="https://cdn.jsdelivr.net/npm/katex@0.16.7/dist/katex.min.js"
+  integrity="sha384-G0zcxDFp5LWZtDuRMnBkk3EphCK1lhEf4UEyEM693ka574TZGwo4IWwS6QLzM/2t"
+  crossorigin="anonymous"
+></script>
+<script
+  defer
+  src="https://cdn.jsdelivr.net/npm/katex@0.16.7/dist/contrib/auto-render.min.js"
+  integrity="sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05"
+  crossorigin="anonymous"
+  onload="renderMathInElement(document.body);"
+></script>
+
+  
+  
+  
+
+  
+  <link rel="icon" href="https://telzhou618.github.io/favicon.ico" />
+  <link rel="apple-touch-icon" href="https://telzhou618.github.io/apple-touch-icon.png" />
+
+  
+  <meta name="generator" content="Hugo 0.114.1">
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+  
+  <meta property="og:title" content="MySQL 优化及索引设计规范" />
+<meta property="og:description" content="索引是帮助MySQL高效获取数据的排好序的数据结构。
+几个MySQL命令 mysql.server start // 启动MySQL mysql.server stop // 停止MYSQL ./mysqld_safe --data=../data // 从data备份中恢复数据 ./mysql_secure_installation // 修改管理员密码 索引的优缺点 优点
+索引大大减少了服务器需要扫描的数据量。 索引可以帮助服务器避免排序和临时表。 索引可以将随机IO变为顺序IO。 缺点
+创建索引和维护索引要耗费时间 ，这种时间随着数据量的增加而增加。 索引需要占物理空间 。 索引的分类 主键索引(聚簇索引、聚集索引)、二级索引（非聚集索引）。 普通索引、唯一索引、全文索引。 独立索引、复合索引、前缀索引。 B&#43;Tree 索引、Hash索引。 索引数据结构 常见的索引数据结构有Hash表、二叉树、平衡二叉树、红黑树、B-Tree、B&#43;Tree。 Hash 索引：Hash 表只能做等值匹配，效率很高。但是不支持范围查找和排序，因为取每个数据要做hash运算，只有取出来才能知道他是什么。 二叉树：二叉树极端情况下树会变成一个链表，也不适合做索引。 平衡二叉树：平衡二叉树无法支持很大的数据，数据量大时，树的高度依然很高，效率不高。 红黑树：红黑树通过限制节点的颜色控制数据变化时树的旋转次数，插入、删除数据时性能有一定提升，但树高依然无法控制，无法支持大数据量。 B-tree：非叶子节点存储真实数据，占用空间大，可存储的索引会减少。 B&#43;tree：所有数据存在叶子节点，非叶子节点只存索引，可容纳更多的索引数据。 SQL性能分析工具Explain 工具详解 在一条查询语句前加 explain 可以获得SQL语句的执行计划，可看到使用了什么索引，大致扫描了多少行等信息，从而分析出SQL语句的瓶颈在哪里。 explain select * from employees where name = &lsquo;Lucy&rsquo;; Explain 工具详解 在一条查询语句前加 explain 可以获得SQL语句的执行计划，可看到使用了什么索引，大致扫描了多少行等信息，从而分析出SQL语句的瓶颈在哪里。
+explain select * from employees where name = &#39;Lucy&#39;; 下面介绍下 Explain 中的列。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://telzhou618.github.io/post/mysql-review/" /><meta property="article:section" content="post" />
+<meta property="article:published_time" content="2022-06-28T11:44:07+08:00" />
+<meta property="article:modified_time" content="2022-06-28T11:44:07+08:00" />
+
+  
+  <meta itemprop="name" content="MySQL 优化及索引设计规范">
+<meta itemprop="description" content="索引是帮助MySQL高效获取数据的排好序的数据结构。
+几个MySQL命令 mysql.server start // 启动MySQL mysql.server stop // 停止MYSQL ./mysqld_safe --data=../data // 从data备份中恢复数据 ./mysql_secure_installation // 修改管理员密码 索引的优缺点 优点
+索引大大减少了服务器需要扫描的数据量。 索引可以帮助服务器避免排序和临时表。 索引可以将随机IO变为顺序IO。 缺点
+创建索引和维护索引要耗费时间 ，这种时间随着数据量的增加而增加。 索引需要占物理空间 。 索引的分类 主键索引(聚簇索引、聚集索引)、二级索引（非聚集索引）。 普通索引、唯一索引、全文索引。 独立索引、复合索引、前缀索引。 B&#43;Tree 索引、Hash索引。 索引数据结构 常见的索引数据结构有Hash表、二叉树、平衡二叉树、红黑树、B-Tree、B&#43;Tree。 Hash 索引：Hash 表只能做等值匹配，效率很高。但是不支持范围查找和排序，因为取每个数据要做hash运算，只有取出来才能知道他是什么。 二叉树：二叉树极端情况下树会变成一个链表，也不适合做索引。 平衡二叉树：平衡二叉树无法支持很大的数据，数据量大时，树的高度依然很高，效率不高。 红黑树：红黑树通过限制节点的颜色控制数据变化时树的旋转次数，插入、删除数据时性能有一定提升，但树高依然无法控制，无法支持大数据量。 B-tree：非叶子节点存储真实数据，占用空间大，可存储的索引会减少。 B&#43;tree：所有数据存在叶子节点，非叶子节点只存索引，可容纳更多的索引数据。 SQL性能分析工具Explain 工具详解 在一条查询语句前加 explain 可以获得SQL语句的执行计划，可看到使用了什么索引，大致扫描了多少行等信息，从而分析出SQL语句的瓶颈在哪里。 explain select * from employees where name = &lsquo;Lucy&rsquo;; Explain 工具详解 在一条查询语句前加 explain 可以获得SQL语句的执行计划，可看到使用了什么索引，大致扫描了多少行等信息，从而分析出SQL语句的瓶颈在哪里。
+explain select * from employees where name = &#39;Lucy&#39;; 下面介绍下 Explain 中的列。"><meta itemprop="datePublished" content="2022-06-28T11:44:07+08:00" />
+<meta itemprop="dateModified" content="2022-06-28T11:44:07+08:00" />
+<meta itemprop="wordCount" content="1087">
+<meta itemprop="keywords" content="" />
+  
+  <meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="MySQL 优化及索引设计规范"/>
+<meta name="twitter:description" content="索引是帮助MySQL高效获取数据的排好序的数据结构。
+几个MySQL命令 mysql.server start // 启动MySQL mysql.server stop // 停止MYSQL ./mysqld_safe --data=../data // 从data备份中恢复数据 ./mysql_secure_installation // 修改管理员密码 索引的优缺点 优点
+索引大大减少了服务器需要扫描的数据量。 索引可以帮助服务器避免排序和临时表。 索引可以将随机IO变为顺序IO。 缺点
+创建索引和维护索引要耗费时间 ，这种时间随着数据量的增加而增加。 索引需要占物理空间 。 索引的分类 主键索引(聚簇索引、聚集索引)、二级索引（非聚集索引）。 普通索引、唯一索引、全文索引。 独立索引、复合索引、前缀索引。 B&#43;Tree 索引、Hash索引。 索引数据结构 常见的索引数据结构有Hash表、二叉树、平衡二叉树、红黑树、B-Tree、B&#43;Tree。 Hash 索引：Hash 表只能做等值匹配，效率很高。但是不支持范围查找和排序，因为取每个数据要做hash运算，只有取出来才能知道他是什么。 二叉树：二叉树极端情况下树会变成一个链表，也不适合做索引。 平衡二叉树：平衡二叉树无法支持很大的数据，数据量大时，树的高度依然很高，效率不高。 红黑树：红黑树通过限制节点的颜色控制数据变化时树的旋转次数，插入、删除数据时性能有一定提升，但树高依然无法控制，无法支持大数据量。 B-tree：非叶子节点存储真实数据，占用空间大，可存储的索引会减少。 B&#43;tree：所有数据存在叶子节点，非叶子节点只存索引，可容纳更多的索引数据。 SQL性能分析工具Explain 工具详解 在一条查询语句前加 explain 可以获得SQL语句的执行计划，可看到使用了什么索引，大致扫描了多少行等信息，从而分析出SQL语句的瓶颈在哪里。 explain select * from employees where name = &lsquo;Lucy&rsquo;; Explain 工具详解 在一条查询语句前加 explain 可以获得SQL语句的执行计划，可看到使用了什么索引，大致扫描了多少行等信息，从而分析出SQL语句的瓶颈在哪里。
+explain select * from employees where name = &#39;Lucy&#39;; 下面介绍下 Explain 中的列。"/>
+
+  
+  
+</head>
+
+  <body class="text-black duration-200 ease-out dark:text-white">
+    <header class="mx-auto flex h-[5rem] max-w-3xl px-8 lg:justify-center">
+  <div class="relative z-50 mr-auto flex items-center">
+    <a
+      class="-translate-x-[1px] -translate-y-[1px] text-2xl font-semibold"
+      href="https://telzhou618.github.io/"
+      >Home</a
+    >
+    <div
+      class="btn-dark text-[0] ml-4 h-6 w-6 shrink-0 cursor-pointer [background:url(./theme.svg)_left_center/cover_no-repeat] dark:invert dark:[background-position:right]"
+      role="button"
+      aria-label="Dark"
+    ></div>
+  </div>
+
+  <div
+    class="btn-menu relative z-50 -mr-8 flex h-[5rem] w-[5rem] shrink-0 cursor-pointer flex-col items-center justify-center gap-2.5 lg:hidden"
+    role="button"
+    aria-label="Menu"
+  ></div>
+
+  
+  <script>
+    
+    const htmlClass = document.documentElement.classList;
+    setTimeout(() => {
+      htmlClass.remove('not-ready');
+    }, 10);
+
+    
+    const btnMenu = document.querySelector('.btn-menu');
+    btnMenu.addEventListener('click', () => {
+      htmlClass.toggle('open');
+    });
+
+    
+    const metaTheme = document.querySelector('meta[name="theme-color"]');
+    const lightBg = "#faf6f1".replace(/"/g, '');
+    const setDark = (isDark) => {
+      metaTheme.setAttribute('content', isDark ? '#000' : lightBg);
+      htmlClass[isDark ? 'add' : 'remove']('dark');
+      localStorage.setItem('dark', isDark);
+    };
+
+    
+    const darkScheme = window.matchMedia('(prefers-color-scheme: dark)');
+    if (htmlClass.contains('dark')) {
+      setDark(true);
+    } else {
+      const darkVal = localStorage.getItem('dark');
+      setDark(darkVal ? darkVal === 'true' : darkScheme.matches);
+    }
+
+    
+    darkScheme.addEventListener('change', (event) => {
+      setDark(event.matches);
+    });
+
+    
+    const btnDark = document.querySelector('.btn-dark');
+    btnDark.addEventListener('click', () => {
+      setDark(localStorage.getItem('dark') !== 'true');
+    });
+  </script>
+
+  <div
+    class="nav-wrapper fixed inset-x-0 top-full z-40 flex h-full select-none flex-col justify-center pb-16 duration-200 dark:bg-black lg:static lg:h-auto lg:flex-row lg:!bg-transparent lg:pb-0 lg:transition-none"
+  >
+    
+    
+    <nav class="lg:ml-12 lg:flex lg:flex-row lg:items-center lg:space-x-6">
+      
+      <a
+        class="block text-center text-2xl leading-[5rem] lg:text-base lg:font-normal"
+        href="/post/"
+        >posts</a
+      >
+      
+      <a
+        class="block text-center text-2xl leading-[5rem] lg:text-base lg:font-normal"
+        href="/about/"
+        >about</a
+      >
+      
+    </nav>
+    
+
+    
+    <nav
+      class="mt-12 flex justify-center space-x-10 dark:invert lg:ml-12 lg:mt-0 lg:items-center lg:space-x-6"
+    >
+      
+      <a
+        class="h-8 w-8 text-[0] [background:var(--url)_center_center/cover_no-repeat] lg:h-6 lg:w-6"
+        style="--url: url(./github.svg)"
+        href="https://github.com/telzhou618"
+        target="_blank"
+        rel="me"
+      >
+        github
+      </a>
+      
+    </nav>
+    
+  </div>
+</header>
+
+
+    <main
+      class="prose prose-neutral relative mx-auto min-h-[calc(100%-10rem)] max-w-3xl px-8 pb-24 pt-16 dark:prose-invert"
+    >
+      
+
+<article>
+  <header class="mb-20">
+    <h1 class="!my-0 pb-2.5">MySQL 优化及索引设计规范</h1>
+
+    
+    <div class="text-sm opacity-60">
+      
+      <time>Jun 28, 2022</time>
+      
+      
+      
+      
+    </div>
+    
+  </header>
+
+  <section><p>索引是帮助MySQL高效获取数据的排好序的数据结构。</p>
+<h2 id="几个mysql命令">几个MySQL命令</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>mysql.server start // 启动MySQL
+</span></span><span style="display:flex;"><span>mysql.server stop  // 停止MYSQL
+</span></span><span style="display:flex;"><span>./mysqld_safe --data<span style="color:#f92672">=</span>../data // 从data备份中恢复数据
+</span></span><span style="display:flex;"><span>./mysql_secure_installation // 修改管理员密码
+</span></span></code></pre></div><h2 id="索引的优缺点">索引的优缺点</h2>
+<p>优点</p>
+<ul>
+<li>索引大大减少了服务器需要扫描的数据量。</li>
+<li>索引可以帮助服务器避免排序和临时表。</li>
+<li>索引可以将随机IO变为顺序IO。</li>
+</ul>
+<p>缺点</p>
+<ul>
+<li>创建索引和维护索引要耗费时间 ，这种时间随着数据量的增加而增加。</li>
+<li>索引需要占物理空间 。</li>
+</ul>
+<h2 id="索引的分类">索引的分类</h2>
+<ul>
+<li>主键索引(聚簇索引、聚集索引)、二级索引（非聚集索引）。</li>
+<li>普通索引、唯一索引、全文索引。</li>
+<li>独立索引、复合索引、前缀索引。</li>
+<li>B+Tree 索引、Hash索引。</li>
+</ul>
+<h2 id="索引数据结构">索引数据结构</h2>
+<p>常见的索引数据结构有Hash表、二叉树、平衡二叉树、红黑树、B-Tree、B+Tree。
+<img src="/_static/mysql/m0.png" alt=""></p>
+<ol>
+<li>Hash 索引：Hash 表只能做等值匹配，效率很高。但是不支持范围查找和排序，因为取每个数据要做hash运算，只有取出来才能知道他是什么。</li>
+<li>二叉树：二叉树极端情况下树会变成一个链表，也不适合做索引。</li>
+<li>平衡二叉树：平衡二叉树无法支持很大的数据，数据量大时，树的高度依然很高，效率不高。</li>
+<li>红黑树：红黑树通过限制节点的颜色控制数据变化时树的旋转次数，插入、删除数据时性能有一定提升，但树高依然无法控制，无法支持大数据量。</li>
+<li>B-tree：非叶子节点存储真实数据，占用空间大，可存储的索引会减少。</li>
+<li>B+tree：所有数据存在叶子节点，非叶子节点只存索引，可容纳更多的索引数据。 SQL性能分析工具Explain 工具详解 在一条查询语句前加 explain
+可以获得SQL语句的执行计划，可看到使用了什么索引，大致扫描了多少行等信息，从而分析出SQL语句的瓶颈在哪里。 explain select * from employees where name = &lsquo;Lucy&rsquo;;</li>
+</ol>
+<h2 id="explain-工具详解">Explain 工具详解</h2>
+<p>在一条查询语句前加 explain 可以获得SQL语句的执行计划，可看到使用了什么索引，大致扫描了多少行等信息，从而分析出SQL语句的瓶颈在哪里。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#66d9ef">explain</span> <span style="color:#66d9ef">select</span> <span style="color:#f92672">*</span> <span style="color:#66d9ef">from</span> employees <span style="color:#66d9ef">where</span> name <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;Lucy&#39;</span>;
+</span></span></code></pre></div><p><img src="/_static/mysql/m1.png" alt="">
+下面介绍下 Explain 中的列。</p>
+<ul>
+<li>id</li>
+</ul>
+<p>一条SQL语句在MySQL底层可要分成条语句执行，比如关联查询，ID代表SQL语句执行的优先级，ID越大的SQL先执行，ID一样的从上到下一次执行，ID为NULL最后执行。</p>
+<ul>
+<li>select_type select_type</li>
+</ul>
+<p>代表要执行的SQL语句复杂还是简单，取值有如下几种。 simple : 简单查下，不包括子查询或uniun。 primary：代表复杂查询总最外层的select。 subquery：包含在 select 中的子查询（不在 from
+子句中）。 derived：包含在from语句中的子查询，代表用到临时表。 union：包含union 查询。</p>
+<ul>
+<li>table</li>
+</ul>
+<p>代表正在查询的是哪个表，table 如果是 <!-- raw HTML omitted -->，表示使用的临时表，N 就是依赖查询的ID的值，会先执行id=N 语句。当有union 时，table 列为&lt;union1,2&gt;,1,2 分别代表参与SQL的ID。</p>
+<ul>
+<li>type</li>
+</ul>
+<p>表示关联类型或访问类型, 查找数据的大致范围，性能从最优到最差一次为：system &gt; const &gt; eq_ref &gt; ref &gt; range &gt; index &gt; ALL，一般DBA要求要达到range，最好是ref。
+const或system：primary key 或 unique key 的所有列与常数比较，只匹配一行，速度很快。 eq_ref：primary key 或 unique key 索引的所有部分被连接使用，只返回一行。
+ref：普通索引或唯一索引前缀匹配，可能找到多行。 range：范围查找，如：in、between、&gt; 、&lt;、&gt;= 等。 index：扫描二级索引的全部叶节点，一般为覆盖索引。 ALL：扫描主键索引的叶节点，指全表扫描。</p>
+<ul>
+<li>possible_keys</li>
+</ul>
+<p>代表MySQL可能选择哪些索引来查找。 当possible_keys有值，key 为NULL时，代表数据不多，走索引还要回表，MySQL 认为直接走全表扫描可能会快一点；
+当possible_keys为NULL时，代表没有索引可用，直接全表扫描。</p>
+<ul>
+<li>key</li>
+</ul>
+<p>代表查询实际使用的索引，为NULL表示没有选用索引，如果有可用的索引可以用 force index强制走索引，ignore index忽略索引。 select * from employees force index(
+idx_name_age_position) where name = &lsquo;Lucy&rsquo;;</p>
+<ul>
+<li>key_len</li>
+</ul>
+<p>代表查询使用索引的字节数，通过这个值可以算出具体使用索引中的那一列，比如当索引是联合索引的时候。 key_len计算规则如下： 字符串，char(n)和varchar(n)
+，5.0.3以后版本中，n均代表字符数，而不是字节数，如果是utf-8，一个数字或字母占1个字节，一个汉字占3个字节。 char(n)：如果存汉字长度就是 3n 字节 varchar(n)：如果存汉字则长度是 3n + 2
+字节，加的2字节用来存储字符串长度，因为varchar是变长字符串 数值类型 tinyint：1字节 smallint：2字节 int：4字节 bigint：8字节 时间类型 date：3字节timestamp：4字节
+datetime：8字节 如果字段允许为 NULL，需要1字节记录是否为 NULL 索引最大长度是768字节，当字符串过长时，mysql会做一个类似左前缀索引的处理，将前半部分的字符提取出来做索引。</p>
+<ul>
+<li>ref</li>
+</ul>
+<p>代表key对于的索引中，查找值用到的列或常量，常见的有 const、字段名。</p>
+<ul>
+<li>rows</li>
+</ul>
+<p>代表大概扫描的行数，不是结果集准确的行数。</p>
+<ul>
+<li>Extra</li>
+</ul>
+<p>代表额外的信息,取值如下:</p>
+<pre><code>- Using index：使用覆盖索引。
+- Using where：查询的列没有索引。
+- Using index condition：查询的列表未完全被索引覆盖，要加索引优化。
+- Using temporay：需要临时表处理查询，要优化。 
+- Using filesort：借用外部空间排序，数据少用内存，数据大用磁盘，要加索引优化。
+- Select tables optimized away：使用聚合函数访问索引字段，如：max,min 等。 
+</code></pre>
+<h2 id="索引最佳实战">索引最佳实战</h2>
+<p>实例表</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#66d9ef">CREATE</span> <span style="color:#66d9ef">TABLE</span> <span style="color:#f92672">`</span>employees<span style="color:#f92672">`</span>
+</span></span><span style="display:flex;"><span>(
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">`</span>id<span style="color:#f92672">`</span>        int(<span style="color:#ae81ff">11</span>) <span style="color:#66d9ef">NOT</span> <span style="color:#66d9ef">NULL</span> AUTO_INCREMENT,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">`</span>name<span style="color:#f92672">`</span>      varchar(<span style="color:#ae81ff">24</span>) <span style="color:#66d9ef">NOT</span> <span style="color:#66d9ef">NULL</span> <span style="color:#66d9ef">DEFAULT</span> <span style="color:#e6db74">&#39;&#39;</span> <span style="color:#66d9ef">COMMENT</span> <span style="color:#e6db74">&#39;姓名&#39;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">`</span>age<span style="color:#f92672">`</span>       int(<span style="color:#ae81ff">11</span>) <span style="color:#66d9ef">NOT</span> <span style="color:#66d9ef">NULL</span> <span style="color:#66d9ef">DEFAULT</span> <span style="color:#e6db74">&#39;0&#39;</span> <span style="color:#66d9ef">COMMENT</span> <span style="color:#e6db74">&#39;年龄&#39;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">`</span><span style="color:#66d9ef">position</span><span style="color:#f92672">`</span>  varchar(<span style="color:#ae81ff">20</span>) <span style="color:#66d9ef">NOT</span> <span style="color:#66d9ef">NULL</span> <span style="color:#66d9ef">DEFAULT</span> <span style="color:#e6db74">&#39;&#39;</span> <span style="color:#66d9ef">COMMENT</span> <span style="color:#e6db74">&#39;职位&#39;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">`</span>hire_time<span style="color:#f92672">`</span> <span style="color:#66d9ef">timestamp</span>   <span style="color:#66d9ef">NOT</span> <span style="color:#66d9ef">NULL</span> <span style="color:#66d9ef">DEFAULT</span> <span style="color:#66d9ef">CURRENT_TIMESTAMP</span> <span style="color:#66d9ef">COMMENT</span> <span style="color:#e6db74">&#39;入职时间&#39;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">PRIMARY</span> <span style="color:#66d9ef">KEY</span> (<span style="color:#f92672">`</span>id<span style="color:#f92672">`</span>),
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">KEY</span>         <span style="color:#f92672">`</span>idx_name_age_position<span style="color:#f92672">`</span> (<span style="color:#f92672">`</span>name<span style="color:#f92672">`</span>,<span style="color:#f92672">`</span>age<span style="color:#f92672">`</span>,<span style="color:#f92672">`</span><span style="color:#66d9ef">position</span><span style="color:#f92672">`</span>) <span style="color:#66d9ef">USING</span> BTREE
+</span></span><span style="display:flex;"><span>) ENGINE<span style="color:#f92672">=</span>InnoDB AUTO_INCREMENT<span style="color:#f92672">=</span><span style="color:#ae81ff">4</span> <span style="color:#66d9ef">DEFAULT</span> CHARSET<span style="color:#f92672">=</span>utf8 <span style="color:#66d9ef">COMMENT</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#39;员工记录表&#39;</span>;
+</span></span></code></pre></div><p>常见实例</p>
+<ul>
+<li>不在索引上做任何操作，如：计算、函数、类型转换等，会导致索引失效。</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#66d9ef">EXPLAIN</span> <span style="color:#66d9ef">SELECT</span> <span style="color:#f92672">*</span> <span style="color:#66d9ef">FROM</span> employees <span style="color:#66d9ef">WHERE</span> <span style="color:#66d9ef">left</span> (name, <span style="color:#ae81ff">3</span>) <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;LiLei&#39;</span>;
+</span></span></code></pre></div><ul>
+<li>存储引擎不能使用索引范围条件右边的列。如下只有 nage 和 age 字段参与索引查找。可通过 key_len 长度确定索引真实用到的字段。</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#66d9ef">EXPLAIN</span> <span style="color:#66d9ef">SELECT</span> <span style="color:#f92672">*</span> <span style="color:#66d9ef">FROM</span> employees <span style="color:#66d9ef">WHERE</span> name <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;LiLei&#39;</span> <span style="color:#66d9ef">AND</span> age <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">22</span> <span style="color:#66d9ef">AND</span> <span style="color:#66d9ef">position</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;manager&#39;</span>;
+</span></span></code></pre></div><ul>
+<li>尽量用覆盖索引，减少SLECT * 语句。</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#66d9ef">EXPLAIN</span> <span style="color:#66d9ef">SELECT</span> name, age <span style="color:#66d9ef">FROM</span> employees <span style="color:#66d9ef">WHERE</span> name <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;LiLei&#39;</span> <span style="color:#66d9ef">AND</span> age <span style="color:#f92672">=</span> <span style="color:#ae81ff">23</span> <span style="color:#66d9ef">AND</span> <span style="color:#66d9ef">position</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;manager&#39;</span>;
+</span></span></code></pre></div><ul>
+<li>不等于(!=或者&lt;&gt;)、not in、not exists 都不走索引。</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#66d9ef">EXPLAIN</span> <span style="color:#66d9ef">SELECT</span> <span style="color:#f92672">*</span> <span style="color:#66d9ef">FROM</span> employees <span style="color:#66d9ef">WHERE</span> name <span style="color:#f92672">!=</span> <span style="color:#e6db74">&#39;LiLei&#39;</span>;
+</span></span></code></pre></div><ul>
+<li>&lt;、&gt;、&lt;=、&gt;= 索引优化器会根据检索比例、表大小等因素评估是否走索引。</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#66d9ef">EXPLAIN</span> <span style="color:#66d9ef">SELECT</span> <span style="color:#f92672">*</span> <span style="color:#66d9ef">FROM</span> employees <span style="color:#66d9ef">WHERE</span> name <span style="color:#f92672">&gt;=</span> <span style="color:#e6db74">&#39;LiLei&#39;</span>;
+</span></span></code></pre></div><ul>
+<li>is null、is not null 一般也不走索引。</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#66d9ef">EXPLAIN</span> <span style="color:#66d9ef">SELECT</span> <span style="color:#f92672">*</span> <span style="color:#66d9ef">FROM</span> employees <span style="color:#66d9ef">WHERE</span> name <span style="color:#66d9ef">is</span> <span style="color:#66d9ef">null</span>
+</span></span></code></pre></div><ul>
+<li>like 查询通配符开都不走索引。</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#66d9ef">EXPLAIN</span> <span style="color:#66d9ef">SELECT</span> <span style="color:#f92672">*</span> <span style="color:#66d9ef">FROM</span> employees <span style="color:#66d9ef">WHERE</span> name <span style="color:#66d9ef">like</span> <span style="color:#e6db74">&#39;%Lei&#39;</span>
+</span></span></code></pre></div><ul>
+<li>字符串不加单引号会使索引失效。</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#66d9ef">EXPLAIN</span> <span style="color:#66d9ef">SELECT</span> <span style="color:#f92672">*</span> <span style="color:#66d9ef">FROM</span> employees <span style="color:#66d9ef">WHERE</span> name <span style="color:#f92672">=</span> <span style="color:#ae81ff">1000</span>;
+</span></span></code></pre></div><ul>
+<li>少用 or 或 in, 查询时不一定走索引，优化器评估确定是否走索引。</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#66d9ef">EXPLAIN</span> <span style="color:#66d9ef">SELECT</span> <span style="color:#f92672">*</span> <span style="color:#66d9ef">FROM</span> employees <span style="color:#66d9ef">WHERE</span> name <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;LiLei&#39;</span> <span style="color:#66d9ef">or</span> name <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;HanMeimei&#39;</span>;
+</span></span></code></pre></div><ul>
+<li>强制走索引</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#66d9ef">EXPLAIN</span> <span style="color:#66d9ef">SELECT</span> <span style="color:#f92672">*</span> <span style="color:#66d9ef">FROM</span> employees <span style="color:#66d9ef">force</span> <span style="color:#66d9ef">index</span>(idx_name_age_position)
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">WHERE</span> name <span style="color:#f92672">&gt;</span> <span style="color:#e6db74">&#39;LiLei&#39;</span> <span style="color:#66d9ef">AND</span> age <span style="color:#f92672">=</span> <span style="color:#ae81ff">22</span> A ND <span style="color:#66d9ef">position</span> <span style="color:#f92672">=</span><span style="color:#e6db74">&#39;manager&#39;</span>;
+</span></span></code></pre></div><p>虽然使用了强制走索引让联合索引第一个字段范围查找也走索引，扫描的行rows看上去也少了点，但是最终查找效率不一定比全表 扫描高，因为回表效率不高。</p>
+<ul>
+<li>索引下推</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#66d9ef">EXPLAIN</span> <span style="color:#66d9ef">SELECT</span> <span style="color:#f92672">*</span> <span style="color:#66d9ef">FROM</span> employees <span style="color:#66d9ef">WHERE</span> name <span style="color:#66d9ef">like</span> <span style="color:#e6db74">&#39;LiLei%&#39;</span> <span style="color:#66d9ef">AND</span> age <span style="color:#f92672">=</span> <span style="color:#ae81ff">22</span> <span style="color:#66d9ef">AND</span> <span style="color:#66d9ef">position</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;manager&#39;</span>;
+</span></span></code></pre></div><p>在MySQL5.6之前的版本，这个查询只能在联合索引里匹配到名字是&rsquo;LiLei&rsquo;开头的索引，然后拿这些索引对应的主键逐个回表，到主键索引上找出相应的记录，再比对age和position这两个字段的值是否符合。</p>
+<p>MySQL 5.6引入了索引下推优化，可以在索引遍历过程中，对索引中包含的所有字段先做判断，过滤掉不符合条件的记录之后再回表，可以有效的减少回表次数。使用了索引下推优化后，上面那个查询在联合索引里匹配到名字是&rsquo;LiLei'
+开头的索引之后，同时还会在索引里过滤age和position这两个字段，拿着过滤完剩下的索引对应的主键id再回表查整行数据。</p>
+<p>索引下推会减少回表次数，对于innodb引擎的表索引下推只能用于二级索引，innodb的主键索引（聚簇索引）树叶子节点上保存的是全行数据，所以这个时候索引下推并不会起到减少查询全行数据的效果。</p>
+<p><!-- raw HTML omitted -->为什么范围查找Mysql没有用索引下推优化？<!-- raw HTML omitted --></p>
+<p>估计应该是Mysql认为范围查找过滤的结果集过大，likeKK%在绝大多数情况来看，过滤后的结果集比较小，所以这里Mysql选择给likeKK%用了索引下推优化，当然这也不是绝对的，有时like
+KK% 也不一定就会走索引下推。</p>
+<h2 id="一条sql语句是如何执行的">一条SQL语句是如何执行的</h2>
+<p>大体来说，MySQL 可以分为 Server 层和存储引擎层两部分。
+<img src="/_static/mysql/m2.png" alt=""></p>
+<ul>
+<li>Server层</li>
+</ul>
+<p>主要包括连接器、查询缓存、分析器、优化器、执行器等，涵盖 MySQL 的大多数核心服务功能，以及所有的内置函数（如日期、时间、数学和加密函数等），所有跨存储引擎的功能都在这一层实现，比如存储过程、触发器、视图等。</p>
+<ul>
+<li>Store层存</li>
+</ul>
+<p>储引擎层负责数据的存储和提取。其架构模式是插件式的，支持InnoDB、MyISAM、Memory等多个存储引擎。现在最常用的存储引擎是InnoDB，它从MySQL 5.5.5
+版本开始成为了默认存储引擎。也就是说如果我们在createtable时不指定表的存储引擎类型,默认会给你设置存储引擎为InnoDB。</p>
+<ul>
+<li>连接器</li>
+</ul>
+<p>负责与各种客户端建立连接、获取权限、维持和管理连接。
+连接过程可分为两步：建立连接，然后要求输入用户名密码认证身份，认证成功后会获取用户所有权限放在用户的Session中。（如果此时修改了系统表user中的权限，也不影响已经建立了的连接，除非断开重连才会生效）。</p>
+<p>查看已连接的用户：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#66d9ef">show</span> processlist; <span style="color:#75715e">-- Commend为Sleep为空闲连接。
+</span></span></span></code></pre></div><p>查看连接默认时长：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#66d9ef">show</span> <span style="color:#66d9ef">global</span> variables <span style="color:#66d9ef">like</span> <span style="color:#e6db74">&#34;wait_timeout&#34;</span>;  <span style="color:#75715e">-- 默认值8小时。
+</span></span></span></code></pre></div><p>修改连接默认时长：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#66d9ef">global</span> wait_timeout<span style="color:#f92672">=</span><span style="color:#ae81ff">28800</span>;  <span style="color:#75715e">-- 设置全局服务器关闭非交互连接之前等待活动的秒数
+</span></span></span></code></pre></div><ul>
+<li>查询缓存</li>
+</ul>
+<p>MySQL收到查询语句时，首先会到查询缓存查询，查不到再去查库，缓存的Key为SQL语句，Value就是查询结果。 只要对一个表更新，这个表上的所有查询缓存就会被清空。一般可以用在静态表中，对于频繁更新的表意义不大。</p>
+<p>开启查询缓存：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>修改my.cnf query_cache_type=2  // 0代表关闭查询缓存OFF，1代表开启ON，2（DEMAND按需，默认都不走缓存）
+</span></span></code></pre></div><p>指定走查询缓存：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#66d9ef">select</span> SQL_CACHE <span style="color:#f92672">*</span> <span style="color:#66d9ef">from</span> test <span style="color:#66d9ef">where</span> ID <span style="color:#f92672">=</span> <span style="color:#ae81ff">5</span>; <span style="color:#75715e">-- 用 SQL_CACHE 显示指定走缓存。
+</span></span></span></code></pre></div><p>查看缓存是否开启：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#66d9ef">show</span> <span style="color:#66d9ef">global</span> variables <span style="color:#66d9ef">like</span> <span style="color:#e6db74">&#34;%query_cache_type%&#34;</span>;
+</span></span></code></pre></div><p>控缓存命中率：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#66d9ef">show</span> status <span style="color:#66d9ef">like</span><span style="color:#e6db74">&#39;%Qcache%&#39;</span>;
+</span></span></code></pre></div><p>mysql8.0已经移除了查询缓存功能。</p>
+<ul>
+<li>分析器</li>
+</ul>
+<p>首先此法分析器会分析每个词代表什么，然后会做语法分析，如果你的语句不对，就会收到“You have an error in your SQL syntax”的错误提醒，经过此法分析器后生成一颗语法树。</p>
+<ul>
+<li>优化器</li>
+</ul>
+<p>优化SQL语句，选择走哪一个索引，或是全表扫码。</p>
+<ul>
+<li>执行器</li>
+</ul>
+<p>先做一次权限校验，再调用InnoDB的接口执行查询，获取结果；</p>
+<p>Bin-log 日志 记录CUD执行的日志，用于恢复数据。</p>
+<h2 id="mysql是如何选择索引的-trace-工具">MySQL是如何选择索引的 (Trace 工具)</h2>
+<p>Trace 工具可以清楚的看到一条SQL的详细执行步骤，开启 Trace 工具对MySQL性能有一定的影响，一般只有临时分析问题时开启，用完关闭。</p>
+<p>开启</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span>mysql
+</span></span><span style="display:flex;"><span><span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">set</span> <span style="color:#66d9ef">session</span> optimizer_trace<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;enabled=on&#34;</span>,end_markers_in_json<span style="color:#f92672">=</span><span style="color:#66d9ef">on</span>; <span style="color:#75715e">-- 开启trace
+</span></span></span></code></pre></div><p>实例</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#66d9ef">SELECT</span> <span style="color:#f92672">*</span> <span style="color:#66d9ef">FROM</span> employees <span style="color:#66d9ef">where</span> name <span style="color:#f92672">&gt;</span> <span style="color:#e6db74">&#39;a&#39;</span> <span style="color:#66d9ef">order</span> <span style="color:#66d9ef">by</span> <span style="color:#66d9ef">position</span>;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">SELECT</span> <span style="color:#f92672">*</span> <span style="color:#66d9ef">FROM</span> information_schema.OPTIMIZER_TRACE;
+</span></span></code></pre></div><p>先执行一条查查语句，紧接着执行上面第二条语句，就能获得SQL执行的 Trace 计划，如下为关键信息说明。 Trace
+结果说明文档参考：http://note.youdao.com/noteshare?id=d2e8a0ae8c9dc2a45c799b771a5899f6
+结论：全表扫描的成本低于索引扫描，所以mysql最终选择全表扫描。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span>mysql
+</span></span><span style="display:flex;"><span><span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">set</span> <span style="color:#66d9ef">session</span> optimizer_trace<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;enabled=off&#34;</span>; <span style="color:#75715e">--关闭trace
+</span></span></span></code></pre></div><h2 id="mysql-深入优化之-order-by-与-group-by-优化">MySQL 深入优化之 Order by 与 Group By 优化</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#66d9ef">explain</span> <span style="color:#66d9ef">select</span> <span style="color:#f92672">*</span> <span style="color:#66d9ef">from</span> employees <span style="color:#66d9ef">where</span> name <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;LiLei&#39;</span> <span style="color:#66d9ef">order</span> <span style="color:#66d9ef">by</span> age;
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>[
+</span></span><span style="display:flex;"><span>  {
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;id&#34;</span>: <span style="color:#ae81ff">1</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;select_type&#34;</span>: <span style="color:#e6db74">&#34;SIMPLE&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;table&#34;</span>: <span style="color:#e6db74">&#34;employees&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;type&#34;</span>: <span style="color:#e6db74">&#34;ref&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;possible_keys&#34;</span>: <span style="color:#e6db74">&#34;idx_name_age_position&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;key&#34;</span>: <span style="color:#e6db74">&#34;idx_name_age_position&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;key_len&#34;</span>: <span style="color:#e6db74">&#34;74&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;ref&#34;</span>: <span style="color:#e6db74">&#34;const&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;rows&#34;</span>: <span style="color:#ae81ff">1</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;Extra&#34;</span>: <span style="color:#e6db74">&#34;Using index condition; Using where&#34;</span>
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>]
+</span></span></code></pre></div><p>Extra 中没有 Using fileSort, 使用name索引字段，紧跟着age排序。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#66d9ef">explain</span> <span style="color:#66d9ef">select</span> <span style="color:#f92672">*</span> <span style="color:#66d9ef">from</span> employees <span style="color:#66d9ef">where</span> name <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;LiLei&#39;</span> <span style="color:#66d9ef">order</span> <span style="color:#66d9ef">by</span> <span style="color:#66d9ef">position</span>;
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>[
+</span></span><span style="display:flex;"><span>  {
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;id&#34;</span>: <span style="color:#ae81ff">1</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;select_type&#34;</span>: <span style="color:#e6db74">&#34;SIMPLE&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;table&#34;</span>: <span style="color:#e6db74">&#34;employees&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;type&#34;</span>: <span style="color:#e6db74">&#34;ref&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;possible_keys&#34;</span>: <span style="color:#e6db74">&#34;idx_name_age_position&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;key&#34;</span>: <span style="color:#e6db74">&#34;idx_name_age_position&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;key_len&#34;</span>: <span style="color:#e6db74">&#34;74&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;ref&#34;</span>: <span style="color:#e6db74">&#34;const&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;rows&#34;</span>: <span style="color:#ae81ff">1</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;Extra&#34;</span>: <span style="color:#e6db74">&#34;Using index condition; Using where; Using filesort&#34;</span>
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>]
+</span></span></code></pre></div><p>Extra 中出现 Using fileSort, 使用name索引字段，position排序，中间断了。</p>
+<p>1、MySQL支持两种方式的排序filesort和index，Using index是指MySQL扫描索引本身完成排序。index效率高，filesort效率低。</p>
+<p>2、order by满足两种情况会使用Using index。</p>
+<ol>
+<li>order by语句使用索引最左前列。</li>
+<li>使用where子句与order by子句条件列组合满足索引最左前列。</li>
+</ol>
+<p>3、尽量在索引列上完成排序，遵循索引建立（索引创建的顺序）时的最左前缀法则。</p>
+<p>4、如果order by的条件不在索引列上，就会产生Using filesort。</p>
+<p>5、能用覆盖索引尽量用覆盖索引</p>
+<p>6、group by与order by很类似，其实质是先排序后分组，遵照索引创建顺序的最左前缀法则。对于group by的优化如果不需要排序的可以加上order by
+null禁止排序。注意，where高于having，能写在where中 的限定条件就不要去having限定了。</p>
+<p>Using filesort文件排序原理</p>
+<ul>
+<li>
+<p>单路排序： 是一次性取出满足条件行的所有字段，然后在sort buffer中进行排序；用trace工具可以看到sort_mode信息里显示&lt; sort_key,
+additional_fields &gt;或者&lt;sort_key,packed_additional_fields &gt;</p>
+</li>
+<li>
+<p>双路排序（又叫回表排序模式）： 是首先根据相应的条件取出相应的排序字段和可以直接定位行数据的行 ID，然后在 sort buffer 中进行排序，排序完后需要再次取回其它需要的字段；用trace工具可以看到sort_mode信息里显示&lt;
+sort_key, rowid &gt;</p>
+</li>
+</ul>
+<p>MySQL 通过比较系统变量 max_length_for_sort_data(默认1024字节) 的大小和需要查询的字段总大小来判断使用哪种排序模式。</p>
+<pre><code>1、如果 字段的总长度小于max_length_for_sort_data ，那么使用 单路排序模式； 
+2、如果 字段的总长度大于max_length_for_sort_data ，那么使用 双路排序模∙式。
+</code></pre>
+<h2 id="mysql-深入优化之分页优化">MySQL 深入优化之分页优化</h2>
+<p>创建实例表：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span>employees
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">CREATE</span> <span style="color:#66d9ef">TABLE</span> <span style="color:#f92672">`</span>employees<span style="color:#f92672">`</span>
+</span></span><span style="display:flex;"><span>(
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">`</span>id<span style="color:#f92672">`</span>        int(<span style="color:#ae81ff">11</span>) <span style="color:#66d9ef">NOT</span> <span style="color:#66d9ef">NULL</span> AUTO_INCREMENT,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">`</span>name<span style="color:#f92672">`</span>      varchar(<span style="color:#ae81ff">24</span>) <span style="color:#66d9ef">NOT</span> <span style="color:#66d9ef">NULL</span> <span style="color:#66d9ef">DEFAULT</span> <span style="color:#e6db74">&#39;&#39;</span> <span style="color:#66d9ef">COMMENT</span> <span style="color:#e6db74">&#39;姓名&#39;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">`</span>age<span style="color:#f92672">`</span>       int(<span style="color:#ae81ff">11</span>) <span style="color:#66d9ef">NOT</span> <span style="color:#66d9ef">NULL</span> <span style="color:#66d9ef">DEFAULT</span> <span style="color:#e6db74">&#39;0&#39;</span> <span style="color:#66d9ef">COMMENT</span> <span style="color:#e6db74">&#39;年龄&#39;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">`</span><span style="color:#66d9ef">position</span><span style="color:#f92672">`</span>  varchar(<span style="color:#ae81ff">20</span>) <span style="color:#66d9ef">NOT</span> <span style="color:#66d9ef">NULL</span> <span style="color:#66d9ef">DEFAULT</span> <span style="color:#e6db74">&#39;&#39;</span> <span style="color:#66d9ef">COMMENT</span> <span style="color:#e6db74">&#39;职位&#39;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">`</span>hire_time<span style="color:#f92672">`</span> <span style="color:#66d9ef">timestamp</span>   <span style="color:#66d9ef">NOT</span> <span style="color:#66d9ef">NULL</span> <span style="color:#66d9ef">DEFAULT</span> <span style="color:#66d9ef">CURRENT_TIMESTAMP</span> <span style="color:#66d9ef">COMMENT</span> <span style="color:#e6db74">&#39;入职时间&#39;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">PRIMARY</span> <span style="color:#66d9ef">KEY</span> (<span style="color:#f92672">`</span>id<span style="color:#f92672">`</span>),
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">KEY</span>         <span style="color:#f92672">`</span>idx_name_age_position<span style="color:#f92672">`</span> (<span style="color:#f92672">`</span>name<span style="color:#f92672">`</span>,<span style="color:#f92672">`</span>age<span style="color:#f92672">`</span>,<span style="color:#f92672">`</span><span style="color:#66d9ef">position</span><span style="color:#f92672">`</span>) <span style="color:#66d9ef">USING</span> BTREE
+</span></span><span style="display:flex;"><span>) ENGINE<span style="color:#f92672">=</span>InnoDB AUTO_INCREMENT<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span> <span style="color:#66d9ef">DEFAULT</span> CHARSET<span style="color:#f92672">=</span>utf8 <span style="color:#66d9ef">COMMENT</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#39;员工记录表&#39;</span>;
+</span></span></code></pre></div><ul>
+<li>场景一：主键自增且连续的分页</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#66d9ef">EXPLAIN</span> <span style="color:#66d9ef">select</span> <span style="color:#f92672">*</span> <span style="color:#66d9ef">from</span> employees <span style="color:#66d9ef">limit</span> <span style="color:#ae81ff">10000</span>,<span style="color:#ae81ff">10</span>;
+</span></span></code></pre></div><p>一般会这么写SQL，Mysql 会先取10010条数据，然后抛弃前面10000条返回剩下的10条，当表数据量越来越大是查询会越来越慢。 优化后： mysql&gt; EXPLAIN select * from employees where
+id &gt; 90000 limit 5;</p>
+<p>此种方式会走索引，且扫描行数大大减少，执行效率很高，但要求苛刻，必须有自增ID且连续，不能断（删数据），一般很难满足，不常用。</p>
+<ul>
+<li>场景二：非主键字段排序的分页</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#66d9ef">EXPLAIN</span> <span style="color:#66d9ef">select</span> <span style="color:#f92672">*</span> <span style="color:#66d9ef">from</span> employees <span style="color:#66d9ef">ORDER</span> <span style="color:#66d9ef">BY</span> name <span style="color:#66d9ef">limit</span> <span style="color:#ae81ff">90000</span>,<span style="color:#ae81ff">5</span>;
+</span></span></code></pre></div><p>即使 name 字段有索引，MySQL 也不会走索引，原因：走 idx_name_age_position 索引，还要回表，要扫描多棵树，MySQL 认为性能不高，还不如全部扫描呢，所以还用了 filesort 排序。</p>
+<p>优化后:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#66d9ef">EXPLAIN</span> <span style="color:#66d9ef">select</span> <span style="color:#f92672">*</span><span style="color:#66d9ef">from</span> employees e
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">inner</span> <span style="color:#66d9ef">join</span> (<span style="color:#66d9ef">select</span> id <span style="color:#66d9ef">from</span> employees <span style="color:#66d9ef">order</span> <span style="color:#66d9ef">by</span> name <span style="color:#66d9ef">limit</span> <span style="color:#ae81ff">90000</span>,<span style="color:#ae81ff">5</span>) ed <span style="color:#66d9ef">on</span> e.id <span style="color:#f92672">=</span> ed.id;
+</span></span></code></pre></div><p>按照ID优先级 Mysql 的执行顺序为 2:1:1（ID越大先执行，ID一样从上到下执行）, 先走idx_name_age_position
+覆盖索引，找到所有满足条件的记录ID列表，再拿这个结果去聚簇索引扫描。这里用到了临时表 <!-- raw HTML omitted -->,type 虽然为ALL，表示全表扫描，但这个临时表也只有5条记录，所以很快。
+优化关键：想办法让条件查询、排序返回的值尽量最少，尽量走索引，再取那这个结果到主键索引中查。</p>
+<h2 id="mysql深入优化之-关联查询-join-优化">MySQL深入优化之 关联查询 Join 优化</h2>
+<p>创建实例表 t1,t2</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#66d9ef">CREATE</span> <span style="color:#66d9ef">TABLE</span> <span style="color:#f92672">`</span>t1<span style="color:#f92672">`</span>
+</span></span><span style="display:flex;"><span>(
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">`</span>id<span style="color:#f92672">`</span> int(<span style="color:#ae81ff">11</span>) <span style="color:#66d9ef">NOT</span> <span style="color:#66d9ef">NULL</span> AUTO_INCREMENT,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">`</span>a<span style="color:#f92672">`</span>  int(<span style="color:#ae81ff">11</span>) <span style="color:#66d9ef">DEFAULT</span> <span style="color:#66d9ef">NULL</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">`</span>b<span style="color:#f92672">`</span>  int(<span style="color:#ae81ff">11</span>) <span style="color:#66d9ef">DEFAULT</span> <span style="color:#66d9ef">NULL</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">PRIMARY</span> <span style="color:#66d9ef">KEY</span> (<span style="color:#f92672">`</span>id<span style="color:#f92672">`</span>),
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">KEY</span>  <span style="color:#f92672">`</span>idx_a<span style="color:#f92672">`</span> (<span style="color:#f92672">`</span>a<span style="color:#f92672">`</span>)
+</span></span><span style="display:flex;"><span>) ENGINE<span style="color:#f92672">=</span>InnoDB <span style="color:#66d9ef">DEFAULT</span> CHARSET<span style="color:#f92672">=</span>utf8;
+</span></span></code></pre></div><p>创建表t2，和t1一样</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#66d9ef">create</span> <span style="color:#66d9ef">table</span> t2 <span style="color:#66d9ef">like</span> t1;
+</span></span></code></pre></div><p>然后：t1 表插入1w条记录，t2表插入100条记录； t1 大表，t2小表；同时两个表 a 字段都都有索引。</p>
+<p><strong>Join 查询有两种算法 Nested-Loop Join 算法（嵌套循环连接） Block Nested-Loop Join 算法（基于块的嵌套循环连接）</strong></p>
+<ul>
+<li>第一种：嵌套循环连接 Nested-Loop Join(NLJ) 算法</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#66d9ef">EXPLAIN</span> <span style="color:#66d9ef">select</span> <span style="color:#f92672">*</span> <span style="color:#66d9ef">from</span> t1 <span style="color:#66d9ef">inner</span> <span style="color:#66d9ef">join</span> t2 <span style="color:#66d9ef">on</span> t1.a <span style="color:#f92672">=</span> t2.a;
+</span></span></code></pre></div><p><img src="/_static/mysql/m5.png" alt=""></p>
+<p>执行计划原理图
+<img src="/_static/mysql/m3.png" alt=""></p>
+<p>执行步骤</p>
+<ul>
+<li>从t2表中读取一条记录。</li>
+<li>从第一步的数据中取出关联字段a，到t1中查找。</li>
+<li>取出t1中满足的行和t2中获取的结果集合并。</li>
+<li>重复以上3步，直达t2中的记录取完，终止返回。</li>
+</ul>
+<p>执行过程分析</p>
+<p>t1 表全表扫描，扫描100行，t2表根据索引a扫描二级索引，一次可以扫描t1的一整行完整数据，扫描了100行，因此总共扫描了200行。这种方式称为NLJ算法扫描，特征就是 Extra 中没有 Using join
+buffer 内容。 那么如果 a 字段没有索引呢，那就走下面的 BNL算法。</p>
+<ul>
+<li>第二种：基于块的嵌套循环连接 Block Nested-Loop Join(BNL)算法</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#66d9ef">EXPLAIN</span> <span style="color:#66d9ef">select</span> <span style="color:#f92672">*</span> <span style="color:#66d9ef">from</span> t1 <span style="color:#66d9ef">inner</span> <span style="color:#66d9ef">join</span> t2 <span style="color:#66d9ef">on</span> t1.b <span style="color:#f92672">=</span> t2.b;
+</span></span></code></pre></div><p><img src="/_static/mysql/m5.png" alt="">
+明显 Extra 中有Using join buffer。。。说明就是BNL算法，因为关联字段 b 上没索引。</p>
+<p>BNL 执行计划
+<img src="/_static/mysql/m4.png" alt=""></p>
+<p>执行步骤</p>
+<ul>
+<li>把 t2 的所有数据放入到 join_buffer 中。</li>
+<li>把表 t1 中每一行取出来，跟 join_buffer 中的数据做对比。</li>
+<li>返回满足 join 条件的数据。</li>
+</ul>
+<p>执行过程分析</p>
+<p>join_buffer 的大小是由参数 join_buffer_size 设定的，默认值是 256k。如果放不下表 t2 的所有数据话，策略很简单，就是分段放。整个过程对表 t1 和 t2
+都做了一次全表扫描，因此扫描的总行数为10000(表 t1 的数据总量) + 100(表 t2 的数据总量) =10100。并且 join_buffer 里的数据是无序的，因此对表 t1 中的每一行，都要做 100
+次判断，所以内存中的判断次数是100 * 10000= 100 万次。</p>
+<p>关联SQL的优化原则</p>
+<p>关联字段加索引，让mysql做join操作时尽量选择NLJ算法。 小表驱动大表，写多表连接sql时如果明确知道哪张表是小表可以用straight_join写法固定连接驱动方式，省去mysql优化器自己判断的时间。</p>
+<h2 id="mysql-深入优化之-count-优化">MySQL 深入优化之 COUNT(*) 优化</h2>
+<p>实例SQL</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#66d9ef">EXPLAIN</span> <span style="color:#66d9ef">select</span> <span style="color:#66d9ef">count</span>(<span style="color:#ae81ff">1</span>) <span style="color:#66d9ef">from</span> employees;
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#66d9ef">EXPLAIN</span> <span style="color:#66d9ef">select</span> <span style="color:#66d9ef">count</span>(id) <span style="color:#66d9ef">from</span> employees;
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#66d9ef">EXPLAIN</span> <span style="color:#66d9ef">select</span> <span style="color:#66d9ef">count</span>(name) <span style="color:#66d9ef">from</span> employees;
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#66d9ef">EXPLAIN</span> <span style="color:#66d9ef">select</span> <span style="color:#66d9ef">count</span>(<span style="color:#f92672">*</span>) <span style="color:#66d9ef">from</span> employees;
+</span></span></code></pre></div><p>执行效率结论</p>
+<ul>
+<li>字段有索引：count(*)≈count(1)&gt;count(字段)&gt;count(主键 id)</li>
+<li>字段无索引：count(*)≈count(1)&gt;count(主键 id)&gt;count(字段)</li>
+</ul>
+<p>执行计划分析</p>
+<ul>
+<li>count(字段)：如果字段有索引，走二级索引，每扫描一行取出字段的值，统计字段的个数,NULL值不算。</li>
+<li>count(1)：如果有二级索引，扫描二级索引，累加字段用常量1代替，不需要取出字段的值。</li>
+<li>count(*)：如果有二级索引，走二级索引，不需要取出字段的值，扫描到行就会统计加1。</li>
+<li>count(id)：如果有二级索引，走二级索引,没有才会走主键索引，因为二级索引数据少，扫描快一些。</li>
+</ul>
+<p>优化方案</p>
+<p>单独维护总行数。myisam 存储引擎的表，行数会维护在磁盘上，count时会直接返回，不再扫描。 show table status like &lsquo;表名&rsquo;， 可得到表的预估行数。 将行数维护在 redis 里，但一致性很难保证。
+将行数维护在本地库，插入和删除和更新行数放在一个事务里，可保证一致性。 注意：count(字段)不会计算null值的行。</p>
+<h2 id="mysql-深入优化之-如何选择数据类型">MySQL 深入优化之 如何选择数据类型</h2>
+<ul>
+<li>选择数据类型的原则
+<ul>
+<li>确定合适的大类型：数字、字符串、时间、二进制；</li>
+<li>确定具体的类型：有无符号、取值范围、变长定长等。</li>
+</ul>
+</li>
+<li>注意事项
+<ul>
+<li>int(11) 和 int(5)：数字代表显示宽度，没有实际意义。如果类型后面增加 ZEROFILL，则宽度不足时前面会用0补齐。</li>
+<li>char(5)：存储固定长度字符串，5代表字符长度，如果不够5个前面会用空格代替，占用存储空间是固定的。char最多255字节。</li>
+<li>varchar(20)：20代表最多存储字符的长度。varchar 最长 65535 个字节。</li>
+</ul>
+</li>
+</ul>
+<h2 id="索引优化建议及设计原则">索引优化建议及设计原则</h2>
+</section>
+
+  
+  
+
+  
+  
+  
+  <nav class="mt-24 flex rounded-lg bg-black/[3%] text-lg dark:bg-white/[8%]">
+    
+    <a
+      class="flex w-1/2 items-center rounded-l-md p-6 pr-3 no-underline hover:bg-black/[2%] dark:hover:bg-white/[3%]"
+      href="https://telzhou618.github.io/post/mybatis/"
+      ><span class="mr-1.5">←</span><span>MyBatis 源码解析</span></a
+    >
+    
+    
+    <a
+      class="ml-auto flex w-1/2 items-center justify-end rounded-r-md p-6 pl-3 no-underline hover:bg-black/[2%] dark:hover:bg-white/[3%]"
+      href="https://telzhou618.github.io/post/netty/"
+      ><span>Netty 和 NIO 全面掌握</span><span class="ml-1.5">→</span></a
+    >
+    
+  </nav>
+  
+
+  
+  
+
+  
+  
+  <div class="mt-24" id="graphcomment"></div>
+  <script type="text/javascript">
+    var __semio__params = {
+      graphcommentId: 'a42bc435-1a67-9bc8-2cde-72ec7ba0d2fb',
+      behaviour: {
+        
+      },
+      
+    };
+
+    function __semio__onload() {
+      __semio__gc_graphlogin(__semio__params);
+    }
+
+    (function () {
+      var gc = document.createElement('script');
+      gc.type = 'text/javascript';
+      gc.async = true;
+      gc.onload = __semio__onload;
+      gc.defer = true;
+      gc.src =
+        'https://integration.graphcomment.com/gc_graphlogin.js?' + Date.now();
+      (
+        document.getElementsByTagName('head')[0] ||
+        document.getElementsByTagName('body')[0]
+      ).appendChild(gc);
+    })();
+  </script>
+  
+</article>
+
+
+    </main>
+
+    <footer
+  class="opaco mx-auto flex h-[5rem] max-w-3xl items-center px-8 text-[0.9em] opacity-60"
+>
+  <div class="mr-auto">
+    &copy; 2023
+    <a class="link" href="https://telzhou618.github.io">Home</a>
+  </div>
+  <a class="link mx-6" href="https://gohugo.io/" rel="noopener" target="_blank"
+    >Powered by Hugo️️</a
+  >️
+  <a
+    class="link"
+    href="https://github.com/nanxiaobei/hugo-paper"
+    rel="noopener"
+    target="_blank"
+    >Theme Paper</a
+  >
+</footer>
+
+  </body>
+</html>

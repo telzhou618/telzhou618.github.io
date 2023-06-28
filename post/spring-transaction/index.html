@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<html
+  class="not-ready text-sm lg:text-base"
+  style="--bg: #faf6f1"
+  lang="en-us"
+>
+  <head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, shrink-to-fit=no"
+  />
+
+  
+  <title>Spring 事务源码解析 - Home</title>
+
+  
+  <meta name="theme-color" />
+
+  
+  
+  
+  <meta name="description" content="Spring 事务利用AOP原理实现,主要过程和AOP原理一样，可以分为三步，启用事务、生成代理对对象、执行。
+从如何使用事务开始 本实例使用Spring的 JdbcTemplate 作为操作数据库的工具，使用 druid 做为数据库连接池。
+首先导入相关的 jar 包 &lt;dependency&gt; &lt;groupId&gt;mysql&lt;/groupId&gt; &lt;artifactId&gt;mysql-connector-java&lt;/artifactId&gt; &lt;version&gt;8.0.20&lt;/version&gt; &lt;/dependency&gt; &lt;dependency&gt; &lt;groupId&gt;com.alibaba&lt;/groupId&gt; &lt;artifactId&gt;druid&lt;/artifactId&gt; &lt;version&gt;1.2.4&lt;/version&gt; &lt;/dependency&gt; &lt;dependency&gt; &lt;groupId&gt;org.springframework&lt;/groupId&gt; &lt;artifactId&gt;spring-jdbc&lt;/artifactId&gt; &lt;version&gt;5.2.12.RELEASE&lt;/version&gt; &lt;/dependency&gt; &lt;dependency&gt; &lt;groupId&gt;org.springframework&lt;/groupId&gt; &lt;artifactId&gt;spring-tx&lt;/artifactId&gt; &lt;version&gt;5.2.12.RELEASE&lt;/version&gt; &lt;/dependency&gt; 在配置类上加上 @EnableTransactionManagement 注解表示开启Spring事务功能 @ComponentScan(&#34;com.example&#34;) @EnableTransactionManagement public class ApplicationMain {} 配置数据源、配置JdbcTemplate、配置事务管理器 @Configuration public class JdbcConfig { @Bean(initMethod = &#34;init&#34;) public DruidDataSource dataSource() { DruidDataSource dataSource = new DruidDataSource(); dataSource.setUrl(&#34;jdbc:mysql://localhost/test?useUnicode=true&amp;characterEncoding=utf-8&#34;); dataSource.setUsername(&#34;root&#34;); dataSource.setPassword(&#34;rootroot&#34;); return dataSource; } @Bean public JdbcTemplate jdbcTemplate(DataSource dataSource) { return new JdbcTemplate(dataSource); } @Bean public TransactionManager transactionManager(DataSource dataSource) { return new DataSourceTransactionManager(dataSource); } } 创建测试表 blog、创建实体对象Blog create table blog ( id int auto_increment comment &#39;id&#39; primary key, title varchar(20) null comment &#39;标题&#39;, content varchar(100) null comment &#39;内容&#39; ) comment &#39;blog表&#39;; 创建实体对象 @Getter @Setter @ToString @Accessors(chain = true) public class Blog { private Integer id; private String title; private String content; } 创建 BlogService和一个 insert 方法插入一条记录，在方法上加上 @Transactional 注解，在执行插入数据成功后故意写个异常情况1/0，测试事务是否回滚。 @Service @AllArgsConstructor public class BlogService { private final JdbcTemplate jdbcTemplate; @Transactional(rollbackFor = Exception." />
+  <meta name="author" content="telzhou618" />
+  
+
+  
+  
+  
+  
+  
+  
+  <link rel="preload stylesheet" as="style" href="https://telzhou618.github.io/main.min.css" />
+
+  
+
+  
+     
+  <link rel="preload" as="image" href="https://telzhou618.github.io/theme.png" />
+
+  
+  
+  
+  <link rel="preload" as="image" href="https://s.gravatar.com/avatar/9ff9514e4c37a5cb11be475190289857778d613942c4d6364c16e770a4cb66a0?s=80" />
+  
+  
+
+  
+  <link rel="preload" as="image" href="https://telzhou618.github.io/github.svg" />
+  
+  
+
+  
+  
+  <link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/katex@0.16.7/dist/katex.min.css"
+  integrity="sha384-3UiQGuEI4TTMaFmGIZumfRPtfKQ3trwQE2JgosJxCnGmQpL/lJdjpcHkaaFwHlcI"
+  crossorigin="anonymous"
+/>
+<script
+  defer
+  src="https://cdn.jsdelivr.net/npm/katex@0.16.7/dist/katex.min.js"
+  integrity="sha384-G0zcxDFp5LWZtDuRMnBkk3EphCK1lhEf4UEyEM693ka574TZGwo4IWwS6QLzM/2t"
+  crossorigin="anonymous"
+></script>
+<script
+  defer
+  src="https://cdn.jsdelivr.net/npm/katex@0.16.7/dist/contrib/auto-render.min.js"
+  integrity="sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05"
+  crossorigin="anonymous"
+  onload="renderMathInElement(document.body);"
+></script>
+
+  
+  
+  
+
+  
+  <link rel="icon" href="https://telzhou618.github.io/favicon.ico" />
+  <link rel="apple-touch-icon" href="https://telzhou618.github.io/apple-touch-icon.png" />
+
+  
+  <meta name="generator" content="Hugo 0.114.1">
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+  
+  <meta property="og:title" content="Spring 事务源码解析" />
+<meta property="og:description" content="Spring 事务利用AOP原理实现,主要过程和AOP原理一样，可以分为三步，启用事务、生成代理对对象、执行。
+从如何使用事务开始 本实例使用Spring的 JdbcTemplate 作为操作数据库的工具，使用 druid 做为数据库连接池。
+首先导入相关的 jar 包 &lt;dependency&gt; &lt;groupId&gt;mysql&lt;/groupId&gt; &lt;artifactId&gt;mysql-connector-java&lt;/artifactId&gt; &lt;version&gt;8.0.20&lt;/version&gt; &lt;/dependency&gt; &lt;dependency&gt; &lt;groupId&gt;com.alibaba&lt;/groupId&gt; &lt;artifactId&gt;druid&lt;/artifactId&gt; &lt;version&gt;1.2.4&lt;/version&gt; &lt;/dependency&gt; &lt;dependency&gt; &lt;groupId&gt;org.springframework&lt;/groupId&gt; &lt;artifactId&gt;spring-jdbc&lt;/artifactId&gt; &lt;version&gt;5.2.12.RELEASE&lt;/version&gt; &lt;/dependency&gt; &lt;dependency&gt; &lt;groupId&gt;org.springframework&lt;/groupId&gt; &lt;artifactId&gt;spring-tx&lt;/artifactId&gt; &lt;version&gt;5.2.12.RELEASE&lt;/version&gt; &lt;/dependency&gt; 在配置类上加上 @EnableTransactionManagement 注解表示开启Spring事务功能 @ComponentScan(&#34;com.example&#34;) @EnableTransactionManagement public class ApplicationMain {} 配置数据源、配置JdbcTemplate、配置事务管理器 @Configuration public class JdbcConfig { @Bean(initMethod = &#34;init&#34;) public DruidDataSource dataSource() { DruidDataSource dataSource = new DruidDataSource(); dataSource.setUrl(&#34;jdbc:mysql://localhost/test?useUnicode=true&amp;characterEncoding=utf-8&#34;); dataSource.setUsername(&#34;root&#34;); dataSource.setPassword(&#34;rootroot&#34;); return dataSource; } @Bean public JdbcTemplate jdbcTemplate(DataSource dataSource) { return new JdbcTemplate(dataSource); } @Bean public TransactionManager transactionManager(DataSource dataSource) { return new DataSourceTransactionManager(dataSource); } } 创建测试表 blog、创建实体对象Blog create table blog ( id int auto_increment comment &#39;id&#39; primary key, title varchar(20) null comment &#39;标题&#39;, content varchar(100) null comment &#39;内容&#39; ) comment &#39;blog表&#39;; 创建实体对象 @Getter @Setter @ToString @Accessors(chain = true) public class Blog { private Integer id; private String title; private String content; } 创建 BlogService和一个 insert 方法插入一条记录，在方法上加上 @Transactional 注解，在执行插入数据成功后故意写个异常情况1/0，测试事务是否回滚。 @Service @AllArgsConstructor public class BlogService { private final JdbcTemplate jdbcTemplate; @Transactional(rollbackFor = Exception." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://telzhou618.github.io/post/spring-transaction/" /><meta property="article:section" content="post" />
+<meta property="article:published_time" content="2022-06-28T11:44:07+08:00" />
+<meta property="article:modified_time" content="2022-06-28T11:44:07+08:00" />
+
+  
+  <meta itemprop="name" content="Spring 事务源码解析">
+<meta itemprop="description" content="Spring 事务利用AOP原理实现,主要过程和AOP原理一样，可以分为三步，启用事务、生成代理对对象、执行。
+从如何使用事务开始 本实例使用Spring的 JdbcTemplate 作为操作数据库的工具，使用 druid 做为数据库连接池。
+首先导入相关的 jar 包 &lt;dependency&gt; &lt;groupId&gt;mysql&lt;/groupId&gt; &lt;artifactId&gt;mysql-connector-java&lt;/artifactId&gt; &lt;version&gt;8.0.20&lt;/version&gt; &lt;/dependency&gt; &lt;dependency&gt; &lt;groupId&gt;com.alibaba&lt;/groupId&gt; &lt;artifactId&gt;druid&lt;/artifactId&gt; &lt;version&gt;1.2.4&lt;/version&gt; &lt;/dependency&gt; &lt;dependency&gt; &lt;groupId&gt;org.springframework&lt;/groupId&gt; &lt;artifactId&gt;spring-jdbc&lt;/artifactId&gt; &lt;version&gt;5.2.12.RELEASE&lt;/version&gt; &lt;/dependency&gt; &lt;dependency&gt; &lt;groupId&gt;org.springframework&lt;/groupId&gt; &lt;artifactId&gt;spring-tx&lt;/artifactId&gt; &lt;version&gt;5.2.12.RELEASE&lt;/version&gt; &lt;/dependency&gt; 在配置类上加上 @EnableTransactionManagement 注解表示开启Spring事务功能 @ComponentScan(&#34;com.example&#34;) @EnableTransactionManagement public class ApplicationMain {} 配置数据源、配置JdbcTemplate、配置事务管理器 @Configuration public class JdbcConfig { @Bean(initMethod = &#34;init&#34;) public DruidDataSource dataSource() { DruidDataSource dataSource = new DruidDataSource(); dataSource.setUrl(&#34;jdbc:mysql://localhost/test?useUnicode=true&amp;characterEncoding=utf-8&#34;); dataSource.setUsername(&#34;root&#34;); dataSource.setPassword(&#34;rootroot&#34;); return dataSource; } @Bean public JdbcTemplate jdbcTemplate(DataSource dataSource) { return new JdbcTemplate(dataSource); } @Bean public TransactionManager transactionManager(DataSource dataSource) { return new DataSourceTransactionManager(dataSource); } } 创建测试表 blog、创建实体对象Blog create table blog ( id int auto_increment comment &#39;id&#39; primary key, title varchar(20) null comment &#39;标题&#39;, content varchar(100) null comment &#39;内容&#39; ) comment &#39;blog表&#39;; 创建实体对象 @Getter @Setter @ToString @Accessors(chain = true) public class Blog { private Integer id; private String title; private String content; } 创建 BlogService和一个 insert 方法插入一条记录，在方法上加上 @Transactional 注解，在执行插入数据成功后故意写个异常情况1/0，测试事务是否回滚。 @Service @AllArgsConstructor public class BlogService { private final JdbcTemplate jdbcTemplate; @Transactional(rollbackFor = Exception."><meta itemprop="datePublished" content="2022-06-28T11:44:07+08:00" />
+<meta itemprop="dateModified" content="2022-06-28T11:44:07+08:00" />
+<meta itemprop="wordCount" content="402">
+<meta itemprop="keywords" content="" />
+  
+  <meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Spring 事务源码解析"/>
+<meta name="twitter:description" content="Spring 事务利用AOP原理实现,主要过程和AOP原理一样，可以分为三步，启用事务、生成代理对对象、执行。
+从如何使用事务开始 本实例使用Spring的 JdbcTemplate 作为操作数据库的工具，使用 druid 做为数据库连接池。
+首先导入相关的 jar 包 &lt;dependency&gt; &lt;groupId&gt;mysql&lt;/groupId&gt; &lt;artifactId&gt;mysql-connector-java&lt;/artifactId&gt; &lt;version&gt;8.0.20&lt;/version&gt; &lt;/dependency&gt; &lt;dependency&gt; &lt;groupId&gt;com.alibaba&lt;/groupId&gt; &lt;artifactId&gt;druid&lt;/artifactId&gt; &lt;version&gt;1.2.4&lt;/version&gt; &lt;/dependency&gt; &lt;dependency&gt; &lt;groupId&gt;org.springframework&lt;/groupId&gt; &lt;artifactId&gt;spring-jdbc&lt;/artifactId&gt; &lt;version&gt;5.2.12.RELEASE&lt;/version&gt; &lt;/dependency&gt; &lt;dependency&gt; &lt;groupId&gt;org.springframework&lt;/groupId&gt; &lt;artifactId&gt;spring-tx&lt;/artifactId&gt; &lt;version&gt;5.2.12.RELEASE&lt;/version&gt; &lt;/dependency&gt; 在配置类上加上 @EnableTransactionManagement 注解表示开启Spring事务功能 @ComponentScan(&#34;com.example&#34;) @EnableTransactionManagement public class ApplicationMain {} 配置数据源、配置JdbcTemplate、配置事务管理器 @Configuration public class JdbcConfig { @Bean(initMethod = &#34;init&#34;) public DruidDataSource dataSource() { DruidDataSource dataSource = new DruidDataSource(); dataSource.setUrl(&#34;jdbc:mysql://localhost/test?useUnicode=true&amp;characterEncoding=utf-8&#34;); dataSource.setUsername(&#34;root&#34;); dataSource.setPassword(&#34;rootroot&#34;); return dataSource; } @Bean public JdbcTemplate jdbcTemplate(DataSource dataSource) { return new JdbcTemplate(dataSource); } @Bean public TransactionManager transactionManager(DataSource dataSource) { return new DataSourceTransactionManager(dataSource); } } 创建测试表 blog、创建实体对象Blog create table blog ( id int auto_increment comment &#39;id&#39; primary key, title varchar(20) null comment &#39;标题&#39;, content varchar(100) null comment &#39;内容&#39; ) comment &#39;blog表&#39;; 创建实体对象 @Getter @Setter @ToString @Accessors(chain = true) public class Blog { private Integer id; private String title; private String content; } 创建 BlogService和一个 insert 方法插入一条记录，在方法上加上 @Transactional 注解，在执行插入数据成功后故意写个异常情况1/0，测试事务是否回滚。 @Service @AllArgsConstructor public class BlogService { private final JdbcTemplate jdbcTemplate; @Transactional(rollbackFor = Exception."/>
+
+  
+  
+</head>
+
+  <body class="text-black duration-200 ease-out dark:text-white">
+    <header class="mx-auto flex h-[5rem] max-w-3xl px-8 lg:justify-center">
+  <div class="relative z-50 mr-auto flex items-center">
+    <a
+      class="-translate-x-[1px] -translate-y-[1px] text-2xl font-semibold"
+      href="https://telzhou618.github.io/"
+      >Home</a
+    >
+    <div
+      class="btn-dark text-[0] ml-4 h-6 w-6 shrink-0 cursor-pointer [background:url(./theme.svg)_left_center/cover_no-repeat] dark:invert dark:[background-position:right]"
+      role="button"
+      aria-label="Dark"
+    ></div>
+  </div>
+
+  <div
+    class="btn-menu relative z-50 -mr-8 flex h-[5rem] w-[5rem] shrink-0 cursor-pointer flex-col items-center justify-center gap-2.5 lg:hidden"
+    role="button"
+    aria-label="Menu"
+  ></div>
+
+  
+  <script>
+    
+    const htmlClass = document.documentElement.classList;
+    setTimeout(() => {
+      htmlClass.remove('not-ready');
+    }, 10);
+
+    
+    const btnMenu = document.querySelector('.btn-menu');
+    btnMenu.addEventListener('click', () => {
+      htmlClass.toggle('open');
+    });
+
+    
+    const metaTheme = document.querySelector('meta[name="theme-color"]');
+    const lightBg = "#faf6f1".replace(/"/g, '');
+    const setDark = (isDark) => {
+      metaTheme.setAttribute('content', isDark ? '#000' : lightBg);
+      htmlClass[isDark ? 'add' : 'remove']('dark');
+      localStorage.setItem('dark', isDark);
+    };
+
+    
+    const darkScheme = window.matchMedia('(prefers-color-scheme: dark)');
+    if (htmlClass.contains('dark')) {
+      setDark(true);
+    } else {
+      const darkVal = localStorage.getItem('dark');
+      setDark(darkVal ? darkVal === 'true' : darkScheme.matches);
+    }
+
+    
+    darkScheme.addEventListener('change', (event) => {
+      setDark(event.matches);
+    });
+
+    
+    const btnDark = document.querySelector('.btn-dark');
+    btnDark.addEventListener('click', () => {
+      setDark(localStorage.getItem('dark') !== 'true');
+    });
+  </script>
+
+  <div
+    class="nav-wrapper fixed inset-x-0 top-full z-40 flex h-full select-none flex-col justify-center pb-16 duration-200 dark:bg-black lg:static lg:h-auto lg:flex-row lg:!bg-transparent lg:pb-0 lg:transition-none"
+  >
+    
+    
+    <nav class="lg:ml-12 lg:flex lg:flex-row lg:items-center lg:space-x-6">
+      
+      <a
+        class="block text-center text-2xl leading-[5rem] lg:text-base lg:font-normal"
+        href="/post/"
+        >posts</a
+      >
+      
+      <a
+        class="block text-center text-2xl leading-[5rem] lg:text-base lg:font-normal"
+        href="/about/"
+        >about</a
+      >
+      
+    </nav>
+    
+
+    
+    <nav
+      class="mt-12 flex justify-center space-x-10 dark:invert lg:ml-12 lg:mt-0 lg:items-center lg:space-x-6"
+    >
+      
+      <a
+        class="h-8 w-8 text-[0] [background:var(--url)_center_center/cover_no-repeat] lg:h-6 lg:w-6"
+        style="--url: url(./github.svg)"
+        href="https://github.com/telzhou618"
+        target="_blank"
+        rel="me"
+      >
+        github
+      </a>
+      
+    </nav>
+    
+  </div>
+</header>
+
+
+    <main
+      class="prose prose-neutral relative mx-auto min-h-[calc(100%-10rem)] max-w-3xl px-8 pb-24 pt-16 dark:prose-invert"
+    >
+      
+
+<article>
+  <header class="mb-20">
+    <h1 class="!my-0 pb-2.5">Spring 事务源码解析</h1>
+
+    
+    <div class="text-sm opacity-60">
+      
+      <time>Jun 28, 2022</time>
+      
+      
+      
+      
+    </div>
+    
+  </header>
+
+  <section><p>Spring 事务利用AOP原理实现,主要过程和AOP原理一样，可以分为三步，启用事务、生成代理对对象、执行。</p>
+<h2 id="从如何使用事务开始">从如何使用事务开始</h2>
+<p>本实例使用Spring的 JdbcTemplate 作为操作数据库的工具，使用 druid 做为数据库连接池。</p>
+<ul>
+<li>首先导入相关的 jar 包</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-xml" data-lang="xml"><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">&lt;dependency&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&lt;groupId&gt;</span>mysql<span style="color:#f92672">&lt;/groupId&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&lt;artifactId&gt;</span>mysql-connector-java<span style="color:#f92672">&lt;/artifactId&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&lt;version&gt;</span>8.0.20<span style="color:#f92672">&lt;/version&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">&lt;/dependency&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">&lt;dependency&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">&lt;groupId&gt;</span>com.alibaba<span style="color:#f92672">&lt;/groupId&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">&lt;artifactId&gt;</span>druid<span style="color:#f92672">&lt;/artifactId&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">&lt;version&gt;</span>1.2.4<span style="color:#f92672">&lt;/version&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">&lt;/dependency&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">&lt;dependency&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">&lt;groupId&gt;</span>org.springframework<span style="color:#f92672">&lt;/groupId&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">&lt;artifactId&gt;</span>spring-jdbc<span style="color:#f92672">&lt;/artifactId&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">&lt;version&gt;</span>5.2.12.RELEASE<span style="color:#f92672">&lt;/version&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">&lt;/dependency&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">&lt;dependency&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">&lt;groupId&gt;</span>org.springframework<span style="color:#f92672">&lt;/groupId&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">&lt;artifactId&gt;</span>spring-tx<span style="color:#f92672">&lt;/artifactId&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">&lt;version&gt;</span>5.2.12.RELEASE<span style="color:#f92672">&lt;/version&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">&lt;/dependency&gt;</span>
+</span></span></code></pre></div><ul>
+<li>在配置类上加上 @EnableTransactionManagement 注解表示开启Spring事务功能</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#a6e22e">@ComponentScan</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;com.example&#34;</span><span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">@EnableTransactionManagement</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">ApplicationMain</span> <span style="color:#f92672">{}</span>
+</span></span></code></pre></div><ul>
+<li>配置数据源、配置JdbcTemplate、配置事务管理器</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#a6e22e">@Configuration</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">JdbcConfig</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">@Bean</span><span style="color:#f92672">(</span>initMethod <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;init&#34;</span><span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> DruidDataSource <span style="color:#a6e22e">dataSource</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>        DruidDataSource dataSource <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> DruidDataSource<span style="color:#f92672">();</span>
+</span></span><span style="display:flex;"><span>        dataSource<span style="color:#f92672">.</span><span style="color:#a6e22e">setUrl</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;jdbc:mysql://localhost/test?useUnicode=true&amp;characterEncoding=utf-8&#34;</span><span style="color:#f92672">);</span>
+</span></span><span style="display:flex;"><span>        dataSource<span style="color:#f92672">.</span><span style="color:#a6e22e">setUsername</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;root&#34;</span><span style="color:#f92672">);</span>
+</span></span><span style="display:flex;"><span>        dataSource<span style="color:#f92672">.</span><span style="color:#a6e22e">setPassword</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;rootroot&#34;</span><span style="color:#f92672">);</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> dataSource<span style="color:#f92672">;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">@Bean</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> JdbcTemplate <span style="color:#a6e22e">jdbcTemplate</span><span style="color:#f92672">(</span>DataSource dataSource<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">new</span> JdbcTemplate<span style="color:#f92672">(</span>dataSource<span style="color:#f92672">);</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">@Bean</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> TransactionManager <span style="color:#a6e22e">transactionManager</span><span style="color:#f92672">(</span>DataSource dataSource<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">new</span> DataSourceTransactionManager<span style="color:#f92672">(</span>dataSource<span style="color:#f92672">);</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
+</span></span></code></pre></div><ul>
+<li>创建测试表 blog、创建实体对象Blog</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#66d9ef">create</span> <span style="color:#66d9ef">table</span> blog
+</span></span><span style="display:flex;"><span>(
+</span></span><span style="display:flex;"><span>    id      int auto_increment <span style="color:#66d9ef">comment</span> <span style="color:#e6db74">&#39;id&#39;</span> <span style="color:#66d9ef">primary</span> <span style="color:#66d9ef">key</span>,
+</span></span><span style="display:flex;"><span>    title   varchar(<span style="color:#ae81ff">20</span>) <span style="color:#66d9ef">null</span> <span style="color:#66d9ef">comment</span> <span style="color:#e6db74">&#39;标题&#39;</span>,
+</span></span><span style="display:flex;"><span>    content varchar(<span style="color:#ae81ff">100</span>) <span style="color:#66d9ef">null</span> <span style="color:#66d9ef">comment</span> <span style="color:#e6db74">&#39;内容&#39;</span>
+</span></span><span style="display:flex;"><span>) <span style="color:#66d9ef">comment</span> <span style="color:#e6db74">&#39;blog表&#39;</span>;
+</span></span></code></pre></div><ul>
+<li>创建实体对象</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#a6e22e">@Getter</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">@Setter</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">@ToString</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">@Accessors</span><span style="color:#f92672">(</span>chain <span style="color:#f92672">=</span> <span style="color:#66d9ef">true</span><span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Blog</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> Integer id<span style="color:#f92672">;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> String title<span style="color:#f92672">;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> String content<span style="color:#f92672">;</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
+</span></span></code></pre></div><ul>
+<li>创建 BlogService和一个 insert 方法插入一条记录，在方法上加上 @Transactional 注解，在执行插入数据成功后故意写个异常情况1/0，测试事务是否回滚。</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#a6e22e">@Service</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">@AllArgsConstructor</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">BlogService</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">final</span> JdbcTemplate jdbcTemplate<span style="color:#f92672">;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">@Transactional</span><span style="color:#f92672">(</span>rollbackFor <span style="color:#f92672">=</span> Exception<span style="color:#f92672">.</span><span style="color:#a6e22e">class</span><span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">int</span> <span style="color:#a6e22e">insert</span><span style="color:#f92672">(</span>Blog blog<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>        String sql <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;insert into blog(title,content) value(?,?)&#34;</span><span style="color:#f92672">;</span>
+</span></span><span style="display:flex;"><span>        Object<span style="color:#f92672">[]</span> args <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> Object<span style="color:#f92672">[]{</span>blog<span style="color:#f92672">.</span><span style="color:#a6e22e">getTitle</span><span style="color:#f92672">(),</span> blog<span style="color:#f92672">.</span><span style="color:#a6e22e">getContent</span><span style="color:#f92672">()};</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">int</span> ret <span style="color:#f92672">=</span> jdbcTemplate<span style="color:#f92672">.</span><span style="color:#a6e22e">update</span><span style="color:#f92672">(</span>sql<span style="color:#f92672">,</span> args<span style="color:#f92672">);</span>
+</span></span><span style="display:flex;"><span>        System<span style="color:#f92672">.</span><span style="color:#a6e22e">out</span><span style="color:#f92672">.</span><span style="color:#a6e22e">println</span><span style="color:#f92672">(</span><span style="color:#ae81ff">1</span> <span style="color:#f92672">/</span> <span style="color:#ae81ff">0</span><span style="color:#f92672">);</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> ret<span style="color:#f92672">;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
+</span></span></code></pre></div><ul>
+<li>执行测试方法,看运行结果</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#a6e22e">@ComponentScan</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;com.example&#34;</span><span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">@EnableTransactionManagement</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">ApplicationMain</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">main</span><span style="color:#f92672">(</span>String<span style="color:#f92672">[]</span> args<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>        ApplicationContext context <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> AnnotationConfigApplicationContext<span style="color:#f92672">(</span>ApplicationMain<span style="color:#f92672">.</span><span style="color:#a6e22e">class</span><span style="color:#f92672">);</span>
+</span></span><span style="display:flex;"><span>        BlogService blogService <span style="color:#f92672">=</span> context<span style="color:#f92672">.</span><span style="color:#a6e22e">getBean</span><span style="color:#f92672">(</span>BlogService<span style="color:#f92672">.</span><span style="color:#a6e22e">class</span><span style="color:#f92672">);</span>
+</span></span><span style="display:flex;"><span>        Blog blog <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> Blog<span style="color:#f92672">().</span><span style="color:#a6e22e">setTitle</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;xxx222&#34;</span><span style="color:#f92672">).</span><span style="color:#a6e22e">setContent</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;xxx2222&#34;</span><span style="color:#f92672">);</span>
+</span></span><span style="display:flex;"><span>        System<span style="color:#f92672">.</span><span style="color:#a6e22e">out</span><span style="color:#f92672">.</span><span style="color:#a6e22e">println</span><span style="color:#f92672">(</span>blogService<span style="color:#f92672">.</span><span style="color:#a6e22e">insert</span><span style="color:#f92672">(</span>blog<span style="color:#f92672">));</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
+</span></span></code></pre></div><ul>
+<li>查询执行结果</li>
+</ul>
+<p><img src="/_static/aop/img1.png" alt="image.png"></p>
+<blockquote>
+<p>从执行结果看，后面的代码抛异常后，事务回滚了，那个仅凭一个简单的注解事务是如何开启、提交已经回滚的呢，下面我们从底层源码一探究竟。</p>
+</blockquote>
+<h2 id="从事务的入口-开始">从事务的入口 开始</h2>
+<p>@EnableTransactionManagement</p>
+<p>点开 @EnableTransactionManagement 注解，我们发现他导入了另一类@Import(TransactionManagementConfigurationSelector.class)，@Import
+的作用是它可以导入一个普通类到Spring容器中，使其注册为一个bean。</p>
+<p><img src="/_static/aop/img2.png" alt="image.png"></p>
+<p>TransactionManagementConfigurationSelector 类它有实现了 ImportSelector 接口，重写了 selectImports
+方法，该方法会在Spring扫描的时候执行，通过返回的类名数组生成bean，最后发现添加EnableTransactionManagement注解的最终目的是注入 AutoProxyRegistrar 和
+ProxyTransactionManagementConfiguration 这两个类到Spring容器。</p>
+<p><strong>AutoProxyRegistrar</strong></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span>AopConfigUtils<span style="color:#f92672">.</span><span style="color:#a6e22e">registerAutoProxyCreatorIfNecessary</span><span style="color:#f92672">(</span>registry<span style="color:#f92672">);</span>
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#a6e22e">@Nullable</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">public</span> <span style="color:#66d9ef">static</span> BeanDefinition <span style="color:#a6e22e">registerAutoProxyCreatorIfNecessary</span><span style="color:#f92672">(</span>
+</span></span><span style="display:flex;"><span>			BeanDefinitionRegistry registry<span style="color:#f92672">,</span> <span style="color:#a6e22e">@Nullable</span> Object source<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">return</span> registerOrEscalateApcAsRequired<span style="color:#f92672">(</span>InfrastructureAdvisorAutoProxyCreator<span style="color:#f92672">.</span><span style="color:#a6e22e">class</span><span style="color:#f92672">,</span> registry<span style="color:#f92672">,</span> source<span style="color:#f92672">);</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#f92672">}</span>
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">InfrastructureAdvisorAutoProxyCreator</span> <span style="color:#66d9ef">extends</span> AbstractAdvisorAutoProxyCreator <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">@Nullable</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">private</span> ConfigurableListableBeanFactory beanFactory<span style="color:#f92672">;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">@Override</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">protected</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">initBeanFactory</span><span style="color:#f92672">(</span>ConfigurableListableBeanFactory beanFactory<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">super</span><span style="color:#f92672">.</span><span style="color:#a6e22e">initBeanFactory</span><span style="color:#f92672">(</span>beanFactory<span style="color:#f92672">);</span>
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">beanFactory</span> <span style="color:#f92672">=</span> beanFactory<span style="color:#f92672">;</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">@Override</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">protected</span> <span style="color:#66d9ef">boolean</span> <span style="color:#a6e22e">isEligibleAdvisorBean</span><span style="color:#f92672">(</span>String beanName<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">return</span> <span style="color:#f92672">(</span><span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">beanFactory</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span> <span style="color:#f92672">&amp;&amp;</span> <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">beanFactory</span><span style="color:#f92672">.</span><span style="color:#a6e22e">containsBeanDefinition</span><span style="color:#f92672">(</span>beanName<span style="color:#f92672">)</span> <span style="color:#f92672">&amp;&amp;</span>
+</span></span><span style="display:flex;"><span>				<span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">beanFactory</span><span style="color:#f92672">.</span><span style="color:#a6e22e">getBeanDefinition</span><span style="color:#f92672">(</span>beanName<span style="color:#f92672">).</span><span style="color:#a6e22e">getRole</span><span style="color:#f92672">()</span> <span style="color:#f92672">==</span> BeanDefinition<span style="color:#f92672">.</span><span style="color:#a6e22e">ROLE_INFRASTRUCTURE</span><span style="color:#f92672">);</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
+</span></span></code></pre></div><p>AutoProxyRegistrar 实现了 ImportBeanDefinitionRegistrar，重写了 registerBeanDefinitions
+方法，该方法在Spring容器启动的时候回执行，可以注册bean定义，在这里核心是注册了另一个 bean
+InfrastructureAdvisorAutoProxyCreator,InfrastructureAdvisorAutoProxyCreator方法中几乎没有什么核心代码，它的全部功能来源于 AOP 解析类
+AbstractAdvisorAutoProxyCreator。</p>
+<p><strong>ProxyTransactionManagementConfiguration</strong></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#a6e22e">@Configuration</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">ProxyTransactionManagementConfiguration</span> <span style="color:#66d9ef">extends</span> AbstractTransactionManagementConfiguration <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">@Bean</span><span style="color:#f92672">(</span>name <span style="color:#f92672">=</span> TransactionManagementConfigUtils<span style="color:#f92672">.</span><span style="color:#a6e22e">TRANSACTION_ADVISOR_BEAN_NAME</span><span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">@Role</span><span style="color:#f92672">(</span>BeanDefinition<span style="color:#f92672">.</span><span style="color:#a6e22e">ROLE_INFRASTRUCTURE</span><span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">public</span> BeanFactoryTransactionAttributeSourceAdvisor <span style="color:#a6e22e">transactionAdvisor</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>		BeanFactoryTransactionAttributeSourceAdvisor advisor <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> BeanFactoryTransactionAttributeSourceAdvisor<span style="color:#f92672">();</span>
+</span></span><span style="display:flex;"><span>		advisor<span style="color:#f92672">.</span><span style="color:#a6e22e">setTransactionAttributeSource</span><span style="color:#f92672">(</span>transactionAttributeSource<span style="color:#f92672">());</span>
+</span></span><span style="display:flex;"><span>		advisor<span style="color:#f92672">.</span><span style="color:#a6e22e">setAdvice</span><span style="color:#f92672">(</span>transactionInterceptor<span style="color:#f92672">());</span>
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span><span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">enableTx</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>			advisor<span style="color:#f92672">.</span><span style="color:#a6e22e">setOrder</span><span style="color:#f92672">(</span><span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">enableTx</span><span style="color:#f92672">.&lt;</span>Integer<span style="color:#f92672">&gt;</span>getNumber<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;order&#34;</span><span style="color:#f92672">));</span>
+</span></span><span style="display:flex;"><span>		<span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">return</span> advisor<span style="color:#f92672">;</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">@Bean</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">@Role</span><span style="color:#f92672">(</span>BeanDefinition<span style="color:#f92672">.</span><span style="color:#a6e22e">ROLE_INFRASTRUCTURE</span><span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">public</span> TransactionAttributeSource <span style="color:#a6e22e">transactionAttributeSource</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">return</span> <span style="color:#66d9ef">new</span> AnnotationTransactionAttributeSource<span style="color:#f92672">();</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">@Bean</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">@Role</span><span style="color:#f92672">(</span>BeanDefinition<span style="color:#f92672">.</span><span style="color:#a6e22e">ROLE_INFRASTRUCTURE</span><span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">public</span> TransactionInterceptor <span style="color:#a6e22e">transactionInterceptor</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>		TransactionInterceptor interceptor <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> TransactionInterceptor<span style="color:#f92672">();</span>
+</span></span><span style="display:flex;"><span>		interceptor<span style="color:#f92672">.</span><span style="color:#a6e22e">setTransactionAttributeSource</span><span style="color:#f92672">(</span>transactionAttributeSource<span style="color:#f92672">());</span>
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span><span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">txManager</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>			interceptor<span style="color:#f92672">.</span><span style="color:#a6e22e">setTransactionManager</span><span style="color:#f92672">(</span><span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">txManager</span><span style="color:#f92672">);</span>
+</span></span><span style="display:flex;"><span>		<span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">return</span> interceptor<span style="color:#f92672">;</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
+</span></span></code></pre></div><p>ProxyTransactionManagementConfiguration 类是一个配置类，他注册了三个bean。</p>
+<ul>
+<li>BeanFactoryTransactionAttributeSourceAdvisor 它是一个Advisor，实现了Advisor 接口，它是是AOP的其中一种方式和 @Aspect 注解效果是一样的，都会被AOP解析识别。</li>
+<li>AnnotationTransactionAttributeSource 是事务属性源，他主要负责判断一个bean及其方法是不是有@Transactional注解，如果有就要生成动态代理。</li>
+<li>TransactionInterceptor 该类是代理类具体实现逻辑，生成代理代理对象时会用到，在具体执行事务时会调用其中的 invock 方法。</li>
+</ul>
+<p>另外 AnnotationTransactionAttributeSource 和 TransactionInterceptor 都是 BeanFactoryTransactionAttributeSourceAdvisor
+的属性，具体的调用在BeanFactoryTransactionAttributeSourceAdvisor 完成。</p>
+<p>以上就是启用事务时所作的事情。</p>
+<h2 id="何时生成代理对象">何时生成代理对象</h2>
+<p>什么时候生成代理对象 ？</p>
+<p>为那些bean生成代理对象？</p>
+<p><strong>InfrastructureAdvisorAutoProxyCreator</strong></p>
+<p>还记得它吗，该对象时具体扫描 @Transactional 标注的类和方法，再生成代理对象的，但是它的核心功能都是继承自AOP的对象AbstractAdvisorAutoProxyCreator
+的，所以说事务的实现在于创建了符合AOP规则的 Advisor(BeanFactoryTransactionAttributeSourceAdvisor) ，然后交给AOP去生成代理对象,</p>
+<p>AOP 在哪里找到 BeanFactoryTransactionAttributeSourceAdvisor ?</p>
+<p><img src="/_static/aop/img3.png" alt="image.png"></p>
+<p><img src="/_static/aop/img4.png" alt="image.png"></p>
+<p><img src="/_static/aop/img5.png" alt="image.png"></p>
+<h2 id="何时调用事务方法">何时调用事务方法</h2>
+<p>未完</p>
+</section>
+
+  
+  
+
+  
+  
+  
+  <nav class="mt-24 flex rounded-lg bg-black/[3%] text-lg dark:bg-white/[8%]">
+    
+    <a
+      class="flex w-1/2 items-center rounded-l-md p-6 pr-3 no-underline hover:bg-black/[2%] dark:hover:bg-white/[3%]"
+      href="https://telzhou618.github.io/post/distributed-lock/"
+      ><span class="mr-1.5">←</span><span>Redis 或 Zookeeper 实现分布式锁</span></a
+    >
+    
+    
+    <a
+      class="ml-auto flex w-1/2 items-center justify-end rounded-r-md p-6 pl-3 no-underline hover:bg-black/[2%] dark:hover:bg-white/[3%]"
+      href="https://telzhou618.github.io/post/spring-ioc-bean-register/"
+      ><span>Spring容器注册bean有哪些方式？</span><span class="ml-1.5">→</span></a
+    >
+    
+  </nav>
+  
+
+  
+  
+
+  
+  
+  <div class="mt-24" id="graphcomment"></div>
+  <script type="text/javascript">
+    var __semio__params = {
+      graphcommentId: 'a42bc435-1a67-9bc8-2cde-72ec7ba0d2fb',
+      behaviour: {
+        
+      },
+      
+    };
+
+    function __semio__onload() {
+      __semio__gc_graphlogin(__semio__params);
+    }
+
+    (function () {
+      var gc = document.createElement('script');
+      gc.type = 'text/javascript';
+      gc.async = true;
+      gc.onload = __semio__onload;
+      gc.defer = true;
+      gc.src =
+        'https://integration.graphcomment.com/gc_graphlogin.js?' + Date.now();
+      (
+        document.getElementsByTagName('head')[0] ||
+        document.getElementsByTagName('body')[0]
+      ).appendChild(gc);
+    })();
+  </script>
+  
+</article>
+
+
+    </main>
+
+    <footer
+  class="opaco mx-auto flex h-[5rem] max-w-3xl items-center px-8 text-[0.9em] opacity-60"
+>
+  <div class="mr-auto">
+    &copy; 2023
+    <a class="link" href="https://telzhou618.github.io">Home</a>
+  </div>
+  <a class="link mx-6" href="https://gohugo.io/" rel="noopener" target="_blank"
+    >Powered by Hugo️️</a
+  >️
+  <a
+    class="link"
+    href="https://github.com/nanxiaobei/hugo-paper"
+    rel="noopener"
+    target="_blank"
+    >Theme Paper</a
+  >
+</footer>
+
+  </body>
+</html>

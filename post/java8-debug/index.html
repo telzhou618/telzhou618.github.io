@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<html
+  class="not-ready text-sm lg:text-base"
+  style="--bg: #faf6f1"
+  lang="en-us"
+>
+  <head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, shrink-to-fit=no"
+  />
+
+  
+  <title>JAVA8 debug 技巧 - Home</title>
+
+  
+  <meta name="theme-color" />
+
+  
+  
+  
+  <meta name="description" content="调试按钮说明 Stream 调试 实例代码：
+// 1.Stream 调试 List&lt;Integer&gt; list1 = Lists.newArrayList(1, 5, 3, 2, 4); List&lt;Integer&gt; list2 = list1.stream() .filter(o -&gt; o &gt; 2) .sorted() .collect(Collectors.toList()); System.out.println(list2); 在 stram() 处设置断点，debug 运行。
+可以看到Debug视图中 Trace Current Steam Chain 图标会点亮。
+点击该图标弹出 Stream Trace 视图。可以看到 filter、sorted、collect 每一个方法执行之后的结果。
+ok，成功。
+Optional 调试 实例代码：
+// 2.Optional 调试 User user = new User() .setId(1) .setName(&#34;tom&#34;) .setArea(new Area().setProvince(&#34;beijing&#34;)); String province = Optional.ofNullable(user) .map(User::getArea) .map(Area::getProvince) .orElse(&#34;未知&#34;); System.out.println(province); 在 Optaionl 处加断点，debug 运行，可以看到 Evaluate Express 图标。" />
+  <meta name="author" content="telzhou618" />
+  
+
+  
+  
+  
+  
+  
+  
+  <link rel="preload stylesheet" as="style" href="https://telzhou618.github.io/main.min.css" />
+
+  
+
+  
+     
+  <link rel="preload" as="image" href="https://telzhou618.github.io/theme.png" />
+
+  
+  
+  
+  <link rel="preload" as="image" href="https://s.gravatar.com/avatar/9ff9514e4c37a5cb11be475190289857778d613942c4d6364c16e770a4cb66a0?s=80" />
+  
+  
+
+  
+  <link rel="preload" as="image" href="https://telzhou618.github.io/github.svg" />
+  
+  
+
+  
+  
+  <link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/katex@0.16.7/dist/katex.min.css"
+  integrity="sha384-3UiQGuEI4TTMaFmGIZumfRPtfKQ3trwQE2JgosJxCnGmQpL/lJdjpcHkaaFwHlcI"
+  crossorigin="anonymous"
+/>
+<script
+  defer
+  src="https://cdn.jsdelivr.net/npm/katex@0.16.7/dist/katex.min.js"
+  integrity="sha384-G0zcxDFp5LWZtDuRMnBkk3EphCK1lhEf4UEyEM693ka574TZGwo4IWwS6QLzM/2t"
+  crossorigin="anonymous"
+></script>
+<script
+  defer
+  src="https://cdn.jsdelivr.net/npm/katex@0.16.7/dist/contrib/auto-render.min.js"
+  integrity="sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05"
+  crossorigin="anonymous"
+  onload="renderMathInElement(document.body);"
+></script>
+
+  
+  
+  
+
+  
+  <link rel="icon" href="https://telzhou618.github.io/favicon.ico" />
+  <link rel="apple-touch-icon" href="https://telzhou618.github.io/apple-touch-icon.png" />
+
+  
+  <meta name="generator" content="Hugo 0.114.1">
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+  
+  <meta property="og:title" content="JAVA8 debug 技巧" />
+<meta property="og:description" content="调试按钮说明 Stream 调试 实例代码：
+// 1.Stream 调试 List&lt;Integer&gt; list1 = Lists.newArrayList(1, 5, 3, 2, 4); List&lt;Integer&gt; list2 = list1.stream() .filter(o -&gt; o &gt; 2) .sorted() .collect(Collectors.toList()); System.out.println(list2); 在 stram() 处设置断点，debug 运行。
+可以看到Debug视图中 Trace Current Steam Chain 图标会点亮。
+点击该图标弹出 Stream Trace 视图。可以看到 filter、sorted、collect 每一个方法执行之后的结果。
+ok，成功。
+Optional 调试 实例代码：
+// 2.Optional 调试 User user = new User() .setId(1) .setName(&#34;tom&#34;) .setArea(new Area().setProvince(&#34;beijing&#34;)); String province = Optional.ofNullable(user) .map(User::getArea) .map(Area::getProvince) .orElse(&#34;未知&#34;); System.out.println(province); 在 Optaionl 处加断点，debug 运行，可以看到 Evaluate Express 图标。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://telzhou618.github.io/post/java8-debug/" /><meta property="article:section" content="post" />
+<meta property="article:published_time" content="2022-06-28T11:44:07+08:00" />
+<meta property="article:modified_time" content="2022-06-28T11:44:07+08:00" />
+
+  
+  <meta itemprop="name" content="JAVA8 debug 技巧">
+<meta itemprop="description" content="调试按钮说明 Stream 调试 实例代码：
+// 1.Stream 调试 List&lt;Integer&gt; list1 = Lists.newArrayList(1, 5, 3, 2, 4); List&lt;Integer&gt; list2 = list1.stream() .filter(o -&gt; o &gt; 2) .sorted() .collect(Collectors.toList()); System.out.println(list2); 在 stram() 处设置断点，debug 运行。
+可以看到Debug视图中 Trace Current Steam Chain 图标会点亮。
+点击该图标弹出 Stream Trace 视图。可以看到 filter、sorted、collect 每一个方法执行之后的结果。
+ok，成功。
+Optional 调试 实例代码：
+// 2.Optional 调试 User user = new User() .setId(1) .setName(&#34;tom&#34;) .setArea(new Area().setProvince(&#34;beijing&#34;)); String province = Optional.ofNullable(user) .map(User::getArea) .map(Area::getProvince) .orElse(&#34;未知&#34;); System.out.println(province); 在 Optaionl 处加断点，debug 运行，可以看到 Evaluate Express 图标。"><meta itemprop="datePublished" content="2022-06-28T11:44:07+08:00" />
+<meta itemprop="dateModified" content="2022-06-28T11:44:07+08:00" />
+<meta itemprop="wordCount" content="210">
+<meta itemprop="keywords" content="" />
+  
+  <meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="JAVA8 debug 技巧"/>
+<meta name="twitter:description" content="调试按钮说明 Stream 调试 实例代码：
+// 1.Stream 调试 List&lt;Integer&gt; list1 = Lists.newArrayList(1, 5, 3, 2, 4); List&lt;Integer&gt; list2 = list1.stream() .filter(o -&gt; o &gt; 2) .sorted() .collect(Collectors.toList()); System.out.println(list2); 在 stram() 处设置断点，debug 运行。
+可以看到Debug视图中 Trace Current Steam Chain 图标会点亮。
+点击该图标弹出 Stream Trace 视图。可以看到 filter、sorted、collect 每一个方法执行之后的结果。
+ok，成功。
+Optional 调试 实例代码：
+// 2.Optional 调试 User user = new User() .setId(1) .setName(&#34;tom&#34;) .setArea(new Area().setProvince(&#34;beijing&#34;)); String province = Optional.ofNullable(user) .map(User::getArea) .map(Area::getProvince) .orElse(&#34;未知&#34;); System.out.println(province); 在 Optaionl 处加断点，debug 运行，可以看到 Evaluate Express 图标。"/>
+
+  
+  
+</head>
+
+  <body class="text-black duration-200 ease-out dark:text-white">
+    <header class="mx-auto flex h-[5rem] max-w-3xl px-8 lg:justify-center">
+  <div class="relative z-50 mr-auto flex items-center">
+    <a
+      class="-translate-x-[1px] -translate-y-[1px] text-2xl font-semibold"
+      href="https://telzhou618.github.io/"
+      >Home</a
+    >
+    <div
+      class="btn-dark text-[0] ml-4 h-6 w-6 shrink-0 cursor-pointer [background:url(./theme.svg)_left_center/cover_no-repeat] dark:invert dark:[background-position:right]"
+      role="button"
+      aria-label="Dark"
+    ></div>
+  </div>
+
+  <div
+    class="btn-menu relative z-50 -mr-8 flex h-[5rem] w-[5rem] shrink-0 cursor-pointer flex-col items-center justify-center gap-2.5 lg:hidden"
+    role="button"
+    aria-label="Menu"
+  ></div>
+
+  
+  <script>
+    
+    const htmlClass = document.documentElement.classList;
+    setTimeout(() => {
+      htmlClass.remove('not-ready');
+    }, 10);
+
+    
+    const btnMenu = document.querySelector('.btn-menu');
+    btnMenu.addEventListener('click', () => {
+      htmlClass.toggle('open');
+    });
+
+    
+    const metaTheme = document.querySelector('meta[name="theme-color"]');
+    const lightBg = "#faf6f1".replace(/"/g, '');
+    const setDark = (isDark) => {
+      metaTheme.setAttribute('content', isDark ? '#000' : lightBg);
+      htmlClass[isDark ? 'add' : 'remove']('dark');
+      localStorage.setItem('dark', isDark);
+    };
+
+    
+    const darkScheme = window.matchMedia('(prefers-color-scheme: dark)');
+    if (htmlClass.contains('dark')) {
+      setDark(true);
+    } else {
+      const darkVal = localStorage.getItem('dark');
+      setDark(darkVal ? darkVal === 'true' : darkScheme.matches);
+    }
+
+    
+    darkScheme.addEventListener('change', (event) => {
+      setDark(event.matches);
+    });
+
+    
+    const btnDark = document.querySelector('.btn-dark');
+    btnDark.addEventListener('click', () => {
+      setDark(localStorage.getItem('dark') !== 'true');
+    });
+  </script>
+
+  <div
+    class="nav-wrapper fixed inset-x-0 top-full z-40 flex h-full select-none flex-col justify-center pb-16 duration-200 dark:bg-black lg:static lg:h-auto lg:flex-row lg:!bg-transparent lg:pb-0 lg:transition-none"
+  >
+    
+    
+    <nav class="lg:ml-12 lg:flex lg:flex-row lg:items-center lg:space-x-6">
+      
+      <a
+        class="block text-center text-2xl leading-[5rem] lg:text-base lg:font-normal"
+        href="/post/"
+        >posts</a
+      >
+      
+      <a
+        class="block text-center text-2xl leading-[5rem] lg:text-base lg:font-normal"
+        href="/about/"
+        >about</a
+      >
+      
+    </nav>
+    
+
+    
+    <nav
+      class="mt-12 flex justify-center space-x-10 dark:invert lg:ml-12 lg:mt-0 lg:items-center lg:space-x-6"
+    >
+      
+      <a
+        class="h-8 w-8 text-[0] [background:var(--url)_center_center/cover_no-repeat] lg:h-6 lg:w-6"
+        style="--url: url(./github.svg)"
+        href="https://github.com/telzhou618"
+        target="_blank"
+        rel="me"
+      >
+        github
+      </a>
+      
+    </nav>
+    
+  </div>
+</header>
+
+
+    <main
+      class="prose prose-neutral relative mx-auto min-h-[calc(100%-10rem)] max-w-3xl px-8 pb-24 pt-16 dark:prose-invert"
+    >
+      
+
+<article>
+  <header class="mb-20">
+    <h1 class="!my-0 pb-2.5">JAVA8 debug 技巧</h1>
+
+    
+    <div class="text-sm opacity-60">
+      
+      <time>Jun 28, 2022</time>
+      
+      
+      
+      
+    </div>
+    
+  </header>
+
+  <section><h2 id="调试按钮说明">调试按钮说明</h2>
+<p><img src="https://raw.githubusercontent.com/telzhou618/images/main/img/1630499068947-f460c3fd-c3ef-4491-afe3-2b634262a20e.png" alt="img"></p>
+<p><img src="https://raw.githubusercontent.com/telzhou618/images/main/img/1630499070530-c0c628e6-7a56-444a-a191-0ba3dd980a24.png" alt="img"></p>
+<h2 id="stream-调试">Stream 调试</h2>
+<p>实例代码：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#75715e">// 1.Stream 调试
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>List<span style="color:#f92672">&lt;</span>Integer<span style="color:#f92672">&gt;</span> list1 <span style="color:#f92672">=</span> Lists<span style="color:#f92672">.</span><span style="color:#a6e22e">newArrayList</span><span style="color:#f92672">(</span><span style="color:#ae81ff">1</span><span style="color:#f92672">,</span> <span style="color:#ae81ff">5</span><span style="color:#f92672">,</span> <span style="color:#ae81ff">3</span><span style="color:#f92672">,</span> <span style="color:#ae81ff">2</span><span style="color:#f92672">,</span> <span style="color:#ae81ff">4</span><span style="color:#f92672">);</span>
+</span></span><span style="display:flex;"><span>List<span style="color:#f92672">&lt;</span>Integer<span style="color:#f92672">&gt;</span> list2 <span style="color:#f92672">=</span> list1<span style="color:#f92672">.</span><span style="color:#a6e22e">stream</span><span style="color:#f92672">()</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">.</span><span style="color:#a6e22e">filter</span><span style="color:#f92672">(</span>o <span style="color:#f92672">-&gt;</span> o <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">2</span><span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">.</span><span style="color:#a6e22e">sorted</span><span style="color:#f92672">()</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">.</span><span style="color:#a6e22e">collect</span><span style="color:#f92672">(</span>Collectors<span style="color:#f92672">.</span><span style="color:#a6e22e">toList</span><span style="color:#f92672">());</span>
+</span></span><span style="display:flex;"><span>System<span style="color:#f92672">.</span><span style="color:#a6e22e">out</span><span style="color:#f92672">.</span><span style="color:#a6e22e">println</span><span style="color:#f92672">(</span>list2<span style="color:#f92672">);</span>
+</span></span></code></pre></div><p>在 stram() 处设置断点，debug 运行。</p>
+<p>可以看到Debug视图中 Trace Current Steam Chain 图标会点亮。</p>
+<p><img src="https://raw.githubusercontent.com/telzhou618/images/main/img/1630499069843-06f36ac6-8d74-4221-ae28-635c665d27aa.png" alt="img"></p>
+<p>点击该图标弹出 Stream Trace 视图。可以看到 filter、sorted、collect 每一个方法执行之后的结果。</p>
+<p><img src="https://raw.githubusercontent.com/telzhou618/images/main/img/1630499069429-3bd7b09b-29c4-4d9f-9afd-07fcbc008a91.png" alt="img"></p>
+<p>ok，成功。</p>
+<h2 id="optional-调试">Optional 调试</h2>
+<p>实例代码：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#75715e">// 2.Optional 调试
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>User user <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> User<span style="color:#f92672">()</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">.</span><span style="color:#a6e22e">setId</span><span style="color:#f92672">(</span><span style="color:#ae81ff">1</span><span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">.</span><span style="color:#a6e22e">setName</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;tom&#34;</span><span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">.</span><span style="color:#a6e22e">setArea</span><span style="color:#f92672">(</span><span style="color:#66d9ef">new</span> Area<span style="color:#f92672">().</span><span style="color:#a6e22e">setProvince</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;beijing&#34;</span><span style="color:#f92672">));</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>String province <span style="color:#f92672">=</span> Optional<span style="color:#f92672">.</span><span style="color:#a6e22e">ofNullable</span><span style="color:#f92672">(</span>user<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">.</span><span style="color:#a6e22e">map</span><span style="color:#f92672">(</span>User<span style="color:#f92672">::</span>getArea<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">.</span><span style="color:#a6e22e">map</span><span style="color:#f92672">(</span>Area<span style="color:#f92672">::</span>getProvince<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">.</span><span style="color:#a6e22e">orElse</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;未知&#34;</span><span style="color:#f92672">);</span>
+</span></span><span style="display:flex;"><span>System<span style="color:#f92672">.</span><span style="color:#a6e22e">out</span><span style="color:#f92672">.</span><span style="color:#a6e22e">println</span><span style="color:#f92672">(</span>province<span style="color:#f92672">);</span>
+</span></span></code></pre></div><p>在 Optaionl 处加断点，debug 运行，可以看到 Evaluate Express 图标。</p>
+<p><img src="https://raw.githubusercontent.com/telzhou618/images/main/img/1630499069962-409b0f79-b58e-45ca-8bf6-c44b21b7a783.png" alt="img"></p>
+<p>点击该图标弹出 Evaluate 视图，输入需要调试的代码，点击右下角 Evaluate 图标，可以看到执行结果。</p>
+<p><img src="https://raw.githubusercontent.com/telzhou618/images/main/img/1630499070454-e069bfaa-cb0a-4152-b548-0aefc97c62b5.png" alt="img"></p>
+<p>注：Optaionl 不像 Stream 那样，有专门的调试器，他需要借助 Evaluate Express 视图完成调试。</p>
+<h2 id="条件断点">条件断点</h2>
+<p>实例代码：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#75715e">// 3.条件断点, 循环
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>List<span style="color:#f92672">&lt;</span>Integer<span style="color:#f92672">&gt;</span> integerList <span style="color:#f92672">=</span> Lists<span style="color:#f92672">.</span><span style="color:#a6e22e">newArrayList</span><span style="color:#f92672">(</span><span style="color:#ae81ff">1</span><span style="color:#f92672">,</span> <span style="color:#ae81ff">2</span><span style="color:#f92672">,</span> <span style="color:#ae81ff">3</span><span style="color:#f92672">,</span> <span style="color:#ae81ff">4</span><span style="color:#f92672">,</span> <span style="color:#ae81ff">5</span><span style="color:#f92672">,</span> <span style="color:#ae81ff">6</span><span style="color:#f92672">,</span> <span style="color:#ae81ff">7</span><span style="color:#f92672">,</span> <span style="color:#ae81ff">8</span><span style="color:#f92672">,</span> <span style="color:#ae81ff">9</span><span style="color:#f92672">,</span> <span style="color:#ae81ff">10</span><span style="color:#f92672">);</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> <span style="color:#f92672">(</span>Integer x <span style="color:#f92672">:</span> integerList<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>    System<span style="color:#f92672">.</span><span style="color:#a6e22e">out</span><span style="color:#f92672">.</span><span style="color:#a6e22e">print</span><span style="color:#f92672">(</span>x<span style="color:#f92672">);</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
+</span></span></code></pre></div><p>有时候在循环中调试时，我们希望只关心我们需要关心的那个对象，但是一次循环记录有很多，每一个都跟一遍很是麻烦，那么条件断点就可以上场了。</p>
+<p>在需要的地方加断点，在断点上右键弹出条件断点视图，输入条件表达式，点击 Done。</p>
+<p><img src="https://raw.githubusercontent.com/telzhou618/images/main/img/1630499070871-4c1848d9-49ed-4759-b3d4-912fee6a369c.png" alt="img"></p>
+<p>然后 debug 运行, 只有当 x 的值为 5 的时候才会停住，进入断点。</p>
+<h2 id="多线程调试">多线程调试</h2>
+<p>实例代码：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#75715e">// 4.多线程调试
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">new</span> Thread<span style="color:#f92672">(()</span> <span style="color:#f92672">-&gt;</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>    System<span style="color:#f92672">.</span><span style="color:#a6e22e">out</span><span style="color:#f92672">.</span><span style="color:#a6e22e">println</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;线程1执行&#34;</span><span style="color:#f92672">);</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">},</span> <span style="color:#e6db74">&#34;线程1&#34;</span><span style="color:#f92672">).</span><span style="color:#a6e22e">start</span><span style="color:#f92672">();</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">new</span> Thread<span style="color:#f92672">(()</span> <span style="color:#f92672">-&gt;</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>    System<span style="color:#f92672">.</span><span style="color:#a6e22e">out</span><span style="color:#f92672">.</span><span style="color:#a6e22e">println</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;线程2执行&#34;</span><span style="color:#f92672">);</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">},</span> <span style="color:#e6db74">&#34;线程2&#34;</span><span style="color:#f92672">).</span><span style="color:#a6e22e">start</span><span style="color:#f92672">();</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>System<span style="color:#f92672">.</span><span style="color:#a6e22e">out</span><span style="color:#f92672">.</span><span style="color:#a6e22e">println</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;主线程&#34;</span><span style="color:#f92672">);</span>
+</span></span></code></pre></div><p>线程的执行时间是有系统分配，开发人员无法控制，但是通过Idea 专用的线程调试功能可以很好的选择要执行的线程代码，达到调试代码的目的。</p>
+<p>先在线程内设置断点，在断点上右键选择 Thread 类型。</p>
+<p><img src="https://raw.githubusercontent.com/telzhou618/images/main/img/1630499071776-c8742633-1c45-4780-a71f-6fa9427e412e.png" alt="img"></p>
+<p>然后 debug 运行项目，在 Debug 的 Frames 视图可以方便的选择要执行的线程，选择后可继续一步步调试代码。</p>
+<p><img src="https://raw.githubusercontent.com/telzhou618/images/main/img/1630499071948-a700a80a-9491-46eb-bb4b-c148aaa5108a.png" alt="img"></p>
+<h2 id="方法回退">方法回退</h2>
+<p>实例代码：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">method1</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>    System<span style="color:#f92672">.</span><span style="color:#a6e22e">out</span><span style="color:#f92672">.</span><span style="color:#a6e22e">println</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;method1&#34;</span><span style="color:#f92672">);</span>
+</span></span><span style="display:flex;"><span>    method2<span style="color:#f92672">();</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">method2</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>    System<span style="color:#f92672">.</span><span style="color:#a6e22e">out</span><span style="color:#f92672">.</span><span style="color:#a6e22e">println</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;method2&#34;</span><span style="color:#f92672">);</span>
+</span></span><span style="display:flex;"><span>    method3<span style="color:#f92672">();</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">method3</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>    System<span style="color:#f92672">.</span><span style="color:#a6e22e">out</span><span style="color:#f92672">.</span><span style="color:#a6e22e">println</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;method3&#34;</span><span style="color:#f92672">);</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">main</span><span style="color:#f92672">(</span>String<span style="color:#f92672">[]</span> args<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>    method1<span style="color:#f92672">();</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
+</span></span></code></pre></div><p>通过工具栏里的按钮可回退到上一步。</p>
+<p>通过选中方法右键选择 Drop Frame 可回退到指定的方法。</p>
+<p>如：阅读Spring IOC 启动流程源码时，方法调用都很深，想退回来再看看上一步做了啥，用方法回退很方便。</p>
+<p>但是对于修改了共享数据的方法，如果回退再执行一次，可能产生异常数据。</p>
+<p><img src="https://raw.githubusercontent.com/telzhou618/images/main/img/1630499072085-26b843ff-3385-4f6e-aa54-88e3dcef190b.png" alt="img"></p>
+<h2 id="强制返回">强制返回</h2>
+<p>Debug 调试代码时，跟到一个无关痛痒的方法，有时候我们希望提前返回，可以使用下面的方法强制返回一个指定的值。</p>
+<p>选择方法右键，选择Fore Return。</p>
+<p><img src="https://raw.githubusercontent.com/telzhou618/images/main/img/1630499072434-c1a5e750-1f2b-4193-ade0-e716953dda9c.png" alt="img"></p>
+<p>会弹出一个窗口，输入要返回的值即可。</p>
+<p><img src="https://raw.githubusercontent.com/telzhou618/images/main/img/1630499072285-8f20cdd7-a4cd-45ac-be2a-52035c06cea3.png" alt="img"></p>
+<h2 id="热修改变量的值">热修改变量的值</h2>
+<p>有时候，在Debug 的过程中我们想调整一个参数的值又不想重启项目，可以使用Idea提供的实时修改变量值的功能。</p>
+<p>首先在 Variables 视图选要修改的变量，右键选择Set Value。</p>
+<p><img src="https://raw.githubusercontent.com/telzhou618/images/main/img/1630499073255-7299d943-bd91-4986-82fa-fef5d29db917.png" alt="img"></p>
+<p>输入要修改的内容，回车可进行热修改。</p>
+<p><img src="https://raw.githubusercontent.com/telzhou618/images/main/img/1630499073224-eaf43192-cce7-48ed-a617-cfd7a7572f56.png" alt="img"></p>
+</section>
+
+  
+  
+
+  
+  
+  
+  <nav class="mt-24 flex rounded-lg bg-black/[3%] text-lg dark:bg-white/[8%]">
+    
+    <a
+      class="flex w-1/2 items-center rounded-l-md p-6 pr-3 no-underline hover:bg-black/[2%] dark:hover:bg-white/[3%]"
+      href="https://telzhou618.github.io/post/commons-pool2/"
+      ><span class="mr-1.5">←</span><span>Commons-pool2 应用与实战</span></a
+    >
+    
+    
+    <a
+      class="ml-auto flex w-1/2 items-center justify-end rounded-r-md p-6 pl-3 no-underline hover:bg-black/[2%] dark:hover:bg-white/[3%]"
+      href="https://telzhou618.github.io/post/jvm/"
+      ><span>JVM 常用参数</span><span class="ml-1.5">→</span></a
+    >
+    
+  </nav>
+  
+
+  
+  
+
+  
+  
+  <div class="mt-24" id="graphcomment"></div>
+  <script type="text/javascript">
+    var __semio__params = {
+      graphcommentId: 'a42bc435-1a67-9bc8-2cde-72ec7ba0d2fb',
+      behaviour: {
+        
+      },
+      
+    };
+
+    function __semio__onload() {
+      __semio__gc_graphlogin(__semio__params);
+    }
+
+    (function () {
+      var gc = document.createElement('script');
+      gc.type = 'text/javascript';
+      gc.async = true;
+      gc.onload = __semio__onload;
+      gc.defer = true;
+      gc.src =
+        'https://integration.graphcomment.com/gc_graphlogin.js?' + Date.now();
+      (
+        document.getElementsByTagName('head')[0] ||
+        document.getElementsByTagName('body')[0]
+      ).appendChild(gc);
+    })();
+  </script>
+  
+</article>
+
+
+    </main>
+
+    <footer
+  class="opaco mx-auto flex h-[5rem] max-w-3xl items-center px-8 text-[0.9em] opacity-60"
+>
+  <div class="mr-auto">
+    &copy; 2023
+    <a class="link" href="https://telzhou618.github.io">Home</a>
+  </div>
+  <a class="link mx-6" href="https://gohugo.io/" rel="noopener" target="_blank"
+    >Powered by Hugo️️</a
+  >️
+  <a
+    class="link"
+    href="https://github.com/nanxiaobei/hugo-paper"
+    rel="noopener"
+    target="_blank"
+    >Theme Paper</a
+  >
+</footer>
+
+  </body>
+</html>
