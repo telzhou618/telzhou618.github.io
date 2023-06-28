@@ -22,7 +22,17 @@
       <pubDate>Wed, 28 Jun 2023 11:43:58 +0800</pubDate>
       
       <guid>https://telzhou618.github.io/post/linux/</guid>
-      <description></description>
+      <description>less 从文件开头查看少量内容命令，命令格式：less [参数] 文件 。
+参数：
+- /字符串：向下搜索 - ?字符串：向上搜索 - n：重复前一个搜索(向下搜索) - N：反向重复前一个搜索(向上搜索) - 翻一页 - f：前进一页 - b：回退一页 - 翻半页： - d：前进半页 - u：后退半页 - 翻一行： - e/j：前进一行 - y/k：后退一行 实例1：查看日志, -N 显示行号
+less -N /var/a.log 实例2：跳转到最后一行，并滚动打印。
+shift + f 操作1：在滚动打印的基础上停止滚动
+control + c 操作2：向上搜索关键词
+?kewwaord + enter 按n继续向上搜索相同字符串 按N继续向下搜索相同字符串 操作3：向下搜索关键词
+/kewwaord + enter 按N继续向下搜索相同字符串 按n继续向上搜索相同字符串 chown 设置文件所有者对文件的权限。
+实例1：给admin用户授于/var/log.a.log文件权限
+chown admin /var/log.a.log 实例2：递归给某个用户授于整个目录权限
+chown -R admin /var/log/ chmod 设置用户对文件的读、写、执行权限。</description>
     </item>
     
     <item>
@@ -31,7 +41,7 @@
       <pubDate>Wed, 28 Jun 2023 11:40:09 +0800</pubDate>
       
       <guid>https://telzhou618.github.io/post/modify-env/</guid>
-      <description>环境变量文件存储位置 /etc/paths （全局建议修改这个文件 ） /etc/profile （建议不修改这个文件 ） /etc/bashrc （一般在这个文件中添加系统级环境变量） .profile 文件为系统的每个用户设置环境信息,当用户第一次登录时,该文件被执行.并从/etc/profile.d目录的配置文件中搜集shell的设置 ./bashrc 每一个运行bash shell的用户执行此文件.当bash shell被打开时,该文件被读取 ./bash_profile 该文件包含专用于你的bash shell的bash信息,当登录时以及每次打开新的shell时,该文件被读取 修改完让其生效 source ./.bash_profile </description>
+      <description>环境变量文件存储位置 &amp;gt; /etc/paths （全局建议修改这个文件 ） &amp;gt; /etc/profile （建议不修改这个文件 ） &amp;gt; /etc/bashrc （一般在这个文件中添加系统级环境变量） &amp;gt; ~/.profile 文件为系统的每个用户设置环境信息,当用户第一次登录时,该文件被执行.并从/etc/profile.d目录的配置文件中搜集shell的设置 &amp;gt; ~/.bashrc 每一个运行bash shell的用户执行此文件.当bash shell被打开时,该文件被读取 &amp;gt; ~/.bash_profile 该文件包含专用于你的bash shell的bash信息,当登录时以及每次打开新的shell时,该文件被读取 修改完让其生效 source ~/.bash_profile </description>
     </item>
     
     <item>
@@ -40,7 +50,7 @@
       <pubDate>Wed, 28 Jun 2023 11:37:30 +0800</pubDate>
       
       <guid>https://telzhou618.github.io/post/shell-change/</guid>
-      <description>shell 常用命令 more /etc/shells # 查查有多少个shell echo $SHELL # 查看当前shell chsh -s /bin/bash # 切换到 bash chsh -s /bin/zsh	# 切换到zsh chsh -s /usr/local/bin/fish	切换到fish </description>
+      <description>shell 常用命令 more /etc/shells # 查查有多少个shell echo $SHELL # 查看当前shell chsh -s /bin/bash # 切换到 bash chsh -s /bin/zsh	# 切换到zsh chsh -s /usr/local/bin/fish	#切换到fish </description>
     </item>
     
     <item>
@@ -50,17 +60,6 @@
       
       <guid>https://telzhou618.github.io/about/</guid>
       <description></description>
-    </item>
-    
-    <item>
-      <title>My First Post</title>
-      <link>https://telzhou618.github.io/post/my-first-post/</link>
-      <pubDate>Tue, 27 Jun 2023 13:20:25 +0800</pubDate>
-      
-      <guid>https://telzhou618.github.io/post/my-first-post/</guid>
-      <description>Introduction This is bold text, and this is emphasized text.
-Visit the Hugo website!
-11 </description>
     </item>
     
   </channel>
