@@ -6,7 +6,30 @@
     <description>Recent content on Home</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 28 Jun 2023 17:39:37 +0800</lastBuildDate><atom:link href="https://telzhou618.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 10 Jul 2023 21:36:57 +0800</lastBuildDate><atom:link href="https://telzhou618.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>MYSQL 表空间分析</title>
+      <link>https://telzhou618.github.io/post/mysql_information_schema/</link>
+      <pubDate>Mon, 10 Jul 2023 21:36:57 +0800</pubDate>
+      
+      <guid>https://telzhou618.github.io/post/mysql_information_schema/</guid>
+      <description>删除数据并释放空间命令 drop table table_name 立刻释放磁盘空间 ，不管是 Innodb和MyISAM ； truncate table table_name立刻释放磁盘空间 ，不管是 Innodb和MyISAM; delete from table_name 删除表的全部数据，对于MyISAM 会立刻释放磁盘空间 ，而InnoDB 不会释放磁盘空间； delete from table_name where xx 带条件的删除, 不管是innodb还是MyISAM都不会释放磁盘空间；delete操作后使用optimize table table_name 释放磁盘空间，优化表期间会锁定表，所以要在空闲时段执行optimize table 查看表空间占用大小 MySQL 表空间信息保存在哪 information_schema.TABLES 中。
+查看所有数据库的容量和大小 select table_schema as &amp;#39;数据库&amp;#39;, sum(table_rows) as &amp;#39;记录数&amp;#39;, sum(truncate(data_length/1024/1024, 2)) as &amp;#39;数据容量(MB)&amp;#39;, sum(truncate(index_length/1024/1024, 2)) as &amp;#39;索引容量(MB)&amp;#39;, sum(truncate(data_free/1024/1024, 2)) as &amp;#39;碎片空间容量(MB)&amp;#39; from information_schema.tables group by table_schema order by sum(data_length) desc, sum(index_length) desc 查看指定数据库各个表容量大小 select table_schema as &amp;#39;数据库&amp;#39;, table_name as &amp;#39;表名&amp;#39;, table_rows as &amp;#39;记录数&amp;#39;, truncate(data_length/1024/1024, 2) as &amp;#39;数据容量(MB)&amp;#39;, truncate(index_length/1024/1024, 2) as &amp;#39;索引容量(MB)&amp;#39;, sum(truncate(data_free/1024/1024, 2)) as &amp;#39;碎片空间容量(MB)&amp;#39; from information_schema.</description>
+    </item>
+    
+    <item>
+      <title>Java SPI 应用</title>
+      <link>https://telzhou618.github.io/post/java-spi/</link>
+      <pubDate>Wed, 05 Jul 2023 16:15:58 +0800</pubDate>
+      
+      <guid>https://telzhou618.github.io/post/java-spi/</guid>
+      <description>Java SPI（Service Provider Interface）是Java平台提供的一种机制，用于实现服务发现和扩展的功能。它允许开发人员定义一组接口，然后允许其他开发人员在应用程序中提供不同的实现。
+举个例子 某应该需要外部提供数据，具体使用USB接口传输还是Typec接口传输并不关心，官方只需定义接口，USB厂商和typec厂商各自去实现接口即可，具体如下。 创建 maven 项目 data-trans-api 为接口项目, xml 配置如下
+&amp;lt;?xml version=&amp;#34;1.0&amp;#34; encoding=&amp;#34;UTF-8&amp;#34;?&amp;gt; &amp;lt;project xmlns=&amp;#34;http://maven.apache.org/POM/4.0.0&amp;#34; xmlns:xsi=&amp;#34;http://www.w3.org/2001/XMLSchema-instance&amp;#34; xsi:schemaLocation=&amp;#34;http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd&amp;#34;&amp;gt; &amp;lt;parent&amp;gt; &amp;lt;artifactId&amp;gt;spi-demo&amp;lt;/artifactId&amp;gt; &amp;lt;groupId&amp;gt;org.example&amp;lt;/groupId&amp;gt; &amp;lt;version&amp;gt;1.0-SNAPSHOT&amp;lt;/version&amp;gt; &amp;lt;/parent&amp;gt; &amp;lt;modelVersion&amp;gt;4.0.0&amp;lt;/modelVersion&amp;gt; &amp;lt;artifactId&amp;gt;data-trans-api&amp;lt;/artifactId&amp;gt; &amp;lt;properties&amp;gt; &amp;lt;maven.compiler.source&amp;gt;8&amp;lt;/maven.compiler.source&amp;gt; &amp;lt;maven.compiler.target&amp;gt;8&amp;lt;/maven.compiler.target&amp;gt; &amp;lt;/properties&amp;gt; &amp;lt;/project&amp;gt; 定义接口
+package com.example; public interface DataProvider { String getData(); } usb实现项目 创建一个名称为 usb 的 maven 项目，引入前面提供的 data-trans-api 包，完整的XML如下
+&amp;lt;?xml version=&amp;#34;1.0&amp;#34; encoding=&amp;#34;UTF-8&amp;#34;?&amp;gt; &amp;lt;project xmlns=&amp;#34;http://maven.apache.org/POM/4.0.0&amp;#34; xmlns:xsi=&amp;#34;http://www.w3.org/2001/XMLSchema-instance&amp;#34; xsi:schemaLocation=&amp;#34;http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd&amp;#34;&amp;gt; &amp;lt;parent&amp;gt; &amp;lt;artifactId&amp;gt;spi-demo&amp;lt;/artifactId&amp;gt; &amp;lt;groupId&amp;gt;org.example&amp;lt;/groupId&amp;gt; &amp;lt;version&amp;gt;1.0-SNAPSHOT&amp;lt;/version&amp;gt; &amp;lt;/parent&amp;gt; &amp;lt;modelVersion&amp;gt;4.0.0&amp;lt;/modelVersion&amp;gt; &amp;lt;artifactId&amp;gt;usb&amp;lt;/artifactId&amp;gt; &amp;lt;properties&amp;gt; &amp;lt;maven.compiler.source&amp;gt;8&amp;lt;/maven.compiler.source&amp;gt; &amp;lt;maven.compiler.target&amp;gt;8&amp;lt;/maven.compiler.target&amp;gt; &amp;lt;/properties&amp;gt; &amp;lt;dependencies&amp;gt; &amp;lt;dependency&amp;gt; &amp;lt;groupId&amp;gt;org.</description>
+    </item>
+    
     <item>
       <title>Otter数据同步2 - 配置同步</title>
       <link>https://telzhou618.github.io/post/otter2/</link>
