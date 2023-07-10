@@ -360,10 +360,12 @@ package com.example; public interface DataProvider { String getData(); } usb实�
 </span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> <span style="color:#e6db74">&#34;从Usb接口获取数据...&#34;</span><span style="color:#f92672">;</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#f92672">}</span>
 </span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
-</span></span></code></pre></div><p>然后在 resources 目录下依次创建目录 META-INF/services/
-在 services 目录创建配置文件，名称为接口类的完全限定名，这里是 com.example.DataProvider
-在文件内添加实现类的完全限定名，这里是 com.example.UsbDataProvider, 如果有多个实现，换行写入，每个实现类单独一行, 完整的结果如下
-文件路径：resource/META-INF/services/com.example.DataProvider，文件内容如下</p>
+</span></span></code></pre></div><ul>
+<li>在 resources 目录下依次创建目录 META-INF/services/</li>
+<li>在 services 目录创建配置文件，名称为接口类的完全限定名，这里是 com.example.DataProvider</li>
+<li>在文件内添加实现类的完全限定名，这里是 com.example.UsbDataProvider, 如果有多个实现，换行写入，每个实现类单独一行, 完整的结果如下</li>
+<li>文件路径：resource/META-INF/services/com.example.DataProvider，文件内容如下</li>
+</ul>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>com.example.UsbDataProvider
 </span></span></code></pre></div><h3 id="使用-demo">使用 demo</h3>
 <p>创建 maven 项目，名称为 demo, 引入前面的接口包和实现包</p>
@@ -391,8 +393,10 @@ package com.example; public interface DataProvider { String getData(); } usb实�
 </span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
 </span></span></code></pre></div><p>运行结果</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>从Usb接口获取数据...
-</span></span></code></pre></div><p>可以看到拿到了 UsbDataProvider 对象实例，并且调用 getData方法成功获取到数据。</p>
-<p>原理：ServiceLoader 会扫描所有jar包的 DataProvider 配置文件，加载实现类，并通过反射实例化。</p>
+</span></span></code></pre></div><ul>
+<li>可以看到拿到了 UsbDataProvider 对象实例，并且调用 getData方法成功获取到数据。</li>
+<li>原理：ServiceLoader 会扫描所有jar包的 DataProvider 配置文件，加载实现类，并通过反射实例化。</li>
+</ul>
 <p>如果有一天要用Typec获取数据，在不修改代码的情况下如何实现？</p>
 <h3 id="typc实现">typc实现</h3>
 <p>创建名为 typec 的 maven 项目，引入接口包 data-trans-api, xml 如下</p>
