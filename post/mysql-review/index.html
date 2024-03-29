@@ -29,13 +29,9 @@
 
 
 
-
-
-
-
 <html
-  class="not-ready text-sm lg:text-base"
-  style="--bg: #faf6f1"
+  class="not-ready lg:text-base"
+  style="--bg: #faf8f1"
   lang="en-us"
 >
   <head>
@@ -80,8 +76,6 @@ explain select * from employees where name = &#39;Lucy&#39;; 下面介绍下 Exp
   
   
   
-  <link rel="preload" as="image" href="https://s.gravatar.com/avatar/9ff9514e4c37a5cb11be475190289857778d613942c4d6364c16e770a4cb66a0?s=80" />
-  
   
 
   
@@ -120,7 +114,7 @@ explain select * from employees where name = &#39;Lucy&#39;; 下面介绍下 Exp
   <link rel="apple-touch-icon" href="https://telzhou618.github.io/apple-touch-icon.png" />
 
   
-  <meta name="generator" content="Hugo 0.114.1">
+  <meta name="generator" content="Hugo 0.121.1">
 
   
   
@@ -140,8 +134,9 @@ explain select * from employees where name = &#39;Lucy&#39;; 下面介绍下 Exp
 explain select * from employees where name = &#39;Lucy&#39;; 下面介绍下 Explain 中的列。" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://telzhou618.github.io/post/mysql-review/" /><meta property="article:section" content="post" />
-<meta property="article:published_time" content="2022-06-28T11:44:07+08:00" />
-<meta property="article:modified_time" content="2022-06-28T11:44:07+08:00" />
+<meta property="article:published_time" content="2023-08-28T11:44:07+08:00" />
+<meta property="article:modified_time" content="2023-08-28T11:44:07+08:00" />
+
 
   
   <meta itemprop="name" content="MySQL 优化及索引设计规范">
@@ -149,13 +144,12 @@ explain select * from employees where name = &#39;Lucy&#39;; 下面介绍下 Exp
 几个MySQL命令 mysql.server start // 启动MySQL mysql.server stop // 停止MYSQL ./mysqld_safe --data=../data // 从data备份中恢复数据 ./mysql_secure_installation // 修改管理员密码 索引的优缺点 优点
 索引大大减少了服务器需要扫描的数据量。 索引可以帮助服务器避免排序和临时表。 索引可以将随机IO变为顺序IO。 缺点
 创建索引和维护索引要耗费时间 ，这种时间随着数据量的增加而增加。 索引需要占物理空间 。 索引的分类 主键索引(聚簇索引、聚集索引)、二级索引（非聚集索引）。 普通索引、唯一索引、全文索引。 独立索引、复合索引、前缀索引。 B&#43;Tree 索引、Hash索引。 索引数据结构 常见的索引数据结构有Hash表、二叉树、平衡二叉树、红黑树、B-Tree、B&#43;Tree。 Hash 索引：Hash 表只能做等值匹配，效率很高。但是不支持范围查找和排序，因为取每个数据要做hash运算，只有取出来才能知道他是什么。 二叉树：二叉树极端情况下树会变成一个链表，也不适合做索引。 平衡二叉树：平衡二叉树无法支持很大的数据，数据量大时，树的高度依然很高，效率不高。 红黑树：红黑树通过限制节点的颜色控制数据变化时树的旋转次数，插入、删除数据时性能有一定提升，但树高依然无法控制，无法支持大数据量。 B-tree：非叶子节点存储真实数据，占用空间大，可存储的索引会减少。 B&#43;tree：所有数据存在叶子节点，非叶子节点只存索引，可容纳更多的索引数据。 SQL性能分析工具Explain 工具详解 在一条查询语句前加 explain 可以获得SQL语句的执行计划，可看到使用了什么索引，大致扫描了多少行等信息，从而分析出SQL语句的瓶颈在哪里。 explain select * from employees where name = &lsquo;Lucy&rsquo;; Explain 工具详解 在一条查询语句前加 explain 可以获得SQL语句的执行计划，可看到使用了什么索引，大致扫描了多少行等信息，从而分析出SQL语句的瓶颈在哪里。
-explain select * from employees where name = &#39;Lucy&#39;; 下面介绍下 Explain 中的列。"><meta itemprop="datePublished" content="2022-06-28T11:44:07+08:00" />
-<meta itemprop="dateModified" content="2022-06-28T11:44:07+08:00" />
+explain select * from employees where name = &#39;Lucy&#39;; 下面介绍下 Explain 中的列。"><meta itemprop="datePublished" content="2023-08-28T11:44:07+08:00" />
+<meta itemprop="dateModified" content="2023-08-28T11:44:07+08:00" />
 <meta itemprop="wordCount" content="1087">
 <meta itemprop="keywords" content="" />
   
-  <meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="MySQL 优化及索引设计规范"/>
+  <meta name="twitter:card" content="summary"/><meta name="twitter:title" content="MySQL 优化及索引设计规范"/>
 <meta name="twitter:description" content="索引是帮助MySQL高效获取数据的排好序的数据结构。
 几个MySQL命令 mysql.server start // 启动MySQL mysql.server stop // 停止MYSQL ./mysqld_safe --data=../data // 从data备份中恢复数据 ./mysql_secure_installation // 修改管理员密码 索引的优缺点 优点
 索引大大减少了服务器需要扫描的数据量。 索引可以帮助服务器避免排序和临时表。 索引可以将随机IO变为顺序IO。 缺点
@@ -167,11 +161,11 @@ explain select * from employees where name = &#39;Lucy&#39;; 下面介绍下 Exp
 </head>
 
   <body class="text-black duration-200 ease-out dark:text-white">
-    <header class="mx-auto flex h-[5rem] max-w-3xl px-8 lg:justify-center">
+    <header class="mx-auto flex h-[4.5rem] max-w-3xl px-8 lg:justify-center">
   <div class="relative z-50 mr-auto flex items-center">
     <a
       class="-translate-x-[1px] -translate-y-[1px] text-2xl font-semibold"
-      href="https://telzhou618.github.io/"
+      href="https://telzhou618.github.io"
       >Home</a
     >
     <div
@@ -182,7 +176,7 @@ explain select * from employees where name = &#39;Lucy&#39;; 下面介绍下 Exp
   </div>
 
   <div
-    class="btn-menu relative z-50 -mr-8 flex h-[5rem] w-[5rem] shrink-0 cursor-pointer flex-col items-center justify-center gap-2.5 lg:hidden"
+    class="btn-menu relative z-50 -mr-8 flex h-[4.5rem] w-[5rem] shrink-0 cursor-pointer flex-col items-center justify-center gap-2.5 lg:hidden"
     role="button"
     aria-label="Menu"
   ></div>
@@ -203,7 +197,7 @@ explain select * from employees where name = &#39;Lucy&#39;; 下面介绍下 Exp
 
     
     const metaTheme = document.querySelector('meta[name="theme-color"]');
-    const lightBg = "#faf6f1".replace(/"/g, '');
+    const lightBg = '#faf8f1'.replace(/"/g, '');
     const setDark = (isDark) => {
       metaTheme.setAttribute('content', isDark ? '#000' : lightBg);
       htmlClass[isDark ? 'add' : 'remove']('dark');
@@ -236,22 +230,6 @@ explain select * from employees where name = &#39;Lucy&#39;; 下面介绍下 Exp
   >
     
     
-    <nav class="lg:ml-12 lg:flex lg:flex-row lg:items-center lg:space-x-6">
-      
-      <a
-        class="block text-center text-2xl leading-[5rem] lg:text-base lg:font-normal"
-        href="/post/"
-        >posts</a
-      >
-      
-      <a
-        class="block text-center text-2xl leading-[5rem] lg:text-base lg:font-normal"
-        href="/about/"
-        >about</a
-      >
-      
-    </nav>
-    
 
     
     <nav
@@ -275,18 +253,18 @@ explain select * from employees where name = &#39;Lucy&#39;; 下面介绍下 Exp
 
 
     <main
-      class="prose prose-neutral relative mx-auto min-h-[calc(100%-10rem)] max-w-3xl px-8 pb-24 pt-16 dark:prose-invert"
+      class="prose prose-neutral relative mx-auto min-h-[calc(100%-9rem)] max-w-3xl px-8 pb-16 pt-12 dark:prose-invert"
     >
       
 
 <article>
-  <header class="mb-20">
+  <header class="mb-16">
     <h1 class="!my-0 pb-2.5">MySQL 优化及索引设计规范</h1>
 
     
-    <div class="text-sm opacity-60">
+    <div class="text-sm antialiased opacity-60">
       
-      <time>Jun 28, 2022</time>
+      <time>Aug 28, 2023</time>
       
       
       
@@ -710,16 +688,16 @@ buffer 内容。 那么如果 a 字段没有索引呢，那就走下面的 BNL�
   <nav class="mt-24 flex rounded-lg bg-black/[3%] text-lg dark:bg-white/[8%]">
     
     <a
-      class="flex w-1/2 items-center rounded-l-md p-6 pr-3 no-underline hover:bg-black/[2%] dark:hover:bg-white/[3%]"
-      href="https://telzhou618.github.io/post/mybatis/"
-      ><span class="mr-1.5">←</span><span>MyBatis 源码解析</span></a
+      class="flex w-1/2 items-center rounded-l-md p-6 pr-3 font-semibold no-underline hover:bg-black/[2%] dark:hover:bg-white/[3%]"
+      href="https://telzhou618.github.io/post/rocketmq/"
+      ><span class="mr-1.5">←</span><span>一文搞懂 RocketMQ</span></a
     >
     
     
     <a
-      class="ml-auto flex w-1/2 items-center justify-end rounded-r-md p-6 pl-3 no-underline hover:bg-black/[2%] dark:hover:bg-white/[3%]"
-      href="https://telzhou618.github.io/post/netty/"
-      ><span>Netty 和 NIO 全面掌握</span><span class="ml-1.5">→</span></a
+      class="ml-auto flex w-1/2 items-center justify-end rounded-r-md p-6 pl-3 font-semibold no-underline hover:bg-black/[2%] dark:hover:bg-white/[3%]"
+      href="https://telzhou618.github.io/post/redis/"
+      ><span>Redis 从入门到入土</span><span class="ml-1.5">→</span></a
     >
     
   </nav>
@@ -765,7 +743,7 @@ buffer 内容。 那么如果 a 字段没有索引呢，那就走下面的 BNL�
     </main>
 
     <footer
-  class="opaco mx-auto flex h-[5rem] max-w-3xl items-center px-8 text-[0.9em] opacity-60"
+  class="opaco mx-auto flex h-[4.5rem] max-w-3xl items-center px-8 text-[0.9em] opacity-60"
 >
   <div class="mr-auto">
     &copy; 2023
@@ -779,7 +757,7 @@ buffer 内容。 那么如果 a 字段没有索引呢，那就走下面的 BNL�
     href="https://github.com/nanxiaobei/hugo-paper"
     rel="noopener"
     target="_blank"
-    >Theme Paper</a
+    >✎ Paper</a
   >
 </footer>
 

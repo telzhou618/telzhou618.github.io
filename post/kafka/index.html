@@ -29,13 +29,9 @@
 
 
 
-
-
-
-
 <html
-  class="not-ready text-sm lg:text-base"
-  style="--bg: #faf6f1"
+  class="not-ready lg:text-base"
+  style="--bg: #faf8f1"
   lang="en-us"
 >
   <head>
@@ -76,8 +72,6 @@
   
   
   
-  <link rel="preload" as="image" href="https://s.gravatar.com/avatar/9ff9514e4c37a5cb11be475190289857778d613942c4d6364c16e770a4cb66a0?s=80" />
-  
   
 
   
@@ -116,7 +110,7 @@
   <link rel="apple-touch-icon" href="https://telzhou618.github.io/apple-touch-icon.png" />
 
   
-  <meta name="generator" content="Hugo 0.114.1">
+  <meta name="generator" content="Hugo 0.121.1">
 
   
   
@@ -135,6 +129,7 @@
 <meta property="article:published_time" content="2022-06-28T11:44:07+08:00" />
 <meta property="article:modified_time" content="2022-06-28T11:44:07+08:00" />
 
+
   
   <meta itemprop="name" content="一文搞懂 kafka">
 <meta itemprop="description" content=""><meta itemprop="datePublished" content="2022-06-28T11:44:07+08:00" />
@@ -142,8 +137,7 @@
 <meta itemprop="wordCount" content="0">
 <meta itemprop="keywords" content="" />
   
-  <meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="一文搞懂 kafka"/>
+  <meta name="twitter:card" content="summary"/><meta name="twitter:title" content="一文搞懂 kafka"/>
 <meta name="twitter:description" content=""/>
 
   
@@ -151,11 +145,11 @@
 </head>
 
   <body class="text-black duration-200 ease-out dark:text-white">
-    <header class="mx-auto flex h-[5rem] max-w-3xl px-8 lg:justify-center">
+    <header class="mx-auto flex h-[4.5rem] max-w-3xl px-8 lg:justify-center">
   <div class="relative z-50 mr-auto flex items-center">
     <a
       class="-translate-x-[1px] -translate-y-[1px] text-2xl font-semibold"
-      href="https://telzhou618.github.io/"
+      href="https://telzhou618.github.io"
       >Home</a
     >
     <div
@@ -166,7 +160,7 @@
   </div>
 
   <div
-    class="btn-menu relative z-50 -mr-8 flex h-[5rem] w-[5rem] shrink-0 cursor-pointer flex-col items-center justify-center gap-2.5 lg:hidden"
+    class="btn-menu relative z-50 -mr-8 flex h-[4.5rem] w-[5rem] shrink-0 cursor-pointer flex-col items-center justify-center gap-2.5 lg:hidden"
     role="button"
     aria-label="Menu"
   ></div>
@@ -187,7 +181,7 @@
 
     
     const metaTheme = document.querySelector('meta[name="theme-color"]');
-    const lightBg = "#faf6f1".replace(/"/g, '');
+    const lightBg = '#faf8f1'.replace(/"/g, '');
     const setDark = (isDark) => {
       metaTheme.setAttribute('content', isDark ? '#000' : lightBg);
       htmlClass[isDark ? 'add' : 'remove']('dark');
@@ -220,22 +214,6 @@
   >
     
     
-    <nav class="lg:ml-12 lg:flex lg:flex-row lg:items-center lg:space-x-6">
-      
-      <a
-        class="block text-center text-2xl leading-[5rem] lg:text-base lg:font-normal"
-        href="/post/"
-        >posts</a
-      >
-      
-      <a
-        class="block text-center text-2xl leading-[5rem] lg:text-base lg:font-normal"
-        href="/about/"
-        >about</a
-      >
-      
-    </nav>
-    
 
     
     <nav
@@ -259,16 +237,16 @@
 
 
     <main
-      class="prose prose-neutral relative mx-auto min-h-[calc(100%-10rem)] max-w-3xl px-8 pb-24 pt-16 dark:prose-invert"
+      class="prose prose-neutral relative mx-auto min-h-[calc(100%-9rem)] max-w-3xl px-8 pb-16 pt-12 dark:prose-invert"
     >
       
 
 <article>
-  <header class="mb-20">
+  <header class="mb-16">
     <h1 class="!my-0 pb-2.5">一文搞懂 kafka</h1>
 
     
-    <div class="text-sm opacity-60">
+    <div class="text-sm antialiased opacity-60">
       
       <time>Jun 28, 2022</time>
       
@@ -290,16 +268,16 @@
   <nav class="mt-24 flex rounded-lg bg-black/[3%] text-lg dark:bg-white/[8%]">
     
     <a
-      class="flex w-1/2 items-center rounded-l-md p-6 pr-3 no-underline hover:bg-black/[2%] dark:hover:bg-white/[3%]"
-      href="https://telzhou618.github.io/post/vscode/"
-      ><span class="mr-1.5">←</span><span>Vscode 常用快捷键</span></a
+      class="flex w-1/2 items-center rounded-l-md p-6 pr-3 font-semibold no-underline hover:bg-black/[2%] dark:hover:bg-white/[3%]"
+      href="https://telzhou618.github.io/post/netty/"
+      ><span class="mr-1.5">←</span><span>Netty 和 NIO 全面掌握</span></a
     >
     
     
     <a
-      class="ml-auto flex w-1/2 items-center justify-end rounded-r-md p-6 pl-3 no-underline hover:bg-black/[2%] dark:hover:bg-white/[3%]"
-      href="https://telzhou618.github.io/post/rocketmq/"
-      ><span>一文搞懂 RocketMQ</span><span class="ml-1.5">→</span></a
+      class="ml-auto flex w-1/2 items-center justify-end rounded-r-md p-6 pl-3 font-semibold no-underline hover:bg-black/[2%] dark:hover:bg-white/[3%]"
+      href="https://telzhou618.github.io/post/java8-debug/"
+      ><span>JAVA8 debug 技巧</span><span class="ml-1.5">→</span></a
     >
     
   </nav>
@@ -345,7 +323,7 @@
     </main>
 
     <footer
-  class="opaco mx-auto flex h-[5rem] max-w-3xl items-center px-8 text-[0.9em] opacity-60"
+  class="opaco mx-auto flex h-[4.5rem] max-w-3xl items-center px-8 text-[0.9em] opacity-60"
 >
   <div class="mr-auto">
     &copy; 2023
@@ -359,7 +337,7 @@
     href="https://github.com/nanxiaobei/hugo-paper"
     rel="noopener"
     target="_blank"
-    >Theme Paper</a
+    >✎ Paper</a
   >
 </footer>
 

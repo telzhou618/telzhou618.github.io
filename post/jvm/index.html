@@ -29,13 +29,9 @@
 
 
 
-
-
-
-
 <html
-  class="not-ready text-sm lg:text-base"
-  style="--bg: #faf6f1"
+  class="not-ready lg:text-base"
+  style="--bg: #faf8f1"
   lang="en-us"
 >
   <head>
@@ -100,8 +96,6 @@ G1收集器 -XX:&#43;UseG1GC:使用G1收集器
   
   
   
-  <link rel="preload" as="image" href="https://s.gravatar.com/avatar/9ff9514e4c37a5cb11be475190289857778d613942c4d6364c16e770a4cb66a0?s=80" />
-  
   
 
   
@@ -140,7 +134,7 @@ G1收集器 -XX:&#43;UseG1GC:使用G1收集器
   <link rel="apple-touch-icon" href="https://telzhou618.github.io/apple-touch-icon.png" />
 
   
-  <meta name="generator" content="Hugo 0.114.1">
+  <meta name="generator" content="Hugo 0.121.1">
 
   
   
@@ -180,8 +174,9 @@ G1收集器 -XX:&#43;UseG1GC:使用G1收集器
 -XX:G1HeapWastePercent(默认5%): gc过程中空出来的region是否充足阈值，在混合回收的时候，对Region回收都 是基于复制算法进行的，都是把要回收的Region里的存活对象放入其他Region，然后这个Region中的垃圾对象全部清 理掉，这样的话在回收过程就会不断空出来新的Region，一旦空闲出来的Region数量达到了堆内存的5%，此时就会立 即停止混合回收，意味着本次混合回收就结束了。" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://telzhou618.github.io/post/jvm/" /><meta property="article:section" content="post" />
-<meta property="article:published_time" content="2022-06-28T11:44:07+08:00" />
-<meta property="article:modified_time" content="2022-06-28T11:44:07+08:00" />
+<meta property="article:published_time" content="2023-06-16T11:44:07+08:00" />
+<meta property="article:modified_time" content="2023-06-16T11:44:07+08:00" />
+
 
   
   <meta itemprop="name" content="JVM 常用参数">
@@ -209,13 +204,12 @@ G1收集器 -XX:&#43;UseG1GC:使用G1收集器
 -XX:InitiatingHeapOccupancyPercent:老年代占用空间达到整堆内存阈值(默认45%)，则执行新生代和老年代的混合 收集(MixedGC)，比如我们之前说的堆默认有2048个region，如果有接近1000个region都是老年代的region，则可能 就要触发MixedGC了
 -XX:G1MixedGCLiveThresholdPercent(默认85%) region中的存活对象低于这个值时才会回收该region，如果超过这 个值，存活对象过多，回收的的意义不大。
 -XX:G1MixedGCCountTarget:在一次回收过程中指定做几次筛选回收(默认8次)，在最后一个筛选回收阶段可以回收一 会，然后暂停回收，恢复系统运行，一会再开始回收，这样可以让系统不至于单次停顿时间过长。
--XX:G1HeapWastePercent(默认5%): gc过程中空出来的region是否充足阈值，在混合回收的时候，对Region回收都 是基于复制算法进行的，都是把要回收的Region里的存活对象放入其他Region，然后这个Region中的垃圾对象全部清 理掉，这样的话在回收过程就会不断空出来新的Region，一旦空闲出来的Region数量达到了堆内存的5%，此时就会立 即停止混合回收，意味着本次混合回收就结束了。"><meta itemprop="datePublished" content="2022-06-28T11:44:07+08:00" />
-<meta itemprop="dateModified" content="2022-06-28T11:44:07+08:00" />
+-XX:G1HeapWastePercent(默认5%): gc过程中空出来的region是否充足阈值，在混合回收的时候，对Region回收都 是基于复制算法进行的，都是把要回收的Region里的存活对象放入其他Region，然后这个Region中的垃圾对象全部清 理掉，这样的话在回收过程就会不断空出来新的Region，一旦空闲出来的Region数量达到了堆内存的5%，此时就会立 即停止混合回收，意味着本次混合回收就结束了。"><meta itemprop="datePublished" content="2023-06-16T11:44:07+08:00" />
+<meta itemprop="dateModified" content="2023-06-16T11:44:07+08:00" />
 <meta itemprop="wordCount" content="145">
 <meta itemprop="keywords" content="" />
   
-  <meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="JVM 常用参数"/>
+  <meta name="twitter:card" content="summary"/><meta name="twitter:title" content="JVM 常用参数"/>
 <meta name="twitter:description" content="开启TLAB 开启开启TLAB后,为没个线程预先分配一块内存，创建对象优先使用TLAB内存分配空间。
 XX:&#43;UseTLAB # 开启TLAB，默认开启 XX:TLABSize # 设置缓存区大小 开启指针压缩 在64位平台的HotSpot中使用32位指针，内存使用会多出1.5倍左右，使用较大指针在主内存和缓存之间移动数据， 占用较大宽带，同时GC也会承受较大压力，默认开启！
 XX:&#43;UseCompressedOops 开启逃逸分析 jdk1.7 后默认开启。
@@ -247,11 +241,11 @@ G1收集器 -XX:&#43;UseG1GC:使用G1收集器
 </head>
 
   <body class="text-black duration-200 ease-out dark:text-white">
-    <header class="mx-auto flex h-[5rem] max-w-3xl px-8 lg:justify-center">
+    <header class="mx-auto flex h-[4.5rem] max-w-3xl px-8 lg:justify-center">
   <div class="relative z-50 mr-auto flex items-center">
     <a
       class="-translate-x-[1px] -translate-y-[1px] text-2xl font-semibold"
-      href="https://telzhou618.github.io/"
+      href="https://telzhou618.github.io"
       >Home</a
     >
     <div
@@ -262,7 +256,7 @@ G1收集器 -XX:&#43;UseG1GC:使用G1收集器
   </div>
 
   <div
-    class="btn-menu relative z-50 -mr-8 flex h-[5rem] w-[5rem] shrink-0 cursor-pointer flex-col items-center justify-center gap-2.5 lg:hidden"
+    class="btn-menu relative z-50 -mr-8 flex h-[4.5rem] w-[5rem] shrink-0 cursor-pointer flex-col items-center justify-center gap-2.5 lg:hidden"
     role="button"
     aria-label="Menu"
   ></div>
@@ -283,7 +277,7 @@ G1收集器 -XX:&#43;UseG1GC:使用G1收集器
 
     
     const metaTheme = document.querySelector('meta[name="theme-color"]');
-    const lightBg = "#faf6f1".replace(/"/g, '');
+    const lightBg = '#faf8f1'.replace(/"/g, '');
     const setDark = (isDark) => {
       metaTheme.setAttribute('content', isDark ? '#000' : lightBg);
       htmlClass[isDark ? 'add' : 'remove']('dark');
@@ -316,22 +310,6 @@ G1收集器 -XX:&#43;UseG1GC:使用G1收集器
   >
     
     
-    <nav class="lg:ml-12 lg:flex lg:flex-row lg:items-center lg:space-x-6">
-      
-      <a
-        class="block text-center text-2xl leading-[5rem] lg:text-base lg:font-normal"
-        href="/post/"
-        >posts</a
-      >
-      
-      <a
-        class="block text-center text-2xl leading-[5rem] lg:text-base lg:font-normal"
-        href="/about/"
-        >about</a
-      >
-      
-    </nav>
-    
 
     
     <nav
@@ -355,18 +333,18 @@ G1收集器 -XX:&#43;UseG1GC:使用G1收集器
 
 
     <main
-      class="prose prose-neutral relative mx-auto min-h-[calc(100%-10rem)] max-w-3xl px-8 pb-24 pt-16 dark:prose-invert"
+      class="prose prose-neutral relative mx-auto min-h-[calc(100%-9rem)] max-w-3xl px-8 pb-16 pt-12 dark:prose-invert"
     >
       
 
 <article>
-  <header class="mb-20">
+  <header class="mb-16">
     <h1 class="!my-0 pb-2.5">JVM 常用参数</h1>
 
     
-    <div class="text-sm opacity-60">
+    <div class="text-sm antialiased opacity-60">
       
-      <time>Jun 28, 2022</time>
+      <time>Jun 16, 2023</time>
       
       
       
@@ -499,16 +477,16 @@ G1收集器 -XX:&#43;UseG1GC:使用G1收集器
   <nav class="mt-24 flex rounded-lg bg-black/[3%] text-lg dark:bg-white/[8%]">
     
     <a
-      class="flex w-1/2 items-center rounded-l-md p-6 pr-3 no-underline hover:bg-black/[2%] dark:hover:bg-white/[3%]"
-      href="https://telzhou618.github.io/post/java8-debug/"
-      ><span class="mr-1.5">←</span><span>JAVA8 debug 技巧</span></a
+      class="flex w-1/2 items-center rounded-l-md p-6 pr-3 font-semibold no-underline hover:bg-black/[2%] dark:hover:bg-white/[3%]"
+      href="https://telzhou618.github.io/post/mybatis/"
+      ><span class="mr-1.5">←</span><span>MyBatis 源码解析</span></a
     >
     
     
     <a
-      class="ml-auto flex w-1/2 items-center justify-end rounded-r-md p-6 pl-3 no-underline hover:bg-black/[2%] dark:hover:bg-white/[3%]"
-      href="https://telzhou618.github.io/post/mybatis/"
-      ><span>MyBatis 源码解析</span><span class="ml-1.5">→</span></a
+      class="ml-auto flex w-1/2 items-center justify-end rounded-r-md p-6 pl-3 font-semibold no-underline hover:bg-black/[2%] dark:hover:bg-white/[3%]"
+      href="https://telzhou618.github.io/post/docker/"
+      ><span>Docker &amp; Docker-compose</span><span class="ml-1.5">→</span></a
     >
     
   </nav>
@@ -554,7 +532,7 @@ G1收集器 -XX:&#43;UseG1GC:使用G1收集器
     </main>
 
     <footer
-  class="opaco mx-auto flex h-[5rem] max-w-3xl items-center px-8 text-[0.9em] opacity-60"
+  class="opaco mx-auto flex h-[4.5rem] max-w-3xl items-center px-8 text-[0.9em] opacity-60"
 >
   <div class="mr-auto">
     &copy; 2023
@@ -568,7 +546,7 @@ G1收集器 -XX:&#43;UseG1GC:使用G1收集器
     href="https://github.com/nanxiaobei/hugo-paper"
     rel="noopener"
     target="_blank"
-    >Theme Paper</a
+    >✎ Paper</a
   >
 </footer>
 
