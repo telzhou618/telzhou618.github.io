@@ -1,0 +1,1451 @@
+<!doctype html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<html
+  class="not-ready lg:text-base"
+  style="--bg: #faf8f1"
+  lang="en-us"
+>
+  <head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, shrink-to-fit=no"
+  />
+
+  
+  <title>一文搞懂 RocketMQ - Home</title>
+
+  
+  <meta name="theme-color" />
+
+  
+  
+  
+  
+  <meta name="description" content="RocketMQ 集群架构图 RocketMQ 四大核心集群 NameServer 集群：作为注册中心，维护着所有的broker和topic的映射关系，以及路由功能，多台部署，之间不互相通信。 Broker集群 ：负责消息存储，消息转发。 Producer集群 ：生产消息，一般是自己的Application集群。 Consumer集群：消费消息，一般是自己的Application集群。 RocketMQ 其他核心组件 Consumer Group：消费者组，集群模式相同Group的每个Consumer平均分摊消息，广播模式相同Group的每个Consumer都接收全量消息。 Topic：一类消息的集合，一个消息只能属于一个Topic。 Message：消息的载体。 Message Queue：消息分区，每个Topic下可以有多个分区。 Tag：给消息设置一个标签，消费者可以过滤出想要的消息。 RocketMQ 消息发送方式 单项发送 只负责发出去，不管是否成功，没有返回值，一般用在可靠性不高的场景，如记录日志。
+producer.sendOneway(msg); 同步发送 需要同步等待消费发送的结果，有返回值，用在可靠性要求高，性能不高的场景。
+// Send message to one of brokers SendResult sendResult = producer.send(msg); // Check whether the message has been delivered by the callback of sendResult System.out.printf(&#34;%s%n&#34;, sendResult); 异步发送 无需等待返回值，需要实现回调方法，消息发送完成会自动执行回调方法，用在可靠性和性能要求较高的场景。
+producer.send(msg, new SendCallback() { @Override public void onSuccess(SendResult sendResult) { System.out.printf(&#34;%-10d OK %s %n&#34;, index, sendResult." />
+  <meta name="author" content="telzhou618" />
+  
+
+  
+  
+  
+  
+  
+  
+  <link rel="preload stylesheet" as="style" href="https://telzhou618.github.io/main.min.css" />
+
+  
+  
+  
+  
+  
+  <link rel="preload" as="image" href="https://telzhou618.github.io/theme.svg" />
+
+  
+  
+  
+  
+  <link rel="preload" as="image" href="https://s.gravatar.com/avatar/9ff9514e4c37a5cb11be475190289857778d613942c4d6364c16e770a4cb66a0?s=80" />
+  
+  
+
+  
+  
+  <link rel="preload" as="image" href="https://telzhou618.github.io/github.svg" />
+  
+  
+
+  
+  
+
+  
+  
+  
+  <link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/katex@0.16.7/dist/katex.min.css"
+  integrity="sha384-3UiQGuEI4TTMaFmGIZumfRPtfKQ3trwQE2JgosJxCnGmQpL/lJdjpcHkaaFwHlcI"
+  crossorigin="anonymous"
+/>
+<script
+  defer
+  src="https://cdn.jsdelivr.net/npm/katex@0.16.7/dist/katex.min.js"
+  integrity="sha384-G0zcxDFp5LWZtDuRMnBkk3EphCK1lhEf4UEyEM693ka574TZGwo4IWwS6QLzM/2t"
+  crossorigin="anonymous"
+></script>
+<script
+  defer
+  src="https://cdn.jsdelivr.net/npm/katex@0.16.7/dist/contrib/auto-render.min.js"
+  integrity="sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05"
+  crossorigin="anonymous"
+></script>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () =>
+    renderMathInElement(document.body, {
+      
+      
+      delimiters: [
+        { left: '$$', right: '$$', display: true },
+        { left: '$', right: '$', display: false },
+      ],
+      
+      throwOnError: false,
+    }),
+  );
+</script>
+
+  
+  
+  
+
+  
+  <link rel="icon" href="https://telzhou618.github.io/favicon.ico" />
+  <link rel="apple-touch-icon" href="https://telzhou618.github.io/apple-touch-icon.png" />
+
+  
+  <meta name="generator" content="Hugo 0.121.1">
+
+  
+  
+  
+  
+  
+  <meta itemprop="name" content="一文搞懂 RocketMQ">
+<meta itemprop="description" content="RocketMQ 集群架构图 RocketMQ 四大核心集群 NameServer 集群：作为注册中心，维护着所有的broker和topic的映射关系，以及路由功能，多台部署，之间不互相通信。 Broker集群 ：负责消息存储，消息转发。 Producer集群 ：生产消息，一般是自己的Application集群。 Consumer集群：消费消息，一般是自己的Application集群。 RocketMQ 其他核心组件 Consumer Group：消费者组，集群模式相同Group的每个Consumer平均分摊消息，广播模式相同Group的每个Consumer都接收全量消息。 Topic：一类消息的集合，一个消息只能属于一个Topic。 Message：消息的载体。 Message Queue：消息分区，每个Topic下可以有多个分区。 Tag：给消息设置一个标签，消费者可以过滤出想要的消息。 RocketMQ 消息发送方式 单项发送 只负责发出去，不管是否成功，没有返回值，一般用在可靠性不高的场景，如记录日志。
+producer.sendOneway(msg); 同步发送 需要同步等待消费发送的结果，有返回值，用在可靠性要求高，性能不高的场景。
+// Send message to one of brokers SendResult sendResult = producer.send(msg); // Check whether the message has been delivered by the callback of sendResult System.out.printf(&#34;%s%n&#34;, sendResult); 异步发送 无需等待返回值，需要实现回调方法，消息发送完成会自动执行回调方法，用在可靠性和性能要求较高的场景。
+producer.send(msg, new SendCallback() { @Override public void onSuccess(SendResult sendResult) { System.out.printf(&#34;%-10d OK %s %n&#34;, index, sendResult."><meta itemprop="datePublished" content="2022-06-28T11:44:07+08:00" />
+<meta itemprop="dateModified" content="2022-06-28T11:44:07+08:00" />
+<meta itemprop="wordCount" content="2589">
+<meta itemprop="keywords" content="" />
+  
+  <meta property="og:title" content="一文搞懂 RocketMQ" />
+<meta property="og:description" content="RocketMQ 集群架构图 RocketMQ 四大核心集群 NameServer 集群：作为注册中心，维护着所有的broker和topic的映射关系，以及路由功能，多台部署，之间不互相通信。 Broker集群 ：负责消息存储，消息转发。 Producer集群 ：生产消息，一般是自己的Application集群。 Consumer集群：消费消息，一般是自己的Application集群。 RocketMQ 其他核心组件 Consumer Group：消费者组，集群模式相同Group的每个Consumer平均分摊消息，广播模式相同Group的每个Consumer都接收全量消息。 Topic：一类消息的集合，一个消息只能属于一个Topic。 Message：消息的载体。 Message Queue：消息分区，每个Topic下可以有多个分区。 Tag：给消息设置一个标签，消费者可以过滤出想要的消息。 RocketMQ 消息发送方式 单项发送 只负责发出去，不管是否成功，没有返回值，一般用在可靠性不高的场景，如记录日志。
+producer.sendOneway(msg); 同步发送 需要同步等待消费发送的结果，有返回值，用在可靠性要求高，性能不高的场景。
+// Send message to one of brokers SendResult sendResult = producer.send(msg); // Check whether the message has been delivered by the callback of sendResult System.out.printf(&#34;%s%n&#34;, sendResult); 异步发送 无需等待返回值，需要实现回调方法，消息发送完成会自动执行回调方法，用在可靠性和性能要求较高的场景。
+producer.send(msg, new SendCallback() { @Override public void onSuccess(SendResult sendResult) { System.out.printf(&#34;%-10d OK %s %n&#34;, index, sendResult." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://telzhou618.github.io/post/rocketmq/" /><meta property="article:section" content="post" />
+<meta property="article:published_time" content="2022-06-28T11:44:07+08:00" />
+<meta property="article:modified_time" content="2022-06-28T11:44:07+08:00" />
+
+
+  
+  <meta name="twitter:card" content="summary"/><meta name="twitter:title" content="一文搞懂 RocketMQ"/>
+<meta name="twitter:description" content="RocketMQ 集群架构图 RocketMQ 四大核心集群 NameServer 集群：作为注册中心，维护着所有的broker和topic的映射关系，以及路由功能，多台部署，之间不互相通信。 Broker集群 ：负责消息存储，消息转发。 Producer集群 ：生产消息，一般是自己的Application集群。 Consumer集群：消费消息，一般是自己的Application集群。 RocketMQ 其他核心组件 Consumer Group：消费者组，集群模式相同Group的每个Consumer平均分摊消息，广播模式相同Group的每个Consumer都接收全量消息。 Topic：一类消息的集合，一个消息只能属于一个Topic。 Message：消息的载体。 Message Queue：消息分区，每个Topic下可以有多个分区。 Tag：给消息设置一个标签，消费者可以过滤出想要的消息。 RocketMQ 消息发送方式 单项发送 只负责发出去，不管是否成功，没有返回值，一般用在可靠性不高的场景，如记录日志。
+producer.sendOneway(msg); 同步发送 需要同步等待消费发送的结果，有返回值，用在可靠性要求高，性能不高的场景。
+// Send message to one of brokers SendResult sendResult = producer.send(msg); // Check whether the message has been delivered by the callback of sendResult System.out.printf(&#34;%s%n&#34;, sendResult); 异步发送 无需等待返回值，需要实现回调方法，消息发送完成会自动执行回调方法，用在可靠性和性能要求较高的场景。
+producer.send(msg, new SendCallback() { @Override public void onSuccess(SendResult sendResult) { System.out.printf(&#34;%-10d OK %s %n&#34;, index, sendResult."/>
+
+  
+  
+  
+  <link rel="canonical" href="https://telzhou618.github.io/post/rocketmq/" />
+  
+  
+</head>
+
+  <body class="text-black duration-200 ease-out dark:text-white">
+    <header class="mx-auto flex h-[4.5rem] max-w-3xl px-8 lg:justify-center">
+  <div class="relative z-50 mr-auto flex items-center">
+    <a
+      class="-translate-x-[1px] -translate-y-[1px] text-2xl font-semibold"
+      href="https://telzhou618.github.io"
+      >Home</a
+    >
+    <div
+      class="btn-dark text-[0] ml-4 h-6 w-6 shrink-0 cursor-pointer [background:url(./theme.svg)_left_center/cover_no-repeat] dark:invert dark:[background-position:right]"
+      role="button"
+      aria-label="Dark"
+    ></div>
+  </div>
+
+  <div
+    class="btn-menu relative z-50 -mr-8 flex h-[4.5rem] w-[5rem] shrink-0 cursor-pointer flex-col items-center justify-center gap-2.5 lg:hidden"
+    role="button"
+    aria-label="Menu"
+  ></div>
+
+  
+
+  <script>
+    
+    const htmlClass = document.documentElement.classList;
+    setTimeout(() => {
+      htmlClass.remove('not-ready');
+    }, 10);
+
+    
+    const btnMenu = document.querySelector('.btn-menu');
+    btnMenu.addEventListener('click', () => {
+      htmlClass.toggle('open');
+    });
+
+    
+    const metaTheme = document.querySelector('meta[name="theme-color"]');
+    const lightBg = '#faf8f1'.replace(/"/g, '');
+    const setDark = (isDark) => {
+      metaTheme.setAttribute('content', isDark ? '#000' : lightBg);
+      htmlClass[isDark ? 'add' : 'remove']('dark');
+      localStorage.setItem('dark', isDark);
+    };
+
+    
+    const darkScheme = window.matchMedia('(prefers-color-scheme: dark)');
+    if (htmlClass.contains('dark')) {
+      setDark(true);
+    } else {
+      const darkVal = localStorage.getItem('dark');
+      setDark(darkVal ? darkVal === 'true' : darkScheme.matches);
+    }
+
+    
+    darkScheme.addEventListener('change', (event) => {
+      setDark(event.matches);
+    });
+
+    
+    const btnDark = document.querySelector('.btn-dark');
+    btnDark.addEventListener('click', () => {
+      setDark(localStorage.getItem('dark') !== 'true');
+    });
+  </script>
+
+  <div
+    class="nav-wrapper fixed inset-x-0 top-full z-40 flex h-full select-none flex-col justify-center pb-16 duration-200 dark:bg-black lg:static lg:h-auto lg:flex-row lg:!bg-transparent lg:pb-0 lg:transition-none"
+  >
+    
+    
+    <nav class="lg:ml-12 lg:flex lg:flex-row lg:items-center lg:space-x-6">
+      
+      <a
+        class="block text-center text-2xl leading-[5rem] lg:text-base lg:font-normal"
+        href="/post/"
+        >Posts</a
+      >
+      
+      <a
+        class="block text-center text-2xl leading-[5rem] lg:text-base lg:font-normal"
+        href="/about/"
+        >About</a
+      >
+      
+    </nav>
+    
+
+    
+    <nav
+      class="mt-12 flex justify-center space-x-10 dark:invert lg:ml-12 lg:mt-0 lg:items-center lg:space-x-6"
+    >
+      
+      <a
+        class="h-8 w-8 text-[0] [background:var(--url)_center_center/cover_no-repeat] lg:h-6 lg:w-6"
+        style="--url: url(./github.svg)"
+        href="https://github.com/telzhou618"
+        target="_blank"
+        rel="me"
+      >
+        github
+      </a>
+      
+    </nav>
+    
+  </div>
+</header>
+
+
+    <main
+      class="prose prose-neutral relative mx-auto min-h-[calc(100%-9rem)] max-w-3xl px-8 pb-16 pt-12 dark:prose-invert"
+    >
+      
+
+<article>
+  <header class="mb-16">
+    <h1 class="!my-0 pb-2.5">一文搞懂 RocketMQ</h1>
+
+    
+    <div class="text-sm antialiased opacity-60">
+      
+      <time>Jun 28, 2022</time>
+      
+      
+      
+      
+    </div>
+    
+  </header>
+
+  <section><h2 id="rocketmq-集群架构图">RocketMQ 集群架构图</h2>
+<p><img src="https://raw.githubusercontent.com/telzhou618/images/main/img/rocketmq_architecture_1.png" alt="rocketmq_architecture_1"></p>
+<h2 id="rocketmq-四大核心集群">RocketMQ 四大核心集群</h2>
+<ul>
+<li><strong>NameServer</strong> 集群：作为注册中心，维护着所有的broker和topic的映射关系，以及路由功能，多台部署，之间不互相通信。</li>
+<li><strong>Broker集群</strong> ：负责消息存储，消息转发。</li>
+<li><strong>Producer集群</strong> ：生产消息，一般是自己的Application集群。</li>
+<li><strong>Consumer集群</strong>：消费消息，一般是自己的Application集群。</li>
+</ul>
+<h2 id="rocketmq-其他核心组件">RocketMQ 其他核心组件</h2>
+<ul>
+<li><strong>Consumer Group</strong>：消费者组，集群模式相同Group的每个Consumer平均分摊消息，广播模式相同Group的每个Consumer都接收全量消息。</li>
+<li><strong>Topic</strong>：一类消息的集合，一个消息只能属于一个Topic。</li>
+<li><strong>Message</strong>：消息的载体。</li>
+<li><strong>Message Queue</strong>：消息分区，每个Topic下可以有多个分区。</li>
+<li><strong>Tag</strong>：给消息设置一个标签，消费者可以过滤出想要的消息。</li>
+</ul>
+<h2 id="rocketmq-消息发送方式">RocketMQ 消息发送方式</h2>
+<h3 id="单项发送">单项发送</h3>
+<p>只负责发出去，不管是否成功，没有返回值，一般用在可靠性不高的场景，如记录日志。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span>producer.<span style="color:#a6e22e">sendOneway</span>(msg);
+</span></span></code></pre></div><h3 id="同步发送">同步发送</h3>
+<p>需要同步等待消费发送的结果，有返回值，用在可靠性要求高，性能不高的场景。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#75715e">// Send message to one of brokers</span>
+</span></span><span style="display:flex;"><span>SendResult sendResult <span style="color:#f92672">=</span> producer.<span style="color:#a6e22e">send</span>(msg);
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// Check whether the message has been delivered by the callback of sendResult</span>
+</span></span><span style="display:flex;"><span>System.<span style="color:#a6e22e">out</span>.<span style="color:#a6e22e">printf</span>(<span style="color:#e6db74">&#34;%s%n&#34;</span>, sendResult);
+</span></span></code></pre></div><h3 id="异步发送">异步发送</h3>
+<p>无需等待返回值，需要实现回调方法，消息发送完成会自动执行回调方法，用在可靠性和性能要求较高的场景。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span>producer.<span style="color:#a6e22e">send</span>(msg, <span style="color:#66d9ef">new</span> SendCallback() {
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">@Override</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">onSuccess</span>(SendResult sendResult) {
+</span></span><span style="display:flex;"><span>    System.<span style="color:#a6e22e">out</span>.<span style="color:#a6e22e">printf</span>(<span style="color:#e6db74">&#34;%-10d OK %s %n&#34;</span>, index,
+</span></span><span style="display:flex;"><span>                      sendResult.<span style="color:#a6e22e">getMsgId</span>());
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">@Override</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">onException</span>(Throwable e) {
+</span></span><span style="display:flex;"><span>    System.<span style="color:#a6e22e">out</span>.<span style="color:#a6e22e">printf</span>(<span style="color:#e6db74">&#34;%-10d Exception %s %n&#34;</span>, index, e);
+</span></span><span style="display:flex;"><span>    e.<span style="color:#a6e22e">printStackTrace</span>();
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>});
+</span></span></code></pre></div><h2 id="rocketmq-消息类型">RocketMQ 消息类型</h2>
+<h3 id="顺序消息">顺序消息</h3>
+<ul>
+<li>
+<p>局部有序：需要生产者和消费者同时保证，只能把需要保证有序的消息发送到同一个MessageQuenue，在消费者端同一个MessageQuenue的消息只能由一个消费者消费。</p>
+<ul>
+<li>如：电商场景的下单业务，对于同一个丁当它从下单、付款、发货是有序的，但不同的订单之间又是无序的，可用这种方案。</li>
+<li>生产者端代码：实现 select 方法，把相同订单的消息发在同一个 quenue。</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span>SendResult sendResult <span style="color:#f92672">=</span> producer.<span style="color:#a6e22e">send</span>(msg, <span style="color:#66d9ef">new</span> MessageQueueSelector() {
+</span></span><span style="display:flex;"><span>   <span style="color:#a6e22e">@Override</span>
+</span></span><span style="display:flex;"><span>   <span style="color:#66d9ef">public</span> MessageQueue <span style="color:#a6e22e">select</span>(List<span style="color:#f92672">&lt;</span>MessageQueue<span style="color:#f92672">&gt;</span> mqs, Message msg, Object arg) {
+</span></span><span style="display:flex;"><span>     Long id <span style="color:#f92672">=</span> (Long) arg;  <span style="color:#75715e">//根据订单id选择发送queue</span>
+</span></span><span style="display:flex;"><span>     <span style="color:#66d9ef">long</span> index <span style="color:#f92672">=</span> id <span style="color:#f92672">%</span> mqs.<span style="color:#a6e22e">size</span>();
+</span></span><span style="display:flex;"><span>     <span style="color:#66d9ef">return</span> mqs.<span style="color:#a6e22e">get</span>((<span style="color:#66d9ef">int</span>) index);
+</span></span><span style="display:flex;"><span>   }
+</span></span><span style="display:flex;"><span> }, orderList.<span style="color:#a6e22e">get</span>(i).<span style="color:#a6e22e">getOrderId</span>());<span style="color:#75715e">//订单id</span>
+</span></span></code></pre></div><ul>
+<li>消费者端代码： 重要的是注册一个MessageListenerOrderly类型的消费者</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span>consumer.<span style="color:#a6e22e">registerMessageListener</span>(<span style="color:#66d9ef">new</span> MessageListenerOrderly() {
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">@Override</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">public</span> ConsumeOrderlyStatus <span style="color:#a6e22e">consumeMessage</span>(List<span style="color:#f92672">&lt;</span>MessageExt<span style="color:#f92672">&gt;</span> msgs, ConsumeOrderlyContext context) {
+</span></span><span style="display:flex;"><span>    context.<span style="color:#a6e22e">setAutoCommit</span>(<span style="color:#66d9ef">true</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> (MessageExt msg : msgs) {
+</span></span><span style="display:flex;"><span>      <span style="color:#75715e">// 可以看到每个queue有唯一的consume线程来消费, 订单对每个queue(分区)有序</span>
+</span></span><span style="display:flex;"><span>      System.<span style="color:#a6e22e">out</span>.<span style="color:#a6e22e">println</span>(<span style="color:#e6db74">&#34;consumeThread=&#34;</span> <span style="color:#f92672">+</span> Thread.<span style="color:#a6e22e">currentThread</span>().<span style="color:#a6e22e">getName</span>() <span style="color:#f92672">+</span> <span style="color:#e6db74">&#34;queueId=&#34;</span> <span style="color:#f92672">+</span> msg.<span style="color:#a6e22e">getQueueId</span>() <span style="color:#f92672">+</span> <span style="color:#e6db74">&#34;, content:&#34;</span> <span style="color:#f92672">+</span> <span style="color:#66d9ef">new</span> String(msg.<span style="color:#a6e22e">getBody</span>()));
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> ConsumeOrderlyStatus.<span style="color:#a6e22e">SUCCESS</span>;
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>});
+</span></span></code></pre></div></li>
+<li>
+<p>全局有序：一个Topic只能有一个MessageQuenue以及消费只能有一个消费者，一般不这么用。</p>
+</li>
+</ul>
+<h3 id="事务消息">事务消息</h3>
+<p>是指应用本地事务和消息可以定义在一个全局事务中，要么同时成功，要么同时失败，可应用在消息和数据库数据严格一致的场景。</p>
+<p>样例：<a href="https://github.com/apache/rocketmq/blob/master/docs/cn/RocketMQ_Example.md#61-%E5%8F%91%E9%80%81%E4%BA%8B%E5%8A%A1%E6%B6%88%E6%81%AF%E6%A0%B7%E4%BE%8B">https://github.com/apache/rocketmq/blob/master/docs/cn/RocketMQ_Example.md#61-发送事务消息样例</a></p>
+<h3 id="延迟消息">延迟消息</h3>
+<p>消息发送给brocker后不会立即消息，一段时间后投递给真正的 Topic， 比如：电商场景一个订单创建1小时候没付款，自动释放库存。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span>Message message <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> Message(<span style="color:#e6db74">&#34;TestTopic&#34;</span>, (<span style="color:#e6db74">&#34;Hello scheduled message &#34;</span> <span style="color:#f92672">+</span> i).<span style="color:#a6e22e">getBytes</span>());
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 设置延时等级3,这个消息将在10s之后发送(现在只支持固定的几个时间,详看delayTimeLevel)</span>
+</span></span><span style="display:flex;"><span>message.<span style="color:#a6e22e">setDelayTimeLevel</span>(3);
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 发送消息</span>
+</span></span><span style="display:flex;"><span>producer.<span style="color:#a6e22e">send</span>(message);
+</span></span></code></pre></div><ul>
+<li>使用限制</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">private</span> String messageDelayLevel <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;1s 5s 10s 30s 1m 2m 3m 4m 5m 6m 7m 8m 9m 10m 20m 30m 1h 2h&#34;</span>;
+</span></span></code></pre></div><h3 id="可靠消息">可靠消息</h3>
+<ul>
+<li>
+<p>如何保证生产者发消息成功？同步发消息、同步方式同步从节点、同步方式刷盘。</p>
+</li>
+<li>
+<p>如何保证消费者消费成功？不要异步消费，消费成功返回ACK，如果消费失败，MQ会重试。</p>
+</li>
+<li>
+<p>MQ 集群宕机怎么办？把消息咱存在Redis，等MQ恢复后再异步再发给MQ。</p>
+</li>
+</ul>
+<h3 id="消息过滤">消息过滤</h3>
+<p>发消息时设置 TAG，消费端可以用TAG过滤只选择自己想要的消息，不想要的不会发给消费者，可以减少网络传输，但增加复杂性。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span>DefaultMQPushConsumer consumer <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> DefaultMQPushConsumer(<span style="color:#e6db74">&#34;CID_EXAMPLE&#34;</span>);
+</span></span><span style="display:flex;"><span>consumer.<span style="color:#a6e22e">subscribe</span>(<span style="color:#e6db74">&#34;TOPIC&#34;</span>, <span style="color:#e6db74">&#34;TAGA || TAGB || TAGC&#34;</span>);
+</span></span></code></pre></div><h3 id="回溯消息">回溯消息</h3>
+<p>消费过的消息不会立即删除，如果MQ宕机重启后，消费者可以选择重新消费某一时间前的历史消息重新消费，称为回溯消息。</p>
+<h3 id="流量控制">流量控制</h3>
+<p>如果 broker 的处理能达到瓶颈，可设置拒绝消息发送，消费者端可通过降低拉取消息的评率流控。</p>
+<h3 id="死信队列">死信队列</h3>
+<p>对于消费失败的消息，重试次数达到最大值后会迁移到一个特殊的队列，这类消息称为死信，可以在MQ控制台手动重发来进行消费。</p>
+<h2 id="rocketmq-核心原理">RocketMQ 核心原理</h2>
+<h3 id="事务消息原理">事务消息原理</h3>
+<h3 id="brocker-选主原理">Brocker 选主原理</h3>
+<ul>
+<li>
+<p>Broker 启动后会主动向NameServer注册自己的信息，之后每隔30秒上报一次Topic路由信息。</p>
+</li>
+<li>
+<p>为保证Broker高可用，borker 引入了 dledger 集群部署方式，当主节点宕机后，dledger集群会自动产生一个新的主节点提供服务，dledger 实现了 Raft 协议，支持选主等功能，更多参考：<a href="https://github.com/openmessaging/dledger/wiki">DLedger - 基于 Raft 算法的 Commitlog Library</a> 。</p>
+</li>
+<li>
+<p>相比kafa引入 zk 实现动态选主的方式dledger 更加轻量，可以直接以 jar 使用。</p>
+</li>
+</ul>
+<h3 id="brocker-存储消息原理">Brocker 存储消息原理</h3>
+<p>RocketMQ 实现消息持久化存储，主要有如下三种文件组成。</p>
+<p><img src="https://raw.githubusercontent.com/telzhou618/images/main/img/rocketmq_design_1.png" alt="rocketmq_design_1"></p>
+<ul>
+<li>CommitLog：具体存储消息的载体，提前申请连续存储空间，顺序写入速度快。</li>
+<li>ConsumeQueue：消费队列，记录Topic和消息存储关系，已经记录消息的当前消费位置（偏移量）。</li>
+<li>IndexFile：索引文件，可通过KEY或时间区间快速查询消息。</li>
+</ul>
+<h2 id="rocketmq-源码解析">RocketMQ 源码解析</h2>
+<h3 id="nameserver-源码">NameServer 源码</h3>
+<ul>
+<li>从启动类 NamesrvStartup 开始</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">main</span>(String<span style="color:#f92672">[]</span> args) {
+</span></span><span style="display:flex;"><span>        main0(args);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">static</span> NamesrvController <span style="color:#a6e22e">main0</span>(String<span style="color:#f92672">[]</span> args) {
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">try</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 实例化 NamesrvController 对象</span>
+</span></span><span style="display:flex;"><span>    NamesrvController controller <span style="color:#f92672">=</span> createNamesrvController(args);
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 执行启动逻辑</span>
+</span></span><span style="display:flex;"><span>    start(controller);
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> controller;
+</span></span><span style="display:flex;"><span>  } <span style="color:#66d9ef">catch</span> (Throwable e) {
+</span></span><span style="display:flex;"><span>    e.<span style="color:#a6e22e">printStackTrace</span>();
+</span></span><span style="display:flex;"><span>    System.<span style="color:#a6e22e">exit</span>(<span style="color:#f92672">-</span>1);
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">null</span>;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><blockquote>
+<p>关键代码就以上两行，createNamesrvController 方法实例化NamesrvController对象，然后执行start方法实现启动逻辑</p>
+</blockquote>
+<ul>
+<li>createNamesrvController() 方法解析</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">static</span> NamesrvController <span style="color:#a6e22e">createNamesrvController</span>(String<span style="color:#f92672">[]</span> args) <span style="color:#66d9ef">throws</span> IOException, JoranException {
+</span></span><span style="display:flex;"><span>        System.<span style="color:#a6e22e">setProperty</span>(RemotingCommand.<span style="color:#a6e22e">REMOTING_VERSION_KEY</span>, Integer.<span style="color:#a6e22e">toString</span>(MQVersion.<span style="color:#a6e22e">CURRENT_VERSION</span>));
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">//PackageConflictDetect.detectFastjson();</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        Options options <span style="color:#f92672">=</span> ServerUtil.<span style="color:#a6e22e">buildCommandlineOptions</span>(<span style="color:#66d9ef">new</span> Options());
+</span></span><span style="display:flex;"><span>        commandLine <span style="color:#f92672">=</span> ServerUtil.<span style="color:#a6e22e">parseCmdLine</span>(<span style="color:#e6db74">&#34;mqnamesrv&#34;</span>, args, buildCommandlineOptions(options), <span style="color:#66d9ef">new</span> PosixParser());
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> (<span style="color:#66d9ef">null</span> <span style="color:#f92672">==</span> commandLine) {
+</span></span><span style="display:flex;"><span>            System.<span style="color:#a6e22e">exit</span>(<span style="color:#f92672">-</span>1);
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">null</span>;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>				<span style="color:#75715e">// 实例化 NameServer 配置类</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">final</span> NamesrvConfig namesrvConfig <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> NamesrvConfig();
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// 实例化 Netty 配置类</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">final</span> NettyServerConfig nettyServerConfig <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> NettyServerConfig();
+</span></span><span style="display:flex;"><span>        nettyServerConfig.<span style="color:#a6e22e">setListenPort</span>(9876);
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> (commandLine.<span style="color:#a6e22e">hasOption</span>(<span style="color:#e6db74">&#39;c&#39;</span>)) {
+</span></span><span style="display:flex;"><span>           <span style="color:#75715e">// 解析参数C，C参数用来置顶配置的文件, 具体逻辑代码忽略。</span>
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> (commandLine.<span style="color:#a6e22e">hasOption</span>(<span style="color:#e6db74">&#39;p&#39;</span>)) {
+</span></span><span style="display:flex;"><span>            <span style="color:#75715e">// 解析参数p，p参数用来单独设置配置属性和属性值，具体逻辑代码忽略。</span>
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        MixAll.<span style="color:#a6e22e">properties2Object</span>(ServerUtil.<span style="color:#a6e22e">commandLine2Properties</span>(commandLine), namesrvConfig);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> (<span style="color:#66d9ef">null</span> <span style="color:#f92672">==</span> namesrvConfig.<span style="color:#a6e22e">getRocketmqHome</span>()) {
+</span></span><span style="display:flex;"><span>            System.<span style="color:#a6e22e">out</span>.<span style="color:#a6e22e">printf</span>(<span style="color:#e6db74">&#34;Please set the %s variable in your environment to match the location of the RocketMQ installation%n&#34;</span>, MixAll.<span style="color:#a6e22e">ROCKETMQ_HOME_ENV</span>);
+</span></span><span style="display:flex;"><span>            System.<span style="color:#a6e22e">exit</span>(<span style="color:#f92672">-</span>2);
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// 加载日志配置文件</span>
+</span></span><span style="display:flex;"><span>        LoggerContext lc <span style="color:#f92672">=</span> (LoggerContext) LoggerFactory.<span style="color:#a6e22e">getILoggerFactory</span>();
+</span></span><span style="display:flex;"><span>        JoranConfigurator configurator <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> JoranConfigurator();
+</span></span><span style="display:flex;"><span>        configurator.<span style="color:#a6e22e">setContext</span>(lc);
+</span></span><span style="display:flex;"><span>        lc.<span style="color:#a6e22e">reset</span>();
+</span></span><span style="display:flex;"><span>        configurator.<span style="color:#a6e22e">doConfigure</span>(namesrvConfig.<span style="color:#a6e22e">getRocketmqHome</span>() <span style="color:#f92672">+</span> <span style="color:#e6db74">&#34;/conf/logback_namesrv.xml&#34;</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        log <span style="color:#f92672">=</span> InternalLoggerFactory.<span style="color:#a6e22e">getLogger</span>(LoggerName.<span style="color:#a6e22e">NAMESRV_LOGGER_NAME</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        MixAll.<span style="color:#a6e22e">printObjectProperties</span>(log, namesrvConfig);
+</span></span><span style="display:flex;"><span>        MixAll.<span style="color:#a6e22e">printObjectProperties</span>(log, nettyServerConfig);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// 使用前面两个 configure 对象实例化 NamesrvController对象。</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">final</span> NamesrvController controller <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> NamesrvController(namesrvConfig, nettyServerConfig);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// remember all configs to prevent discard</span>
+</span></span><span style="display:flex;"><span>        controller.<span style="color:#a6e22e">getConfiguration</span>().<span style="color:#a6e22e">registerConfig</span>(properties);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> controller;
+</span></span><span style="display:flex;"><span>    }
+</span></span></code></pre></div><blockquote>
+<p>这里主要做了两件事，1.把所有的配置信息解析成 NamesrvConfig 和 NettyServerConfig 对象。2.传入使用配置对象实例化NamesrvController对象。</p>
+</blockquote>
+<ul>
+<li>下面看下实例化 NamesrvController 的构造方法做可哪些事</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span> <span style="color:#66d9ef">public</span> <span style="color:#a6e22e">NamesrvController</span>(NamesrvConfig namesrvConfig, NettyServerConfig nettyServerConfig) {
+</span></span><span style="display:flex;"><span>   <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">namesrvConfig</span> <span style="color:#f92672">=</span> namesrvConfig;
+</span></span><span style="display:flex;"><span>   <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">nettyServerConfig</span> <span style="color:#f92672">=</span> nettyServerConfig;
+</span></span><span style="display:flex;"><span>   <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">kvConfigManager</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> KVConfigManager(<span style="color:#66d9ef">this</span>);
+</span></span><span style="display:flex;"><span>   <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">routeInfoManager</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> RouteInfoManager();
+</span></span><span style="display:flex;"><span>   <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">brokerHousekeepingService</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> BrokerHousekeepingService(<span style="color:#66d9ef">this</span>);
+</span></span><span style="display:flex;"><span>   <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">configuration</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> Configuration(
+</span></span><span style="display:flex;"><span>     log,
+</span></span><span style="display:flex;"><span>     <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">namesrvConfig</span>, <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">nettyServerConfig</span>
+</span></span><span style="display:flex;"><span>   );
+</span></span><span style="display:flex;"><span>   <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">configuration</span>.<span style="color:#a6e22e">setStorePathFromConfig</span>(<span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">namesrvConfig</span>, <span style="color:#e6db74">&#34;configStorePath&#34;</span>);
+</span></span><span style="display:flex;"><span> }
+</span></span></code></pre></div><blockquote>
+<p>就是一些对象的赋值操作，测试 NamesrvController 对象创建完毕。</p>
+</blockquote>
+<ul>
+<li>启动方法 start(controller)</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span>   <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">static</span> NamesrvController <span style="color:#a6e22e">start</span>(<span style="color:#66d9ef">final</span> NamesrvController controller) <span style="color:#66d9ef">throws</span> Exception {
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> (<span style="color:#66d9ef">null</span> <span style="color:#f92672">==</span> controller) {
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">throw</span> <span style="color:#66d9ef">new</span> IllegalArgumentException(<span style="color:#e6db74">&#34;NamesrvController is null&#34;</span>);
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>				<span style="color:#75715e">// 执行 NamesrvController 的初始化方法</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">boolean</span> initResult <span style="color:#f92672">=</span> controller.<span style="color:#a6e22e">initialize</span>();
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span>initResult) {
+</span></span><span style="display:flex;"><span>            controller.<span style="color:#a6e22e">shutdown</span>();
+</span></span><span style="display:flex;"><span>            System.<span style="color:#a6e22e">exit</span>(<span style="color:#f92672">-</span>3);
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>				<span style="color:#75715e">// 注册钩子方法，服务关闭是执行，做一些清理工作。</span>
+</span></span><span style="display:flex;"><span>        Runtime.<span style="color:#a6e22e">getRuntime</span>().<span style="color:#a6e22e">addShutdownHook</span>(<span style="color:#66d9ef">new</span> ShutdownHookThread(log, <span style="color:#66d9ef">new</span> Callable<span style="color:#f92672">&lt;</span>Void<span style="color:#f92672">&gt;</span>() {
+</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">@Override</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">public</span> Void <span style="color:#a6e22e">call</span>() <span style="color:#66d9ef">throws</span> Exception {
+</span></span><span style="display:flex;"><span>                controller.<span style="color:#a6e22e">shutdown</span>();
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">null</span>;
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>        }));
+</span></span><span style="display:flex;"><span>				
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// 执行启动</span>
+</span></span><span style="display:flex;"><span>        controller.<span style="color:#a6e22e">start</span>();
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> controller;
+</span></span><span style="display:flex;"><span>    }
+</span></span></code></pre></div><blockquote>
+<p>这里重要有两个方法，controller.initialize() 和  controller.start()，下面具体看下执行逻辑。</p>
+</blockquote>
+<ul>
+<li>controller.initialize()</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span> <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">boolean</span> <span style="color:#a6e22e">initialize</span>() {
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>   <span style="color:#75715e">// 加载 kv存储模块，读取配置中的 kvConfig.json文件内容。</span>
+</span></span><span style="display:flex;"><span>   <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">kvConfigManager</span>.<span style="color:#a6e22e">load</span>();
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>   <span style="color:#75715e">// 实例化 Netty服务端对象，用于处理客户端和 broker的请求。</span>
+</span></span><span style="display:flex;"><span>   <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">remotingServer</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> NettyRemotingServer(<span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">nettyServerConfig</span>, <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">brokerHousekeepingService</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>   <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">remotingExecutor</span> <span style="color:#f92672">=</span>
+</span></span><span style="display:flex;"><span>     Executors.<span style="color:#a6e22e">newFixedThreadPool</span>(nettyServerConfig.<span style="color:#a6e22e">getServerWorkerThreads</span>(), <span style="color:#66d9ef">new</span> ThreadFactoryImpl(<span style="color:#e6db74">&#34;RemotingExecutorThread_&#34;</span>));
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>   <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">registerProcessor</span>();
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>   <span style="color:#75715e">// 定时扫描 broker，移除不活跃的broker</span>
+</span></span><span style="display:flex;"><span>   <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">scheduledExecutorService</span>.<span style="color:#a6e22e">scheduleAtFixedRate</span>(<span style="color:#66d9ef">new</span> Runnable() {
+</span></span><span style="display:flex;"><span>     <span style="color:#a6e22e">@Override</span>
+</span></span><span style="display:flex;"><span>     <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">run</span>() {
+</span></span><span style="display:flex;"><span>       NamesrvController.<span style="color:#a6e22e">this</span>.<span style="color:#a6e22e">routeInfoManager</span>.<span style="color:#a6e22e">scanNotActiveBroker</span>();
+</span></span><span style="display:flex;"><span>     }
+</span></span><span style="display:flex;"><span>   }, 5, 10, TimeUnit.<span style="color:#a6e22e">SECONDS</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>   <span style="color:#75715e">// 定时器，每隔10min打印一次KV配置</span>
+</span></span><span style="display:flex;"><span>   <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">scheduledExecutorService</span>.<span style="color:#a6e22e">scheduleAtFixedRate</span>(<span style="color:#66d9ef">new</span> Runnable() {
+</span></span><span style="display:flex;"><span>     <span style="color:#a6e22e">@Override</span>
+</span></span><span style="display:flex;"><span>     <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">run</span>() {
+</span></span><span style="display:flex;"><span>       NamesrvController.<span style="color:#a6e22e">this</span>.<span style="color:#a6e22e">kvConfigManager</span>.<span style="color:#a6e22e">printAllPeriodically</span>();
+</span></span><span style="display:flex;"><span>     }
+</span></span><span style="display:flex;"><span>   }, 1, 10, TimeUnit.<span style="color:#a6e22e">MINUTES</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>   <span style="color:#75715e">// 如果开启SSL支持，执行以下逻辑，监听器证书变化时会实时更新，做到热加载</span>
+</span></span><span style="display:flex;"><span>   <span style="color:#66d9ef">if</span> (TlsSystemConfig.<span style="color:#a6e22e">tlsMode</span> <span style="color:#f92672">!=</span> TlsMode.<span style="color:#a6e22e">DISABLED</span>) {
+</span></span><span style="display:flex;"><span>     <span style="color:#75715e">// Register a listener to reload SslContext</span>
+</span></span><span style="display:flex;"><span>     <span style="color:#66d9ef">try</span> {
+</span></span><span style="display:flex;"><span>       <span style="color:#75715e">// ...</span>
+</span></span><span style="display:flex;"><span>     } <span style="color:#66d9ef">catch</span> (Exception e) {
+</span></span><span style="display:flex;"><span>       log.<span style="color:#a6e22e">warn</span>(<span style="color:#e6db74">&#34;FileWatchService created error, can&#39;t load the certificate dynamically&#34;</span>);
+</span></span><span style="display:flex;"><span>     }
+</span></span><span style="display:flex;"><span>   }
+</span></span><span style="display:flex;"><span>   <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">true</span>;
+</span></span><span style="display:flex;"><span> }
+</span></span></code></pre></div><ul>
+<li>controller.start()</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">start</span>() <span style="color:#66d9ef">throws</span> Exception {
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">// 启动 netty 服务</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">remotingServer</span>.<span style="color:#a6e22e">start</span>();
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">if</span> (<span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">fileWatchService</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span>) {
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 检测SSL证书文件是否变化，如果有变，及时加载最新的秘钥信息。</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">fileWatchService</span>.<span style="color:#a6e22e">start</span>();
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><blockquote>
+<p>remotingServer.start() 会真正启动一个NettyServer程序用于处理来自其他服务的请求，熟悉Netty的话会非常容易看明白。</p>
+</blockquote>
+<p>以上是 NameServer 启动的源码解析，可以总结为两步。</p>
+<ol>
+<li>解析配置文件。</li>
+<li>启动NettyServer服务。</li>
+</ol>
+<h3 id="broker-启动源码">Broker 启动源码</h3>
+<p>从启动类 BrokerStartup 开始</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">main</span>(String<span style="color:#f92672">[]</span> args) {
+</span></span><span style="display:flex;"><span>  start(createBrokerController(args));
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><blockquote>
+<p>有两个核心方法，createBrokerController 方法创建BrokerController对象，然后传个 start 方法执行启动工作。</p>
+</blockquote>
+<p>createBrokerController 方法</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">static</span> BrokerController <span style="color:#a6e22e">createBrokerController</span>(String<span style="color:#f92672">[]</span> args) {
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">try</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">//PackageConflictDetect.detectFastjson();</span>
+</span></span><span style="display:flex;"><span>    Options options <span style="color:#f92672">=</span> ServerUtil.<span style="color:#a6e22e">buildCommandlineOptions</span>(<span style="color:#66d9ef">new</span> Options());
+</span></span><span style="display:flex;"><span>    commandLine <span style="color:#f92672">=</span> ServerUtil.<span style="color:#a6e22e">parseCmdLine</span>(<span style="color:#e6db74">&#34;mqbroker&#34;</span>, args, buildCommandlineOptions(options),
+</span></span><span style="display:flex;"><span>                                          <span style="color:#66d9ef">new</span> PosixParser());
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (<span style="color:#66d9ef">null</span> <span style="color:#f92672">==</span> commandLine) {
+</span></span><span style="display:flex;"><span>      System.<span style="color:#a6e22e">exit</span>(<span style="color:#f92672">-</span>1);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 实例化 broker 的配置对象</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">final</span> BrokerConfig brokerConfig <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> BrokerConfig();
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 实例化 Netty 配置对象</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">final</span> NettyServerConfig nettyServerConfig <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> NettyServerConfig();
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">final</span> NettyClientConfig nettyClientConfig <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> NettyClientConfig();
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 设置 Netty 的端口</span>
+</span></span><span style="display:flex;"><span>    nettyServerConfig.<span style="color:#a6e22e">setListenPort</span>(10911);
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 实例化消息存储的配置对象</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">final</span> MessageStoreConfig messageStoreConfig <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> MessageStoreConfig();
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (BrokerRole.<span style="color:#a6e22e">SLAVE</span> <span style="color:#f92672">==</span> messageStoreConfig.<span style="color:#a6e22e">getBrokerRole</span>()) {
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">int</span> ratio <span style="color:#f92672">=</span> messageStoreConfig.<span style="color:#a6e22e">getAccessMessageInMemoryMaxRatio</span>() <span style="color:#f92672">-</span> 10;
+</span></span><span style="display:flex;"><span>      messageStoreConfig.<span style="color:#a6e22e">setAccessMessageInMemoryMaxRatio</span>(ratio);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (commandLine.<span style="color:#a6e22e">hasOption</span>(<span style="color:#e6db74">&#39;c&#39;</span>)) {
+</span></span><span style="display:flex;"><span>      <span style="color:#75715e">// 解析参数 c</span>
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    MixAll.<span style="color:#a6e22e">properties2Object</span>(ServerUtil.<span style="color:#a6e22e">commandLine2Properties</span>(commandLine), brokerConfig);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (<span style="color:#66d9ef">null</span> <span style="color:#f92672">==</span> brokerConfig.<span style="color:#a6e22e">getRocketmqHome</span>()) {
+</span></span><span style="display:flex;"><span>      System.<span style="color:#a6e22e">out</span>.<span style="color:#a6e22e">printf</span>(<span style="color:#e6db74">&#34;Please set the %s variable in your environment to match the location of the RocketMQ installation&#34;</span>, MixAll.<span style="color:#a6e22e">ROCKETMQ_HOME_ENV</span>);
+</span></span><span style="display:flex;"><span>      System.<span style="color:#a6e22e">exit</span>(<span style="color:#f92672">-</span>2);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    String namesrvAddr <span style="color:#f92672">=</span> brokerConfig.<span style="color:#a6e22e">getNamesrvAddr</span>();
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (<span style="color:#66d9ef">null</span> <span style="color:#f92672">!=</span> namesrvAddr) {
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">try</span> {
+</span></span><span style="display:flex;"><span>        String<span style="color:#f92672">[]</span> addrArray <span style="color:#f92672">=</span> namesrvAddr.<span style="color:#a6e22e">split</span>(<span style="color:#e6db74">&#34;;&#34;</span>);
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">for</span> (String addr : addrArray) {
+</span></span><span style="display:flex;"><span>          RemotingUtil.<span style="color:#a6e22e">string2SocketAddress</span>(addr);
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>      } <span style="color:#66d9ef">catch</span> (Exception e) {
+</span></span><span style="display:flex;"><span>        System.<span style="color:#a6e22e">out</span>.<span style="color:#a6e22e">printf</span>(
+</span></span><span style="display:flex;"><span>          <span style="color:#e6db74">&#34;The Name Server Address[%s] illegal, please set it as follows, \&#34;127.0.0.1:9876;192.168.0.1:9876\&#34;%n&#34;</span>,
+</span></span><span style="display:flex;"><span>          namesrvAddr);
+</span></span><span style="display:flex;"><span>        System.<span style="color:#a6e22e">exit</span>(<span style="color:#f92672">-</span>3);
+</span></span><span style="display:flex;"><span>      }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">switch</span> (messageStoreConfig.<span style="color:#a6e22e">getBrokerRole</span>()) {
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">case</span> ASYNC_MASTER:
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">case</span> SYNC_MASTER:
+</span></span><span style="display:flex;"><span>        brokerConfig.<span style="color:#a6e22e">setBrokerId</span>(MixAll.<span style="color:#a6e22e">MASTER_ID</span>);
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">break</span>;
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">case</span> SLAVE:
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> (brokerConfig.<span style="color:#a6e22e">getBrokerId</span>() <span style="color:#f92672">&lt;=</span> 0) {
+</span></span><span style="display:flex;"><span>          System.<span style="color:#a6e22e">out</span>.<span style="color:#a6e22e">printf</span>(<span style="color:#e6db74">&#34;Slave&#39;s brokerId must be &gt; 0&#34;</span>);
+</span></span><span style="display:flex;"><span>          System.<span style="color:#a6e22e">exit</span>(<span style="color:#f92672">-</span>3);
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">break</span>;
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">default</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">break</span>;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (messageStoreConfig.<span style="color:#a6e22e">isEnableDLegerCommitLog</span>()) {
+</span></span><span style="display:flex;"><span>      brokerConfig.<span style="color:#a6e22e">setBrokerId</span>(<span style="color:#f92672">-</span>1);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    messageStoreConfig.<span style="color:#a6e22e">setHaListenPort</span>(nettyServerConfig.<span style="color:#a6e22e">getListenPort</span>() <span style="color:#f92672">+</span> 1);
+</span></span><span style="display:flex;"><span>    LoggerContext lc <span style="color:#f92672">=</span> (LoggerContext) LoggerFactory.<span style="color:#a6e22e">getILoggerFactory</span>();
+</span></span><span style="display:flex;"><span>    JoranConfigurator configurator <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> JoranConfigurator();
+</span></span><span style="display:flex;"><span>    configurator.<span style="color:#a6e22e">setContext</span>(lc);
+</span></span><span style="display:flex;"><span>    lc.<span style="color:#a6e22e">reset</span>();
+</span></span><span style="display:flex;"><span>    configurator.<span style="color:#a6e22e">doConfigure</span>(brokerConfig.<span style="color:#a6e22e">getRocketmqHome</span>() <span style="color:#f92672">+</span> <span style="color:#e6db74">&#34;/conf/logback_broker.xml&#34;</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (commandLine.<span style="color:#a6e22e">hasOption</span>(<span style="color:#e6db74">&#39;p&#39;</span>)) {
+</span></span><span style="display:flex;"><span>      <span style="color:#75715e">// 解析参数 p</span>
+</span></span><span style="display:flex;"><span>    } <span style="color:#66d9ef">else</span> <span style="color:#66d9ef">if</span> (commandLine.<span style="color:#a6e22e">hasOption</span>(<span style="color:#e6db74">&#39;m&#39;</span>)) {
+</span></span><span style="display:flex;"><span>      <span style="color:#75715e">// 解析参数 m</span>
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    log <span style="color:#f92672">=</span> InternalLoggerFactory.<span style="color:#a6e22e">getLogger</span>(LoggerName.<span style="color:#a6e22e">BROKER_LOGGER_NAME</span>);
+</span></span><span style="display:flex;"><span>    MixAll.<span style="color:#a6e22e">printObjectProperties</span>(log, brokerConfig);
+</span></span><span style="display:flex;"><span>    MixAll.<span style="color:#a6e22e">printObjectProperties</span>(log, nettyServerConfig);
+</span></span><span style="display:flex;"><span>    MixAll.<span style="color:#a6e22e">printObjectProperties</span>(log, nettyClientConfig);
+</span></span><span style="display:flex;"><span>    MixAll.<span style="color:#a6e22e">printObjectProperties</span>(log, messageStoreConfig);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 实例化 BrokerController 对象</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">final</span> BrokerController controller <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> BrokerController(
+</span></span><span style="display:flex;"><span>      brokerConfig,
+</span></span><span style="display:flex;"><span>      nettyServerConfig,
+</span></span><span style="display:flex;"><span>      nettyClientConfig,
+</span></span><span style="display:flex;"><span>      messageStoreConfig);
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// remember all configs to prevent discard</span>
+</span></span><span style="display:flex;"><span>    controller.<span style="color:#a6e22e">getConfiguration</span>().<span style="color:#a6e22e">registerConfig</span>(properties);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">boolean</span> initResult <span style="color:#f92672">=</span> controller.<span style="color:#a6e22e">initialize</span>();
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span>initResult) {
+</span></span><span style="display:flex;"><span>      controller.<span style="color:#a6e22e">shutdown</span>();
+</span></span><span style="display:flex;"><span>      System.<span style="color:#a6e22e">exit</span>(<span style="color:#f92672">-</span>3);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 注册一个 JVM 关闭时的钩子方法，用于做一些清理工作</span>
+</span></span><span style="display:flex;"><span>    Runtime.<span style="color:#a6e22e">getRuntime</span>().<span style="color:#a6e22e">addShutdownHook</span>(<span style="color:#66d9ef">new</span> Thread(<span style="color:#66d9ef">new</span> Runnable() {
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">volatile</span> <span style="color:#66d9ef">boolean</span> hasShutdown <span style="color:#f92672">=</span> <span style="color:#66d9ef">false</span>;
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">private</span> AtomicInteger shutdownTimes <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> AtomicInteger(0);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>      <span style="color:#a6e22e">@Override</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">run</span>() {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">synchronized</span> (<span style="color:#66d9ef">this</span>) {
+</span></span><span style="display:flex;"><span>          log.<span style="color:#a6e22e">info</span>(<span style="color:#e6db74">&#34;Shutdown hook was invoked, {}&#34;</span>, <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">shutdownTimes</span>.<span style="color:#a6e22e">incrementAndGet</span>());
+</span></span><span style="display:flex;"><span>          <span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span><span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">hasShutdown</span>) {
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">hasShutdown</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">true</span>;
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">long</span> beginTime <span style="color:#f92672">=</span> System.<span style="color:#a6e22e">currentTimeMillis</span>();
+</span></span><span style="display:flex;"><span>            controller.<span style="color:#a6e22e">shutdown</span>();
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">long</span> consumingTimeTotal <span style="color:#f92672">=</span> System.<span style="color:#a6e22e">currentTimeMillis</span>() <span style="color:#f92672">-</span> beginTime;
+</span></span><span style="display:flex;"><span>            log.<span style="color:#a6e22e">info</span>(<span style="color:#e6db74">&#34;Shutdown hook over, consuming total time(ms): {}&#34;</span>, consumingTimeTotal);
+</span></span><span style="display:flex;"><span>          }
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>      }
+</span></span><span style="display:flex;"><span>    }, <span style="color:#e6db74">&#34;ShutdownHook&#34;</span>));
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> controller;
+</span></span><span style="display:flex;"><span>  } <span style="color:#66d9ef">catch</span> (Throwable e) {
+</span></span><span style="display:flex;"><span>    e.<span style="color:#a6e22e">printStackTrace</span>();
+</span></span><span style="display:flex;"><span>    System.<span style="color:#a6e22e">exit</span>(<span style="color:#f92672">-</span>1);
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">null</span>;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#a6e22e">BrokerController</span>(
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">final</span> BrokerConfig brokerConfig,
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">final</span> NettyServerConfig nettyServerConfig,
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">final</span> NettyClientConfig nettyClientConfig,
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">final</span> MessageStoreConfig messageStoreConfig
+</span></span><span style="display:flex;"><span>) {
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">brokerConfig</span> <span style="color:#f92672">=</span> brokerConfig;
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">nettyServerConfig</span> <span style="color:#f92672">=</span> nettyServerConfig;
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">nettyClientConfig</span> <span style="color:#f92672">=</span> nettyClientConfig;
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">messageStoreConfig</span> <span style="color:#f92672">=</span> messageStoreConfig;
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">consumerOffsetManager</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> ConsumerOffsetManager(<span style="color:#66d9ef">this</span>);
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">topicConfigManager</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> TopicConfigManager(<span style="color:#66d9ef">this</span>);
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">pullMessageProcessor</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> PullMessageProcessor(<span style="color:#66d9ef">this</span>);
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">pullRequestHoldService</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> PullRequestHoldService(<span style="color:#66d9ef">this</span>);
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">messageArrivingListener</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> NotifyMessageArrivingListener(<span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">pullRequestHoldService</span>);
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">consumerIdsChangeListener</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> DefaultConsumerIdsChangeListener(<span style="color:#66d9ef">this</span>);
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">//...</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><blockquote>
+<p>以上为实例化 BrokerController 的过程.</p>
+</blockquote>
+<p>start 方法</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">static</span> BrokerController <span style="color:#a6e22e">start</span>(BrokerController controller) {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">try</span> {
+</span></span><span style="display:flex;"><span>      controller.<span style="color:#a6e22e">start</span>();
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">return</span> controller;
+</span></span><span style="display:flex;"><span>    } <span style="color:#66d9ef">catch</span> (Throwable e) {
+</span></span><span style="display:flex;"><span>      e.<span style="color:#a6e22e">printStackTrace</span>();
+</span></span><span style="display:flex;"><span>      System.<span style="color:#a6e22e">exit</span>(<span style="color:#f92672">-</span>1);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">null</span>;
+</span></span><span style="display:flex;"><span>  }
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">start</span>() <span style="color:#66d9ef">throws</span> Exception {
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">// 启动消息存储服务</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">if</span> (<span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">messageStore</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span>) {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">messageStore</span>.<span style="color:#a6e22e">start</span>();
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">// 启动 Netty 服务，用于接收外部的请求</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">if</span> (<span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">remotingServer</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span>) {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">remotingServer</span>.<span style="color:#a6e22e">start</span>();
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>  
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">if</span> (<span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">fastRemotingServer</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span>) {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">fastRemotingServer</span>.<span style="color:#a6e22e">start</span>();
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">// 启动配置文件监控服务，用于配置热更新。</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">if</span> (<span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">fileWatchService</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span>) {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">fileWatchService</span>.<span style="color:#a6e22e">start</span>();
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">if</span> (<span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">brokerOuterAPI</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span>) {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">brokerOuterAPI</span>.<span style="color:#a6e22e">start</span>();
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">if</span> (<span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">pullRequestHoldService</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span>) {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">pullRequestHoldService</span>.<span style="color:#a6e22e">start</span>();
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">if</span> (<span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">clientHousekeepingService</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span>) {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">clientHousekeepingService</span>.<span style="color:#a6e22e">start</span>();
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">if</span> (<span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">filterServerManager</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span>) {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">filterServerManager</span>.<span style="color:#a6e22e">start</span>();
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span>messageStoreConfig.<span style="color:#a6e22e">isEnableDLegerCommitLog</span>()) {
+</span></span><span style="display:flex;"><span>    startProcessorByHa(messageStoreConfig.<span style="color:#a6e22e">getBrokerRole</span>());
+</span></span><span style="display:flex;"><span>    handleSlaveSynchronize(messageStoreConfig.<span style="color:#a6e22e">getBrokerRole</span>());
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">registerBrokerAll</span>(<span style="color:#66d9ef">true</span>, <span style="color:#66d9ef">false</span>, <span style="color:#66d9ef">true</span>);
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">scheduledExecutorService</span>.<span style="color:#a6e22e">scheduleAtFixedRate</span>(<span style="color:#66d9ef">new</span> Runnable() {
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">@Override</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">run</span>() {
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">try</span> {
+</span></span><span style="display:flex;"><span>        BrokerController.<span style="color:#a6e22e">this</span>.<span style="color:#a6e22e">registerBrokerAll</span>(<span style="color:#66d9ef">true</span>, <span style="color:#66d9ef">false</span>, brokerConfig.<span style="color:#a6e22e">isForceRegister</span>());
+</span></span><span style="display:flex;"><span>      } <span style="color:#66d9ef">catch</span> (Throwable e) {
+</span></span><span style="display:flex;"><span>        log.<span style="color:#a6e22e">error</span>(<span style="color:#e6db74">&#34;registerBrokerAll Exception&#34;</span>, e);
+</span></span><span style="display:flex;"><span>      }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>  }, 1000 <span style="color:#f92672">*</span> 10, Math.<span style="color:#a6e22e">max</span>(10000, Math.<span style="color:#a6e22e">min</span>(brokerConfig.<span style="color:#a6e22e">getRegisterNameServerPeriod</span>(), 60000)), TimeUnit.<span style="color:#a6e22e">MILLISECONDS</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">if</span> (<span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">brokerStatsManager</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span>) {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">brokerStatsManager</span>.<span style="color:#a6e22e">start</span>();
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">if</span> (<span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">brokerFastFailure</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span>) {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">brokerFastFailure</span>.<span style="color:#a6e22e">start</span>();
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><blockquote>
+<p>以上为启动 Broker 的过程。</p>
+</blockquote>
+<h3 id="producer-发消息给broker-源码">Producer 发消息给Broker 源码</h3>
+<p>Producer 发消息主要代码在  client 包中实现，发消息的方式大致有三种，单向、同步、异步。发消息的默认入口都在 DefaultMQProducerImpl 这个类中，下面看下最简单的单向发消息接口。</p>
+<p><strong>单向发消息</strong></p>
+<p>DefaultMQProducerImpl 类中的 sendOneway 是单向发消息的入口</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">sendOneway</span>(Message msg) <span style="color:#66d9ef">throws</span> MQClientException, RemotingException, InterruptedException {
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">try</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">sendDefaultImpl</span>(msg, CommunicationMode.<span style="color:#a6e22e">ONEWAY</span>, <span style="color:#66d9ef">null</span>, <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">defaultMQProducer</span>.<span style="color:#a6e22e">getSendMsgTimeout</span>());
+</span></span><span style="display:flex;"><span>  } <span style="color:#66d9ef">catch</span> (MQBrokerException e) {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">throw</span> <span style="color:#66d9ef">new</span> MQClientException(<span style="color:#e6db74">&#34;unknown exception&#34;</span>, e);
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>接着调用私有方法 this.sendDefaualtImpl()</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">private</span> SendResult <span style="color:#a6e22e">sendDefaultImpl</span>(
+</span></span><span style="display:flex;"><span>  Message msg,
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">final</span> CommunicationMode communicationMode,
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">final</span> SendCallback sendCallback,
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">final</span> <span style="color:#66d9ef">long</span> timeout
+</span></span><span style="display:flex;"><span>) <span style="color:#66d9ef">throws</span> MQClientException, RemotingException, MQBrokerException, InterruptedException {
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">// ... 忽略一些不必要的代码</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">// 获取Topic信息</span>
+</span></span><span style="display:flex;"><span>  TopicPublishInfo topicPublishInfo <span style="color:#f92672">=</span> <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">tryToFindTopicPublishInfo</span>(msg.<span style="color:#a6e22e">getTopic</span>());
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">// 判断Topic是否正常</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">if</span> (topicPublishInfo <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span> <span style="color:#f92672">&amp;&amp;</span> topicPublishInfo.<span style="color:#a6e22e">ok</span>()) {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">boolean</span> callTimeout <span style="color:#f92672">=</span> <span style="color:#66d9ef">false</span>;
+</span></span><span style="display:flex;"><span>    MessageQueue mq <span style="color:#f92672">=</span> <span style="color:#66d9ef">null</span>;
+</span></span><span style="display:flex;"><span>    Exception exception <span style="color:#f92672">=</span> <span style="color:#66d9ef">null</span>;
+</span></span><span style="display:flex;"><span>    SendResult sendResult <span style="color:#f92672">=</span> <span style="color:#66d9ef">null</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">int</span> timesTotal <span style="color:#f92672">=</span> communicationMode <span style="color:#f92672">==</span> CommunicationMode.<span style="color:#a6e22e">SYNC</span> <span style="color:#f92672">?</span> 1 <span style="color:#f92672">+</span> <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">defaultMQProducer</span>.<span style="color:#a6e22e">getRetryTimesWhenSendFailed</span>() : 1;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">int</span> times <span style="color:#f92672">=</span> 0;
+</span></span><span style="display:flex;"><span>    String<span style="color:#f92672">[]</span> brokersSent <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> String<span style="color:#f92672">[</span>timesTotal<span style="color:#f92672">]</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> (; times <span style="color:#f92672">&lt;</span> timesTotal; times<span style="color:#f92672">++</span>) {
+</span></span><span style="display:flex;"><span>      String lastBrokerName <span style="color:#f92672">=</span> <span style="color:#66d9ef">null</span> <span style="color:#f92672">==</span> mq <span style="color:#f92672">?</span> <span style="color:#66d9ef">null</span> : mq.<span style="color:#a6e22e">getBrokerName</span>();
+</span></span><span style="display:flex;"><span>      <span style="color:#75715e">// 选择一个MessageQueue</span>
+</span></span><span style="display:flex;"><span>      MessageQueue mqSelected <span style="color:#f92672">=</span> <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">selectOneMessageQueue</span>(topicPublishInfo, lastBrokerName);
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">if</span> (mqSelected <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span>) {
+</span></span><span style="display:flex;"><span>        mq <span style="color:#f92672">=</span> mqSelected;
+</span></span><span style="display:flex;"><span>        brokersSent<span style="color:#f92672">[</span>times<span style="color:#f92672">]</span> <span style="color:#f92672">=</span> mq.<span style="color:#a6e22e">getBrokerName</span>();
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">try</span> {
+</span></span><span style="display:flex;"><span>          beginTimestampPrev <span style="color:#f92672">=</span> System.<span style="color:#a6e22e">currentTimeMillis</span>();
+</span></span><span style="display:flex;"><span>          <span style="color:#66d9ef">if</span> (times <span style="color:#f92672">&gt;</span> 0) {
+</span></span><span style="display:flex;"><span>            <span style="color:#75715e">//Reset topic with namespace during resend.</span>
+</span></span><span style="display:flex;"><span>            msg.<span style="color:#a6e22e">setTopic</span>(<span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">defaultMQProducer</span>.<span style="color:#a6e22e">withNamespace</span>(msg.<span style="color:#a6e22e">getTopic</span>()));
+</span></span><span style="display:flex;"><span>          }
+</span></span><span style="display:flex;"><span>          <span style="color:#66d9ef">long</span> costTime <span style="color:#f92672">=</span> beginTimestampPrev <span style="color:#f92672">-</span> beginTimestampFirst;
+</span></span><span style="display:flex;"><span>          <span style="color:#66d9ef">if</span> (timeout <span style="color:#f92672">&lt;</span> costTime) {
+</span></span><span style="display:flex;"><span>            callTimeout <span style="color:#f92672">=</span> <span style="color:#66d9ef">true</span>;
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">break</span>;
+</span></span><span style="display:flex;"><span>          }
+</span></span><span style="display:flex;"><span>          <span style="color:#75715e">// 发送消息</span>
+</span></span><span style="display:flex;"><span>          sendResult <span style="color:#f92672">=</span> <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">sendKernelImpl</span>(msg, mq, communicationMode, sendCallback, topicPublishInfo, timeout <span style="color:#f92672">-</span> costTime);
+</span></span><span style="display:flex;"><span>          endTimestamp <span style="color:#f92672">=</span> System.<span style="color:#a6e22e">currentTimeMillis</span>();
+</span></span><span style="display:flex;"><span>          <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">updateFaultItem</span>(mq.<span style="color:#a6e22e">getBrokerName</span>(), endTimestamp <span style="color:#f92672">-</span> beginTimestampPrev, <span style="color:#66d9ef">false</span>);
+</span></span><span style="display:flex;"><span>          <span style="color:#66d9ef">switch</span> (communicationMode) {
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">case</span> ASYNC:
+</span></span><span style="display:flex;"><span>              <span style="color:#75715e">// 异步发送消息不关心返回值</span>
+</span></span><span style="display:flex;"><span>              <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">null</span>;
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">case</span> ONEWAY:
+</span></span><span style="display:flex;"><span>              <span style="color:#75715e">// 单项发送消息不关心返回值</span>
+</span></span><span style="display:flex;"><span>              <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">null</span>;
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">case</span> SYNC:
+</span></span><span style="display:flex;"><span>              <span style="color:#75715e">// 同步发送消息需要返回值</span>
+</span></span><span style="display:flex;"><span>              <span style="color:#66d9ef">if</span> (sendResult.<span style="color:#a6e22e">getSendStatus</span>() <span style="color:#f92672">!=</span> SendStatus.<span style="color:#a6e22e">SEND_OK</span>) {
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">if</span> (<span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">defaultMQProducer</span>.<span style="color:#a6e22e">isRetryAnotherBrokerWhenNotStoreOK</span>()) {
+</span></span><span style="display:flex;"><span>                  <span style="color:#66d9ef">continue</span>;
+</span></span><span style="display:flex;"><span>                }
+</span></span><span style="display:flex;"><span>              }
+</span></span><span style="display:flex;"><span>              <span style="color:#66d9ef">return</span> sendResult;
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">default</span>:
+</span></span><span style="display:flex;"><span>              <span style="color:#66d9ef">break</span>;
+</span></span><span style="display:flex;"><span>          }
+</span></span><span style="display:flex;"><span>        } <span style="color:#66d9ef">catch</span> (RemotingException e) {
+</span></span><span style="display:flex;"><span>          <span style="color:#75715e">// 处理异常...</span>
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>      } <span style="color:#66d9ef">else</span> {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">break</span>;
+</span></span><span style="display:flex;"><span>      }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (sendResult <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span>) {
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">return</span> sendResult;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">//...</span>
+</span></span><span style="display:flex;"><span>  }
+</span></span></code></pre></div><blockquote>
+<ol>
+<li>选择要发送的 MessageQucence, 这里有具体的负载均衡算实现。</li>
+<li>发送消息都调用私有方法 this.sendKernelImpl 实现。</li>
+</ol>
+</blockquote>
+<p>this.sendKernelImpl()方法</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span> <span style="color:#66d9ef">private</span> SendResult <span style="color:#a6e22e">sendKernelImpl</span>(<span style="color:#66d9ef">final</span> Message msg,
+</span></span><span style="display:flex;"><span>                                   <span style="color:#66d9ef">final</span> MessageQueue mq,
+</span></span><span style="display:flex;"><span>                                   <span style="color:#66d9ef">final</span> CommunicationMode communicationMode,
+</span></span><span style="display:flex;"><span>                                   <span style="color:#66d9ef">final</span> SendCallback sendCallback,
+</span></span><span style="display:flex;"><span>                                   <span style="color:#66d9ef">final</span> TopicPublishInfo topicPublishInfo,
+</span></span><span style="display:flex;"><span>                                   <span style="color:#66d9ef">final</span> <span style="color:#66d9ef">long</span> timeout) <span style="color:#66d9ef">throws</span> MQClientException, RemotingException, MQBrokerException, InterruptedException {
+</span></span><span style="display:flex;"><span>   <span style="color:#66d9ef">long</span> beginStartTime <span style="color:#f92672">=</span> System.<span style="color:#a6e22e">currentTimeMillis</span>();
+</span></span><span style="display:flex;"><span>   <span style="color:#75715e">// 根据 broker名称查询地址</span>
+</span></span><span style="display:flex;"><span>   String brokerAddr <span style="color:#f92672">=</span> <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">mQClientFactory</span>.<span style="color:#a6e22e">findBrokerAddressInPublish</span>(mq.<span style="color:#a6e22e">getBrokerName</span>());
+</span></span><span style="display:flex;"><span>   <span style="color:#66d9ef">if</span> (<span style="color:#66d9ef">null</span> <span style="color:#f92672">==</span> brokerAddr) {
+</span></span><span style="display:flex;"><span>     tryToFindTopicPublishInfo(mq.<span style="color:#a6e22e">getTopic</span>());
+</span></span><span style="display:flex;"><span>     brokerAddr <span style="color:#f92672">=</span> <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">mQClientFactory</span>.<span style="color:#a6e22e">findBrokerAddressInPublish</span>(mq.<span style="color:#a6e22e">getBrokerName</span>());
+</span></span><span style="display:flex;"><span>   }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>   SendMessageContext context <span style="color:#f92672">=</span> <span style="color:#66d9ef">null</span>;
+</span></span><span style="display:flex;"><span>   <span style="color:#66d9ef">if</span> (brokerAddr <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span>) {
+</span></span><span style="display:flex;"><span>     brokerAddr <span style="color:#f92672">=</span> MixAll.<span style="color:#a6e22e">brokerVIPChannel</span>(<span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">defaultMQProducer</span>.<span style="color:#a6e22e">isSendMessageWithVIPChannel</span>(), brokerAddr);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>     <span style="color:#66d9ef">byte</span><span style="color:#f92672">[]</span> prevBody <span style="color:#f92672">=</span> msg.<span style="color:#a6e22e">getBody</span>();
+</span></span><span style="display:flex;"><span>     <span style="color:#66d9ef">try</span> {
+</span></span><span style="display:flex;"><span>       <span style="color:#75715e">//for MessageBatch,ID has been set in the generating process</span>
+</span></span><span style="display:flex;"><span>       <span style="color:#75715e">// 设置参数，忽略</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>       SendResult sendResult <span style="color:#f92672">=</span> <span style="color:#66d9ef">null</span>;
+</span></span><span style="display:flex;"><span>       <span style="color:#66d9ef">switch</span> (communicationMode) {
+</span></span><span style="display:flex;"><span>         <span style="color:#66d9ef">case</span> ASYNC:
+</span></span><span style="display:flex;"><span>           <span style="color:#75715e">// 异步发送消息</span>
+</span></span><span style="display:flex;"><span>           Message tmpMessage <span style="color:#f92672">=</span> msg;
+</span></span><span style="display:flex;"><span>           <span style="color:#66d9ef">boolean</span> messageCloned <span style="color:#f92672">=</span> <span style="color:#66d9ef">false</span>;
+</span></span><span style="display:flex;"><span>           <span style="color:#66d9ef">if</span> (msgBodyCompressed) {
+</span></span><span style="display:flex;"><span>             <span style="color:#75715e">//If msg body was compressed, msgbody should be reset using prevBody.</span>
+</span></span><span style="display:flex;"><span>             <span style="color:#75715e">//Clone new message using commpressed message body and recover origin massage.</span>
+</span></span><span style="display:flex;"><span>             <span style="color:#75715e">//Fix bug:https://github.com/apache/rocketmq-externals/issues/66</span>
+</span></span><span style="display:flex;"><span>             tmpMessage <span style="color:#f92672">=</span> MessageAccessor.<span style="color:#a6e22e">cloneMessage</span>(msg);
+</span></span><span style="display:flex;"><span>             messageCloned <span style="color:#f92672">=</span> <span style="color:#66d9ef">true</span>;
+</span></span><span style="display:flex;"><span>             msg.<span style="color:#a6e22e">setBody</span>(prevBody);
+</span></span><span style="display:flex;"><span>           }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>           <span style="color:#66d9ef">if</span> (topicWithNamespace) {
+</span></span><span style="display:flex;"><span>             <span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span>messageCloned) {
+</span></span><span style="display:flex;"><span>               tmpMessage <span style="color:#f92672">=</span> MessageAccessor.<span style="color:#a6e22e">cloneMessage</span>(msg);
+</span></span><span style="display:flex;"><span>               messageCloned <span style="color:#f92672">=</span> <span style="color:#66d9ef">true</span>;
+</span></span><span style="display:flex;"><span>             }
+</span></span><span style="display:flex;"><span>             msg.<span style="color:#a6e22e">setTopic</span>(NamespaceUtil.<span style="color:#a6e22e">withoutNamespace</span>(msg.<span style="color:#a6e22e">getTopic</span>(), <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">defaultMQProducer</span>.<span style="color:#a6e22e">getNamespace</span>()));
+</span></span><span style="display:flex;"><span>           }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>           <span style="color:#66d9ef">long</span> costTimeAsync <span style="color:#f92672">=</span> System.<span style="color:#a6e22e">currentTimeMillis</span>() <span style="color:#f92672">-</span> beginStartTime;
+</span></span><span style="display:flex;"><span>           <span style="color:#66d9ef">if</span> (timeout <span style="color:#f92672">&lt;</span> costTimeAsync) {
+</span></span><span style="display:flex;"><span>             <span style="color:#66d9ef">throw</span> <span style="color:#66d9ef">new</span> RemotingTooMuchRequestException(<span style="color:#e6db74">&#34;sendKernelImpl call timeout&#34;</span>);
+</span></span><span style="display:flex;"><span>           }
+</span></span><span style="display:flex;"><span>           <span style="color:#75715e">// 同步发送实现</span>
+</span></span><span style="display:flex;"><span>           sendResult <span style="color:#f92672">=</span> <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">mQClientFactory</span>.<span style="color:#a6e22e">getMQClientAPIImpl</span>().<span style="color:#a6e22e">sendMessage</span>(
+</span></span><span style="display:flex;"><span>             brokerAddr,
+</span></span><span style="display:flex;"><span>             mq.<span style="color:#a6e22e">getBrokerName</span>(),
+</span></span><span style="display:flex;"><span>             tmpMessage,
+</span></span><span style="display:flex;"><span>             requestHeader,
+</span></span><span style="display:flex;"><span>             timeout <span style="color:#f92672">-</span> costTimeAsync,
+</span></span><span style="display:flex;"><span>             communicationMode,
+</span></span><span style="display:flex;"><span>             sendCallback,
+</span></span><span style="display:flex;"><span>             topicPublishInfo,
+</span></span><span style="display:flex;"><span>             <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">mQClientFactory</span>,
+</span></span><span style="display:flex;"><span>             <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">defaultMQProducer</span>.<span style="color:#a6e22e">getRetryTimesWhenSendAsyncFailed</span>(),
+</span></span><span style="display:flex;"><span>             context,
+</span></span><span style="display:flex;"><span>             <span style="color:#66d9ef">this</span>);
+</span></span><span style="display:flex;"><span>           <span style="color:#66d9ef">break</span>;
+</span></span><span style="display:flex;"><span>           <span style="color:#75715e">// 单项发送消息</span>
+</span></span><span style="display:flex;"><span>         <span style="color:#66d9ef">case</span> ONEWAY:
+</span></span><span style="display:flex;"><span>           <span style="color:#75715e">// 同步发送消息</span>
+</span></span><span style="display:flex;"><span>         <span style="color:#66d9ef">case</span> SYNC:
+</span></span><span style="display:flex;"><span>           <span style="color:#66d9ef">long</span> costTimeSync <span style="color:#f92672">=</span> System.<span style="color:#a6e22e">currentTimeMillis</span>() <span style="color:#f92672">-</span> beginStartTime;
+</span></span><span style="display:flex;"><span>           <span style="color:#66d9ef">if</span> (timeout <span style="color:#f92672">&lt;</span> costTimeSync) {
+</span></span><span style="display:flex;"><span>             <span style="color:#66d9ef">throw</span> <span style="color:#66d9ef">new</span> RemotingTooMuchRequestException(<span style="color:#e6db74">&#34;sendKernelImpl call timeout&#34;</span>);
+</span></span><span style="display:flex;"><span>           }
+</span></span><span style="display:flex;"><span>           <span style="color:#75715e">// 同步发送实现</span>
+</span></span><span style="display:flex;"><span>           sendResult <span style="color:#f92672">=</span> <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">mQClientFactory</span>.<span style="color:#a6e22e">getMQClientAPIImpl</span>().<span style="color:#a6e22e">sendMessage</span>(
+</span></span><span style="display:flex;"><span>             brokerAddr,
+</span></span><span style="display:flex;"><span>             mq.<span style="color:#a6e22e">getBrokerName</span>(),
+</span></span><span style="display:flex;"><span>             msg,
+</span></span><span style="display:flex;"><span>             requestHeader,
+</span></span><span style="display:flex;"><span>             timeout <span style="color:#f92672">-</span> costTimeSync,
+</span></span><span style="display:flex;"><span>             communicationMode,
+</span></span><span style="display:flex;"><span>             context,
+</span></span><span style="display:flex;"><span>             <span style="color:#66d9ef">this</span>);
+</span></span><span style="display:flex;"><span>           <span style="color:#66d9ef">break</span>;
+</span></span><span style="display:flex;"><span>         <span style="color:#66d9ef">default</span>:
+</span></span><span style="display:flex;"><span>           <span style="color:#66d9ef">assert</span> <span style="color:#66d9ef">false</span>;
+</span></span><span style="display:flex;"><span>           <span style="color:#66d9ef">break</span>;
+</span></span><span style="display:flex;"><span>       }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>       <span style="color:#66d9ef">if</span> (<span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">hasSendMessageHook</span>()) {
+</span></span><span style="display:flex;"><span>         context.<span style="color:#a6e22e">setSendResult</span>(sendResult);
+</span></span><span style="display:flex;"><span>         <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">executeSendMessageHookAfter</span>(context);
+</span></span><span style="display:flex;"><span>       }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>       <span style="color:#66d9ef">return</span> sendResult;
+</span></span><span style="display:flex;"><span>     } <span style="color:#66d9ef">catch</span> (RemotingException e) {
+</span></span><span style="display:flex;"><span>       <span style="color:#75715e">// ...</span>
+</span></span><span style="display:flex;"><span>     } <span style="color:#66d9ef">finally</span> {
+</span></span><span style="display:flex;"><span>       <span style="color:#75715e">// ...</span>
+</span></span><span style="display:flex;"><span>     }
+</span></span><span style="display:flex;"><span>   }
+</span></span><span style="display:flex;"><span> }
+</span></span></code></pre></div><blockquote>
+<p>不管什么方式的消息，最后都调用  this.mQClientFactory.getMQClientAPIImpl().sendMessage()实现。</p>
+</blockquote>
+<p>this.mQClientFactory.getMQClientAPIImpl().sendMessage()</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span> <span style="color:#66d9ef">public</span> SendResult <span style="color:#a6e22e">sendMessage</span>(
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">final</span> String addr,
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">final</span> String brokerName,
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">final</span> Message msg,
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">final</span> SendMessageRequestHeader requestHeader,
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">final</span> <span style="color:#66d9ef">long</span> timeoutMillis,
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">final</span> CommunicationMode communicationMode,
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">final</span> SendCallback sendCallback,
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">final</span> TopicPublishInfo topicPublishInfo,
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">final</span> MQClientInstance instance,
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">final</span> <span style="color:#66d9ef">int</span> retryTimesWhenSendFailed,
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">final</span> SendMessageContext context,
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">final</span> DefaultMQProducerImpl producer
+</span></span><span style="display:flex;"><span>    ) <span style="color:#66d9ef">throws</span> RemotingException, MQBrokerException, InterruptedException {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">long</span> beginStartTime <span style="color:#f92672">=</span> System.<span style="color:#a6e22e">currentTimeMillis</span>();
+</span></span><span style="display:flex;"><span>   			<span style="color:#75715e">// 生成 RemotingCommand 对象</span>
+</span></span><span style="display:flex;"><span>        RemotingCommand request <span style="color:#f92672">=</span> <span style="color:#66d9ef">null</span>;
+</span></span><span style="display:flex;"><span>        String msgType <span style="color:#f92672">=</span> msg.<span style="color:#a6e22e">getProperty</span>(MessageConst.<span style="color:#a6e22e">PROPERTY_MESSAGE_TYPE</span>);
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">boolean</span> isReply <span style="color:#f92672">=</span> msgType <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span> <span style="color:#f92672">&amp;&amp;</span> msgType.<span style="color:#a6e22e">equals</span>(MixAll.<span style="color:#a6e22e">REPLY_MESSAGE_FLAG</span>);
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> (isReply) {
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span> (sendSmartMsg) {
+</span></span><span style="display:flex;"><span>                SendMessageRequestHeaderV2 requestHeaderV2 <span style="color:#f92672">=</span> SendMessageRequestHeaderV2.<span style="color:#a6e22e">createSendMessageRequestHeaderV2</span>(requestHeader);
+</span></span><span style="display:flex;"><span>                request <span style="color:#f92672">=</span> RemotingCommand.<span style="color:#a6e22e">createRequestCommand</span>(RequestCode.<span style="color:#a6e22e">SEND_REPLY_MESSAGE_V2</span>, requestHeaderV2);
+</span></span><span style="display:flex;"><span>            } <span style="color:#66d9ef">else</span> {
+</span></span><span style="display:flex;"><span>                request <span style="color:#f92672">=</span> RemotingCommand.<span style="color:#a6e22e">createRequestCommand</span>(RequestCode.<span style="color:#a6e22e">SEND_REPLY_MESSAGE</span>, requestHeader);
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>        } <span style="color:#66d9ef">else</span> {
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span> (sendSmartMsg <span style="color:#f92672">||</span> msg <span style="color:#66d9ef">instanceof</span> MessageBatch) {
+</span></span><span style="display:flex;"><span>                SendMessageRequestHeaderV2 requestHeaderV2 <span style="color:#f92672">=</span> SendMessageRequestHeaderV2.<span style="color:#a6e22e">createSendMessageRequestHeaderV2</span>(requestHeader);
+</span></span><span style="display:flex;"><span>                request <span style="color:#f92672">=</span> RemotingCommand.<span style="color:#a6e22e">createRequestCommand</span>(msg <span style="color:#66d9ef">instanceof</span> MessageBatch <span style="color:#f92672">?</span> RequestCode.<span style="color:#a6e22e">SEND_BATCH_MESSAGE</span> : RequestCode.<span style="color:#a6e22e">SEND_MESSAGE_V2</span>, requestHeaderV2);
+</span></span><span style="display:flex;"><span>            } <span style="color:#66d9ef">else</span> {
+</span></span><span style="display:flex;"><span>                request <span style="color:#f92672">=</span> RemotingCommand.<span style="color:#a6e22e">createRequestCommand</span>(RequestCode.<span style="color:#a6e22e">SEND_MESSAGE</span>, requestHeader);
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        request.<span style="color:#a6e22e">setBody</span>(msg.<span style="color:#a6e22e">getBody</span>());
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">switch</span> (communicationMode) {
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">case</span> ONEWAY:
+</span></span><span style="display:flex;"><span>                <span style="color:#75715e">// 单向发送</span>
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">remotingClient</span>.<span style="color:#a6e22e">invokeOneway</span>(addr, request, timeoutMillis);
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">null</span>;
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">case</span> ASYNC:
+</span></span><span style="display:flex;"><span>                <span style="color:#75715e">// 异步发送</span>
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">final</span> AtomicInteger times <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> AtomicInteger();
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">long</span> costTimeAsync <span style="color:#f92672">=</span> System.<span style="color:#a6e22e">currentTimeMillis</span>() <span style="color:#f92672">-</span> beginStartTime;
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">if</span> (timeoutMillis <span style="color:#f92672">&lt;</span> costTimeAsync) {
+</span></span><span style="display:flex;"><span>                    <span style="color:#66d9ef">throw</span> <span style="color:#66d9ef">new</span> RemotingTooMuchRequestException(<span style="color:#e6db74">&#34;sendMessage call timeout&#34;</span>);
+</span></span><span style="display:flex;"><span>                }
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">sendMessageAsync</span>(addr, brokerName, msg, timeoutMillis <span style="color:#f92672">-</span> costTimeAsync, request, sendCallback, topicPublishInfo, instance,
+</span></span><span style="display:flex;"><span>                    retryTimesWhenSendFailed, times, context, producer);
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">null</span>;
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">case</span> SYNC:
+</span></span><span style="display:flex;"><span>                <span style="color:#75715e">// 同步发送</span>
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">long</span> costTimeSync <span style="color:#f92672">=</span> System.<span style="color:#a6e22e">currentTimeMillis</span>() <span style="color:#f92672">-</span> beginStartTime;
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">if</span> (timeoutMillis <span style="color:#f92672">&lt;</span> costTimeSync) {
+</span></span><span style="display:flex;"><span>                    <span style="color:#66d9ef">throw</span> <span style="color:#66d9ef">new</span> RemotingTooMuchRequestException(<span style="color:#e6db74">&#34;sendMessage call timeout&#34;</span>);
+</span></span><span style="display:flex;"><span>                }
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">sendMessageSync</span>(addr, brokerName, msg, timeoutMillis <span style="color:#f92672">-</span> costTimeSync, request);
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">default</span>:
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">assert</span> <span style="color:#66d9ef">false</span>;
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">break</span>;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">null</span>;
+</span></span><span style="display:flex;"><span>    }
+</span></span></code></pre></div><blockquote>
+<ol>
+<li>生成消息的载体对象 RemotingCommand，该对象存储这和其他服务交互的传输数据信息。</li>
+<li>又根据发消息的类型区分同步、异步、单向三种方式，调用具体的实现。</li>
+<li>单向调用 remotingClient.invokeOneway()实现。</li>
+<li>异步调用 this.sendMessageAsync() 实现。</li>
+<li>同步调用 this.sendMessageSync() 实现。</li>
+</ol>
+</blockquote>
+<p>单向发送消息 NettyRemotingClient.remotingClient.invokeOneway()</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#a6e22e">@Override</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">invokeOneway</span>(String addr, RemotingCommand request, <span style="color:#66d9ef">long</span> timeoutMillis) <span style="color:#66d9ef">throws</span> InterruptedException,
+</span></span><span style="display:flex;"><span>RemotingConnectException, RemotingTooMuchRequestException, RemotingTimeoutException, RemotingSendRequestException {
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">// 获取发送消息的 Channel，Netty 的对象</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">final</span> Channel channel <span style="color:#f92672">=</span> <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">getAndCreateChannel</span>(addr);
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">if</span> (channel <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span> <span style="color:#f92672">&amp;&amp;</span> channel.<span style="color:#a6e22e">isActive</span>()) {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">try</span> {
+</span></span><span style="display:flex;"><span>      doBeforeRpcHooks(addr, request);
+</span></span><span style="display:flex;"><span>      <span style="color:#75715e">// 单向发送消息</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">invokeOnewayImpl</span>(channel, request, timeoutMillis);
+</span></span><span style="display:flex;"><span>    } <span style="color:#66d9ef">catch</span> (RemotingSendRequestException e) {
+</span></span><span style="display:flex;"><span>      log.<span style="color:#a6e22e">warn</span>(<span style="color:#e6db74">&#34;invokeOneway: send request exception, so close the channel[{}]&#34;</span>, addr);
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">closeChannel</span>(addr, channel);
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">throw</span> e;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>  } <span style="color:#66d9ef">else</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">closeChannel</span>(addr, channel);
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">throw</span> <span style="color:#66d9ef">new</span> RemotingConnectException(addr);
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>this.invokeOnewayImpl(channel, request, timeoutMillis)</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">invokeOnewayImpl</span>(<span style="color:#66d9ef">final</span> Channel channel, <span style="color:#66d9ef">final</span> RemotingCommand request, <span style="color:#66d9ef">final</span> <span style="color:#66d9ef">long</span> timeoutMillis)
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">throws</span> InterruptedException, RemotingTooMuchRequestException, RemotingTimeoutException, RemotingSendRequestException {
+</span></span><span style="display:flex;"><span>  request.<span style="color:#a6e22e">markOnewayRPC</span>();
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">// 使用信号量控制并发</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">boolean</span> acquired <span style="color:#f92672">=</span> <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">semaphoreOneway</span>.<span style="color:#a6e22e">tryAcquire</span>(timeoutMillis, TimeUnit.<span style="color:#a6e22e">MILLISECONDS</span>);
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">if</span> (acquired) {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">final</span> SemaphoreReleaseOnlyOnce once <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> SemaphoreReleaseOnlyOnce(<span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">semaphoreOneway</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">try</span> {
+</span></span><span style="display:flex;"><span>      <span style="color:#75715e">// 异步发送消息，Netty交互</span>
+</span></span><span style="display:flex;"><span>      channel.<span style="color:#a6e22e">writeAndFlush</span>(request).<span style="color:#a6e22e">addListener</span>(<span style="color:#66d9ef">new</span> ChannelFutureListener() {
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">@Override</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">operationComplete</span>(ChannelFuture f) <span style="color:#66d9ef">throws</span> Exception {
+</span></span><span style="display:flex;"><span>          once.<span style="color:#a6e22e">release</span>();
+</span></span><span style="display:flex;"><span>          <span style="color:#75715e">// 发送完成回调处理</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span>f.<span style="color:#a6e22e">isSuccess</span>()) {
+</span></span><span style="display:flex;"><span>            log.<span style="color:#a6e22e">warn</span>(<span style="color:#e6db74">&#34;send a request command to channel &lt;&#34;</span> <span style="color:#f92672">+</span> channel.<span style="color:#a6e22e">remoteAddress</span>() <span style="color:#f92672">+</span> <span style="color:#e6db74">&#34;&gt; failed.&#34;</span>);
+</span></span><span style="display:flex;"><span>          }
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>      });
+</span></span><span style="display:flex;"><span>    } <span style="color:#66d9ef">catch</span> (Exception e) {
+</span></span><span style="display:flex;"><span>      once.<span style="color:#a6e22e">release</span>();
+</span></span><span style="display:flex;"><span>      log.<span style="color:#a6e22e">warn</span>(<span style="color:#e6db74">&#34;write send a request command to channel &lt;&#34;</span> <span style="color:#f92672">+</span> channel.<span style="color:#a6e22e">remoteAddress</span>() <span style="color:#f92672">+</span> <span style="color:#e6db74">&#34;&gt; failed.&#34;</span>);
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">throw</span> <span style="color:#66d9ef">new</span> RemotingSendRequestException(RemotingHelper.<span style="color:#a6e22e">parseChannelRemoteAddr</span>(channel), e);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>  } <span style="color:#66d9ef">else</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 获取信号量超时处理...</span>
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><blockquote>
+<ol>
+<li>至此发送单向消息完成，这里就是使用 netty 和其他服务交互了，不再深入。</li>
+<li>可以看到使用 channel.writeAndFlush() 异步发送消息，新增了一个监听器，发送失败会打印告警日志。</li>
+<li>单向发送并没有关心返回值。</li>
+<li>使用信号量 Semaphore 控制并发。</li>
+</ol>
+</blockquote>
+<p><strong>同步发送</strong></p>
+<p>在前面的分析中，三种发消息的代码都是公用的，在 MQClientAPIImpl.sendMessage() 中才有不同的分支。</p>
+<p>同步发送开始 MQClientAPIImpl.sendMessageSync()</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span> <span style="color:#66d9ef">private</span> SendResult <span style="color:#a6e22e">sendMessageSync</span>(
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">final</span> String addr,
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">final</span> String brokerName,
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">final</span> Message msg,
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">final</span> <span style="color:#66d9ef">long</span> timeoutMillis,
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">final</span> RemotingCommand request
+</span></span><span style="display:flex;"><span>    ) <span style="color:#66d9ef">throws</span> RemotingException, MQBrokerException, InterruptedException {
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// 发送消息</span>
+</span></span><span style="display:flex;"><span>        RemotingCommand response <span style="color:#f92672">=</span> <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">remotingClient</span>.<span style="color:#a6e22e">invokeSync</span>(addr, request, timeoutMillis);
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">assert</span> response <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span>;
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// 处理返回结果</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">processSendResponse</span>(brokerName, msg, response,addr);
+</span></span><span style="display:flex;"><span>    }
+</span></span></code></pre></div><blockquote>
+<p>可以看到在底层交互的对象请求和接收都封装在了同一个对象 RemotingCommand 中。</p>
+</blockquote>
+<p>this.remotingClient.invokeSync(addr, request, timeoutMillis)</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#a6e22e">@Override</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span> RemotingCommand <span style="color:#a6e22e">invokeSync</span>(String addr, <span style="color:#66d9ef">final</span> RemotingCommand request, <span style="color:#66d9ef">long</span> timeoutMillis)
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">throws</span> InterruptedException, RemotingConnectException, RemotingSendRequestException, RemotingTimeoutException {
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">long</span> beginStartTime <span style="color:#f92672">=</span> System.<span style="color:#a6e22e">currentTimeMillis</span>();
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">final</span> Channel channel <span style="color:#f92672">=</span> <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">getAndCreateChannel</span>(addr);
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">if</span> (channel <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span> <span style="color:#f92672">&amp;&amp;</span> channel.<span style="color:#a6e22e">isActive</span>()) {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">try</span> {
+</span></span><span style="display:flex;"><span>      doBeforeRpcHooks(addr, request);
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">long</span> costTime <span style="color:#f92672">=</span> System.<span style="color:#a6e22e">currentTimeMillis</span>() <span style="color:#f92672">-</span> beginStartTime;
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">if</span> (timeoutMillis <span style="color:#f92672">&lt;</span> costTime) {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">throw</span> <span style="color:#66d9ef">new</span> RemotingTimeoutException(<span style="color:#e6db74">&#34;invokeSync call timeout&#34;</span>);
+</span></span><span style="display:flex;"><span>      }
+</span></span><span style="display:flex;"><span>      <span style="color:#75715e">// 执行发送消息</span>
+</span></span><span style="display:flex;"><span>      RemotingCommand response <span style="color:#f92672">=</span> <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">invokeSyncImpl</span>(channel, request, timeoutMillis <span style="color:#f92672">-</span> costTime);
+</span></span><span style="display:flex;"><span>      doAfterRpcHooks(RemotingHelper.<span style="color:#a6e22e">parseChannelRemoteAddr</span>(channel), request, response);
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">return</span> response;
+</span></span><span style="display:flex;"><span>    } <span style="color:#66d9ef">catch</span> (RemotingSendRequestException e) {
+</span></span><span style="display:flex;"><span>      <span style="color:#75715e">// </span>
+</span></span><span style="display:flex;"><span>    } 
+</span></span><span style="display:flex;"><span>  } 
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>this.invokeSyncImpl()</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">public</span> RemotingCommand <span style="color:#a6e22e">invokeSyncImpl</span>(<span style="color:#66d9ef">final</span> Channel channel, <span style="color:#66d9ef">final</span> RemotingCommand request,
+</span></span><span style="display:flex;"><span>                                      <span style="color:#66d9ef">final</span> <span style="color:#66d9ef">long</span> timeoutMillis)
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">throws</span> InterruptedException, RemotingSendRequestException, RemotingTimeoutException {
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">final</span> <span style="color:#66d9ef">int</span> opaque <span style="color:#f92672">=</span> request.<span style="color:#a6e22e">getOpaque</span>();
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">try</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 构建返回对象，实例化 countDownLatch</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">final</span> ResponseFuture responseFuture <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> ResponseFuture(channel, opaque, timeoutMillis, <span style="color:#66d9ef">null</span>, <span style="color:#66d9ef">null</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">responseTable</span>.<span style="color:#a6e22e">put</span>(opaque, responseFuture);
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">final</span> SocketAddress addr <span style="color:#f92672">=</span> channel.<span style="color:#a6e22e">remoteAddress</span>();
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 使用 nettyClient 异步发送消息。</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 但需求是要返回值，要这里用到 countDownLatch，等到有返回结果才结束。</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// RemotingCommand responseCommand = responseFuture.waitResponse(timeoutMillis); -&gt;  this.countDownLatch.await(timeoutMillis, TimeUnit.MILLISECONDS); 这里主线程等到子线程返回</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// responseFuture.putResponse(null); -&gt; this.countDownLatch.countDown(); 结束等到，接续执行</span>
+</span></span><span style="display:flex;"><span>    channel.<span style="color:#a6e22e">writeAndFlush</span>(request).<span style="color:#a6e22e">addListener</span>(<span style="color:#66d9ef">new</span> ChannelFutureListener() {
+</span></span><span style="display:flex;"><span>      <span style="color:#a6e22e">@Override</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">operationComplete</span>(ChannelFuture f) <span style="color:#66d9ef">throws</span> Exception {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> (f.<span style="color:#a6e22e">isSuccess</span>()) {
+</span></span><span style="display:flex;"><span>          responseFuture.<span style="color:#a6e22e">setSendRequestOK</span>(<span style="color:#66d9ef">true</span>);
+</span></span><span style="display:flex;"><span>          <span style="color:#66d9ef">return</span>;
+</span></span><span style="display:flex;"><span>        } <span style="color:#66d9ef">else</span> {
+</span></span><span style="display:flex;"><span>          responseFuture.<span style="color:#a6e22e">setSendRequestOK</span>(<span style="color:#66d9ef">false</span>);
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        responseTable.<span style="color:#a6e22e">remove</span>(opaque);
+</span></span><span style="display:flex;"><span>        responseFuture.<span style="color:#a6e22e">setCause</span>(f.<span style="color:#a6e22e">cause</span>());
+</span></span><span style="display:flex;"><span>        responseFuture.<span style="color:#a6e22e">putResponse</span>(<span style="color:#66d9ef">null</span>);
+</span></span><span style="display:flex;"><span>        log.<span style="color:#a6e22e">warn</span>(<span style="color:#e6db74">&#34;send a request command to channel &lt;&#34;</span> <span style="color:#f92672">+</span> addr <span style="color:#f92672">+</span> <span style="color:#e6db74">&#34;&gt; failed.&#34;</span>);
+</span></span><span style="display:flex;"><span>      }
+</span></span><span style="display:flex;"><span>    });
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 同步等等返回结果</span>
+</span></span><span style="display:flex;"><span>    RemotingCommand responseCommand <span style="color:#f92672">=</span> responseFuture.<span style="color:#a6e22e">waitResponse</span>(timeoutMillis);
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> responseCommand;
+</span></span><span style="display:flex;"><span>  } <span style="color:#66d9ef">finally</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">responseTable</span>.<span style="color:#a6e22e">remove</span>(opaque);
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">putResponse</span>(<span style="color:#66d9ef">final</span> RemotingCommand responseCommand) {
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">responseCommand</span> <span style="color:#f92672">=</span> responseCommand;
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">countDownLatch</span>.<span style="color:#a6e22e">countDown</span>();
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">public</span> RemotingCommand <span style="color:#a6e22e">waitResponse</span>(<span style="color:#66d9ef">final</span> <span style="color:#66d9ef">long</span> timeoutMillis) <span style="color:#66d9ef">throws</span> InterruptedException {
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">countDownLatch</span>.<span style="color:#a6e22e">await</span>(timeoutMillis, TimeUnit.<span style="color:#a6e22e">MILLISECONDS</span>);
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">responseCommand</span>;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><blockquote>
+<ol>
+<li>发消息给 broker 都一样，都是异步的。</li>
+<li>但这里使用了 CountDownLatch 等待异步线程返回，这里是和单向发送消息最大的不同。</li>
+<li>总体是同步的。</li>
+</ol>
+</blockquote>
+<h3 id="broker-负载均衡源码">Broker 负载均衡源码</h3>
+<p>Producer 发送消息给Topic时，会选择一个MessageQuence, 默认的负载均衡算法是轮询，每个qucence大致平均分配。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">private</span> SendResult <span style="color:#a6e22e">sendDefaultImpl</span>(
+</span></span><span style="display:flex;"><span>    Message msg,
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">final</span> CommunicationMode communicationMode,
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">final</span> SendCallback sendCallback,
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">final</span> <span style="color:#66d9ef">long</span> timeout
+</span></span><span style="display:flex;"><span>  ) <span style="color:#66d9ef">throws</span> MQClientException, RemotingException, MQBrokerException, InterruptedException {
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	  <span style="color:#75715e">//...</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 选择一个MessageQueue</span>
+</span></span><span style="display:flex;"><span>    MessageQueue mqSelected <span style="color:#f92672">=</span> <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">selectOneMessageQueue</span>(topicPublishInfo, lastBrokerName);
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">//...</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>默认情况下最终调用下面方法，每个线程第一访问时，会随机取一个整型值，每次对该值加1取绝对值后对quence的数量取模。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">public</span> MessageQueue <span style="color:#a6e22e">selectOneMessageQueue</span>() {
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">int</span> index <span style="color:#f92672">=</span> <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">sendWhichQueue</span>.<span style="color:#a6e22e">incrementAndGet</span>();
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">int</span> pos <span style="color:#f92672">=</span> Math.<span style="color:#a6e22e">abs</span>(index) <span style="color:#f92672">%</span> <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">messageQueueList</span>.<span style="color:#a6e22e">size</span>();
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">if</span> (pos <span style="color:#f92672">&lt;</span> 0)
+</span></span><span style="display:flex;"><span>    pos <span style="color:#f92672">=</span> 0;
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">messageQueueList</span>.<span style="color:#a6e22e">get</span>(pos);
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h3 id="broker-接收消息及刷盘持久化源码">Broker 接收消息及刷盘持久化源码</h3>
+<p>待补充</p>
+<h3 id="consumer-推模式源码">Consumer 推模式源码</h3>
+<p>推模式实时性高，但占用网络资源多。</p>
+<h3 id="consumer-拉模式源码">Consumer 拉模式源码</h3>
+<p>拉模式可以批量消费，实时性不高，但能减少网络带宽。</p>
+<h2 id="rocketmq-对比其他mq">RocketMQ 对比其他MQ</h2>
+<ul>
+<li>RabbitMQ 安全性高，可靠性高，但吞吐量低。</li>
+<li>Kafka 性能高，但功能单一，且可能会丢消息。</li>
+<li>RocketMQ 性能高，功能全，几乎全场景都能使用。</li>
+</ul>
+<h2 id="rocketmq--常见问题">RocketMQ  常见问题</h2>
+<ul>
+<li>
+<p>如何保证消息不丢失？</p>
+<ul>
+<li>MQ服务正常时，生产者端采用同步发送、同步刷盘、同步同步发给从节点，消费者端消费失败自动重试。</li>
+<li>MQ服务挂掉时，把消息在暂时存入Redis，等MQ服务恢复后再发给MQ。</li>
+</ul>
+</li>
+<li>
+<p>如何保证消息有序？</p>
+<ul>
+<li>局部有序：生产者这段把需要保证有序的消息发在同一个队列，消费者端一个队列只绑定一下消费者。</li>
+<li>全局有序：所有消息只有有一个队列，性能很低。</li>
+</ul>
+</li>
+<li>
+<p>如何处理消息积压？</p>
+<ul>
+<li>当队列多时：增加消费者提高消费的效率。</li>
+<li>当队列少时：创建一个队列多的Topic，迁移消息，再增加消费者消费。</li>
+</ul>
+</li>
+</ul>
+</section>
+
+  
+  
+
+  
+  
+  
+  
+  <nav class="mt-24 flex rounded-lg bg-black/[3%] text-lg dark:bg-white/[8%]">
+    
+    <a
+      class="flex w-1/2 items-center rounded-l-md p-6 pr-3 font-semibold no-underline hover:bg-black/[2%] dark:hover:bg-white/[3%]"
+      href="https://telzhou618.github.io/post/kafka/"
+      ><span class="mr-1.5">←</span><span>一文搞懂 kafka</span></a
+    >
+    
+    
+  </nav>
+  
+  
+
+  
+  
+
+  
+  
+  <div class="mt-24" id="graphcomment"></div>
+  <script type="text/javascript">
+    var __semio__params = {
+      graphcommentId: 'a42bc435-1a67-9bc8-2cde-72ec7ba0d2fb',
+      behaviour: {
+        
+      },
+      
+    };
+
+    function __semio__onload() {
+      __semio__gc_graphlogin(__semio__params);
+    }
+
+    (function () {
+      var gc = document.createElement('script');
+      gc.type = 'text/javascript';
+      gc.async = true;
+      gc.onload = __semio__onload;
+      gc.defer = true;
+      gc.src =
+        'https://integration.graphcomment.com/gc_graphlogin.js?' + Date.now();
+      (
+        document.getElementsByTagName('head')[0] ||
+        document.getElementsByTagName('body')[0]
+      ).appendChild(gc);
+    })();
+  </script>
+  
+
+  
+
+
+  
+</article>
+
+
+    </main>
+
+    <footer
+  class="opaco mx-auto flex h-[4.5rem] max-w-3xl items-center px-8 text-[0.9em] opacity-60"
+>
+  <div class="mr-auto">
+    &copy; 2024
+    <a class="link" href="https://telzhou618.github.io">Home</a>
+  </div>
+  <a class="link mx-6" href="https://gohugo.io/" rel="noopener" target="_blank"
+    >Powered by Hugo️️</a
+  >️
+  <a
+    class="link"
+    href="https://github.com/nanxiaobei/hugo-paper"
+    rel="noopener"
+    target="_blank"
+    >✎ Paper</a
+  >
+</footer>
+
+  </body>
+</html>

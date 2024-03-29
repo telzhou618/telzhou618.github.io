@@ -1,0 +1,1134 @@
+<!doctype html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<html
+  class="not-ready lg:text-base"
+  style="--bg: #faf8f1"
+  lang="en-us"
+>
+  <head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, shrink-to-fit=no"
+  />
+
+  
+  <title>Spring AOP 从入门到源码解析 - Home</title>
+
+  
+  <meta name="theme-color" />
+
+  
+  
+  
+  
+  <meta name="description" content="先学会如何使用 Spring-boot 或 Spring-cloud 中使用AOP 在Spring-boot 工程中使用AOP功能，先引入相关的依赖。
+pom.xml
+&lt;dependency&gt; &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt; &lt;artifactId&gt;spring-boot-starter-web&lt;/artifactId&gt; &lt;/dependency&gt; &lt;dependency&gt; &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt; &lt;artifactId&gt;spring-boot-starter-aop&lt;/artifactId&gt; &lt;/dependency&gt; &lt;dependency&gt; &lt;groupId&gt;org.projectlombok&lt;/groupId&gt; &lt;artifactId&gt;lombok&lt;/artifactId&gt; &lt;version&gt;1.18.22&lt;/version&gt; &lt;/dependency&gt; &lt;dependency&gt; &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt; &lt;artifactId&gt;spring-boot-starter-test&lt;/artifactId&gt; &lt;scope&gt;test&lt;/scope&gt; &lt;exclusions&gt; &lt;exclusion&gt; &lt;groupId&gt;org.junit.vintage&lt;/groupId&gt; &lt;artifactId&gt;junit-vintage-engine&lt;/artifactId&gt; &lt;/exclusion&gt; &lt;/exclusions&gt; &lt;/dependency&gt; 测试业务接口 UserService.java
+public interface UserService { void test(); } 测试业务接口实现类 UserServiceImp.java
+@Slf4j @Service public class UserServiceImpl implements UserService { @Override public void test() { log.info(&#34;执行业务方法test...&#34;); } } 切面类 LogAspect.java
+@Slf4j @Aspect @Component public class LogAspect { @Pointcut(&#34;execution(public * com." />
+  <meta name="author" content="telzhou618" />
+  
+
+  
+  
+  
+  
+  
+  
+  <link rel="preload stylesheet" as="style" href="https://telzhou618.github.io/main.min.css" />
+
+  
+  
+  
+  
+  
+  <link rel="preload" as="image" href="https://telzhou618.github.io/theme.svg" />
+
+  
+  
+  
+  
+  <link rel="preload" as="image" href="https://s.gravatar.com/avatar/9ff9514e4c37a5cb11be475190289857778d613942c4d6364c16e770a4cb66a0?s=80" />
+  
+  
+
+  
+  
+  <link rel="preload" as="image" href="https://telzhou618.github.io/github.svg" />
+  
+  
+
+  
+  
+
+  
+  
+  
+  <link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/katex@0.16.7/dist/katex.min.css"
+  integrity="sha384-3UiQGuEI4TTMaFmGIZumfRPtfKQ3trwQE2JgosJxCnGmQpL/lJdjpcHkaaFwHlcI"
+  crossorigin="anonymous"
+/>
+<script
+  defer
+  src="https://cdn.jsdelivr.net/npm/katex@0.16.7/dist/katex.min.js"
+  integrity="sha384-G0zcxDFp5LWZtDuRMnBkk3EphCK1lhEf4UEyEM693ka574TZGwo4IWwS6QLzM/2t"
+  crossorigin="anonymous"
+></script>
+<script
+  defer
+  src="https://cdn.jsdelivr.net/npm/katex@0.16.7/dist/contrib/auto-render.min.js"
+  integrity="sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05"
+  crossorigin="anonymous"
+></script>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () =>
+    renderMathInElement(document.body, {
+      
+      
+      delimiters: [
+        { left: '$$', right: '$$', display: true },
+        { left: '$', right: '$', display: false },
+      ],
+      
+      throwOnError: false,
+    }),
+  );
+</script>
+
+  
+  
+  
+
+  
+  <link rel="icon" href="https://telzhou618.github.io/favicon.ico" />
+  <link rel="apple-touch-icon" href="https://telzhou618.github.io/apple-touch-icon.png" />
+
+  
+  <meta name="generator" content="Hugo 0.121.1">
+
+  
+  
+  
+  
+  
+  <meta itemprop="name" content="Spring AOP 从入门到源码解析">
+<meta itemprop="description" content="先学会如何使用 Spring-boot 或 Spring-cloud 中使用AOP 在Spring-boot 工程中使用AOP功能，先引入相关的依赖。
+pom.xml
+&lt;dependency&gt; &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt; &lt;artifactId&gt;spring-boot-starter-web&lt;/artifactId&gt; &lt;/dependency&gt; &lt;dependency&gt; &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt; &lt;artifactId&gt;spring-boot-starter-aop&lt;/artifactId&gt; &lt;/dependency&gt; &lt;dependency&gt; &lt;groupId&gt;org.projectlombok&lt;/groupId&gt; &lt;artifactId&gt;lombok&lt;/artifactId&gt; &lt;version&gt;1.18.22&lt;/version&gt; &lt;/dependency&gt; &lt;dependency&gt; &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt; &lt;artifactId&gt;spring-boot-starter-test&lt;/artifactId&gt; &lt;scope&gt;test&lt;/scope&gt; &lt;exclusions&gt; &lt;exclusion&gt; &lt;groupId&gt;org.junit.vintage&lt;/groupId&gt; &lt;artifactId&gt;junit-vintage-engine&lt;/artifactId&gt; &lt;/exclusion&gt; &lt;/exclusions&gt; &lt;/dependency&gt; 测试业务接口 UserService.java
+public interface UserService { void test(); } 测试业务接口实现类 UserServiceImp.java
+@Slf4j @Service public class UserServiceImpl implements UserService { @Override public void test() { log.info(&#34;执行业务方法test...&#34;); } } 切面类 LogAspect.java
+@Slf4j @Aspect @Component public class LogAspect { @Pointcut(&#34;execution(public * com."><meta itemprop="datePublished" content="2023-06-28T14:44:07+08:00" />
+<meta itemprop="dateModified" content="2023-06-28T14:44:07+08:00" />
+<meta itemprop="wordCount" content="2012">
+<meta itemprop="keywords" content="" />
+  
+  <meta property="og:title" content="Spring AOP 从入门到源码解析" />
+<meta property="og:description" content="先学会如何使用 Spring-boot 或 Spring-cloud 中使用AOP 在Spring-boot 工程中使用AOP功能，先引入相关的依赖。
+pom.xml
+&lt;dependency&gt; &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt; &lt;artifactId&gt;spring-boot-starter-web&lt;/artifactId&gt; &lt;/dependency&gt; &lt;dependency&gt; &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt; &lt;artifactId&gt;spring-boot-starter-aop&lt;/artifactId&gt; &lt;/dependency&gt; &lt;dependency&gt; &lt;groupId&gt;org.projectlombok&lt;/groupId&gt; &lt;artifactId&gt;lombok&lt;/artifactId&gt; &lt;version&gt;1.18.22&lt;/version&gt; &lt;/dependency&gt; &lt;dependency&gt; &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt; &lt;artifactId&gt;spring-boot-starter-test&lt;/artifactId&gt; &lt;scope&gt;test&lt;/scope&gt; &lt;exclusions&gt; &lt;exclusion&gt; &lt;groupId&gt;org.junit.vintage&lt;/groupId&gt; &lt;artifactId&gt;junit-vintage-engine&lt;/artifactId&gt; &lt;/exclusion&gt; &lt;/exclusions&gt; &lt;/dependency&gt; 测试业务接口 UserService.java
+public interface UserService { void test(); } 测试业务接口实现类 UserServiceImp.java
+@Slf4j @Service public class UserServiceImpl implements UserService { @Override public void test() { log.info(&#34;执行业务方法test...&#34;); } } 切面类 LogAspect.java
+@Slf4j @Aspect @Component public class LogAspect { @Pointcut(&#34;execution(public * com." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://telzhou618.github.io/post/spring-aop/" /><meta property="article:section" content="post" />
+<meta property="article:published_time" content="2023-06-28T14:44:07+08:00" />
+<meta property="article:modified_time" content="2023-06-28T14:44:07+08:00" />
+
+
+  
+  <meta name="twitter:card" content="summary"/><meta name="twitter:title" content="Spring AOP 从入门到源码解析"/>
+<meta name="twitter:description" content="先学会如何使用 Spring-boot 或 Spring-cloud 中使用AOP 在Spring-boot 工程中使用AOP功能，先引入相关的依赖。
+pom.xml
+&lt;dependency&gt; &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt; &lt;artifactId&gt;spring-boot-starter-web&lt;/artifactId&gt; &lt;/dependency&gt; &lt;dependency&gt; &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt; &lt;artifactId&gt;spring-boot-starter-aop&lt;/artifactId&gt; &lt;/dependency&gt; &lt;dependency&gt; &lt;groupId&gt;org.projectlombok&lt;/groupId&gt; &lt;artifactId&gt;lombok&lt;/artifactId&gt; &lt;version&gt;1.18.22&lt;/version&gt; &lt;/dependency&gt; &lt;dependency&gt; &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt; &lt;artifactId&gt;spring-boot-starter-test&lt;/artifactId&gt; &lt;scope&gt;test&lt;/scope&gt; &lt;exclusions&gt; &lt;exclusion&gt; &lt;groupId&gt;org.junit.vintage&lt;/groupId&gt; &lt;artifactId&gt;junit-vintage-engine&lt;/artifactId&gt; &lt;/exclusion&gt; &lt;/exclusions&gt; &lt;/dependency&gt; 测试业务接口 UserService.java
+public interface UserService { void test(); } 测试业务接口实现类 UserServiceImp.java
+@Slf4j @Service public class UserServiceImpl implements UserService { @Override public void test() { log.info(&#34;执行业务方法test...&#34;); } } 切面类 LogAspect.java
+@Slf4j @Aspect @Component public class LogAspect { @Pointcut(&#34;execution(public * com."/>
+
+  
+  
+  
+  <link rel="canonical" href="https://telzhou618.github.io/post/spring-aop/" />
+  
+  
+</head>
+
+  <body class="text-black duration-200 ease-out dark:text-white">
+    <header class="mx-auto flex h-[4.5rem] max-w-3xl px-8 lg:justify-center">
+  <div class="relative z-50 mr-auto flex items-center">
+    <a
+      class="-translate-x-[1px] -translate-y-[1px] text-2xl font-semibold"
+      href="https://telzhou618.github.io"
+      >Home</a
+    >
+    <div
+      class="btn-dark text-[0] ml-4 h-6 w-6 shrink-0 cursor-pointer [background:url(./theme.svg)_left_center/cover_no-repeat] dark:invert dark:[background-position:right]"
+      role="button"
+      aria-label="Dark"
+    ></div>
+  </div>
+
+  <div
+    class="btn-menu relative z-50 -mr-8 flex h-[4.5rem] w-[5rem] shrink-0 cursor-pointer flex-col items-center justify-center gap-2.5 lg:hidden"
+    role="button"
+    aria-label="Menu"
+  ></div>
+
+  
+
+  <script>
+    
+    const htmlClass = document.documentElement.classList;
+    setTimeout(() => {
+      htmlClass.remove('not-ready');
+    }, 10);
+
+    
+    const btnMenu = document.querySelector('.btn-menu');
+    btnMenu.addEventListener('click', () => {
+      htmlClass.toggle('open');
+    });
+
+    
+    const metaTheme = document.querySelector('meta[name="theme-color"]');
+    const lightBg = '#faf8f1'.replace(/"/g, '');
+    const setDark = (isDark) => {
+      metaTheme.setAttribute('content', isDark ? '#000' : lightBg);
+      htmlClass[isDark ? 'add' : 'remove']('dark');
+      localStorage.setItem('dark', isDark);
+    };
+
+    
+    const darkScheme = window.matchMedia('(prefers-color-scheme: dark)');
+    if (htmlClass.contains('dark')) {
+      setDark(true);
+    } else {
+      const darkVal = localStorage.getItem('dark');
+      setDark(darkVal ? darkVal === 'true' : darkScheme.matches);
+    }
+
+    
+    darkScheme.addEventListener('change', (event) => {
+      setDark(event.matches);
+    });
+
+    
+    const btnDark = document.querySelector('.btn-dark');
+    btnDark.addEventListener('click', () => {
+      setDark(localStorage.getItem('dark') !== 'true');
+    });
+  </script>
+
+  <div
+    class="nav-wrapper fixed inset-x-0 top-full z-40 flex h-full select-none flex-col justify-center pb-16 duration-200 dark:bg-black lg:static lg:h-auto lg:flex-row lg:!bg-transparent lg:pb-0 lg:transition-none"
+  >
+    
+    
+    <nav class="lg:ml-12 lg:flex lg:flex-row lg:items-center lg:space-x-6">
+      
+      <a
+        class="block text-center text-2xl leading-[5rem] lg:text-base lg:font-normal"
+        href="/post/"
+        >Posts</a
+      >
+      
+      <a
+        class="block text-center text-2xl leading-[5rem] lg:text-base lg:font-normal"
+        href="/about/"
+        >About</a
+      >
+      
+    </nav>
+    
+
+    
+    <nav
+      class="mt-12 flex justify-center space-x-10 dark:invert lg:ml-12 lg:mt-0 lg:items-center lg:space-x-6"
+    >
+      
+      <a
+        class="h-8 w-8 text-[0] [background:var(--url)_center_center/cover_no-repeat] lg:h-6 lg:w-6"
+        style="--url: url(./github.svg)"
+        href="https://github.com/telzhou618"
+        target="_blank"
+        rel="me"
+      >
+        github
+      </a>
+      
+    </nav>
+    
+  </div>
+</header>
+
+
+    <main
+      class="prose prose-neutral relative mx-auto min-h-[calc(100%-9rem)] max-w-3xl px-8 pb-16 pt-12 dark:prose-invert"
+    >
+      
+
+<article>
+  <header class="mb-16">
+    <h1 class="!my-0 pb-2.5">Spring AOP 从入门到源码解析</h1>
+
+    
+    <div class="text-sm antialiased opacity-60">
+      
+      <time>Jun 28, 2023</time>
+      
+      
+      
+      
+    </div>
+    
+  </header>
+
+  <section><h2 id="先学会如何使用">先学会如何使用</h2>
+<h3 id="spring-boot-或-spring-cloud--中使用aop">Spring-boot 或 Spring-cloud  中使用AOP</h3>
+<p>在Spring-boot 工程中使用AOP功能，先引入相关的依赖。</p>
+<p>pom.xml</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-xml" data-lang="xml"><span style="display:flex;"><span> <span style="color:#f92672">&lt;dependency&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&lt;groupId&gt;</span>org.springframework.boot<span style="color:#f92672">&lt;/groupId&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&lt;artifactId&gt;</span>spring-boot-starter-web<span style="color:#f92672">&lt;/artifactId&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">&lt;/dependency&gt;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">&lt;dependency&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&lt;groupId&gt;</span>org.springframework.boot<span style="color:#f92672">&lt;/groupId&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&lt;artifactId&gt;</span>spring-boot-starter-aop<span style="color:#f92672">&lt;/artifactId&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">&lt;/dependency&gt;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">&lt;dependency&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&lt;groupId&gt;</span>org.projectlombok<span style="color:#f92672">&lt;/groupId&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&lt;artifactId&gt;</span>lombok<span style="color:#f92672">&lt;/artifactId&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&lt;version&gt;</span>1.18.22<span style="color:#f92672">&lt;/version&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">&lt;/dependency&gt;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">&lt;dependency&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&lt;groupId&gt;</span>org.springframework.boot<span style="color:#f92672">&lt;/groupId&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&lt;artifactId&gt;</span>spring-boot-starter-test<span style="color:#f92672">&lt;/artifactId&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&lt;scope&gt;</span>test<span style="color:#f92672">&lt;/scope&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&lt;exclusions&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&lt;exclusion&gt;</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&lt;groupId&gt;</span>org.junit.vintage<span style="color:#f92672">&lt;/groupId&gt;</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&lt;artifactId&gt;</span>junit-vintage-engine<span style="color:#f92672">&lt;/artifactId&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&lt;/exclusion&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&lt;/exclusions&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">&lt;/dependency&gt;</span>
+</span></span></code></pre></div><p>测试业务接口  UserService.java</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">interface</span> <span style="color:#a6e22e">UserService</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">test</span>();
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>测试业务接口实现类 UserServiceImp.java</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#a6e22e">@Slf4j</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">@Service</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">UserServiceImpl</span> <span style="color:#66d9ef">implements</span> UserService {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">@Override</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">test</span>() {
+</span></span><span style="display:flex;"><span>        log.<span style="color:#a6e22e">info</span>(<span style="color:#e6db74">&#34;执行业务方法test...&#34;</span>);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>切面类 LogAspect.java</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#a6e22e">@Slf4j</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">@Aspect</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">@Component</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">LogAspect</span> {
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">@Pointcut</span>(<span style="color:#e6db74">&#34;execution(public * com.example.service.impl.*.*(..))&#34;</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">pointcut</span>() {
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">@Before</span>(<span style="color:#e6db74">&#34;pointcut()&#34;</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">before</span>() {
+</span></span><span style="display:flex;"><span>        log.<span style="color:#a6e22e">info</span>(<span style="color:#e6db74">&#34;Before通知 -&gt; 业务方法执行前调用...&#34;</span>);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">@After</span>(<span style="color:#e6db74">&#34;pointcut()&#34;</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">after</span>() {
+</span></span><span style="display:flex;"><span>        log.<span style="color:#a6e22e">info</span>(<span style="color:#e6db74">&#34;After通知 -&gt; 业务方法执行后调用...&#34;</span>);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>启动类 Application.java</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#a6e22e">@SpringBootApplication</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Application</span> {
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">main</span>(String<span style="color:#f92672">[]</span> args) {
+</span></span><span style="display:flex;"><span>        SpringApplication.<span style="color:#a6e22e">run</span>(Application.<span style="color:#a6e22e">class</span>, args);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>执行测试类 UserServiceTest.java</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">@SpringBootTest</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">SpringTests</span> {
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">UserServiceTest</span> <span style="color:#66d9ef">extends</span> SpringTests {
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">@Autowired</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> UserService userService;
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">@Test</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">test</span>() {
+</span></span><span style="display:flex;"><span>        userService.<span style="color:#a6e22e">test</span>();
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><pre tabindex="0"><code>INFO 53837 --- [           main] com.example.aspect.LogAspect             : Before通知 -&gt; 业务方法执行前调用...
+INFO 53837 --- [           main] c.example.service.impl.UserServiceImpl   : 执行业务方法test...
+INFO 53837 --- [           main] com.example.aspect.LogAspect             : After通知 -&gt; 业务方法执行后调用...
+</code></pre><p>可以看到，在springboot项目中只要引入  spring-boot-starter-aop 包，默认会自动开启AOP功能。</p>
+<p>这是因为SpringBoot自动配置的特性，如下是AOP的配置类，默认是开启。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#a6e22e">@Configuration</span>(proxyBeanMethods <span style="color:#f92672">=</span> <span style="color:#66d9ef">false</span>)
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">@ConditionalOnProperty</span>(prefix <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;spring.aop&#34;</span>, name <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;auto&#34;</span>, havingValue <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;true&#34;</span>, matchIfMissing <span style="color:#f92672">=</span> <span style="color:#66d9ef">true</span>)
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">AopAutoConfiguration</span> {
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">//</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">@Configuration</span>(proxyBeanMethods <span style="color:#f92672">=</span> <span style="color:#66d9ef">false</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">@ConditionalOnClass</span>(Advice.<span style="color:#a6e22e">class</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">static</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">AspectJAutoProxyingConfiguration</span> {
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">@Configuration</span>(proxyBeanMethods <span style="color:#f92672">=</span> <span style="color:#66d9ef">false</span>)
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">@EnableAspectJAutoProxy</span>(proxyTargetClass <span style="color:#f92672">=</span> <span style="color:#66d9ef">false</span>)
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">@ConditionalOnProperty</span>(prefix <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;spring.aop&#34;</span>, name <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;proxy-target-class&#34;</span>, havingValue <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;false&#34;</span>,
+</span></span><span style="display:flex;"><span>				matchIfMissing <span style="color:#f92672">=</span> <span style="color:#66d9ef">false</span>)
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">static</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">JdkDynamicAutoProxyConfiguration</span> {
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">@Configuration</span>(proxyBeanMethods <span style="color:#f92672">=</span> <span style="color:#66d9ef">false</span>)
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">@EnableAspectJAutoProxy</span>(proxyTargetClass <span style="color:#f92672">=</span> <span style="color:#66d9ef">true</span>)
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">@ConditionalOnProperty</span>(prefix <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;spring.aop&#34;</span>, name <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;proxy-target-class&#34;</span>, havingValue <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;true&#34;</span>,
+</span></span><span style="display:flex;"><span>				matchIfMissing <span style="color:#f92672">=</span> <span style="color:#66d9ef">true</span>)
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">static</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">CglibAutoProxyConfiguration</span> {
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><ul>
+<li>
+<p>根据ConditionalOnProperty条件注解，当前环境中存在 spring.aop.auto，且值为true会启用该配置类， 而matchIfMissing的值为 true, 表明当没有手动配置 spring.aop.auto 时其默认值为true, 即默认开启AOP自动配置。</p>
+</li>
+<li>
+<p>havingValue 表示手动配置的值和havingValue的值相等时才生效。</p>
+</li>
+<li>
+<p>通过 AspectJAutoProxyingConfiguration 内部类注入 JdkDynamicAutoProxyConfiguration 和  CglibAutoProxyConfiguration 配置类型，到底哪一个会生效呢 ?</p>
+</li>
+<li>
+<p>CglibAutoProxyConfiguration会生效，因为没有配置spring.aop.proxy-target-class时CglibAutoProxyConfiguration上的默认值为true, 所以CglibAutoProxyConfiguration配置生效。</p>
+</li>
+<li>
+<p>matchIfMissing 表示没有手动配置时 spring.aop.proxy-target-class 配置的默认值。</p>
+</li>
+<li>
+<p>通过 @EnableAspectJAutoProxy(proxyTargetClass = true)  开启AOP功能，这是实现AOP的关键。</p>
+</li>
+</ul>
+<h2 id="原理分析">原理分析</h2>
+<p>Spring-AOP 的原理可以划分为三个步骤，总共做了三件事，分别是解析切面、创建动态代理、调用代理方法。</p>
+<p><img src="https://raw.githubusercontent.com/telzhou618/images/main/img01/image-20211208172327744.png" alt="image-20211208172327744"></p>
+<p>解析切面：</p>
+<p>在Spring容器启动的过程中会扫描所有的切面类，即标注@Aspect的bean,解析该类中的所有通知方法，生成Advisor，每个含有 @Before、@After&hellip; 的类都是一个通知，都会生成一个Advisor，最后将所有解析好的Advisor保存在缓存中。</p>
+<p>创建代理对象：</p>
+<p>根据切点表达式匹配所有bean和方法，如果匹配成功，实现了接口的bean使用JDK动态代理，没有实现接口使用Cglib动态代理。</p>
+<p>调用代理方法：</p>
+<p>当调用被代理的类的方法是，AOP会在执行目标方法前后执行被植入的切面逻辑。</p>
+<h2 id="解析切面">解析切面</h2>
+<p>从入口 @EnableAspectJAutoProxy 开始。</p>
+<p>导入了另一个类 AspectJAutoProxyRegistrar，@Import注解可以将一个普通类注入到spring容器，注册成bean。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#a6e22e">@Import</span>(AspectJAutoProxyRegistrar.<span style="color:#a6e22e">class</span>)
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#a6e22e">@interface</span> EnableAspectJAutoProxy {}
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">AspectJAutoProxyRegistrar</span> <span style="color:#66d9ef">implements</span> ImportBeanDefinitionRegistrar {
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>   <span style="color:#a6e22e">@Override</span>
+</span></span><span style="display:flex;"><span>   <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">registerBeanDefinitions</span>(
+</span></span><span style="display:flex;"><span>         AnnotationMetadata importingClassMetadata, BeanDefinitionRegistry registry) {
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>      <span style="color:#75715e">// 注入AOP核心类型</span>
+</span></span><span style="display:flex;"><span>      AopConfigUtils.<span style="color:#a6e22e">registerAspectJAnnotationAutoProxyCreatorIfNecessary</span>(registry);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>     <span style="color:#75715e">// 获取 EnableAspectJAutoProxy 注解中的 proxyTargetClass 和  exposeProxy 执行。</span>
+</span></span><span style="display:flex;"><span>     <span style="color:#75715e">// proxyTargetClass = true 表示都使用cglib代理。</span>
+</span></span><span style="display:flex;"><span>     <span style="color:#75715e">// exposeProxy = true 暴露代理对象到AOP的上下文，可以通过AopContext获取。</span>
+</span></span><span style="display:flex;"><span>      AnnotationAttributes enableAspectJAutoProxy <span style="color:#f92672">=</span>
+</span></span><span style="display:flex;"><span>            AnnotationConfigUtils.<span style="color:#a6e22e">attributesFor</span>(importingClassMetadata, EnableAspectJAutoProxy.<span style="color:#a6e22e">class</span>);
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">if</span> (enableAspectJAutoProxy <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span>) {
+</span></span><span style="display:flex;"><span>         <span style="color:#66d9ef">if</span> (enableAspectJAutoProxy.<span style="color:#a6e22e">getBoolean</span>(<span style="color:#e6db74">&#34;proxyTargetClass&#34;</span>)) {
+</span></span><span style="display:flex;"><span>            AopConfigUtils.<span style="color:#a6e22e">forceAutoProxyCreatorToUseClassProxying</span>(registry);
+</span></span><span style="display:flex;"><span>         }
+</span></span><span style="display:flex;"><span>         <span style="color:#66d9ef">if</span> (enableAspectJAutoProxy.<span style="color:#a6e22e">getBoolean</span>(<span style="color:#e6db74">&#34;exposeProxy&#34;</span>)) {
+</span></span><span style="display:flex;"><span>            AopConfigUtils.<span style="color:#a6e22e">forceAutoProxyCreatorToExposeProxy</span>(registry);
+</span></span><span style="display:flex;"><span>         }
+</span></span><span style="display:flex;"><span>      }
+</span></span><span style="display:flex;"><span>   }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>这里导入的是 ImportBeanDefinitionRegistrar 类型的bean, 通过实现 registerBeanDefinitions 方法可以注入其他任何类型的bean。</p>
+<p>关于ImportBeanDefinitionRegistrar 的用法参考另一篇文章：https://juejin.cn/post/7039308644768284679</p>
+<p>关键是注册了另一个bean，AnnotationAwareAspectJAutoProxyCreator 。</p>
+<p><img src="https://raw.githubusercontent.com/telzhou618/images/main/img01/image-20211208170900734.png" alt="image-20211208170900734"></p>
+<p>AnnotationAwareAspectJAutoProxyCreator 实现了 BeenPostProcessor接口 , 是bean的后置处理器。</p>
+<p>BeenPostProcessor 中有两个重要方法如下，他们分别在bean初始化前后执行。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">default</span> Object <span style="color:#a6e22e">postProcessBeforeInitialization</span>(Object bean, String beanName) <span style="color:#66d9ef">throws</span> BeansException {
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">return</span> bean;
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">default</span> Object <span style="color:#a6e22e">postProcessAfterInitialization</span>(Object bean, String beanName) <span style="color:#66d9ef">throws</span> BeansException {
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">return</span> bean;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><ul>
+<li>postProcessBeforeInitialization 在bean 初始化前执行。</li>
+<li>postProcessAfterInitialization 在 bean 初始化后执行。</li>
+</ul>
+<p>另外还实现了 InstantiationAwareBeanPostProcessor接口，该类也有两个方法，分别在bean实例化前后执行。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">default</span> Object <span style="color:#a6e22e">postProcessBeforeInstantiation</span>(Class<span style="color:#f92672">&lt;?&gt;</span> beanClass, String beanName) <span style="color:#66d9ef">throws</span> BeansException {
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">null</span>;
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">default</span> <span style="color:#66d9ef">boolean</span> <span style="color:#a6e22e">postProcessAfterInstantiation</span>(Object bean, String beanName) <span style="color:#66d9ef">throws</span> BeansException {
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">true</span>;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><ul>
+<li>postProcessBeforeInstantiation 在bean实例化前执行。</li>
+<li>postProcessAfterInstantiation 在bean实例化后执行。</li>
+</ul>
+<p>以上四个方法是AOP解析切面、创建代理的关键，在抽象类AbstractAutoProxyCreator中分别实现了这四个方法。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#a6e22e">@Override</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span> Object <span style="color:#a6e22e">postProcessBeforeInstantiation</span>(Class<span style="color:#f92672">&lt;?&gt;</span> beanClass, String beanName) {
+</span></span><span style="display:flex;"><span>   Object cacheKey <span style="color:#f92672">=</span> getCacheKey(beanClass, beanName);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>   <span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span>StringUtils.<span style="color:#a6e22e">hasLength</span>(beanName) <span style="color:#f92672">||</span> <span style="color:#f92672">!</span><span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">targetSourcedBeans</span>.<span style="color:#a6e22e">contains</span>(beanName)) {
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">if</span> (<span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">advisedBeans</span>.<span style="color:#a6e22e">containsKey</span>(cacheKey)) {
+</span></span><span style="display:flex;"><span>         <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">null</span>;
+</span></span><span style="display:flex;"><span>      }
+</span></span><span style="display:flex;"><span>      <span style="color:#75715e">// 解析切面</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">if</span> (isInfrastructureClass(beanClass) <span style="color:#f92672">||</span> shouldSkip(beanClass, beanName)) {
+</span></span><span style="display:flex;"><span>         <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">advisedBeans</span>.<span style="color:#a6e22e">put</span>(cacheKey, Boolean.<span style="color:#a6e22e">FALSE</span>);
+</span></span><span style="display:flex;"><span>         <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">null</span>;
+</span></span><span style="display:flex;"><span>      }
+</span></span><span style="display:flex;"><span>   }
+</span></span><span style="display:flex;"><span>   TargetSource targetSource <span style="color:#f92672">=</span> getCustomTargetSource(beanClass, beanName);
+</span></span><span style="display:flex;"><span>   <span style="color:#66d9ef">if</span> (targetSource <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span>) {
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">if</span> (StringUtils.<span style="color:#a6e22e">hasLength</span>(beanName)) {
+</span></span><span style="display:flex;"><span>         <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">targetSourcedBeans</span>.<span style="color:#a6e22e">add</span>(beanName);
+</span></span><span style="display:flex;"><span>      }
+</span></span><span style="display:flex;"><span>      Object<span style="color:#f92672">[]</span> specificInterceptors <span style="color:#f92672">=</span> getAdvicesAndAdvisorsForBean(beanClass, beanName, targetSource);
+</span></span><span style="display:flex;"><span>      Object proxy <span style="color:#f92672">=</span> createProxy(beanClass, beanName, specificInterceptors, targetSource);
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">proxyTypes</span>.<span style="color:#a6e22e">put</span>(cacheKey, proxy.<span style="color:#a6e22e">getClass</span>());
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">return</span> proxy;
+</span></span><span style="display:flex;"><span>   }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>   <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">null</span>;
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">@Override</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">boolean</span> <span style="color:#a6e22e">postProcessAfterInstantiation</span>(Object bean, String beanName) {
+</span></span><span style="display:flex;"><span>   <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">true</span>;
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">@Override</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span> Object <span style="color:#a6e22e">postProcessBeforeInitialization</span>(Object bean, String beanName) {
+</span></span><span style="display:flex;"><span>   <span style="color:#66d9ef">return</span> bean;
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">@Override</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span> Object <span style="color:#a6e22e">postProcessAfterInitialization</span>(<span style="color:#a6e22e">@Nullable</span> Object bean, String beanName) {
+</span></span><span style="display:flex;"><span>   <span style="color:#66d9ef">if</span> (bean <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span>) {
+</span></span><span style="display:flex;"><span>      Object cacheKey <span style="color:#f92672">=</span> getCacheKey(bean.<span style="color:#a6e22e">getClass</span>(), beanName);
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">if</span> (<span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">earlyProxyReferences</span>.<span style="color:#a6e22e">remove</span>(cacheKey) <span style="color:#f92672">!=</span> bean) {
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// 创建代理</span>
+</span></span><span style="display:flex;"><span>         <span style="color:#66d9ef">return</span> wrapIfNecessary(bean, beanName, cacheKey);
+</span></span><span style="display:flex;"><span>      }
+</span></span><span style="display:flex;"><span>   }
+</span></span><span style="display:flex;"><span>   <span style="color:#66d9ef">return</span> bean;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>在 postProcessBeforeInstantiation 方法中实现了切面解析的逻辑，会在第一个bean实例化前执行。</p>
+<p>在 postProcessAfterInitialization 方法中实现创建代理，在bean初始化后执行。</p>
+<h3 id="切面解析入口方法-postprocessbeforeinstantiation">切面解析入口方法 postProcessBeforeInstantiation</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#75715e">// 切面bean缓存</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">private</span> <span style="color:#66d9ef">final</span> Map<span style="color:#f92672">&lt;</span>Object, Boolean<span style="color:#f92672">&gt;</span> advisedBeans <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> ConcurrentHashMap<span style="color:#f92672">&lt;&gt;</span>(256);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">@Override</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span> Object <span style="color:#a6e22e">postProcessBeforeInstantiation</span>(Class<span style="color:#f92672">&lt;?&gt;</span> beanClass, String beanName) {
+</span></span><span style="display:flex;"><span>  Object cacheKey <span style="color:#f92672">=</span> getCacheKey(beanClass, beanName);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span>StringUtils.<span style="color:#a6e22e">hasLength</span>(beanName) <span style="color:#f92672">||</span> <span style="color:#f92672">!</span><span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">targetSourcedBeans</span>.<span style="color:#a6e22e">contains</span>(beanName)) {
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 如果已经解析返回</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (<span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">advisedBeans</span>.<span style="color:#a6e22e">containsKey</span>(cacheKey)) {
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">null</span>;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>		<span style="color:#75715e">// 解析切面</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (isInfrastructureClass(beanClass) <span style="color:#f92672">||</span> shouldSkip(beanClass, beanName)) {
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">advisedBeans</span>.<span style="color:#a6e22e">put</span>(cacheKey, Boolean.<span style="color:#a6e22e">FALSE</span>);
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">null</span>;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">null</span>;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>postProcessBeforeInstantiation 在bean实例化前执行。</p>
+<p>shouldSkip 方法中实现注解方式AOP的解析过程。</p>
+<p>解析过的切面会把beanName存入 advisedBeans 缓存中, 不再重复解析。</p>
+<h3 id="解析切面核心方法-shouldskip">解析切面核心方法 shouldSkip</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#a6e22e">@Override</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">protected</span> <span style="color:#66d9ef">boolean</span> <span style="color:#a6e22e">shouldSkip</span>(Class<span style="color:#f92672">&lt;?&gt;</span> beanClass, String beanName) {
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">// TODO: Consider optimization by caching the list of the aspect names</span>
+</span></span><span style="display:flex;"><span>  List<span style="color:#f92672">&lt;</span>Advisor<span style="color:#f92672">&gt;</span> candidateAdvisors <span style="color:#f92672">=</span> findCandidateAdvisors();
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">for</span> (Advisor advisor : candidateAdvisors) {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (advisor <span style="color:#66d9ef">instanceof</span> AspectJPointcutAdvisor <span style="color:#f92672">&amp;&amp;</span>
+</span></span><span style="display:flex;"><span>        ((AspectJPointcutAdvisor) advisor).<span style="color:#a6e22e">getAspectName</span>().<span style="color:#a6e22e">equals</span>(beanName)) {
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">true</span>;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">super</span>.<span style="color:#a6e22e">shouldSkip</span>(beanClass, beanName);
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#a6e22e">@Override</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">protected</span> List<span style="color:#f92672">&lt;</span>Advisor<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">findCandidateAdvisors</span>() {
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">// Add all the Spring advisors found according to superclass rules.</span>
+</span></span><span style="display:flex;"><span>  List<span style="color:#f92672">&lt;</span>Advisor<span style="color:#f92672">&gt;</span> advisors <span style="color:#f92672">=</span> <span style="color:#66d9ef">super</span>.<span style="color:#a6e22e">findCandidateAdvisors</span>();
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">// Build Advisors for all AspectJ aspects in the bean factory.</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">if</span> (<span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">aspectJAdvisorsBuilder</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span>) {
+</span></span><span style="display:flex;"><span>    advisors.<span style="color:#a6e22e">addAll</span>(<span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">aspectJAdvisorsBuilder</span>.<span style="color:#a6e22e">buildAspectJAdvisors</span>());
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">return</span> advisors;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>shouldSkip 中调用 findCandidateAdvisors() 解析所有候选的切面，切面有两种切面，一种是基于接口的切面，一种是基于注解的切面。</p>
+<h3 id="解析接口方式的切面">解析接口方式的切面</h3>
+<p>一种是调用 super.findCandidateAdvisors() 解析所有实现Advisor接口的切面bean。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">protected</span> List<span style="color:#f92672">&lt;</span>Advisor<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">findCandidateAdvisors</span>() {
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">advisorRetrievalHelper</span>.<span style="color:#a6e22e">findAdvisorBeans</span>();
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span> List<span style="color:#f92672">&lt;</span>Advisor<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">findAdvisorBeans</span>() {
+</span></span><span style="display:flex;"><span>  String<span style="color:#f92672">[]</span> advisorNames <span style="color:#f92672">=</span> <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">cachedAdvisorBeanNames</span>;
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">if</span> (advisorNames <span style="color:#f92672">==</span> <span style="color:#66d9ef">null</span>) {
+</span></span><span style="display:flex;"><span>			<span style="color:#75715e">// Do not initialize FactoryBeans here: We need to leave all regular beans</span>
+</span></span><span style="display:flex;"><span>			<span style="color:#75715e">// uninitialized to let the auto-proxy creator apply to them!</span>
+</span></span><span style="display:flex;"><span>			advisorNames <span style="color:#f92672">=</span> BeanFactoryUtils.<span style="color:#a6e22e">beanNamesForTypeIncludingAncestors</span>(
+</span></span><span style="display:flex;"><span>					<span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">beanFactory</span>, Advisor.<span style="color:#a6e22e">class</span>, <span style="color:#66d9ef">true</span>, <span style="color:#66d9ef">false</span>);
+</span></span><span style="display:flex;"><span>			<span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">cachedAdvisorBeanNames</span> <span style="color:#f92672">=</span> advisorNames;
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">if</span> (advisorNames.<span style="color:#a6e22e">length</span> <span style="color:#f92672">==</span> 0) {
+</span></span><span style="display:flex;"><span>			<span style="color:#66d9ef">return</span> <span style="color:#66d9ef">new</span> ArrayList<span style="color:#f92672">&lt;&gt;</span>();
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// ... 略</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>这里的核心操作是解析所有实现 Advisor 接口的bean, 缓存起来。</p>
+<h3 id="解析注解方式的切面">解析注解方式的切面</h3>
+<p>另一种调用 aspectJAdvisorsBuilder.buildAspectJAdvisors() 解析所有注解方式的切面。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#75715e">// Advisor缓存，key是aspectNeam</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">private</span> <span style="color:#66d9ef">final</span> Map<span style="color:#f92672">&lt;</span>String, List<span style="color:#f92672">&lt;</span>Advisor<span style="color:#f92672">&gt;&gt;</span> advisorsCache <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> ConcurrentHashMap<span style="color:#f92672">&lt;&gt;</span>();
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span> List<span style="color:#f92672">&lt;</span>Advisor<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">buildAspectJAdvisors</span>() {}
+</span></span></code></pre></div><p>buildAspectJAdvisors 的代码很长，这里略过，只说一下核心逻辑，它会解析Spring容器中取出所有的切面，构建成Advisor放入到advisorsCache缓存起来。</p>
+<p>现在所有的切面都解析好并且缓存起来了，下面就是创建动态代理。</p>
+<h2 id="创建动态代理">创建动态代理</h2>
+<p>AOP创建动态代理有两种方式，如果代理目标实现了接口，则采用JDK动态代理，如果没有实现接口，则采用Cglib动态代理。</p>
+<p><img src="https://raw.githubusercontent.com/telzhou618/images/main/img01/image-20211209164425900.png" alt="image-20211209164425900"></p>
+<h3 id="代理创建入口方法-postprocessafterinitialization">代理创建入口方法 postProcessAfterInitialization</h3>
+<p>前面说过在bean初始化后执行。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#a6e22e">@Override</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span> Object <span style="color:#a6e22e">postProcessAfterInitialization</span>(<span style="color:#a6e22e">@Nullable</span> Object bean, String beanName) {
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">if</span> (bean <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span>) {
+</span></span><span style="display:flex;"><span>    Object cacheKey <span style="color:#f92672">=</span> getCacheKey(bean.<span style="color:#a6e22e">getClass</span>(), beanName);
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (<span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">earlyProxyReferences</span>.<span style="color:#a6e22e">remove</span>(cacheKey) <span style="color:#f92672">!=</span> bean) {
+</span></span><span style="display:flex;"><span>      <span style="color:#75715e">// 创建代理</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">return</span> wrapIfNecessary(bean, beanName, cacheKey); <span style="color:#75715e">// ①</span>
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">return</span> bean;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">protected</span> Object <span style="color:#a6e22e">wrapIfNecessary</span>(Object bean, String beanName, Object cacheKey) {
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">if</span> (StringUtils.<span style="color:#a6e22e">hasLength</span>(beanName) <span style="color:#f92672">&amp;&amp;</span> <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">targetSourcedBeans</span>.<span style="color:#a6e22e">contains</span>(beanName)) {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> bean;
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">if</span> (Boolean.<span style="color:#a6e22e">FALSE</span>.<span style="color:#a6e22e">equals</span>(<span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">advisedBeans</span>.<span style="color:#a6e22e">get</span>(cacheKey))) {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> bean;
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">if</span> (isInfrastructureClass(bean.<span style="color:#a6e22e">getClass</span>()) <span style="color:#f92672">||</span> shouldSkip(bean.<span style="color:#a6e22e">getClass</span>(), beanName)) {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">advisedBeans</span>.<span style="color:#a6e22e">put</span>(cacheKey, Boolean.<span style="color:#a6e22e">FALSE</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> bean;
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">// 根据当前bean获取候选的Advisor，这里做第一次筛选，初步筛选，只根据beanClass匹配。</span>
+</span></span><span style="display:flex;"><span>  Object<span style="color:#f92672">[]</span> specificInterceptors <span style="color:#f92672">=</span> getAdvicesAndAdvisorsForBean(bean.<span style="color:#a6e22e">getClass</span>(), beanName, <span style="color:#66d9ef">null</span>);
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">if</span> (specificInterceptors <span style="color:#f92672">!=</span> DO_NOT_PROXY) {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">advisedBeans</span>.<span style="color:#a6e22e">put</span>(cacheKey, Boolean.<span style="color:#a6e22e">TRUE</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 创建代理</span>
+</span></span><span style="display:flex;"><span>    Object proxy <span style="color:#f92672">=</span> createProxy(
+</span></span><span style="display:flex;"><span>      bean.<span style="color:#a6e22e">getClass</span>(), beanName, specificInterceptors, <span style="color:#66d9ef">new</span> SingletonTargetSource(bean));
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">proxyTypes</span>.<span style="color:#a6e22e">put</span>(cacheKey, proxy.<span style="color:#a6e22e">getClass</span>());
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> proxy;
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">advisedBeans</span>.<span style="color:#a6e22e">put</span>(cacheKey, Boolean.<span style="color:#a6e22e">FALSE</span>);
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">return</span> bean;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">protected</span> Object <span style="color:#a6e22e">createProxy</span>(Class<span style="color:#f92672">&lt;?&gt;</span> beanClass, <span style="color:#a6e22e">@Nullable</span> String beanName,
+</span></span><span style="display:flex;"><span>			<span style="color:#a6e22e">@Nullable</span> Object<span style="color:#f92672">[]</span> specificInterceptors, TargetSource targetSource) {
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">if</span> (<span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">beanFactory</span> <span style="color:#66d9ef">instanceof</span> ConfigurableListableBeanFactory) {
+</span></span><span style="display:flex;"><span>			AutoProxyUtils.<span style="color:#a6e22e">exposeTargetClass</span>((ConfigurableListableBeanFactory) <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">beanFactory</span>, beanName, beanClass);
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 实例化代理工厂并设置创建代理所需的原料</span>
+</span></span><span style="display:flex;"><span>		ProxyFactory proxyFactory <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> ProxyFactory(); 
+</span></span><span style="display:flex;"><span>		proxyFactory.<span style="color:#a6e22e">copyFrom</span>(<span style="color:#66d9ef">this</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span>proxyFactory.<span style="color:#a6e22e">isProxyTargetClass</span>()) {
+</span></span><span style="display:flex;"><span>			<span style="color:#66d9ef">if</span> (shouldProxyTargetClass(beanClass, beanName)) {
+</span></span><span style="display:flex;"><span>				proxyFactory.<span style="color:#a6e22e">setProxyTargetClass</span>(<span style="color:#66d9ef">true</span>);
+</span></span><span style="display:flex;"><span>			}
+</span></span><span style="display:flex;"><span>			<span style="color:#66d9ef">else</span> {
+</span></span><span style="display:flex;"><span>				evaluateProxyInterfaces(beanClass, proxyFactory);
+</span></span><span style="display:flex;"><span>			}
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 构建切面</span>
+</span></span><span style="display:flex;"><span>		Advisor<span style="color:#f92672">[]</span> advisors <span style="color:#f92672">=</span> buildAdvisors(beanName, specificInterceptors);
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 设置切面</span>
+</span></span><span style="display:flex;"><span>		proxyFactory.<span style="color:#a6e22e">addAdvisors</span>(advisors); 
+</span></span><span style="display:flex;"><span>   <span style="color:#75715e">// 设置代理目标对象</span>
+</span></span><span style="display:flex;"><span>		proxyFactory.<span style="color:#a6e22e">setTargetSource</span>(targetSource);
+</span></span><span style="display:flex;"><span>		customizeProxyFactory(proxyFactory);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>		proxyFactory.<span style="color:#a6e22e">setFrozen</span>(<span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">freezeProxy</span>);
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">if</span> (advisorsPreFiltered()) {
+</span></span><span style="display:flex;"><span>			proxyFactory.<span style="color:#a6e22e">setPreFiltered</span>(<span style="color:#66d9ef">true</span>);
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">return</span> proxyFactory.<span style="color:#a6e22e">getProxy</span>(getProxyClassLoader());
+</span></span><span style="display:flex;"><span>	}
+</span></span></code></pre></div><ul>
+<li>创建代理工厂，为代理工程设置原料，一个是要创建代理的代理目标，表明为哪些类创建代理对象，这里是当前bean对象。</li>
+<li>另一个是要植入的切面，为代理目标增强的那些功能。</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">public</span> Object <span style="color:#a6e22e">getProxy</span>(<span style="color:#a6e22e">@Nullable</span> ClassLoader classLoader) {
+</span></span><span style="display:flex;"><span>   <span style="color:#75715e">// 创建AOP代理工厂，创建代理对象</span>
+</span></span><span style="display:flex;"><span>   <span style="color:#66d9ef">return</span> createAopProxy().<span style="color:#a6e22e">getProxy</span>(classLoader);
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">protected</span> <span style="color:#66d9ef">final</span> <span style="color:#66d9ef">synchronized</span> AopProxy <span style="color:#a6e22e">createAopProxy</span>() {
+</span></span><span style="display:flex;"><span>   <span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span><span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">active</span>) {
+</span></span><span style="display:flex;"><span>      activate();
+</span></span><span style="display:flex;"><span>   }
+</span></span><span style="display:flex;"><span>   <span style="color:#75715e">// 创建AOP代理工厂</span>
+</span></span><span style="display:flex;"><span>   <span style="color:#66d9ef">return</span> getAopProxyFactory().<span style="color:#a6e22e">createAopProxy</span>(<span style="color:#66d9ef">this</span>);
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#a6e22e">@Override</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span> AopProxy <span style="color:#a6e22e">createAopProxy</span>(AdvisedSupport config) <span style="color:#66d9ef">throws</span> AopConfigException {
+</span></span><span style="display:flex;"><span>   <span style="color:#66d9ef">if</span> (config.<span style="color:#a6e22e">isOptimize</span>() <span style="color:#f92672">||</span> config.<span style="color:#a6e22e">isProxyTargetClass</span>() <span style="color:#f92672">||</span> hasNoUserSuppliedProxyInterfaces(config)) {
+</span></span><span style="display:flex;"><span>      Class<span style="color:#f92672">&lt;?&gt;</span> targetClass <span style="color:#f92672">=</span> config.<span style="color:#a6e22e">getTargetClass</span>();
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">if</span> (targetClass <span style="color:#f92672">==</span> <span style="color:#66d9ef">null</span>) {
+</span></span><span style="display:flex;"><span>         <span style="color:#66d9ef">throw</span> <span style="color:#66d9ef">new</span> AopConfigException(<span style="color:#e6db74">&#34;TargetSource cannot determine target class: &#34;</span> <span style="color:#f92672">+</span>
+</span></span><span style="display:flex;"><span>               <span style="color:#e6db74">&#34;Either an interface or a target is required for proxy creation.&#34;</span>);
+</span></span><span style="display:flex;"><span>      }
+</span></span><span style="display:flex;"><span>      <span style="color:#75715e">// 如果接口或已经是jdk代理，则走JDK动态代理。</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">if</span> (targetClass.<span style="color:#a6e22e">isInterface</span>() <span style="color:#f92672">||</span> Proxy.<span style="color:#a6e22e">isProxyClass</span>(targetClass)) {
+</span></span><span style="display:flex;"><span>         <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">new</span> JdkDynamicAopProxy(config);
+</span></span><span style="display:flex;"><span>      }
+</span></span><span style="display:flex;"><span>      <span style="color:#75715e">// CGLIB 动态代理</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">new</span> ObjenesisCglibAopProxy(config);
+</span></span><span style="display:flex;"><span>   }
+</span></span><span style="display:flex;"><span>   <span style="color:#66d9ef">else</span> {
+</span></span><span style="display:flex;"><span>      <span style="color:#75715e">// JDK 动态代理</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">new</span> JdkDynamicAopProxy(config);
+</span></span><span style="display:flex;"><span>   }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><ul>
+<li>首先根据当前bean获取符合条件的签名通知列表。</li>
+<li>实例化代理工厂，设置代理目标，设置代理切面通知。</li>
+<li>在代理工厂中又创建AOP代理工厂，根据代理目标选择Cglib或jdk动态代理。</li>
+<li>最后调用代理工厂中 getProxy 方法生成代理对象。</li>
+</ul>
+<h3 id="cglibaopproxy-cglib动态代理">CglibAopProxy cglib动态代理</h3>
+<p>Cglib可以为普通类和接口创建代理类，原理是在应用启动是通过asm技术生成新的字节码文件，新的字节码都统一的签注$$。</p>
+<p>实例：</p>
+<p>代理目标类 Person.java</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Person</span> {
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">sayHello</span>() {
+</span></span><span style="display:flex;"><span>        System.<span style="color:#a6e22e">out</span>.<span style="color:#a6e22e">println</span>(<span style="color:#e6db74">&#34;hello word!&#34;</span>);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>代理工厂类 CglibProxyFactory.java</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">CglibProxyFactory</span> <span style="color:#66d9ef">implements</span> MethodInterceptor {
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">/**
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">     * 代理目标
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">     */</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">final</span> Object target;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">final</span> Enhancer enhancer;
+</span></span><span style="display:flex;"><span>  
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#a6e22e">CglibProxyFactory</span>(Object target) {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">target</span> <span style="color:#f92672">=</span> target;
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">enhancer</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> Enhancer();
+</span></span><span style="display:flex;"><span>        enhancer.<span style="color:#a6e22e">setSuperclass</span>(target.<span style="color:#a6e22e">getClass</span>());
+</span></span><span style="display:flex;"><span>        enhancer.<span style="color:#a6e22e">setCallback</span>(<span style="color:#66d9ef">this</span>);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> Object <span style="color:#a6e22e">getProxy</span>() {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> enhancer.<span style="color:#a6e22e">create</span>();
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">@Override</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> Object <span style="color:#a6e22e">intercept</span>(Object o, Method method, Object<span style="color:#f92672">[]</span> objects, MethodProxy methodProxy) <span style="color:#66d9ef">throws</span> Throwable {
+</span></span><span style="display:flex;"><span>        System.<span style="color:#a6e22e">out</span>.<span style="color:#a6e22e">println</span>(<span style="color:#e6db74">&#34;业务方法执行前...&#34;</span>);
+</span></span><span style="display:flex;"><span>        Object result <span style="color:#f92672">=</span> methodProxy.<span style="color:#a6e22e">invokeSuper</span>(o, objects);
+</span></span><span style="display:flex;"><span>        System.<span style="color:#a6e22e">out</span>.<span style="color:#a6e22e">println</span>(<span style="color:#e6db74">&#34;业务方法执行后...&#34;</span>);
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> result;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>测试 &amp; 执行结果</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">main</span>(String<span style="color:#f92672">[]</span> args) {
+</span></span><span style="display:flex;"><span>    CglibProxyFactory proxyFactory <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> CglibProxyFactory(<span style="color:#66d9ef">new</span> Person());
+</span></span><span style="display:flex;"><span>    Person person <span style="color:#f92672">=</span> (Person) proxyFactory.<span style="color:#a6e22e">getProxy</span>();
+</span></span><span style="display:flex;"><span>    person.<span style="color:#a6e22e">sayHello</span>();
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>业务方法执行前...
+</span></span><span style="display:flex;"><span>hello word!
+</span></span><span style="display:flex;"><span>业务方法执行后...
+</span></span></code></pre></div><h3 id="jdkdynamicaopproxy-jdk动态代理">JdkDynamicAopProxy JDK动态代理</h3>
+<p>jdk 动态代理只能为实现接口的类创建代理。</p>
+<p>jdk 动态代理底层通过生成字节码实现，生成的代理类都会继承一个模板类Proxy, 生成的类名一般为 $Proxy0这样，这也是什么jdk动态代理不能为普通类创建代理的原因，它已经继承Proxy类了，没发再继承另一个了。</p>
+<p>实例：创建代理目标和接口</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">interface</span> <span style="color:#a6e22e">Animal</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">test</span>();
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Dog</span> <span style="color:#66d9ef">implements</span> Animal {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">@Override</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">test</span>() {
+</span></span><span style="display:flex;"><span>        System.<span style="color:#a6e22e">out</span>.<span style="color:#a6e22e">println</span>(<span style="color:#e6db74">&#34;dog 会跑!&#34;</span>);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>代理工厂  JdkDynamicProxyFactory.java</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">JdkDynamicProxyFactory</span> <span style="color:#66d9ef">implements</span> InvocationHandler {
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">/**
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">     * 代理目标
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">     */</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">final</span> Object target;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#a6e22e">JdkDynamicProxyFactory</span>(Object target) {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">target</span> <span style="color:#f92672">=</span> target;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> Object <span style="color:#a6e22e">getProxy</span>() {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span>  Proxy.<span style="color:#a6e22e">newProxyInstance</span>(target.<span style="color:#a6e22e">getClass</span>().<span style="color:#a6e22e">getClassLoader</span>(), target.<span style="color:#a6e22e">getClass</span>().<span style="color:#a6e22e">getInterfaces</span>(), <span style="color:#66d9ef">this</span>);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">@Override</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> Object <span style="color:#a6e22e">invoke</span>(Object proxy, Method method, Object<span style="color:#f92672">[]</span> args) <span style="color:#66d9ef">throws</span> Throwable {
+</span></span><span style="display:flex;"><span>        System.<span style="color:#a6e22e">out</span>.<span style="color:#a6e22e">println</span>(<span style="color:#e6db74">&#34;业务方法执行前...&#34;</span>);
+</span></span><span style="display:flex;"><span>        Object result <span style="color:#f92672">=</span> method.<span style="color:#a6e22e">invoke</span>(target, args);
+</span></span><span style="display:flex;"><span>        System.<span style="color:#a6e22e">out</span>.<span style="color:#a6e22e">println</span>(<span style="color:#e6db74">&#34;业务方法执行后...&#34;</span>);
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> result;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>测试 &amp; 执行结果</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">main</span>(String<span style="color:#f92672">[]</span> args) {
+</span></span><span style="display:flex;"><span>  JdkDynamicProxyFactory proxyFactory <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> JdkDynamicProxyFactory(<span style="color:#66d9ef">new</span> Dog());
+</span></span><span style="display:flex;"><span>  Animal animal <span style="color:#f92672">=</span> (Animal) proxyFactory.<span style="color:#a6e22e">getProxy</span>();
+</span></span><span style="display:flex;"><span>  animal.<span style="color:#a6e22e">test</span>();
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>业务方法执行前...
+</span></span><span style="display:flex;"><span>dog 会跑!
+</span></span><span style="display:flex;"><span>业务方法执行后...
+</span></span></code></pre></div><h2 id="调用代理方法">调用代理方法</h2>
+<h3 id="jdk-动态代理调用切面方法">JDK 动态代理调用切面方法</h3>
+<p>jdk动态代理调用是通过实现 InvocationHandler 接口的 invoke 方法调用切面方法。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">final</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">JdkDynamicAopProxy</span> <span style="color:#66d9ef">implements</span> AopProxy, InvocationHandler, Serializable {
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">@Override</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">@Nullable</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">public</span> Object <span style="color:#a6e22e">invoke</span>(Object proxy, Method method, Object<span style="color:#f92672">[]</span> args) <span style="color:#66d9ef">throws</span> Throwable {
+</span></span><span style="display:flex;"><span>		MethodInvocation invocation;
+</span></span><span style="display:flex;"><span>		Object oldProxy <span style="color:#f92672">=</span> <span style="color:#66d9ef">null</span>;
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">boolean</span> setProxyContext <span style="color:#f92672">=</span> <span style="color:#66d9ef">false</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>		TargetSource targetSource <span style="color:#f92672">=</span> <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">advised</span>.<span style="color:#a6e22e">targetSource</span>;
+</span></span><span style="display:flex;"><span>		Object target <span style="color:#f92672">=</span> <span style="color:#66d9ef">null</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">try</span> {
+</span></span><span style="display:flex;"><span>      <span style="color:#75715e">// 如果是 equals、hashCode 等方法不用调用切面方法，最终调用原方法。</span>
+</span></span><span style="display:flex;"><span>			<span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span><span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">equalsDefined</span> <span style="color:#f92672">&amp;&amp;</span> AopUtils.<span style="color:#a6e22e">isEqualsMethod</span>(method)) {
+</span></span><span style="display:flex;"><span>				<span style="color:#75715e">// The target does not implement the equals(Object) method itself.</span>
+</span></span><span style="display:flex;"><span>				<span style="color:#66d9ef">return</span> equals(args<span style="color:#f92672">[</span>0<span style="color:#f92672">]</span>);
+</span></span><span style="display:flex;"><span>			}
+</span></span><span style="display:flex;"><span>  
+</span></span><span style="display:flex;"><span>			<span style="color:#66d9ef">else</span> <span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span><span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">hashCodeDefined</span> <span style="color:#f92672">&amp;&amp;</span> AopUtils.<span style="color:#a6e22e">isHashCodeMethod</span>(method)) {
+</span></span><span style="display:flex;"><span>				<span style="color:#75715e">// The target does not implement the hashCode() method itself.</span>
+</span></span><span style="display:flex;"><span>				<span style="color:#66d9ef">return</span> hashCode();
+</span></span><span style="display:flex;"><span>			}
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>			<span style="color:#66d9ef">else</span> <span style="color:#66d9ef">if</span> (method.<span style="color:#a6e22e">getDeclaringClass</span>() <span style="color:#f92672">==</span> DecoratingProxy.<span style="color:#a6e22e">class</span>) {
+</span></span><span style="display:flex;"><span>				<span style="color:#75715e">// There is only getDecoratedClass() declared -&gt; dispatch to proxy config.</span>
+</span></span><span style="display:flex;"><span>				<span style="color:#66d9ef">return</span> AopProxyUtils.<span style="color:#a6e22e">ultimateTargetClass</span>(<span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">advised</span>);
+</span></span><span style="display:flex;"><span>			}
+</span></span><span style="display:flex;"><span>  
+</span></span><span style="display:flex;"><span>			<span style="color:#66d9ef">else</span> <span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span><span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">advised</span>.<span style="color:#a6e22e">opaque</span> <span style="color:#f92672">&amp;&amp;</span> method.<span style="color:#a6e22e">getDeclaringClass</span>().<span style="color:#a6e22e">isInterface</span>() <span style="color:#f92672">&amp;&amp;</span>
+</span></span><span style="display:flex;"><span>					method.<span style="color:#a6e22e">getDeclaringClass</span>().<span style="color:#a6e22e">isAssignableFrom</span>(Advised.<span style="color:#a6e22e">class</span>)) {
+</span></span><span style="display:flex;"><span>				<span style="color:#75715e">// Service invocations on ProxyConfig with the proxy config...</span>
+</span></span><span style="display:flex;"><span>				<span style="color:#66d9ef">return</span> AopUtils.<span style="color:#a6e22e">invokeJoinpointUsingReflection</span>(<span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">advised</span>, method, args);
+</span></span><span style="display:flex;"><span>			}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>			Object retVal;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>			<span style="color:#66d9ef">if</span> (<span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">advised</span>.<span style="color:#a6e22e">exposeProxy</span>) {
+</span></span><span style="display:flex;"><span>				<span style="color:#75715e">// Make invocation available if necessary.</span>
+</span></span><span style="display:flex;"><span>				oldProxy <span style="color:#f92672">=</span> AopContext.<span style="color:#a6e22e">setCurrentProxy</span>(proxy);
+</span></span><span style="display:flex;"><span>				setProxyContext <span style="color:#f92672">=</span> <span style="color:#66d9ef">true</span>;
+</span></span><span style="display:flex;"><span>			}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>			<span style="color:#75715e">// Get as late as possible to minimize the time we &#34;own&#34; the target,</span>
+</span></span><span style="display:flex;"><span>			<span style="color:#75715e">// in case it comes from a pool.</span>
+</span></span><span style="display:flex;"><span>			target <span style="color:#f92672">=</span> targetSource.<span style="color:#a6e22e">getTarget</span>();
+</span></span><span style="display:flex;"><span>			Class<span style="color:#f92672">&lt;?&gt;</span> targetClass <span style="color:#f92672">=</span> (target <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span> <span style="color:#f92672">?</span> target.<span style="color:#a6e22e">getClass</span>() : <span style="color:#66d9ef">null</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>			<span style="color:#75715e">// 获取方法的连拦截链，这里会根据方法名最进一步的筛选</span>
+</span></span><span style="display:flex;"><span>			List<span style="color:#f92672">&lt;</span>Object<span style="color:#f92672">&gt;</span> chain <span style="color:#f92672">=</span> <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">advised</span>.<span style="color:#a6e22e">getInterceptorsAndDynamicInterceptionAdvice</span>(method, targetClass);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>			<span style="color:#66d9ef">if</span> (chain.<span style="color:#a6e22e">isEmpty</span>()) {
+</span></span><span style="display:flex;"><span>			  <span style="color:#75715e">// 如果拦截链为空，调用原方法</span>
+</span></span><span style="display:flex;"><span>				Object<span style="color:#f92672">[]</span> argsToUse <span style="color:#f92672">=</span> AopProxyUtils.<span style="color:#a6e22e">adaptArgumentsIfNecessary</span>(method, args);
+</span></span><span style="display:flex;"><span>				retVal <span style="color:#f92672">=</span> AopUtils.<span style="color:#a6e22e">invokeJoinpointUsingReflection</span>(target, method, argsToUse);
+</span></span><span style="display:flex;"><span>			}
+</span></span><span style="display:flex;"><span>			<span style="color:#66d9ef">else</span> {
+</span></span><span style="display:flex;"><span>				<span style="color:#75715e">// 构建调用链，使用责任链模式，执行切面方法。</span>
+</span></span><span style="display:flex;"><span>				invocation <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> ReflectiveMethodInvocation(proxy, target, method, args, targetClass, chain);
+</span></span><span style="display:flex;"><span>				<span style="color:#75715e">// Proceed to the joinpoint through the interceptor chain.</span>
+</span></span><span style="display:flex;"><span>				retVal <span style="color:#f92672">=</span> invocation.<span style="color:#a6e22e">proceed</span>();
+</span></span><span style="display:flex;"><span>			}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>			<span style="color:#75715e">// Massage return value if necessary.</span>
+</span></span><span style="display:flex;"><span>			Class<span style="color:#f92672">&lt;?&gt;</span> returnType <span style="color:#f92672">=</span> method.<span style="color:#a6e22e">getReturnType</span>();
+</span></span><span style="display:flex;"><span>			<span style="color:#66d9ef">if</span> (retVal <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span> <span style="color:#f92672">&amp;&amp;</span> retVal <span style="color:#f92672">==</span> target <span style="color:#f92672">&amp;&amp;</span>
+</span></span><span style="display:flex;"><span>					returnType <span style="color:#f92672">!=</span> Object.<span style="color:#a6e22e">class</span> <span style="color:#f92672">&amp;&amp;</span> returnType.<span style="color:#a6e22e">isInstance</span>(proxy) <span style="color:#f92672">&amp;&amp;</span>
+</span></span><span style="display:flex;"><span>					<span style="color:#f92672">!</span>RawTargetAccess.<span style="color:#a6e22e">class</span>.<span style="color:#a6e22e">isAssignableFrom</span>(method.<span style="color:#a6e22e">getDeclaringClass</span>())) {
+</span></span><span style="display:flex;"><span>				<span style="color:#75715e">// Special case: it returned &#34;this&#34; and the return type of the method</span>
+</span></span><span style="display:flex;"><span>				<span style="color:#75715e">// is type-compatible. Note that we can&#39;t help if the target sets</span>
+</span></span><span style="display:flex;"><span>				<span style="color:#75715e">// a reference to itself in another returned object.</span>
+</span></span><span style="display:flex;"><span>				retVal <span style="color:#f92672">=</span> proxy;
+</span></span><span style="display:flex;"><span>			}
+</span></span><span style="display:flex;"><span>			<span style="color:#66d9ef">else</span> <span style="color:#66d9ef">if</span> (retVal <span style="color:#f92672">==</span> <span style="color:#66d9ef">null</span> <span style="color:#f92672">&amp;&amp;</span> returnType <span style="color:#f92672">!=</span> Void.<span style="color:#a6e22e">TYPE</span> <span style="color:#f92672">&amp;&amp;</span> returnType.<span style="color:#a6e22e">isPrimitive</span>()) {
+</span></span><span style="display:flex;"><span>				<span style="color:#66d9ef">throw</span> <span style="color:#66d9ef">new</span> AopInvocationException(
+</span></span><span style="display:flex;"><span>						<span style="color:#e6db74">&#34;Null return value from advice does not match primitive return type for: &#34;</span> <span style="color:#f92672">+</span> method);
+</span></span><span style="display:flex;"><span>			}
+</span></span><span style="display:flex;"><span>			<span style="color:#66d9ef">return</span> retVal;
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">finally</span> {
+</span></span><span style="display:flex;"><span>			<span style="color:#66d9ef">if</span> (target <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span> <span style="color:#f92672">&amp;&amp;</span> <span style="color:#f92672">!</span>targetSource.<span style="color:#a6e22e">isStatic</span>()) {
+</span></span><span style="display:flex;"><span>				<span style="color:#75715e">// Must have come from TargetSource.</span>
+</span></span><span style="display:flex;"><span>				targetSource.<span style="color:#a6e22e">releaseTarget</span>(target);
+</span></span><span style="display:flex;"><span>			}
+</span></span><span style="display:flex;"><span>			<span style="color:#66d9ef">if</span> (setProxyContext) {
+</span></span><span style="display:flex;"><span>				<span style="color:#75715e">// Restore old proxy.</span>
+</span></span><span style="display:flex;"><span>				AopContext.<span style="color:#a6e22e">setCurrentProxy</span>(oldProxy);
+</span></span><span style="display:flex;"><span>			}
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h3 id="cglib-动态代理调用切面方法">Cglib 动态代理调用切面方法</h3>
+<p>Cglib 通过实现 MethodInterceptor 接口的 intercept 方法调用切面方法。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">interface</span> <span style="color:#a6e22e">MethodInterceptor</span> <span style="color:#66d9ef">extends</span> Callback {
+</span></span><span style="display:flex;"><span>    Object <span style="color:#a6e22e">intercept</span>(Object var1, Method var2, Object<span style="color:#f92672">[]</span> var3, MethodProxy var4) <span style="color:#66d9ef">throws</span> Throwable;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">private</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">DynamicAdvisedInterceptor</span> <span style="color:#66d9ef">implements</span> MethodInterceptor, Serializable {
+</span></span><span style="display:flex;"><span>  
+</span></span><span style="display:flex;"><span>  	<span style="color:#a6e22e">@Override</span>
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">public</span> Object <span style="color:#a6e22e">intercept</span>(Object proxy, Method method, Object<span style="color:#f92672">[]</span> args, MethodProxy methodProxy) <span style="color:#66d9ef">throws</span> Throwable {
+</span></span><span style="display:flex;"><span>			Object oldProxy <span style="color:#f92672">=</span> <span style="color:#66d9ef">null</span>;
+</span></span><span style="display:flex;"><span>			<span style="color:#66d9ef">boolean</span> setProxyContext <span style="color:#f92672">=</span> <span style="color:#66d9ef">false</span>;
+</span></span><span style="display:flex;"><span>			Object target <span style="color:#f92672">=</span> <span style="color:#66d9ef">null</span>;
+</span></span><span style="display:flex;"><span>			TargetSource targetSource <span style="color:#f92672">=</span> <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">advised</span>.<span style="color:#a6e22e">getTargetSource</span>();
+</span></span><span style="display:flex;"><span>			<span style="color:#66d9ef">try</span> {
+</span></span><span style="display:flex;"><span>				<span style="color:#66d9ef">if</span> (<span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">advised</span>.<span style="color:#a6e22e">exposeProxy</span>) {
+</span></span><span style="display:flex;"><span>					<span style="color:#75715e">// Make invocation available if necessary.</span>
+</span></span><span style="display:flex;"><span>					oldProxy <span style="color:#f92672">=</span> AopContext.<span style="color:#a6e22e">setCurrentProxy</span>(proxy);
+</span></span><span style="display:flex;"><span>					setProxyContext <span style="color:#f92672">=</span> <span style="color:#66d9ef">true</span>;
+</span></span><span style="display:flex;"><span>				}
+</span></span><span style="display:flex;"><span>				<span style="color:#75715e">// Get as late as possible to minimize the time we &#34;own&#34; the target, in case it comes from a pool...</span>
+</span></span><span style="display:flex;"><span>				target <span style="color:#f92672">=</span> targetSource.<span style="color:#a6e22e">getTarget</span>();
+</span></span><span style="display:flex;"><span>				Class<span style="color:#f92672">&lt;?&gt;</span> targetClass <span style="color:#f92672">=</span> (target <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span> <span style="color:#f92672">?</span> target.<span style="color:#a6e22e">getClass</span>() : <span style="color:#66d9ef">null</span>);
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// 获取拦截链</span>
+</span></span><span style="display:flex;"><span>				List<span style="color:#f92672">&lt;</span>Object<span style="color:#f92672">&gt;</span> chain <span style="color:#f92672">=</span> <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">advised</span>.<span style="color:#a6e22e">getInterceptorsAndDynamicInterceptionAdvice</span>(method, targetClass);
+</span></span><span style="display:flex;"><span>				Object retVal;
+</span></span><span style="display:flex;"><span>				<span style="color:#75715e">// Check whether we only have one InvokerInterceptor: that is,</span>
+</span></span><span style="display:flex;"><span>				<span style="color:#75715e">// no real advice, but just reflective invocation of the target.</span>
+</span></span><span style="display:flex;"><span>				<span style="color:#66d9ef">if</span> (chain.<span style="color:#a6e22e">isEmpty</span>() <span style="color:#f92672">&amp;&amp;</span> Modifier.<span style="color:#a6e22e">isPublic</span>(method.<span style="color:#a6e22e">getModifiers</span>())) {
+</span></span><span style="display:flex;"><span>					<span style="color:#75715e">// We can skip creating a MethodInvocation: just invoke the target directly.</span>
+</span></span><span style="display:flex;"><span>					<span style="color:#75715e">// Note that the final invoker must be an InvokerInterceptor, so we know</span>
+</span></span><span style="display:flex;"><span>					<span style="color:#75715e">// it does nothing but a reflective operation on the target, and no hot</span>
+</span></span><span style="display:flex;"><span>					<span style="color:#75715e">// swapping or fancy proxying.</span>
+</span></span><span style="display:flex;"><span>					Object<span style="color:#f92672">[]</span> argsToUse <span style="color:#f92672">=</span> AopProxyUtils.<span style="color:#a6e22e">adaptArgumentsIfNecessary</span>(method, args);
+</span></span><span style="display:flex;"><span>					retVal <span style="color:#f92672">=</span> methodProxy.<span style="color:#a6e22e">invoke</span>(target, argsToUse);
+</span></span><span style="display:flex;"><span>				}
+</span></span><span style="display:flex;"><span>				<span style="color:#66d9ef">else</span> {
+</span></span><span style="display:flex;"><span>					<span style="color:#75715e">// 责任连调用，切面方法。</span>
+</span></span><span style="display:flex;"><span>					retVal <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> CglibMethodInvocation(proxy, target, method, args, targetClass, chain, methodProxy).<span style="color:#a6e22e">proceed</span>();
+</span></span><span style="display:flex;"><span>				}
+</span></span><span style="display:flex;"><span>				retVal <span style="color:#f92672">=</span> processReturnType(proxy, target, method, retVal);
+</span></span><span style="display:flex;"><span>				<span style="color:#66d9ef">return</span> retVal;
+</span></span><span style="display:flex;"><span>			}
+</span></span><span style="display:flex;"><span>			<span style="color:#66d9ef">finally</span> {
+</span></span><span style="display:flex;"><span>				<span style="color:#66d9ef">if</span> (target <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span> <span style="color:#f92672">&amp;&amp;</span> <span style="color:#f92672">!</span>targetSource.<span style="color:#a6e22e">isStatic</span>()) {
+</span></span><span style="display:flex;"><span>					targetSource.<span style="color:#a6e22e">releaseTarget</span>(target);
+</span></span><span style="display:flex;"><span>				}
+</span></span><span style="display:flex;"><span>				<span style="color:#66d9ef">if</span> (setProxyContext) {
+</span></span><span style="display:flex;"><span>					<span style="color:#75715e">// Restore old proxy.</span>
+</span></span><span style="display:flex;"><span>					AopContext.<span style="color:#a6e22e">setCurrentProxy</span>(oldProxy);
+</span></span><span style="display:flex;"><span>				}
+</span></span><span style="display:flex;"><span>			}
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>cglib的调用类 CglibMethodInvocation 继承 ReflectiveMethodInvocation。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">private</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">CglibMethodInvocation</span> <span style="color:#66d9ef">extends</span> ReflectiveMethodInvocation {
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">private</span> <span style="color:#66d9ef">final</span> MethodProxy methodProxy;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">private</span> <span style="color:#66d9ef">final</span> <span style="color:#66d9ef">boolean</span> publicMethod;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">public</span> <span style="color:#a6e22e">CglibMethodInvocation</span>(Object proxy, <span style="color:#a6e22e">@Nullable</span> Object target, Method method,
+</span></span><span style="display:flex;"><span>				Object<span style="color:#f92672">[]</span> arguments, <span style="color:#a6e22e">@Nullable</span> Class<span style="color:#f92672">&lt;?&gt;</span> targetClass,
+</span></span><span style="display:flex;"><span>				List<span style="color:#f92672">&lt;</span>Object<span style="color:#f92672">&gt;</span> interceptorsAndDynamicMethodMatchers, MethodProxy methodProxy) {
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>			<span style="color:#66d9ef">super</span>(proxy, target, method, arguments, targetClass, interceptorsAndDynamicMethodMatchers);
+</span></span><span style="display:flex;"><span>			<span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">methodProxy</span> <span style="color:#f92672">=</span> methodProxy;
+</span></span><span style="display:flex;"><span>			<span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">publicMethod</span> <span style="color:#f92672">=</span> Modifier.<span style="color:#a6e22e">isPublic</span>(method.<span style="color:#a6e22e">getModifiers</span>());
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>	}
+</span></span></code></pre></div><ul>
+<li>jdk动态代理调用是通过实现 InvocationHandler 接口的 invoke 方法调用切面方法。</li>
+<li>Cglib 通过实现 MethodInterceptor 接口的 intercept 方法调用切面方法。</li>
+<li>ReflectiveMethodInvocation 通责任连模式对象切面的调用。</li>
+</ul>
+<h2 id="附aop启动流程图">附：AOP启动流程图</h2>
+<p><img src="https://raw.githubusercontent.com/telzhou618/images/main/img01/Spring%20AOP%20%E5%8A%A0%E8%BD%BD%E6%B5%81%E7%A8%8B.png" alt=""></p>
+</section>
+
+  
+  
+
+  
+  
+  
+  
+  <nav class="mt-24 flex rounded-lg bg-black/[3%] text-lg dark:bg-white/[8%]">
+    
+    <a
+      class="flex w-1/2 items-center rounded-l-md p-6 pr-3 font-semibold no-underline hover:bg-black/[2%] dark:hover:bg-white/[3%]"
+      href="https://telzhou618.github.io/post/redis/"
+      ><span class="mr-1.5">←</span><span>Redis 从入门到入土</span></a
+    >
+    
+    
+    <a
+      class="ml-auto flex w-1/2 items-center justify-end rounded-r-md p-6 pl-3 font-semibold no-underline hover:bg-black/[2%] dark:hover:bg-white/[3%]"
+      href="https://telzhou618.github.io/post/linux/"
+      ><span>Linux 常用命令</span><span class="ml-1.5">→</span></a
+    >
+    
+  </nav>
+  
+  
+
+  
+  
+
+  
+  
+  <div class="mt-24" id="graphcomment"></div>
+  <script type="text/javascript">
+    var __semio__params = {
+      graphcommentId: 'a42bc435-1a67-9bc8-2cde-72ec7ba0d2fb',
+      behaviour: {
+        
+      },
+      
+    };
+
+    function __semio__onload() {
+      __semio__gc_graphlogin(__semio__params);
+    }
+
+    (function () {
+      var gc = document.createElement('script');
+      gc.type = 'text/javascript';
+      gc.async = true;
+      gc.onload = __semio__onload;
+      gc.defer = true;
+      gc.src =
+        'https://integration.graphcomment.com/gc_graphlogin.js?' + Date.now();
+      (
+        document.getElementsByTagName('head')[0] ||
+        document.getElementsByTagName('body')[0]
+      ).appendChild(gc);
+    })();
+  </script>
+  
+
+  
+
+
+  
+</article>
+
+
+    </main>
+
+    <footer
+  class="opaco mx-auto flex h-[4.5rem] max-w-3xl items-center px-8 text-[0.9em] opacity-60"
+>
+  <div class="mr-auto">
+    &copy; 2024
+    <a class="link" href="https://telzhou618.github.io">Home</a>
+  </div>
+  <a class="link mx-6" href="https://gohugo.io/" rel="noopener" target="_blank"
+    >Powered by Hugo️️</a
+  >️
+  <a
+    class="link"
+    href="https://github.com/nanxiaobei/hugo-paper"
+    rel="noopener"
+    target="_blank"
+    >✎ Paper</a
+  >
+</footer>
+
+  </body>
+</html>

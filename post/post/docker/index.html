@@ -1,0 +1,683 @@
+<!doctype html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<html
+  class="not-ready lg:text-base"
+  style="--bg: #faf8f1"
+  lang="en-us"
+>
+  <head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, shrink-to-fit=no"
+  />
+
+  
+  <title>Docker &amp; Docker-compose - Home</title>
+
+  
+  <meta name="theme-color" />
+
+  
+  
+  
+  
+  <meta name="description" content="Docker 架构 Docker 主要组件包括 Client、Daemon、Images、Container、Registry。
+Client ： docker客户端 Daemon：docker服务端守护进程。 Images：docker镜像，有点像jar包。 Container：运行docker镜像的容器，像Tomcat。 Registry：docker镜像仓库，像maven仓库。 Docker 常用命令 镜像相关的命令 搜索镜像 docker search java // 搜索镜像 下载镜像 docker pull java:8 // 下载镜像 查看镜像 docker images // 查看镜像 删除镜像 docker rmi java // 删除镜像，加-f强制删除 docker rmi $(docker images ‐q) // 删除所有镜像 容器相关的命令 运行Docker镜像 docker run -d -p 8080:80 nginx:least -d 后台运行 -p 指定端口 如：8080:8080，宿主主机端口：容器端口 -m 指定容器的内存大小 如 ：-m 500M -e 指定环境变量 如：-e JAVA_OPTS=&rsquo;‐Xms1028M ‐Xmx1028M ‐Xmn512M ‐Xss512K ‐XX:MetaspaceSize=256M ‐XX:MaxMetaspaceSize= 256M&#39; -net 设置网络 &ndash;net=bridge 桥接，默认 &ndash;net=host 容器使用宿主网络，不安全。 &ndash;net=container=容器ID，使用和其他容器一样的网络 -v 指定挂在目录 如: /var/nginx/logs : /nginx/logs , 宿主主机：容器主机。 列出容器列表 docker ps // 加 -a 可列出所有的容器，包含停止的容器 停止容器 docker stop [容器ID] // 停止容器 docker kill [容器ID] // 强制停止容器 启动容器 docker start [容器ID] 查看日志 docker container logs [容器ID] 查看容器信息 docker inspect [容器ID] 查看容器里的进程 docker top [容器ID] 文件传输 docker cp [容器ID]:/容器文件路径 宿主主机文件路径	// 从容器cp到主机docker cp 宿主主机文件路径 [容器ID]:/容器文件路径	// 从主机cp到容器 进入到容器的 shell docker exec -it [容器ID] /bin/bash 删除容器 docker rm [容器ID] // 删除已停止的容器 docker rm -f [容器ID] // 强制删除正在运行的容器 docker rm ‐f $(docker ps ‐a ‐q) // 强制删除所有容器 Docker 构建镜像 Dockerfile 命令 FROM 指定基础镜像，如 java:8 RUN 构建镜像执行的命令。 ADD 文件复制 COPY 文件复制，不支持URL和压缩。 CMD 容器启动命令。 EXPOSE 容器暴露端口。 WORKID 容器工作路径。 ENV 环境变量。 ENTRPINT 和CMD类似。 VOLUME 指定存储目录，如：VOLUME[&quot;/data&quot;]。 编写Dockerfile 执行 vi Dockerfile编写镜像文件" />
+  <meta name="author" content="telzhou618" />
+  
+
+  
+  
+  
+  
+  
+  
+  <link rel="preload stylesheet" as="style" href="https://telzhou618.github.io/main.min.css" />
+
+  
+  
+  
+  
+  
+  <link rel="preload" as="image" href="https://telzhou618.github.io/theme.svg" />
+
+  
+  
+  
+  
+  <link rel="preload" as="image" href="https://s.gravatar.com/avatar/9ff9514e4c37a5cb11be475190289857778d613942c4d6364c16e770a4cb66a0?s=80" />
+  
+  
+
+  
+  
+  <link rel="preload" as="image" href="https://telzhou618.github.io/github.svg" />
+  
+  
+
+  
+  
+
+  
+  
+  
+  <link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/katex@0.16.7/dist/katex.min.css"
+  integrity="sha384-3UiQGuEI4TTMaFmGIZumfRPtfKQ3trwQE2JgosJxCnGmQpL/lJdjpcHkaaFwHlcI"
+  crossorigin="anonymous"
+/>
+<script
+  defer
+  src="https://cdn.jsdelivr.net/npm/katex@0.16.7/dist/katex.min.js"
+  integrity="sha384-G0zcxDFp5LWZtDuRMnBkk3EphCK1lhEf4UEyEM693ka574TZGwo4IWwS6QLzM/2t"
+  crossorigin="anonymous"
+></script>
+<script
+  defer
+  src="https://cdn.jsdelivr.net/npm/katex@0.16.7/dist/contrib/auto-render.min.js"
+  integrity="sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05"
+  crossorigin="anonymous"
+></script>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () =>
+    renderMathInElement(document.body, {
+      
+      
+      delimiters: [
+        { left: '$$', right: '$$', display: true },
+        { left: '$', right: '$', display: false },
+      ],
+      
+      throwOnError: false,
+    }),
+  );
+</script>
+
+  
+  
+  
+
+  
+  <link rel="icon" href="https://telzhou618.github.io/favicon.ico" />
+  <link rel="apple-touch-icon" href="https://telzhou618.github.io/apple-touch-icon.png" />
+
+  
+  <meta name="generator" content="Hugo 0.121.1">
+
+  
+  
+  
+  
+  
+  <meta itemprop="name" content="Docker &amp; Docker-compose">
+<meta itemprop="description" content="Docker 架构 Docker 主要组件包括 Client、Daemon、Images、Container、Registry。
+Client ： docker客户端 Daemon：docker服务端守护进程。 Images：docker镜像，有点像jar包。 Container：运行docker镜像的容器，像Tomcat。 Registry：docker镜像仓库，像maven仓库。 Docker 常用命令 镜像相关的命令 搜索镜像 docker search java // 搜索镜像 下载镜像 docker pull java:8 // 下载镜像 查看镜像 docker images // 查看镜像 删除镜像 docker rmi java // 删除镜像，加-f强制删除 docker rmi $(docker images ‐q) // 删除所有镜像 容器相关的命令 运行Docker镜像 docker run -d -p 8080:80 nginx:least -d 后台运行 -p 指定端口 如：8080:8080，宿主主机端口：容器端口 -m 指定容器的内存大小 如 ：-m 500M -e 指定环境变量 如：-e JAVA_OPTS=&rsquo;‐Xms1028M ‐Xmx1028M ‐Xmn512M ‐Xss512K ‐XX:MetaspaceSize=256M ‐XX:MaxMetaspaceSize= 256M&#39; -net 设置网络 &ndash;net=bridge 桥接，默认 &ndash;net=host 容器使用宿主网络，不安全。 &ndash;net=container=容器ID，使用和其他容器一样的网络 -v 指定挂在目录 如: /var/nginx/logs : /nginx/logs , 宿主主机：容器主机。 列出容器列表 docker ps // 加 -a 可列出所有的容器，包含停止的容器 停止容器 docker stop [容器ID] // 停止容器 docker kill [容器ID] // 强制停止容器 启动容器 docker start [容器ID] 查看日志 docker container logs [容器ID] 查看容器信息 docker inspect [容器ID] 查看容器里的进程 docker top [容器ID] 文件传输 docker cp [容器ID]:/容器文件路径 宿主主机文件路径	// 从容器cp到主机docker cp 宿主主机文件路径 [容器ID]:/容器文件路径	// 从主机cp到容器 进入到容器的 shell docker exec -it [容器ID] /bin/bash 删除容器 docker rm [容器ID] // 删除已停止的容器 docker rm -f [容器ID] // 强制删除正在运行的容器 docker rm ‐f $(docker ps ‐a ‐q) // 强制删除所有容器 Docker 构建镜像 Dockerfile 命令 FROM 指定基础镜像，如 java:8 RUN 构建镜像执行的命令。 ADD 文件复制 COPY 文件复制，不支持URL和压缩。 CMD 容器启动命令。 EXPOSE 容器暴露端口。 WORKID 容器工作路径。 ENV 环境变量。 ENTRPINT 和CMD类似。 VOLUME 指定存储目录，如：VOLUME[&quot;/data&quot;]。 编写Dockerfile 执行 vi Dockerfile编写镜像文件"><meta itemprop="datePublished" content="2023-06-28T14:21:07+08:00" />
+<meta itemprop="dateModified" content="2023-06-28T14:21:07+08:00" />
+<meta itemprop="wordCount" content="559">
+<meta itemprop="keywords" content="" />
+  
+  <meta property="og:title" content="Docker &amp; Docker-compose" />
+<meta property="og:description" content="Docker 架构 Docker 主要组件包括 Client、Daemon、Images、Container、Registry。
+Client ： docker客户端 Daemon：docker服务端守护进程。 Images：docker镜像，有点像jar包。 Container：运行docker镜像的容器，像Tomcat。 Registry：docker镜像仓库，像maven仓库。 Docker 常用命令 镜像相关的命令 搜索镜像 docker search java // 搜索镜像 下载镜像 docker pull java:8 // 下载镜像 查看镜像 docker images // 查看镜像 删除镜像 docker rmi java // 删除镜像，加-f强制删除 docker rmi $(docker images ‐q) // 删除所有镜像 容器相关的命令 运行Docker镜像 docker run -d -p 8080:80 nginx:least -d 后台运行 -p 指定端口 如：8080:8080，宿主主机端口：容器端口 -m 指定容器的内存大小 如 ：-m 500M -e 指定环境变量 如：-e JAVA_OPTS=&rsquo;‐Xms1028M ‐Xmx1028M ‐Xmn512M ‐Xss512K ‐XX:MetaspaceSize=256M ‐XX:MaxMetaspaceSize= 256M&#39; -net 设置网络 &ndash;net=bridge 桥接，默认 &ndash;net=host 容器使用宿主网络，不安全。 &ndash;net=container=容器ID，使用和其他容器一样的网络 -v 指定挂在目录 如: /var/nginx/logs : /nginx/logs , 宿主主机：容器主机。 列出容器列表 docker ps // 加 -a 可列出所有的容器，包含停止的容器 停止容器 docker stop [容器ID] // 停止容器 docker kill [容器ID] // 强制停止容器 启动容器 docker start [容器ID] 查看日志 docker container logs [容器ID] 查看容器信息 docker inspect [容器ID] 查看容器里的进程 docker top [容器ID] 文件传输 docker cp [容器ID]:/容器文件路径 宿主主机文件路径	// 从容器cp到主机docker cp 宿主主机文件路径 [容器ID]:/容器文件路径	// 从主机cp到容器 进入到容器的 shell docker exec -it [容器ID] /bin/bash 删除容器 docker rm [容器ID] // 删除已停止的容器 docker rm -f [容器ID] // 强制删除正在运行的容器 docker rm ‐f $(docker ps ‐a ‐q) // 强制删除所有容器 Docker 构建镜像 Dockerfile 命令 FROM 指定基础镜像，如 java:8 RUN 构建镜像执行的命令。 ADD 文件复制 COPY 文件复制，不支持URL和压缩。 CMD 容器启动命令。 EXPOSE 容器暴露端口。 WORKID 容器工作路径。 ENV 环境变量。 ENTRPINT 和CMD类似。 VOLUME 指定存储目录，如：VOLUME[&quot;/data&quot;]。 编写Dockerfile 执行 vi Dockerfile编写镜像文件" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://telzhou618.github.io/post/docker/" /><meta property="article:section" content="post" />
+<meta property="article:published_time" content="2023-06-28T14:21:07+08:00" />
+<meta property="article:modified_time" content="2023-06-28T14:21:07+08:00" />
+
+
+  
+  <meta name="twitter:card" content="summary"/><meta name="twitter:title" content="Docker &amp; Docker-compose"/>
+<meta name="twitter:description" content="Docker 架构 Docker 主要组件包括 Client、Daemon、Images、Container、Registry。
+Client ： docker客户端 Daemon：docker服务端守护进程。 Images：docker镜像，有点像jar包。 Container：运行docker镜像的容器，像Tomcat。 Registry：docker镜像仓库，像maven仓库。 Docker 常用命令 镜像相关的命令 搜索镜像 docker search java // 搜索镜像 下载镜像 docker pull java:8 // 下载镜像 查看镜像 docker images // 查看镜像 删除镜像 docker rmi java // 删除镜像，加-f强制删除 docker rmi $(docker images ‐q) // 删除所有镜像 容器相关的命令 运行Docker镜像 docker run -d -p 8080:80 nginx:least -d 后台运行 -p 指定端口 如：8080:8080，宿主主机端口：容器端口 -m 指定容器的内存大小 如 ：-m 500M -e 指定环境变量 如：-e JAVA_OPTS=&rsquo;‐Xms1028M ‐Xmx1028M ‐Xmn512M ‐Xss512K ‐XX:MetaspaceSize=256M ‐XX:MaxMetaspaceSize= 256M&#39; -net 设置网络 &ndash;net=bridge 桥接，默认 &ndash;net=host 容器使用宿主网络，不安全。 &ndash;net=container=容器ID，使用和其他容器一样的网络 -v 指定挂在目录 如: /var/nginx/logs : /nginx/logs , 宿主主机：容器主机。 列出容器列表 docker ps // 加 -a 可列出所有的容器，包含停止的容器 停止容器 docker stop [容器ID] // 停止容器 docker kill [容器ID] // 强制停止容器 启动容器 docker start [容器ID] 查看日志 docker container logs [容器ID] 查看容器信息 docker inspect [容器ID] 查看容器里的进程 docker top [容器ID] 文件传输 docker cp [容器ID]:/容器文件路径 宿主主机文件路径	// 从容器cp到主机docker cp 宿主主机文件路径 [容器ID]:/容器文件路径	// 从主机cp到容器 进入到容器的 shell docker exec -it [容器ID] /bin/bash 删除容器 docker rm [容器ID] // 删除已停止的容器 docker rm -f [容器ID] // 强制删除正在运行的容器 docker rm ‐f $(docker ps ‐a ‐q) // 强制删除所有容器 Docker 构建镜像 Dockerfile 命令 FROM 指定基础镜像，如 java:8 RUN 构建镜像执行的命令。 ADD 文件复制 COPY 文件复制，不支持URL和压缩。 CMD 容器启动命令。 EXPOSE 容器暴露端口。 WORKID 容器工作路径。 ENV 环境变量。 ENTRPINT 和CMD类似。 VOLUME 指定存储目录，如：VOLUME[&quot;/data&quot;]。 编写Dockerfile 执行 vi Dockerfile编写镜像文件"/>
+
+  
+  
+  
+  <link rel="canonical" href="https://telzhou618.github.io/post/docker/" />
+  
+  
+</head>
+
+  <body class="text-black duration-200 ease-out dark:text-white">
+    <header class="mx-auto flex h-[4.5rem] max-w-3xl px-8 lg:justify-center">
+  <div class="relative z-50 mr-auto flex items-center">
+    <a
+      class="-translate-x-[1px] -translate-y-[1px] text-2xl font-semibold"
+      href="https://telzhou618.github.io"
+      >Home</a
+    >
+    <div
+      class="btn-dark text-[0] ml-4 h-6 w-6 shrink-0 cursor-pointer [background:url(./theme.svg)_left_center/cover_no-repeat] dark:invert dark:[background-position:right]"
+      role="button"
+      aria-label="Dark"
+    ></div>
+  </div>
+
+  <div
+    class="btn-menu relative z-50 -mr-8 flex h-[4.5rem] w-[5rem] shrink-0 cursor-pointer flex-col items-center justify-center gap-2.5 lg:hidden"
+    role="button"
+    aria-label="Menu"
+  ></div>
+
+  
+
+  <script>
+    
+    const htmlClass = document.documentElement.classList;
+    setTimeout(() => {
+      htmlClass.remove('not-ready');
+    }, 10);
+
+    
+    const btnMenu = document.querySelector('.btn-menu');
+    btnMenu.addEventListener('click', () => {
+      htmlClass.toggle('open');
+    });
+
+    
+    const metaTheme = document.querySelector('meta[name="theme-color"]');
+    const lightBg = '#faf8f1'.replace(/"/g, '');
+    const setDark = (isDark) => {
+      metaTheme.setAttribute('content', isDark ? '#000' : lightBg);
+      htmlClass[isDark ? 'add' : 'remove']('dark');
+      localStorage.setItem('dark', isDark);
+    };
+
+    
+    const darkScheme = window.matchMedia('(prefers-color-scheme: dark)');
+    if (htmlClass.contains('dark')) {
+      setDark(true);
+    } else {
+      const darkVal = localStorage.getItem('dark');
+      setDark(darkVal ? darkVal === 'true' : darkScheme.matches);
+    }
+
+    
+    darkScheme.addEventListener('change', (event) => {
+      setDark(event.matches);
+    });
+
+    
+    const btnDark = document.querySelector('.btn-dark');
+    btnDark.addEventListener('click', () => {
+      setDark(localStorage.getItem('dark') !== 'true');
+    });
+  </script>
+
+  <div
+    class="nav-wrapper fixed inset-x-0 top-full z-40 flex h-full select-none flex-col justify-center pb-16 duration-200 dark:bg-black lg:static lg:h-auto lg:flex-row lg:!bg-transparent lg:pb-0 lg:transition-none"
+  >
+    
+    
+    <nav class="lg:ml-12 lg:flex lg:flex-row lg:items-center lg:space-x-6">
+      
+      <a
+        class="block text-center text-2xl leading-[5rem] lg:text-base lg:font-normal"
+        href="/post/"
+        >Posts</a
+      >
+      
+      <a
+        class="block text-center text-2xl leading-[5rem] lg:text-base lg:font-normal"
+        href="/about/"
+        >About</a
+      >
+      
+    </nav>
+    
+
+    
+    <nav
+      class="mt-12 flex justify-center space-x-10 dark:invert lg:ml-12 lg:mt-0 lg:items-center lg:space-x-6"
+    >
+      
+      <a
+        class="h-8 w-8 text-[0] [background:var(--url)_center_center/cover_no-repeat] lg:h-6 lg:w-6"
+        style="--url: url(./github.svg)"
+        href="https://github.com/telzhou618"
+        target="_blank"
+        rel="me"
+      >
+        github
+      </a>
+      
+    </nav>
+    
+  </div>
+</header>
+
+
+    <main
+      class="prose prose-neutral relative mx-auto min-h-[calc(100%-9rem)] max-w-3xl px-8 pb-16 pt-12 dark:prose-invert"
+    >
+      
+
+<article>
+  <header class="mb-16">
+    <h1 class="!my-0 pb-2.5">Docker &amp; Docker-compose</h1>
+
+    
+    <div class="text-sm antialiased opacity-60">
+      
+      <time>Jun 28, 2023</time>
+      
+      
+      
+      
+    </div>
+    
+  </header>
+
+  <section><h2 id="docker-架构">Docker 架构</h2>
+<p><img src="https://raw.githubusercontent.com/telzhou618/images/main/img/image-20210810154908558.png" alt="image-20210810154908558"></p>
+<p>Docker 主要组件包括 Client、Daemon、Images、Container、Registry。</p>
+<ul>
+<li>Client ： docker客户端</li>
+<li>Daemon：docker服务端守护进程。</li>
+<li>Images：docker镜像，有点像jar包。</li>
+<li>Container：运行docker镜像的容器，像Tomcat。</li>
+<li>Registry：docker镜像仓库，像maven仓库。</li>
+</ul>
+<h2 id="docker-常用命令">Docker 常用命令</h2>
+<h3 id="镜像相关的命令">镜像相关的命令</h3>
+<h4 id="搜索镜像">搜索镜像</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>docker search java  // 搜索镜像
+</span></span></code></pre></div><h4 id="下载镜像">下载镜像</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>docker pull java:8  // 下载镜像
+</span></span></code></pre></div><h4 id="查看镜像">查看镜像</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>docker images  // 查看镜像
+</span></span></code></pre></div><h4 id="删除镜像">删除镜像</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>docker rmi java  // 删除镜像，加-f强制删除
+</span></span><span style="display:flex;"><span>docker rmi <span style="color:#66d9ef">$(</span>docker images ‐q<span style="color:#66d9ef">)</span> // 删除所有镜像
+</span></span></code></pre></div><h3 id="容器相关的命令">容器相关的命令</h3>
+<h4 id="运行docker镜像">运行Docker镜像</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>docker run -d -p 8080:80 nginx:least
+</span></span></code></pre></div><ul>
+<li>-d 后台运行</li>
+<li>-p 指定端口
+<ul>
+<li>如：8080:8080，宿主主机端口：容器端口</li>
+</ul>
+</li>
+<li>-m 指定容器的内存大小
+<ul>
+<li>如 ：-m 500M</li>
+</ul>
+</li>
+<li>-e 指定环境变量
+<ul>
+<li>如：-e  JAVA_OPTS=&rsquo;‐Xms1028M ‐Xmx1028M ‐Xmn512M ‐Xss512K ‐XX:MetaspaceSize=256M ‐XX:MaxMetaspaceSize= 256M'</li>
+</ul>
+</li>
+<li>-net 设置网络
+<ul>
+<li>&ndash;net=bridge 桥接，默认</li>
+<li>&ndash;net=host 容器使用宿主网络，不安全。</li>
+<li>&ndash;net=container=容器ID，使用和其他容器一样的网络</li>
+</ul>
+</li>
+<li>-v 指定挂在目录
+<ul>
+<li>如: /var/nginx/logs : /nginx/logs , 宿主主机：容器主机。</li>
+</ul>
+</li>
+</ul>
+<h4 id="列出容器列表">列出容器列表</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>docker ps  // 加 -a 可列出所有的容器，包含停止的容器
+</span></span></code></pre></div><h4 id="停止容器">停止容器</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>docker stop <span style="color:#f92672">[</span>容器ID<span style="color:#f92672">]</span>  // 停止容器
+</span></span><span style="display:flex;"><span>docker kill <span style="color:#f92672">[</span>容器ID<span style="color:#f92672">]</span>  // 强制停止容器
+</span></span></code></pre></div><h4 id="启动容器">启动容器</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>docker start <span style="color:#f92672">[</span>容器ID<span style="color:#f92672">]</span>
+</span></span></code></pre></div><h4 id="查看日志">查看日志</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>docker container logs <span style="color:#f92672">[</span>容器ID<span style="color:#f92672">]</span>
+</span></span></code></pre></div><h4 id="查看容器信息">查看容器信息</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>docker inspect <span style="color:#f92672">[</span>容器ID<span style="color:#f92672">]</span>
+</span></span></code></pre></div><h4 id="查看容器里的进程">查看容器里的进程</h4>
+<pre tabindex="0"><code>docker top [容器ID]
+</code></pre><h4 id="文件传输">文件传输</h4>
+<pre tabindex="0"><code>docker cp [容器ID]:/容器文件路径 宿主主机文件路径	// 从容器cp到主机
+docker cp 宿主主机文件路径 [容器ID]:/容器文件路径	// 从主机cp到容器
+</code></pre><h4 id="进入到容器的-shell">进入到容器的 shell</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>docker exec -it <span style="color:#f92672">[</span>容器ID<span style="color:#f92672">]</span> /bin/bash
+</span></span></code></pre></div><h4 id="删除容器">删除容器</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>docker rm <span style="color:#f92672">[</span>容器ID<span style="color:#f92672">]</span> // 删除已停止的容器
+</span></span><span style="display:flex;"><span>docker rm -f <span style="color:#f92672">[</span>容器ID<span style="color:#f92672">]</span> // 强制删除正在运行的容器
+</span></span><span style="display:flex;"><span>docker rm ‐f <span style="color:#66d9ef">$(</span>docker ps ‐a ‐q<span style="color:#66d9ef">)</span> // 强制删除所有容器
+</span></span></code></pre></div><h2 id="docker-构建镜像">Docker 构建镜像</h2>
+<h3 id="dockerfile-命令">Dockerfile 命令</h3>
+<ul>
+<li>FROM 指定基础镜像，如 java:8</li>
+<li>RUN 构建镜像执行的命令。</li>
+<li>ADD 文件复制</li>
+<li>COPY 文件复制，不支持URL和压缩。</li>
+<li>CMD 容器启动命令。</li>
+<li>EXPOSE 容器暴露端口。</li>
+<li>WORKID 容器工作路径。</li>
+<li>ENV 环境变量。</li>
+<li>ENTRPINT 和CMD类似。</li>
+<li>VOLUME 指定存储目录，如：VOLUME[&quot;/data&quot;]。</li>
+</ul>
+<h3 id="编写dockerfile">编写Dockerfile</h3>
+<p>执行 vi Dockerfile编写镜像文件</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-dockerfile" data-lang="dockerfile"><span style="display:flex;"><span><span style="color:#75715e"># 基础镜像</span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">FROM</span><span style="color:#e6db74"> java:8</span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#75715e"># 复制文件</span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">ADD</span> java-demo.jar /app.jar<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#75715e"># 暴露端口</span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">EXPOSE</span><span style="color:#e6db74"> 8080</span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#75715e"># 运行程序</span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">CMD</span> java -jar /app.jar<span style="color:#960050;background-color:#1e0010">
+</span></span></span></code></pre></div><h3 id="构建镜像">构建镜像</h3>
+<p>在Dockerfile 文件所在的目录执行以下命令构建镜像。</p>
+<pre tabindex="0"><code>docker build -t java-demo:0.0.1 .
+</code></pre><ul>
+<li>-t 指定镜像的名称和版本，不指定版本默认为latest</li>
+<li>&lsquo;.&rsquo; 点代表Dockerfile文件的位置</li>
+</ul>
+<h3 id="上传到docker镜像仓库">上传到Docker镜像仓库</h3>
+<ul>
+<li>在docker hub 注册账号</li>
+<li>在控制台使用 docker login 命令登录</li>
+<li>给镜像打一个tag分组名称, 如： docker tag java-demo.jar:0.0.1  zhangsan/java-demo.jar:0.0.1</li>
+<li>push到远程仓库, 如：docker push zhangsan/java-demo.jar</li>
+</ul>
+<h2 id="docker-compose">Docker-Compose</h2>
+<p>可以批量管理多个容器。</p>
+<h3 id="编写-docker-compose-文件">编写 docker-compose 文件</h3>
+<ul>
+<li>以Redis为例，执行 vi docker-compose-redis.yml。</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-dockerfile" data-lang="dockerfile"><span style="display:flex;"><span>version: <span style="color:#e6db74">&#39;3&#39;</span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>services:<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#75715e"># redis</span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  redis:<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>    image: redis<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>    volumes:<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>      - /var/volumes/redis_data:/data<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>    restart: always<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>    ports:<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>      - <span style="color:#e6db74">&#34;6379:6379&#34;</span><span style="color:#960050;background-color:#1e0010">
+</span></span></span></code></pre></div><h3 id="启动容器-1">启动容器</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>docker-compose -f docker-compose-redis.yml up -d
+</span></span><span style="display:flex;"><span>docker-compose -f docker-compose-redis.yml up -d --build // 每次重新打包新的镜像
+</span></span></code></pre></div><ul>
+<li>-f 指定compose 文件，默认查找docker-compose.yml.</li>
+<li>-d 后台启动。</li>
+</ul>
+<h3 id="配置文件常用参数">配置文件常用参数</h3>
+<ul>
+<li>image 指定镜像名称或ID</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#ae81ff">image：java</span>
+</span></span></code></pre></div><ul>
+<li>build 指定Dockerfile文件的路径</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span> <span style="color:#f92672">build</span>: <span style="color:#ae81ff">./dir</span>
+</span></span></code></pre></div><ul>
+<li>command 覆盖容器启动后默认执行的命令。</li>
+<li>links 连接其他容器</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#f92672">web</span>:
+</span></span><span style="display:flex;"><span>	<span style="color:#f92672">links</span>:
+</span></span><span style="display:flex;"><span>		- <span style="color:#ae81ff">db</span>
+</span></span><span style="display:flex;"><span>		- <span style="color:#ae81ff">redis</span>
+</span></span></code></pre></div><ul>
+<li>
+<p>external_links 连接外部容器，格式和links一样。</p>
+</li>
+<li>
+<p>ports 暴露端口信息，格式：宿主主机端口：容器端口,只指定容器端口时宿主主机端口随机</p>
+</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#f92672">ports</span>:
+</span></span><span style="display:flex;"><span>  - <span style="color:#e6db74">&#34;8081&#34;</span>
+</span></span><span style="display:flex;"><span>	- <span style="color:#e6db74">&#34;8080:8080&#34;</span>
+</span></span></code></pre></div><ul>
+<li>expose 只保留容器端口</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#f92672">expose</span>:
+</span></span><span style="display:flex;"><span>	- <span style="color:#e6db74">&#34;8000&#34;</span>
+</span></span><span style="display:flex;"><span>	- <span style="color:#e6db74">&#34;9000&#34;</span>
+</span></span></code></pre></div><ul>
+<li>volumes 卷挂在路径，格式：宿主主机路径:容器路径</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#f92672">volumes</span>:
+</span></span><span style="display:flex;"><span>	- <span style="color:#ae81ff">/opt/data:/var/lib/mysql</span>
+</span></span></code></pre></div><ul>
+<li>environment 设置环境变量</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#f92672">environment</span>:
+</span></span><span style="display:flex;"><span>	<span style="color:#ae81ff">RACK_ENV dev</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#f92672">SHOW</span>: <span style="color:#66d9ef">false</span>
+</span></span></code></pre></div><ul>
+<li>net 设置网络</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#f92672">net</span>: <span style="color:#e6db74">&#34;bridge&#34;</span> 
+</span></span><span style="display:flex;"><span><span style="color:#f92672">net</span>: <span style="color:#e6db74">&#34;host&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">net</span>: <span style="color:#e6db74">&#34;none&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">net</span>: <span style="color:#e6db74">&#34;container:[service name or container name/id]&#34;</span>
+</span></span></code></pre></div><ul>
+<li>dns 设置dns,可以一个，也可以是多个</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#f92672">dns</span>: <span style="color:#ae81ff">8.8.8.8</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">dns</span>:
+</span></span><span style="display:flex;"><span>	- <span style="color:#ae81ff">8.8.8.8</span>
+</span></span><span style="display:flex;"><span>	- <span style="color:#ae81ff">9.9.9.9</span>
+</span></span></code></pre></div><h3 id="docker-compose-常用操作命令">docker-compose 常用操作命令</h3>
+<ul>
+<li>查看容器</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>docker-compose -f docker-compose.yml ps
+</span></span></code></pre></div><ul>
+<li>关闭/启动/重启某个容器</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>docker-compose -f docker-compose.yml stop/start/restart &lt;服务名称&gt; // 不加服务名则会操作所有容器
+</span></span></code></pre></div><ul>
+<li>查看容器日志</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>docker-compose -f docker-compose.yml logs -f 						 	// 查看所有容器日志
+</span></span><span style="display:flex;"><span>docker-compose -f docker-compose.yml logs -f	&lt;服务名&gt; 		// 查看指定容器日志
+</span></span><span style="display:flex;"><span>docker-compose -f docker-compose.yml logs -f &gt;&gt; app.log &amp; // 把日志输出到文件
+</span></span></code></pre></div><ul>
+<li>重新构建镜像并启动</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>docker-compose -f docker-compose.yml up --build -d
+</span></span></code></pre></div><ul>
+<li>重新构建 cokder-compose.yml 有变化的容器并启动</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>docker-compose -f docker-compose.yml up --fore-recreate -d
+</span></span></code></pre></div><ul>
+<li>停掉容器并删除</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>docker-compose -f docker-compose.yml down
+</span></span></code></pre></div><h2 id="prometheus--grafana-搭建监控">prometheus + grafana 搭建监控</h2>
+<h3 id="安装-redis-exporter">安装 redis-exporter</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>docker run -d <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>	--name redis_exporter <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>	-p 9121:9121 <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>	-v /etc/localtime:/etc/localtime:ro <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>	oliver006/redis_exporter <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>	--redis.addr redis://192.168.202.101:6379 <span style="color:#ae81ff">\ </span><span style="color:#75715e"># redis 地址</span>
+</span></span></code></pre></div><h3 id="安装-prometheus">安装 prometheus</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>cd /opt
+</span></span><span style="display:flex;"><span>mkdir prometheus
+</span></span><span style="display:flex;"><span>cd /opt/prometheus
+</span></span><span style="display:flex;"><span>vi prometheus.yml
+</span></span></code></pre></div><p>prometheus.yml</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#f92672">global</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">scrape_interval</span>: <span style="color:#ae81ff">5s</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">scrape_configs</span>:
+</span></span><span style="display:flex;"><span>  - <span style="color:#f92672">job_name</span>: <span style="color:#ae81ff">prometheus</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">static_configs</span>:
+</span></span><span style="display:flex;"><span>      - <span style="color:#f92672">targets</span>: [<span style="color:#e6db74">&#39;localhost:9090&#39;</span>]
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">labels</span>:
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">instance</span>: <span style="color:#ae81ff">prometheus</span>
+</span></span><span style="display:flex;"><span> 
+</span></span><span style="display:flex;"><span>  - <span style="color:#f92672">job_name</span>: <span style="color:#ae81ff">redis</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">static_configs</span>:
+</span></span><span style="display:flex;"><span>      - <span style="color:#f92672">targets</span>: [<span style="color:#e6db74">&#39;192.168.202.101:9121&#39;</span>] <span style="color:#75715e"># redis_exporter 地址</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">labels</span>:
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">instance</span>: <span style="color:#ae81ff">redis</span>
+</span></span></code></pre></div><p>docker 启动 prometheus</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>docker run  -d <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  -p 9090:9090 <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --name<span style="color:#f92672">=</span>prometheus <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  -v /etc/localtime:/etc/localtime:ro <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  -v /opt/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml  <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  prom/prometheus
+</span></span></code></pre></div><h3 id="安装grafana">安装grafana</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>cd /opt
+</span></span><span style="display:flex;"><span>mkdir grafana-storage
+</span></span><span style="display:flex;"><span>chmod <span style="color:#ae81ff">777</span> grafana-storage
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#75715e"># grafana</span>
+</span></span><span style="display:flex;"><span>docker run -d <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  -p 3000:3000 <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --name<span style="color:#f92672">=</span>grafana <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  -v /opt/grafana-storage:/var/lib/grafana <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  -v /etc/localtime:/etc/localtime:ro <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  grafana/grafana
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>docker run -d --name node_exporter <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>	-p 9100:9100 <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>	--restart<span style="color:#f92672">=</span>always <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>	--net<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;host&#34;</span> <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>	--pid<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;host&#34;</span> <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>	-v <span style="color:#e6db74">&#34;/proc:/host/proc:ro&#34;</span> <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>	-v <span style="color:#e6db74">&#34;/sys:/host/sys:ro&#34;</span> <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>	-v <span style="color:#e6db74">&#34;/:/rootfs:ro&#34;</span> <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>	prom/node-exporter <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>	--path.procfs<span style="color:#f92672">=</span>/host/proc <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>	--path.rootfs<span style="color:#f92672">=</span>/rootfs <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>	--path.sysfs<span style="color:#f92672">=</span>/host/sys <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>	--collector.filesystem.ignored-mount-points<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;^/(sys|proc|dev|host|etc)($$|/)&#39;</span>
+</span></span></code></pre></div></section>
+
+  
+  
+
+  
+  
+  
+  
+  <nav class="mt-24 flex rounded-lg bg-black/[3%] text-lg dark:bg-white/[8%]">
+    
+    <a
+      class="flex w-1/2 items-center rounded-l-md p-6 pr-3 font-semibold no-underline hover:bg-black/[2%] dark:hover:bg-white/[3%]"
+      href="https://telzhou618.github.io/post/linux/"
+      ><span class="mr-1.5">←</span><span>Linux 常用命令</span></a
+    >
+    
+    
+    <a
+      class="ml-auto flex w-1/2 items-center justify-end rounded-r-md p-6 pl-3 font-semibold no-underline hover:bg-black/[2%] dark:hover:bg-white/[3%]"
+      href="https://telzhou618.github.io/post/homebrew/"
+      ><span>Homebrew 常用命令</span><span class="ml-1.5">→</span></a
+    >
+    
+  </nav>
+  
+  
+
+  
+  
+
+  
+  
+  <div class="mt-24" id="graphcomment"></div>
+  <script type="text/javascript">
+    var __semio__params = {
+      graphcommentId: 'a42bc435-1a67-9bc8-2cde-72ec7ba0d2fb',
+      behaviour: {
+        
+      },
+      
+    };
+
+    function __semio__onload() {
+      __semio__gc_graphlogin(__semio__params);
+    }
+
+    (function () {
+      var gc = document.createElement('script');
+      gc.type = 'text/javascript';
+      gc.async = true;
+      gc.onload = __semio__onload;
+      gc.defer = true;
+      gc.src =
+        'https://integration.graphcomment.com/gc_graphlogin.js?' + Date.now();
+      (
+        document.getElementsByTagName('head')[0] ||
+        document.getElementsByTagName('body')[0]
+      ).appendChild(gc);
+    })();
+  </script>
+  
+
+  
+
+
+  
+</article>
+
+
+    </main>
+
+    <footer
+  class="opaco mx-auto flex h-[4.5rem] max-w-3xl items-center px-8 text-[0.9em] opacity-60"
+>
+  <div class="mr-auto">
+    &copy; 2024
+    <a class="link" href="https://telzhou618.github.io">Home</a>
+  </div>
+  <a class="link mx-6" href="https://gohugo.io/" rel="noopener" target="_blank"
+    >Powered by Hugo️️</a
+  >️
+  <a
+    class="link"
+    href="https://github.com/nanxiaobei/hugo-paper"
+    rel="noopener"
+    target="_blank"
+    >✎ Paper</a
+  >
+</footer>
+
+  </body>
+</html>
