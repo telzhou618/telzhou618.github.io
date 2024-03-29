@@ -1,4 +1,9 @@
-<!DOCTYPE html>
+<!doctype html>
+
+
+
+
+
 
 
 
@@ -52,6 +57,7 @@
   
   
   
+  
   <meta
     name="description"
     content="A personal blog"
@@ -68,21 +74,30 @@
   <link rel="preload stylesheet" as="style" href="https://telzhou618.github.io/main.min.css" />
 
   
+  
+  
+  
+  
+  <link rel="preload" as="image" href="https://telzhou618.github.io/theme.svg" />
 
   
-     
-  <link rel="preload" as="image" href="https://telzhou618.github.io/theme.png" />
+  
+  
+  
+  <link rel="preload" as="image" href="https://s.gravatar.com/avatar/9ff9514e4c37a5cb11be475190289857778d613942c4d6364c16e770a4cb66a0?s=80" />
+  
+  
 
   
-  
-  
-  
-
   
   <link rel="preload" as="image" href="https://telzhou618.github.io/github.svg" />
   
   
 
+  
+  
+
+  
   
   
   <link
@@ -102,8 +117,22 @@
   src="https://cdn.jsdelivr.net/npm/katex@0.16.7/dist/contrib/auto-render.min.js"
   integrity="sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05"
   crossorigin="anonymous"
-  onload="renderMathInElement(document.body);"
 ></script>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () =>
+    renderMathInElement(document.body, {
+      
+      
+      delimiters: [
+        { left: '$$', right: '$$', display: true },
+        { left: '$', right: '$', display: false },
+      ],
+      
+      throwOnError: false,
+    }),
+  );
+</script>
 
   
   
@@ -118,13 +147,11 @@
 
   
   
-
   
   
   
-  
-  
-  
+  <meta itemprop="name" content="404 Page not found">
+<meta itemprop="description" content="">
   
   <meta property="og:title" content="404 Page not found" />
 <meta property="og:description" content="" />
@@ -133,12 +160,13 @@
 
 
   
-  <meta itemprop="name" content="404 Page not found">
-<meta itemprop="description" content="">
-  
   <meta name="twitter:card" content="summary"/><meta name="twitter:title" content="404 Page not found"/>
 <meta name="twitter:description" content=""/>
 
+  
+  
+  
+  <link rel="canonical" href="https://telzhou618.github.io/404.html" />
   
   
 </head>
@@ -165,6 +193,7 @@
   ></div>
 
   
+
   <script>
     
     const htmlClass = document.documentElement.classList;
@@ -213,6 +242,22 @@
   >
     
     
+    <nav class="lg:ml-12 lg:flex lg:flex-row lg:items-center lg:space-x-6">
+      
+      <a
+        class="block text-center text-2xl leading-[5rem] lg:text-base lg:font-normal"
+        href="/post/"
+        >Posts</a
+      >
+      
+      <a
+        class="block text-center text-2xl leading-[5rem] lg:text-base lg:font-normal"
+        href="/about/"
+        >About</a
+      >
+      
+    </nav>
+    
 
     
     <nav
@@ -251,7 +296,7 @@
   class="opaco mx-auto flex h-[4.5rem] max-w-3xl items-center px-8 text-[0.9em] opacity-60"
 >
   <div class="mr-auto">
-    &copy; 2023
+    &copy; 2024
     <a class="link" href="https://telzhou618.github.io">Home</a>
   </div>
   <a class="link mx-6" href="https://gohugo.io/" rel="noopener" target="_blank"

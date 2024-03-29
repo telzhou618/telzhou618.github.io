@@ -1,4 +1,9 @@
-<!DOCTYPE html>
+<!doctype html>
+
+
+
+
+
 
 
 
@@ -51,6 +56,7 @@
   
   
   
+  
   <meta name="description" content="otter 官网介绍 名称：otter [&lsquo;ɒtə(r)] 译意： 水獭，数据搬运工 语言： 纯java开发 定位： 基于数据库增量日志解析，准实时同步到本机房或异地机房的mysql/oracle数据库. 一个分布式数据库同步系统。 更多介绍查看Github：https://github.com/alibaba/otter
 架构及工作原理 Otter服务 包含以下组件或服务或组件：
 Canal, 负责监听Bin-log，类似MYSQL的从库，本质上实现了MYSQL的协议，伪装成从库读取bin-log日志。 Manager 管理Otter的配置的后台, 比如管理数据库表之间的映射关系，会把配置推送到 Node。 Node 实现同步功能的核心服务，同时把同步结果实时反馈给Manager。 Zookeepr, 分布式调度，监控节点状态，这个不用解释，分布式系统都会用到。 otter 需要以上四个服务才能工作，搭建比较麻烦，稍后详细说明。
@@ -68,21 +74,30 @@ create table tb_user ( id int(11) unsigned auto_increment comment &#39;ID&#39; p
   <link rel="preload stylesheet" as="style" href="https://telzhou618.github.io/main.min.css" />
 
   
+  
+  
+  
+  
+  <link rel="preload" as="image" href="https://telzhou618.github.io/theme.svg" />
 
   
-     
-  <link rel="preload" as="image" href="https://telzhou618.github.io/theme.png" />
+  
+  
+  
+  <link rel="preload" as="image" href="https://s.gravatar.com/avatar/9ff9514e4c37a5cb11be475190289857778d613942c4d6364c16e770a4cb66a0?s=80" />
+  
+  
 
   
-  
-  
-  
-
   
   <link rel="preload" as="image" href="https://telzhou618.github.io/github.svg" />
   
   
 
+  
+  
+
+  
   
   
   <link
@@ -102,8 +117,22 @@ create table tb_user ( id int(11) unsigned auto_increment comment &#39;ID&#39; p
   src="https://cdn.jsdelivr.net/npm/katex@0.16.7/dist/contrib/auto-render.min.js"
   integrity="sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05"
   crossorigin="anonymous"
-  onload="renderMathInElement(document.body);"
 ></script>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () =>
+    renderMathInElement(document.body, {
+      
+      
+      delimiters: [
+        { left: '$$', right: '$$', display: true },
+        { left: '$', right: '$', display: false },
+      ],
+      
+      throwOnError: false,
+    }),
+  );
+</script>
 
   
   
@@ -114,17 +143,22 @@ create table tb_user ( id int(11) unsigned auto_increment comment &#39;ID&#39; p
   <link rel="apple-touch-icon" href="https://telzhou618.github.io/apple-touch-icon.png" />
 
   
-  <meta name="generator" content="Hugo 0.114.1">
+  <meta name="generator" content="Hugo 0.121.1">
 
   
   
-
   
   
   
-  
-  
-  
+  <meta itemprop="name" content="Otter数据同步1 - 环境搭建">
+<meta itemprop="description" content="otter 官网介绍 名称：otter [&lsquo;ɒtə(r)] 译意： 水獭，数据搬运工 语言： 纯java开发 定位： 基于数据库增量日志解析，准实时同步到本机房或异地机房的mysql/oracle数据库. 一个分布式数据库同步系统。 更多介绍查看Github：https://github.com/alibaba/otter
+架构及工作原理 Otter服务 包含以下组件或服务或组件：
+Canal, 负责监听Bin-log，类似MYSQL的从库，本质上实现了MYSQL的协议，伪装成从库读取bin-log日志。 Manager 管理Otter的配置的后台, 比如管理数据库表之间的映射关系，会把配置推送到 Node。 Node 实现同步功能的核心服务，同时把同步结果实时反馈给Manager。 Zookeepr, 分布式调度，监控节点状态，这个不用解释，分布式系统都会用到。 otter 需要以上四个服务才能工作，搭建比较麻烦，稍后详细说明。
+本次目标 假设要把tb_user表的数据同步到tb_user2, 用otter该如何实现？tb_user 表结构如下。
+create table tb_user ( id int(11) unsigned auto_increment comment &#39;ID&#39; primary key, username varchar(100) default &#39;&#39; not null comment &#39;用户名&#39;, age int default 0 not null comment &#39;年龄&#39;, email varchar(64) default &#39;&#39; not null comment &#39;邮箱&#39;, created_time datetime default CURRENT_TIMESTAMP not null comment &#39;创建时间&#39;, modified_time datetime default CURRENT_TIMESTAMP not null on update CURRENT_TIMESTAMP comment &#39;更新时间&#39;, is_deleted tinyint(2) default 0 not null comment &#39;是否删除&#39; ) comment &#39;用户信息表&#39; charset = utf8mb4; tb_user2 表结构和tb_user相同。"><meta itemprop="datePublished" content="2023-06-28T17:39:33+08:00" />
+<meta itemprop="dateModified" content="2023-06-28T17:39:33+08:00" />
+<meta itemprop="wordCount" content="593">
+<meta itemprop="keywords" content="" />
   
   <meta property="og:title" content="Otter数据同步1 - 环境搭建" />
 <meta property="og:description" content="otter 官网介绍 名称：otter [&lsquo;ɒtə(r)] 译意： 水獭，数据搬运工 语言： 纯java开发 定位： 基于数据库增量日志解析，准实时同步到本机房或异地机房的mysql/oracle数据库. 一个分布式数据库同步系统。 更多介绍查看Github：https://github.com/alibaba/otter
@@ -137,25 +171,19 @@ create table tb_user ( id int(11) unsigned auto_increment comment &#39;ID&#39; p
 <meta property="article:published_time" content="2023-06-28T17:39:33+08:00" />
 <meta property="article:modified_time" content="2023-06-28T17:39:33+08:00" />
 
+
   
-  <meta itemprop="name" content="Otter数据同步1 - 环境搭建">
-<meta itemprop="description" content="otter 官网介绍 名称：otter [&lsquo;ɒtə(r)] 译意： 水獭，数据搬运工 语言： 纯java开发 定位： 基于数据库增量日志解析，准实时同步到本机房或异地机房的mysql/oracle数据库. 一个分布式数据库同步系统。 更多介绍查看Github：https://github.com/alibaba/otter
-架构及工作原理 Otter服务 包含以下组件或服务或组件：
-Canal, 负责监听Bin-log，类似MYSQL的从库，本质上实现了MYSQL的协议，伪装成从库读取bin-log日志。 Manager 管理Otter的配置的后台, 比如管理数据库表之间的映射关系，会把配置推送到 Node。 Node 实现同步功能的核心服务，同时把同步结果实时反馈给Manager。 Zookeepr, 分布式调度，监控节点状态，这个不用解释，分布式系统都会用到。 otter 需要以上四个服务才能工作，搭建比较麻烦，稍后详细说明。
-本次目标 假设要把tb_user表的数据同步到tb_user2, 用otter该如何实现？tb_user 表结构如下。
-create table tb_user ( id int(11) unsigned auto_increment comment &#39;ID&#39; primary key, username varchar(100) default &#39;&#39; not null comment &#39;用户名&#39;, age int default 0 not null comment &#39;年龄&#39;, email varchar(64) default &#39;&#39; not null comment &#39;邮箱&#39;, created_time datetime default CURRENT_TIMESTAMP not null comment &#39;创建时间&#39;, modified_time datetime default CURRENT_TIMESTAMP not null on update CURRENT_TIMESTAMP comment &#39;更新时间&#39;, is_deleted tinyint(2) default 0 not null comment &#39;是否删除&#39; ) comment &#39;用户信息表&#39; charset = utf8mb4; tb_user2 表结构和tb_user相同。"><meta itemprop="datePublished" content="2023-06-28T17:39:33+08:00" />
-<meta itemprop="dateModified" content="2023-06-28T17:39:33+08:00" />
-<meta itemprop="wordCount" content="593">
-<meta itemprop="keywords" content="" />
-  
-  <meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="Otter数据同步1 - 环境搭建"/>
+  <meta name="twitter:card" content="summary"/><meta name="twitter:title" content="Otter数据同步1 - 环境搭建"/>
 <meta name="twitter:description" content="otter 官网介绍 名称：otter [&lsquo;ɒtə(r)] 译意： 水獭，数据搬运工 语言： 纯java开发 定位： 基于数据库增量日志解析，准实时同步到本机房或异地机房的mysql/oracle数据库. 一个分布式数据库同步系统。 更多介绍查看Github：https://github.com/alibaba/otter
 架构及工作原理 Otter服务 包含以下组件或服务或组件：
 Canal, 负责监听Bin-log，类似MYSQL的从库，本质上实现了MYSQL的协议，伪装成从库读取bin-log日志。 Manager 管理Otter的配置的后台, 比如管理数据库表之间的映射关系，会把配置推送到 Node。 Node 实现同步功能的核心服务，同时把同步结果实时反馈给Manager。 Zookeepr, 分布式调度，监控节点状态，这个不用解释，分布式系统都会用到。 otter 需要以上四个服务才能工作，搭建比较麻烦，稍后详细说明。
 本次目标 假设要把tb_user表的数据同步到tb_user2, 用otter该如何实现？tb_user 表结构如下。
 create table tb_user ( id int(11) unsigned auto_increment comment &#39;ID&#39; primary key, username varchar(100) default &#39;&#39; not null comment &#39;用户名&#39;, age int default 0 not null comment &#39;年龄&#39;, email varchar(64) default &#39;&#39; not null comment &#39;邮箱&#39;, created_time datetime default CURRENT_TIMESTAMP not null comment &#39;创建时间&#39;, modified_time datetime default CURRENT_TIMESTAMP not null on update CURRENT_TIMESTAMP comment &#39;更新时间&#39;, is_deleted tinyint(2) default 0 not null comment &#39;是否删除&#39; ) comment &#39;用户信息表&#39; charset = utf8mb4; tb_user2 表结构和tb_user相同。"/>
 
+  
+  
+  
+  <link rel="canonical" href="https://telzhou618.github.io/post/otter1/" />
   
   
 </head>
@@ -182,6 +210,7 @@ create table tb_user ( id int(11) unsigned auto_increment comment &#39;ID&#39; p
   ></div>
 
   
+
   <script>
     
     const htmlClass = document.documentElement.classList;
@@ -229,6 +258,22 @@ create table tb_user ( id int(11) unsigned auto_increment comment &#39;ID&#39; p
     class="nav-wrapper fixed inset-x-0 top-full z-40 flex h-full select-none flex-col justify-center pb-16 duration-200 dark:bg-black lg:static lg:h-auto lg:flex-row lg:!bg-transparent lg:pb-0 lg:transition-none"
   >
     
+    
+    <nav class="lg:ml-12 lg:flex lg:flex-row lg:items-center lg:space-x-6">
+      
+      <a
+        class="block text-center text-2xl leading-[5rem] lg:text-base lg:font-normal"
+        href="/post/"
+        >Posts</a
+      >
+      
+      <a
+        class="block text-center text-2xl leading-[5rem] lg:text-base lg:font-normal"
+        href="/about/"
+        >About</a
+      >
+      
+    </nav>
     
 
     
@@ -489,6 +534,7 @@ server_id=1 # 配置 MySQL replaction 需要定义，不要和 canal 的 slaveId
   
   
   
+  
   <nav class="mt-24 flex rounded-lg bg-black/[3%] text-lg dark:bg-white/[8%]">
     
     <a
@@ -505,6 +551,7 @@ server_id=1 # 配置 MySQL replaction 需要定义，不要和 canal 的 slaveId
     >
     
   </nav>
+  
   
 
   
@@ -541,6 +588,11 @@ server_id=1 # 配置 MySQL replaction 需要定义，不要和 canal 的 slaveId
     })();
   </script>
   
+
+  
+
+
+  
 </article>
 
 
@@ -550,7 +602,7 @@ server_id=1 # 配置 MySQL replaction 需要定义，不要和 canal 的 slaveId
   class="opaco mx-auto flex h-[4.5rem] max-w-3xl items-center px-8 text-[0.9em] opacity-60"
 >
   <div class="mr-auto">
-    &copy; 2023
+    &copy; 2024
     <a class="link" href="https://telzhou618.github.io">Home</a>
   </div>
   <a class="link mx-6" href="https://gohugo.io/" rel="noopener" target="_blank"

@@ -1,4 +1,9 @@
-<!DOCTYPE html>
+<!doctype html>
+
+
+
+
+
 
 
 
@@ -52,6 +57,7 @@
   
   
   
+  
   <meta
     name="description"
     content="A personal blog"
@@ -68,21 +74,30 @@
   <link rel="preload stylesheet" as="style" href="https://telzhou618.github.io/main.min.css" />
 
   
+  
+  
+  
+  
+  <link rel="preload" as="image" href="https://telzhou618.github.io/theme.svg" />
 
   
-     
-  <link rel="preload" as="image" href="https://telzhou618.github.io/theme.png" />
+  
+  
+  
+  <link rel="preload" as="image" href="https://s.gravatar.com/avatar/9ff9514e4c37a5cb11be475190289857778d613942c4d6364c16e770a4cb66a0?s=80" />
+  
+  
 
   
-  
-  
-  
-
   
   <link rel="preload" as="image" href="https://telzhou618.github.io/github.svg" />
   
   
 
+  
+  
+
+  
   
   
   <link
@@ -102,8 +117,22 @@
   src="https://cdn.jsdelivr.net/npm/katex@0.16.7/dist/contrib/auto-render.min.js"
   integrity="sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05"
   crossorigin="anonymous"
-  onload="renderMathInElement(document.body);"
 ></script>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () =>
+    renderMathInElement(document.body, {
+      
+      
+      delimiters: [
+        { left: '$$', right: '$$', display: true },
+        { left: '$', right: '$', display: false },
+      ],
+      
+      throwOnError: false,
+    }),
+  );
+</script>
 
   
   
@@ -118,20 +147,11 @@
 
   
   
-  <link
-    rel="alternate"
-    type="application/rss&#43;xml"
-    href="https://telzhou618.github.io/index.xml"
-    title="Home"
-  />
-  
-
   
   
   
-  
-  
-  
+  <meta itemprop="name" content="Home">
+<meta itemprop="description" content="">
   
   <meta property="og:title" content="Home" />
 <meta property="og:description" content="" />
@@ -140,12 +160,20 @@
 
 
   
-  <meta itemprop="name" content="Home">
-<meta itemprop="description" content="">
-  
   <meta name="twitter:card" content="summary"/><meta name="twitter:title" content="Home"/>
 <meta name="twitter:description" content=""/>
 
+  
+  
+  <link
+    rel="alternate"
+    type="application/rss&#43;xml"
+    href="https://telzhou618.github.io/index.xml"
+    title="Home"
+  />
+  
+  
+  <link rel="canonical" href="https://telzhou618.github.io/" />
   
   
 </head>
@@ -172,6 +200,7 @@
   ></div>
 
   
+
   <script>
     
     const htmlClass = document.documentElement.classList;
@@ -220,6 +249,22 @@
   >
     
     
+    <nav class="lg:ml-12 lg:flex lg:flex-row lg:items-center lg:space-x-6">
+      
+      <a
+        class="block text-center text-2xl leading-[5rem] lg:text-base lg:font-normal"
+        href="/post/"
+        >Posts</a
+      >
+      
+      <a
+        class="block text-center text-2xl leading-[5rem] lg:text-base lg:font-normal"
+        href="/about/"
+        >About</a
+      >
+      
+    </nav>
+    
 
     
     <nav
@@ -266,11 +311,21 @@
 
 <div class="-mt-2 mb-16 flex items-center">
   
+  <div
+    class="mr-5 shrink-0 rounded-full border-[0.5px] border-black/10 bg-white/50 p-3 shadow dark:bg-white/[15%]"
+  >
+    <img
+      class="my-0 aspect-square w-16 rounded-full !bg-black/5 hover:animate-spin dark:!bg-black/80"
+      src="https://s.gravatar.com/avatar/9ff9514e4c37a5cb11be475190289857778d613942c4d6364c16e770a4cb66a0?s=80"
+      alt="telzhou618"
+    />
+  </div>
+  
   
   <div>
     <h1 class="mb-2 mt-3 text-[1.6rem] font-bold">telzhou618</h1>
     <div class="break-words">
-      A personal blog by telzhou618
+      java
     </div>
   </div>
   
@@ -281,11 +336,11 @@
 
 <section class="relative my-10 first-of-type:mt-0 last-of-type:mb-0">
   
-  <h2 class="!my-0 pb-1 font-bold !leading-none">一文搞懂 RocketMQ</h2>
+  <h2 class="!my-0 pb-1 font-bold !leading-none">MYSQL 表空间分析</h2>
   <time class="text-sm antialiased opacity-60"
-    >Sep 11, 2023</time
+    >Jul 10, 2023</time
   >
-  <a class="absolute inset-0 text-[0]" href="https://telzhou618.github.io/post/rocketmq/">一文搞懂 RocketMQ</a>
+  <a class="absolute inset-0 text-[0]" href="https://telzhou618.github.io/post/mysql_information_schema/">MYSQL 表空间分析</a>
 </section>
 
 
@@ -294,11 +349,37 @@
 
 <section class="relative my-10 first-of-type:mt-0 last-of-type:mb-0">
   
-  <h2 class="!my-0 pb-1 font-bold !leading-none">MySQL 优化及索引设计规范</h2>
+  <h2 class="!my-0 pb-1 font-bold !leading-none">Java SPI 应用</h2>
   <time class="text-sm antialiased opacity-60"
-    >Aug 28, 2023</time
+    >Jul 5, 2023</time
   >
-  <a class="absolute inset-0 text-[0]" href="https://telzhou618.github.io/post/mysql-review/">MySQL 优化及索引设计规范</a>
+  <a class="absolute inset-0 text-[0]" href="https://telzhou618.github.io/post/java-spi/">Java SPI 应用</a>
+</section>
+
+
+
+
+
+<section class="relative my-10 first-of-type:mt-0 last-of-type:mb-0">
+  
+  <h2 class="!my-0 pb-1 font-bold !leading-none">Otter数据同步2 - 配置同步</h2>
+  <time class="text-sm antialiased opacity-60"
+    >Jun 28, 2023</time
+  >
+  <a class="absolute inset-0 text-[0]" href="https://telzhou618.github.io/post/otter2/">Otter数据同步2 - 配置同步</a>
+</section>
+
+
+
+
+
+<section class="relative my-10 first-of-type:mt-0 last-of-type:mb-0">
+  
+  <h2 class="!my-0 pb-1 font-bold !leading-none">Otter数据同步1 - 环境搭建</h2>
+  <time class="text-sm antialiased opacity-60"
+    >Jun 28, 2023</time
+  >
+  <a class="absolute inset-0 text-[0]" href="https://telzhou618.github.io/post/otter1/">Otter数据同步1 - 环境搭建</a>
 </section>
 
 
@@ -320,48 +401,9 @@
 
 <section class="relative my-10 first-of-type:mt-0 last-of-type:mb-0">
   
-  <h2 class="!my-0 pb-1 font-bold !leading-none">MyBatis 源码解析</h2>
-  <time class="text-sm antialiased opacity-60"
-    >Jun 28, 2023</time
-  >
-  <a class="absolute inset-0 text-[0]" href="https://telzhou618.github.io/post/mybatis/">MyBatis 源码解析</a>
-</section>
-
-
-
-
-
-<section class="relative my-10 first-of-type:mt-0 last-of-type:mb-0">
-  
-  <h2 class="!my-0 pb-1 font-bold !leading-none">JVM 常用参数</h2>
-  <time class="text-sm antialiased opacity-60"
-    >Jun 16, 2023</time
-  >
-  <a class="absolute inset-0 text-[0]" href="https://telzhou618.github.io/post/jvm/">JVM 常用参数</a>
-</section>
-
-
-
-
-
-<section class="relative my-10 first-of-type:mt-0 last-of-type:mb-0">
-  
-  <h2 class="!my-0 pb-1 font-bold !leading-none">Docker &amp; Docker-compose</h2>
-  <time class="text-sm antialiased opacity-60"
-    >Jun 11, 2023</time
-  >
-  <a class="absolute inset-0 text-[0]" href="https://telzhou618.github.io/post/docker/">Docker &amp; Docker-compose</a>
-</section>
-
-
-
-
-
-<section class="relative my-10 first-of-type:mt-0 last-of-type:mb-0">
-  
   <h2 class="!my-0 pb-1 font-bold !leading-none">Spring AOP 从入门到源码解析</h2>
   <time class="text-sm antialiased opacity-60"
-    >Jun 2, 2023</time
+    >Jun 28, 2023</time
   >
   <a class="absolute inset-0 text-[0]" href="https://telzhou618.github.io/post/spring-aop/">Spring AOP 从入门到源码解析</a>
 </section>
@@ -372,11 +414,11 @@
 
 <section class="relative my-10 first-of-type:mt-0 last-of-type:mb-0">
   
-  <h2 class="!my-0 pb-1 font-bold !leading-none">Netty 和 NIO 全面掌握</h2>
+  <h2 class="!my-0 pb-1 font-bold !leading-none">Linux 常用命令</h2>
   <time class="text-sm antialiased opacity-60"
-    >Jun 28, 2022</time
+    >Jun 28, 2023</time
   >
-  <a class="absolute inset-0 text-[0]" href="https://telzhou618.github.io/post/netty/">Netty 和 NIO 全面掌握</a>
+  <a class="absolute inset-0 text-[0]" href="https://telzhou618.github.io/post/linux/">Linux 常用命令</a>
 </section>
 
 
@@ -385,11 +427,11 @@
 
 <section class="relative my-10 first-of-type:mt-0 last-of-type:mb-0">
   
-  <h2 class="!my-0 pb-1 font-bold !leading-none">一文搞懂 kafka</h2>
+  <h2 class="!my-0 pb-1 font-bold !leading-none">Docker &amp; Docker-compose</h2>
   <time class="text-sm antialiased opacity-60"
-    >Jun 28, 2022</time
+    >Jun 28, 2023</time
   >
-  <a class="absolute inset-0 text-[0]" href="https://telzhou618.github.io/post/kafka/">一文搞懂 kafka</a>
+  <a class="absolute inset-0 text-[0]" href="https://telzhou618.github.io/post/docker/">Docker &amp; Docker-compose</a>
 </section>
 
 
@@ -398,11 +440,24 @@
 
 <section class="relative my-10 first-of-type:mt-0 last-of-type:mb-0">
   
-  <h2 class="!my-0 pb-1 font-bold !leading-none">JAVA8 debug 技巧</h2>
+  <h2 class="!my-0 pb-1 font-bold !leading-none">Homebrew 常用命令</h2>
   <time class="text-sm antialiased opacity-60"
-    >Jun 21, 2022</time
+    >Jun 28, 2023</time
   >
-  <a class="absolute inset-0 text-[0]" href="https://telzhou618.github.io/post/java8-debug/">JAVA8 debug 技巧</a>
+  <a class="absolute inset-0 text-[0]" href="https://telzhou618.github.io/post/homebrew/">Homebrew 常用命令</a>
+</section>
+
+
+
+
+
+<section class="relative my-10 first-of-type:mt-0 last-of-type:mb-0">
+  
+  <h2 class="!my-0 pb-1 font-bold !leading-none">Mac 修改环境变量</h2>
+  <time class="text-sm antialiased opacity-60"
+    >Jun 28, 2023</time
+  >
+  <a class="absolute inset-0 text-[0]" href="https://telzhou618.github.io/post/modify-env/">Mac 修改环境变量</a>
 </section>
 
 
@@ -425,7 +480,7 @@
   class="opaco mx-auto flex h-[4.5rem] max-w-3xl items-center px-8 text-[0.9em] opacity-60"
 >
   <div class="mr-auto">
-    &copy; 2023
+    &copy; 2024
     <a class="link" href="https://telzhou618.github.io">Home</a>
   </div>
   <a class="link mx-6" href="https://gohugo.io/" rel="noopener" target="_blank"

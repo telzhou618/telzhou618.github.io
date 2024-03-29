@@ -1,4 +1,9 @@
-<!DOCTYPE html>
+<!doctype html>
+
+
+
+
+
 
 
 
@@ -51,6 +56,7 @@
   
   
   
+  
   <meta name="description" content="mac 软件包管理工具 brew install #[包名] 安装包。 brew uninstall #[包名] 卸载包。 brew search #[包名] 查询包。 brew list #列出已安装的软件。 brew update #更新brew。 - brew outdated #查看可更新的包。 brew upgrade #(更新所有) 更新所有包。 brew upgrade [包名] #更新置顶包。 brew cleanup #清理所有包的旧版本。 brew cleanup [包名] #清理指定包的旧版本。 brew cleanup -n #查看可清理的旧版本包，不执行实际操作。 brew home #用浏览器打开brew的官方网站。 brew info [包名] #显示软件信息。 brew deps [包名] #显示包依赖。 brew install --cask [包名] #安装桌面软件。 服务管理 brew services list # 查询服务列表和状态 brew services run mysql # 启动mysql 服务 brew services start mysql # 启动 mysql 服务，并注册开机自启 brew services stop mysql # 停止 mysql 服务，并取消开机自启 brew services restart mysql # 重启 mysql 服务，并注册开机自启 brew services cleanup # 清除已卸载应用的无用配置 " />
   <meta name="author" content="telzhou618" />
   
@@ -64,21 +70,30 @@
   <link rel="preload stylesheet" as="style" href="https://telzhou618.github.io/main.min.css" />
 
   
+  
+  
+  
+  
+  <link rel="preload" as="image" href="https://telzhou618.github.io/theme.svg" />
 
   
-     
-  <link rel="preload" as="image" href="https://telzhou618.github.io/theme.png" />
+  
+  
+  
+  <link rel="preload" as="image" href="https://s.gravatar.com/avatar/9ff9514e4c37a5cb11be475190289857778d613942c4d6364c16e770a4cb66a0?s=80" />
+  
+  
 
   
-  
-  
-  
-
   
   <link rel="preload" as="image" href="https://telzhou618.github.io/github.svg" />
   
   
 
+  
+  
+
+  
   
   
   <link
@@ -98,8 +113,22 @@
   src="https://cdn.jsdelivr.net/npm/katex@0.16.7/dist/contrib/auto-render.min.js"
   integrity="sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05"
   crossorigin="anonymous"
-  onload="renderMathInElement(document.body);"
 ></script>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () =>
+    renderMathInElement(document.body, {
+      
+      
+      delimiters: [
+        { left: '$$', right: '$$', display: true },
+        { left: '$', right: '$', display: false },
+      ],
+      
+      throwOnError: false,
+    }),
+  );
+</script>
 
   
   
@@ -110,17 +139,18 @@
   <link rel="apple-touch-icon" href="https://telzhou618.github.io/apple-touch-icon.png" />
 
   
-  <meta name="generator" content="Hugo 0.114.1">
+  <meta name="generator" content="Hugo 0.121.1">
 
   
   
-
   
   
   
-  
-  
-  
+  <meta itemprop="name" content="Homebrew 常用命令">
+<meta itemprop="description" content="mac 软件包管理工具 brew install #[包名] 安装包。 brew uninstall #[包名] 卸载包。 brew search #[包名] 查询包。 brew list #列出已安装的软件。 brew update #更新brew。 - brew outdated #查看可更新的包。 brew upgrade #(更新所有) 更新所有包。 brew upgrade [包名] #更新置顶包。 brew cleanup #清理所有包的旧版本。 brew cleanup [包名] #清理指定包的旧版本。 brew cleanup -n #查看可清理的旧版本包，不执行实际操作。 brew home #用浏览器打开brew的官方网站。 brew info [包名] #显示软件信息。 brew deps [包名] #显示包依赖。 brew install --cask [包名] #安装桌面软件。 服务管理 brew services list # 查询服务列表和状态 brew services run mysql # 启动mysql 服务 brew services start mysql # 启动 mysql 服务，并注册开机自启 brew services stop mysql # 停止 mysql 服务，并取消开机自启 brew services restart mysql # 重启 mysql 服务，并注册开机自启 brew services cleanup # 清除已卸载应用的无用配置 "><meta itemprop="datePublished" content="2023-06-28T11:44:07+08:00" />
+<meta itemprop="dateModified" content="2023-06-28T11:44:07+08:00" />
+<meta itemprop="wordCount" content="101">
+<meta itemprop="keywords" content="" />
   
   <meta property="og:title" content="Homebrew 常用命令" />
 <meta property="og:description" content="mac 软件包管理工具 brew install #[包名] 安装包。 brew uninstall #[包名] 卸载包。 brew search #[包名] 查询包。 brew list #列出已安装的软件。 brew update #更新brew。 - brew outdated #查看可更新的包。 brew upgrade #(更新所有) 更新所有包。 brew upgrade [包名] #更新置顶包。 brew cleanup #清理所有包的旧版本。 brew cleanup [包名] #清理指定包的旧版本。 brew cleanup -n #查看可清理的旧版本包，不执行实际操作。 brew home #用浏览器打开brew的官方网站。 brew info [包名] #显示软件信息。 brew deps [包名] #显示包依赖。 brew install --cask [包名] #安装桌面软件。 服务管理 brew services list # 查询服务列表和状态 brew services run mysql # 启动mysql 服务 brew services start mysql # 启动 mysql 服务，并注册开机自启 brew services stop mysql # 停止 mysql 服务，并取消开机自启 brew services restart mysql # 重启 mysql 服务，并注册开机自启 brew services cleanup # 清除已卸载应用的无用配置 " />
@@ -129,17 +159,15 @@
 <meta property="article:published_time" content="2023-06-28T11:44:07+08:00" />
 <meta property="article:modified_time" content="2023-06-28T11:44:07+08:00" />
 
+
   
-  <meta itemprop="name" content="Homebrew 常用命令">
-<meta itemprop="description" content="mac 软件包管理工具 brew install #[包名] 安装包。 brew uninstall #[包名] 卸载包。 brew search #[包名] 查询包。 brew list #列出已安装的软件。 brew update #更新brew。 - brew outdated #查看可更新的包。 brew upgrade #(更新所有) 更新所有包。 brew upgrade [包名] #更新置顶包。 brew cleanup #清理所有包的旧版本。 brew cleanup [包名] #清理指定包的旧版本。 brew cleanup -n #查看可清理的旧版本包，不执行实际操作。 brew home #用浏览器打开brew的官方网站。 brew info [包名] #显示软件信息。 brew deps [包名] #显示包依赖。 brew install --cask [包名] #安装桌面软件。 服务管理 brew services list # 查询服务列表和状态 brew services run mysql # 启动mysql 服务 brew services start mysql # 启动 mysql 服务，并注册开机自启 brew services stop mysql # 停止 mysql 服务，并取消开机自启 brew services restart mysql # 重启 mysql 服务，并注册开机自启 brew services cleanup # 清除已卸载应用的无用配置 "><meta itemprop="datePublished" content="2023-06-28T11:44:07+08:00" />
-<meta itemprop="dateModified" content="2023-06-28T11:44:07+08:00" />
-<meta itemprop="wordCount" content="101">
-<meta itemprop="keywords" content="" />
-  
-  <meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="Homebrew 常用命令"/>
+  <meta name="twitter:card" content="summary"/><meta name="twitter:title" content="Homebrew 常用命令"/>
 <meta name="twitter:description" content="mac 软件包管理工具 brew install #[包名] 安装包。 brew uninstall #[包名] 卸载包。 brew search #[包名] 查询包。 brew list #列出已安装的软件。 brew update #更新brew。 - brew outdated #查看可更新的包。 brew upgrade #(更新所有) 更新所有包。 brew upgrade [包名] #更新置顶包。 brew cleanup #清理所有包的旧版本。 brew cleanup [包名] #清理指定包的旧版本。 brew cleanup -n #查看可清理的旧版本包，不执行实际操作。 brew home #用浏览器打开brew的官方网站。 brew info [包名] #显示软件信息。 brew deps [包名] #显示包依赖。 brew install --cask [包名] #安装桌面软件。 服务管理 brew services list # 查询服务列表和状态 brew services run mysql # 启动mysql 服务 brew services start mysql # 启动 mysql 服务，并注册开机自启 brew services stop mysql # 停止 mysql 服务，并取消开机自启 brew services restart mysql # 重启 mysql 服务，并注册开机自启 brew services cleanup # 清除已卸载应用的无用配置 "/>
 
+  
+  
+  
+  <link rel="canonical" href="https://telzhou618.github.io/post/homebrew/" />
   
   
 </head>
@@ -166,6 +194,7 @@
   ></div>
 
   
+
   <script>
     
     const htmlClass = document.documentElement.classList;
@@ -213,6 +242,22 @@
     class="nav-wrapper fixed inset-x-0 top-full z-40 flex h-full select-none flex-col justify-center pb-16 duration-200 dark:bg-black lg:static lg:h-auto lg:flex-row lg:!bg-transparent lg:pb-0 lg:transition-none"
   >
     
+    
+    <nav class="lg:ml-12 lg:flex lg:flex-row lg:items-center lg:space-x-6">
+      
+      <a
+        class="block text-center text-2xl leading-[5rem] lg:text-base lg:font-normal"
+        href="/post/"
+        >Posts</a
+      >
+      
+      <a
+        class="block text-center text-2xl leading-[5rem] lg:text-base lg:font-normal"
+        href="/about/"
+        >About</a
+      >
+      
+    </nav>
     
 
     
@@ -288,6 +333,7 @@
   
   
   
+  
   <nav class="mt-24 flex rounded-lg bg-black/[3%] text-lg dark:bg-white/[8%]">
     
     <a
@@ -304,6 +350,7 @@
     >
     
   </nav>
+  
   
 
   
@@ -340,6 +387,11 @@
     })();
   </script>
   
+
+  
+
+
+  
 </article>
 
 
@@ -349,7 +401,7 @@
   class="opaco mx-auto flex h-[4.5rem] max-w-3xl items-center px-8 text-[0.9em] opacity-60"
 >
   <div class="mr-auto">
-    &copy; 2023
+    &copy; 2024
     <a class="link" href="https://telzhou618.github.io">Home</a>
   </div>
   <a class="link mx-6" href="https://gohugo.io/" rel="noopener" target="_blank"

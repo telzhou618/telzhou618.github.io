@@ -1,4 +1,9 @@
-<!DOCTYPE html>
+<!doctype html>
+
+
+
+
+
 
 
 
@@ -51,6 +56,7 @@
   
   
   
+  
   <meta name="description" content="Spring 事务利用AOP原理实现,主要过程和AOP原理一样，可以分为三步，启用事务、生成代理对对象、执行。
 从如何使用事务开始 本实例使用Spring的 JdbcTemplate 作为操作数据库的工具，使用 druid 做为数据库连接池。
 首先导入相关的 jar 包 &lt;dependency&gt; &lt;groupId&gt;mysql&lt;/groupId&gt; &lt;artifactId&gt;mysql-connector-java&lt;/artifactId&gt; &lt;version&gt;8.0.20&lt;/version&gt; &lt;/dependency&gt; &lt;dependency&gt; &lt;groupId&gt;com.alibaba&lt;/groupId&gt; &lt;artifactId&gt;druid&lt;/artifactId&gt; &lt;version&gt;1.2.4&lt;/version&gt; &lt;/dependency&gt; &lt;dependency&gt; &lt;groupId&gt;org.springframework&lt;/groupId&gt; &lt;artifactId&gt;spring-jdbc&lt;/artifactId&gt; &lt;version&gt;5.2.12.RELEASE&lt;/version&gt; &lt;/dependency&gt; &lt;dependency&gt; &lt;groupId&gt;org.springframework&lt;/groupId&gt; &lt;artifactId&gt;spring-tx&lt;/artifactId&gt; &lt;version&gt;5.2.12.RELEASE&lt;/version&gt; &lt;/dependency&gt; 在配置类上加上 @EnableTransactionManagement 注解表示开启Spring事务功能 @ComponentScan(&#34;com.example&#34;) @EnableTransactionManagement public class ApplicationMain {} 配置数据源、配置JdbcTemplate、配置事务管理器 @Configuration public class JdbcConfig { @Bean(initMethod = &#34;init&#34;) public DruidDataSource dataSource() { DruidDataSource dataSource = new DruidDataSource(); dataSource.setUrl(&#34;jdbc:mysql://localhost/test?useUnicode=true&amp;characterEncoding=utf-8&#34;); dataSource.setUsername(&#34;root&#34;); dataSource.setPassword(&#34;rootroot&#34;); return dataSource; } @Bean public JdbcTemplate jdbcTemplate(DataSource dataSource) { return new JdbcTemplate(dataSource); } @Bean public TransactionManager transactionManager(DataSource dataSource) { return new DataSourceTransactionManager(dataSource); } } 创建测试表 blog、创建实体对象Blog create table blog ( id int auto_increment comment &#39;id&#39; primary key, title varchar(20) null comment &#39;标题&#39;, content varchar(100) null comment &#39;内容&#39; ) comment &#39;blog表&#39;; 创建实体对象 @Getter @Setter @ToString @Accessors(chain = true) public class Blog { private Integer id; private String title; private String content; } 创建 BlogService和一个 insert 方法插入一条记录，在方法上加上 @Transactional 注解，在执行插入数据成功后故意写个异常情况1/0，测试事务是否回滚。 @Service @AllArgsConstructor public class BlogService { private final JdbcTemplate jdbcTemplate; @Transactional(rollbackFor = Exception." />
@@ -66,21 +72,30 @@
   <link rel="preload stylesheet" as="style" href="https://telzhou618.github.io/main.min.css" />
 
   
+  
+  
+  
+  
+  <link rel="preload" as="image" href="https://telzhou618.github.io/theme.svg" />
 
   
-     
-  <link rel="preload" as="image" href="https://telzhou618.github.io/theme.png" />
+  
+  
+  
+  <link rel="preload" as="image" href="https://s.gravatar.com/avatar/9ff9514e4c37a5cb11be475190289857778d613942c4d6364c16e770a4cb66a0?s=80" />
+  
+  
 
   
-  
-  
-  
-
   
   <link rel="preload" as="image" href="https://telzhou618.github.io/github.svg" />
   
   
 
+  
+  
+
+  
   
   
   <link
@@ -100,8 +115,22 @@
   src="https://cdn.jsdelivr.net/npm/katex@0.16.7/dist/contrib/auto-render.min.js"
   integrity="sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05"
   crossorigin="anonymous"
-  onload="renderMathInElement(document.body);"
 ></script>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () =>
+    renderMathInElement(document.body, {
+      
+      
+      delimiters: [
+        { left: '$$', right: '$$', display: true },
+        { left: '$', right: '$', display: false },
+      ],
+      
+      throwOnError: false,
+    }),
+  );
+</script>
 
   
   
@@ -116,13 +145,16 @@
 
   
   
-
   
   
   
-  
-  
-  
+  <meta itemprop="name" content="Spring 事务源码解析">
+<meta itemprop="description" content="Spring 事务利用AOP原理实现,主要过程和AOP原理一样，可以分为三步，启用事务、生成代理对对象、执行。
+从如何使用事务开始 本实例使用Spring的 JdbcTemplate 作为操作数据库的工具，使用 druid 做为数据库连接池。
+首先导入相关的 jar 包 &lt;dependency&gt; &lt;groupId&gt;mysql&lt;/groupId&gt; &lt;artifactId&gt;mysql-connector-java&lt;/artifactId&gt; &lt;version&gt;8.0.20&lt;/version&gt; &lt;/dependency&gt; &lt;dependency&gt; &lt;groupId&gt;com.alibaba&lt;/groupId&gt; &lt;artifactId&gt;druid&lt;/artifactId&gt; &lt;version&gt;1.2.4&lt;/version&gt; &lt;/dependency&gt; &lt;dependency&gt; &lt;groupId&gt;org.springframework&lt;/groupId&gt; &lt;artifactId&gt;spring-jdbc&lt;/artifactId&gt; &lt;version&gt;5.2.12.RELEASE&lt;/version&gt; &lt;/dependency&gt; &lt;dependency&gt; &lt;groupId&gt;org.springframework&lt;/groupId&gt; &lt;artifactId&gt;spring-tx&lt;/artifactId&gt; &lt;version&gt;5.2.12.RELEASE&lt;/version&gt; &lt;/dependency&gt; 在配置类上加上 @EnableTransactionManagement 注解表示开启Spring事务功能 @ComponentScan(&#34;com.example&#34;) @EnableTransactionManagement public class ApplicationMain {} 配置数据源、配置JdbcTemplate、配置事务管理器 @Configuration public class JdbcConfig { @Bean(initMethod = &#34;init&#34;) public DruidDataSource dataSource() { DruidDataSource dataSource = new DruidDataSource(); dataSource.setUrl(&#34;jdbc:mysql://localhost/test?useUnicode=true&amp;characterEncoding=utf-8&#34;); dataSource.setUsername(&#34;root&#34;); dataSource.setPassword(&#34;rootroot&#34;); return dataSource; } @Bean public JdbcTemplate jdbcTemplate(DataSource dataSource) { return new JdbcTemplate(dataSource); } @Bean public TransactionManager transactionManager(DataSource dataSource) { return new DataSourceTransactionManager(dataSource); } } 创建测试表 blog、创建实体对象Blog create table blog ( id int auto_increment comment &#39;id&#39; primary key, title varchar(20) null comment &#39;标题&#39;, content varchar(100) null comment &#39;内容&#39; ) comment &#39;blog表&#39;; 创建实体对象 @Getter @Setter @ToString @Accessors(chain = true) public class Blog { private Integer id; private String title; private String content; } 创建 BlogService和一个 insert 方法插入一条记录，在方法上加上 @Transactional 注解，在执行插入数据成功后故意写个异常情况1/0，测试事务是否回滚。 @Service @AllArgsConstructor public class BlogService { private final JdbcTemplate jdbcTemplate; @Transactional(rollbackFor = Exception."><meta itemprop="datePublished" content="2022-06-28T11:44:07+08:00" />
+<meta itemprop="dateModified" content="2022-06-28T11:44:07+08:00" />
+<meta itemprop="wordCount" content="402">
+<meta itemprop="keywords" content="" />
   
   <meta property="og:title" content="Spring 事务源码解析" />
 <meta property="og:description" content="Spring 事务利用AOP原理实现,主要过程和AOP原理一样，可以分为三步，启用事务、生成代理对对象、执行。
@@ -130,24 +162,20 @@
 首先导入相关的 jar 包 &lt;dependency&gt; &lt;groupId&gt;mysql&lt;/groupId&gt; &lt;artifactId&gt;mysql-connector-java&lt;/artifactId&gt; &lt;version&gt;8.0.20&lt;/version&gt; &lt;/dependency&gt; &lt;dependency&gt; &lt;groupId&gt;com.alibaba&lt;/groupId&gt; &lt;artifactId&gt;druid&lt;/artifactId&gt; &lt;version&gt;1.2.4&lt;/version&gt; &lt;/dependency&gt; &lt;dependency&gt; &lt;groupId&gt;org.springframework&lt;/groupId&gt; &lt;artifactId&gt;spring-jdbc&lt;/artifactId&gt; &lt;version&gt;5.2.12.RELEASE&lt;/version&gt; &lt;/dependency&gt; &lt;dependency&gt; &lt;groupId&gt;org.springframework&lt;/groupId&gt; &lt;artifactId&gt;spring-tx&lt;/artifactId&gt; &lt;version&gt;5.2.12.RELEASE&lt;/version&gt; &lt;/dependency&gt; 在配置类上加上 @EnableTransactionManagement 注解表示开启Spring事务功能 @ComponentScan(&#34;com.example&#34;) @EnableTransactionManagement public class ApplicationMain {} 配置数据源、配置JdbcTemplate、配置事务管理器 @Configuration public class JdbcConfig { @Bean(initMethod = &#34;init&#34;) public DruidDataSource dataSource() { DruidDataSource dataSource = new DruidDataSource(); dataSource.setUrl(&#34;jdbc:mysql://localhost/test?useUnicode=true&amp;characterEncoding=utf-8&#34;); dataSource.setUsername(&#34;root&#34;); dataSource.setPassword(&#34;rootroot&#34;); return dataSource; } @Bean public JdbcTemplate jdbcTemplate(DataSource dataSource) { return new JdbcTemplate(dataSource); } @Bean public TransactionManager transactionManager(DataSource dataSource) { return new DataSourceTransactionManager(dataSource); } } 创建测试表 blog、创建实体对象Blog create table blog ( id int auto_increment comment &#39;id&#39; primary key, title varchar(20) null comment &#39;标题&#39;, content varchar(100) null comment &#39;内容&#39; ) comment &#39;blog表&#39;; 创建实体对象 @Getter @Setter @ToString @Accessors(chain = true) public class Blog { private Integer id; private String title; private String content; } 创建 BlogService和一个 insert 方法插入一条记录，在方法上加上 @Transactional 注解，在执行插入数据成功后故意写个异常情况1/0，测试事务是否回滚。 @Service @AllArgsConstructor public class BlogService { private final JdbcTemplate jdbcTemplate; @Transactional(rollbackFor = Exception." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://telzhou618.github.io/post/spring-transaction/" /><meta property="article:section" content="post" />
-<meta property="article:published_time" content="2022-06-06T11:44:07+08:00" />
-<meta property="article:modified_time" content="2022-06-06T11:44:07+08:00" />
+<meta property="article:published_time" content="2022-06-28T11:44:07+08:00" />
+<meta property="article:modified_time" content="2022-06-28T11:44:07+08:00" />
 
 
-  
-  <meta itemprop="name" content="Spring 事务源码解析">
-<meta itemprop="description" content="Spring 事务利用AOP原理实现,主要过程和AOP原理一样，可以分为三步，启用事务、生成代理对对象、执行。
-从如何使用事务开始 本实例使用Spring的 JdbcTemplate 作为操作数据库的工具，使用 druid 做为数据库连接池。
-首先导入相关的 jar 包 &lt;dependency&gt; &lt;groupId&gt;mysql&lt;/groupId&gt; &lt;artifactId&gt;mysql-connector-java&lt;/artifactId&gt; &lt;version&gt;8.0.20&lt;/version&gt; &lt;/dependency&gt; &lt;dependency&gt; &lt;groupId&gt;com.alibaba&lt;/groupId&gt; &lt;artifactId&gt;druid&lt;/artifactId&gt; &lt;version&gt;1.2.4&lt;/version&gt; &lt;/dependency&gt; &lt;dependency&gt; &lt;groupId&gt;org.springframework&lt;/groupId&gt; &lt;artifactId&gt;spring-jdbc&lt;/artifactId&gt; &lt;version&gt;5.2.12.RELEASE&lt;/version&gt; &lt;/dependency&gt; &lt;dependency&gt; &lt;groupId&gt;org.springframework&lt;/groupId&gt; &lt;artifactId&gt;spring-tx&lt;/artifactId&gt; &lt;version&gt;5.2.12.RELEASE&lt;/version&gt; &lt;/dependency&gt; 在配置类上加上 @EnableTransactionManagement 注解表示开启Spring事务功能 @ComponentScan(&#34;com.example&#34;) @EnableTransactionManagement public class ApplicationMain {} 配置数据源、配置JdbcTemplate、配置事务管理器 @Configuration public class JdbcConfig { @Bean(initMethod = &#34;init&#34;) public DruidDataSource dataSource() { DruidDataSource dataSource = new DruidDataSource(); dataSource.setUrl(&#34;jdbc:mysql://localhost/test?useUnicode=true&amp;characterEncoding=utf-8&#34;); dataSource.setUsername(&#34;root&#34;); dataSource.setPassword(&#34;rootroot&#34;); return dataSource; } @Bean public JdbcTemplate jdbcTemplate(DataSource dataSource) { return new JdbcTemplate(dataSource); } @Bean public TransactionManager transactionManager(DataSource dataSource) { return new DataSourceTransactionManager(dataSource); } } 创建测试表 blog、创建实体对象Blog create table blog ( id int auto_increment comment &#39;id&#39; primary key, title varchar(20) null comment &#39;标题&#39;, content varchar(100) null comment &#39;内容&#39; ) comment &#39;blog表&#39;; 创建实体对象 @Getter @Setter @ToString @Accessors(chain = true) public class Blog { private Integer id; private String title; private String content; } 创建 BlogService和一个 insert 方法插入一条记录，在方法上加上 @Transactional 注解，在执行插入数据成功后故意写个异常情况1/0，测试事务是否回滚。 @Service @AllArgsConstructor public class BlogService { private final JdbcTemplate jdbcTemplate; @Transactional(rollbackFor = Exception."><meta itemprop="datePublished" content="2022-06-06T11:44:07+08:00" />
-<meta itemprop="dateModified" content="2022-06-06T11:44:07+08:00" />
-<meta itemprop="wordCount" content="402">
-<meta itemprop="keywords" content="" />
   
   <meta name="twitter:card" content="summary"/><meta name="twitter:title" content="Spring 事务源码解析"/>
 <meta name="twitter:description" content="Spring 事务利用AOP原理实现,主要过程和AOP原理一样，可以分为三步，启用事务、生成代理对对象、执行。
 从如何使用事务开始 本实例使用Spring的 JdbcTemplate 作为操作数据库的工具，使用 druid 做为数据库连接池。
 首先导入相关的 jar 包 &lt;dependency&gt; &lt;groupId&gt;mysql&lt;/groupId&gt; &lt;artifactId&gt;mysql-connector-java&lt;/artifactId&gt; &lt;version&gt;8.0.20&lt;/version&gt; &lt;/dependency&gt; &lt;dependency&gt; &lt;groupId&gt;com.alibaba&lt;/groupId&gt; &lt;artifactId&gt;druid&lt;/artifactId&gt; &lt;version&gt;1.2.4&lt;/version&gt; &lt;/dependency&gt; &lt;dependency&gt; &lt;groupId&gt;org.springframework&lt;/groupId&gt; &lt;artifactId&gt;spring-jdbc&lt;/artifactId&gt; &lt;version&gt;5.2.12.RELEASE&lt;/version&gt; &lt;/dependency&gt; &lt;dependency&gt; &lt;groupId&gt;org.springframework&lt;/groupId&gt; &lt;artifactId&gt;spring-tx&lt;/artifactId&gt; &lt;version&gt;5.2.12.RELEASE&lt;/version&gt; &lt;/dependency&gt; 在配置类上加上 @EnableTransactionManagement 注解表示开启Spring事务功能 @ComponentScan(&#34;com.example&#34;) @EnableTransactionManagement public class ApplicationMain {} 配置数据源、配置JdbcTemplate、配置事务管理器 @Configuration public class JdbcConfig { @Bean(initMethod = &#34;init&#34;) public DruidDataSource dataSource() { DruidDataSource dataSource = new DruidDataSource(); dataSource.setUrl(&#34;jdbc:mysql://localhost/test?useUnicode=true&amp;characterEncoding=utf-8&#34;); dataSource.setUsername(&#34;root&#34;); dataSource.setPassword(&#34;rootroot&#34;); return dataSource; } @Bean public JdbcTemplate jdbcTemplate(DataSource dataSource) { return new JdbcTemplate(dataSource); } @Bean public TransactionManager transactionManager(DataSource dataSource) { return new DataSourceTransactionManager(dataSource); } } 创建测试表 blog、创建实体对象Blog create table blog ( id int auto_increment comment &#39;id&#39; primary key, title varchar(20) null comment &#39;标题&#39;, content varchar(100) null comment &#39;内容&#39; ) comment &#39;blog表&#39;; 创建实体对象 @Getter @Setter @ToString @Accessors(chain = true) public class Blog { private Integer id; private String title; private String content; } 创建 BlogService和一个 insert 方法插入一条记录，在方法上加上 @Transactional 注解，在执行插入数据成功后故意写个异常情况1/0，测试事务是否回滚。 @Service @AllArgsConstructor public class BlogService { private final JdbcTemplate jdbcTemplate; @Transactional(rollbackFor = Exception."/>
 
+  
+  
+  
+  <link rel="canonical" href="https://telzhou618.github.io/post/spring-transaction/" />
   
   
 </head>
@@ -174,6 +202,7 @@
   ></div>
 
   
+
   <script>
     
     const htmlClass = document.documentElement.classList;
@@ -222,6 +251,22 @@
   >
     
     
+    <nav class="lg:ml-12 lg:flex lg:flex-row lg:items-center lg:space-x-6">
+      
+      <a
+        class="block text-center text-2xl leading-[5rem] lg:text-base lg:font-normal"
+        href="/post/"
+        >Posts</a
+      >
+      
+      <a
+        class="block text-center text-2xl leading-[5rem] lg:text-base lg:font-normal"
+        href="/about/"
+        >About</a
+      >
+      
+    </nav>
+    
 
     
     <nav
@@ -256,7 +301,7 @@
     
     <div class="text-sm antialiased opacity-60">
       
-      <time>Jun 6, 2022</time>
+      <time>Jun 28, 2022</time>
       
       
       
@@ -486,12 +531,13 @@ AbstractAdvisorAutoProxyCreator。</p>
   
   
   
+  
   <nav class="mt-24 flex rounded-lg bg-black/[3%] text-lg dark:bg-white/[8%]">
     
     <a
       class="flex w-1/2 items-center rounded-l-md p-6 pr-3 font-semibold no-underline hover:bg-black/[2%] dark:hover:bg-white/[3%]"
-      href="https://telzhou618.github.io/post/vscode/"
-      ><span class="mr-1.5">←</span><span>Vscode 常用快捷键</span></a
+      href="https://telzhou618.github.io/post/distributed-lock/"
+      ><span class="mr-1.5">←</span><span>Redis 或 Zookeeper 实现分布式锁</span></a
     >
     
     
@@ -502,6 +548,7 @@ AbstractAdvisorAutoProxyCreator。</p>
     >
     
   </nav>
+  
   
 
   
@@ -538,6 +585,11 @@ AbstractAdvisorAutoProxyCreator。</p>
     })();
   </script>
   
+
+  
+
+
+  
 </article>
 
 
@@ -547,7 +599,7 @@ AbstractAdvisorAutoProxyCreator。</p>
   class="opaco mx-auto flex h-[4.5rem] max-w-3xl items-center px-8 text-[0.9em] opacity-60"
 >
   <div class="mr-auto">
-    &copy; 2023
+    &copy; 2024
     <a class="link" href="https://telzhou618.github.io">Home</a>
   </div>
   <a class="link mx-6" href="https://gohugo.io/" rel="noopener" target="_blank"

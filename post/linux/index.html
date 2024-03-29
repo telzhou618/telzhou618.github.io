@@ -1,4 +1,9 @@
-<!DOCTYPE html>
+<!doctype html>
+
+
+
+
+
 
 
 
@@ -51,6 +56,7 @@
   
   
   
+  
   <meta name="description" content="less 从文件开头查看少量内容命令，命令格式：less [参数] 文件 。
 参数：
 - /字符串：向下搜索 - ?字符串：向上搜索 - n：重复前一个搜索(向下搜索) - N：反向重复前一个搜索(向上搜索) - 翻一页 - f：前进一页 - b：回退一页 - 翻半页： - d：前进半页 - u：后退半页 - 翻一行： - e/j：前进一行 - y/k：后退一行 实例1：查看日志, -N 显示行号
@@ -74,21 +80,30 @@ chown -R admin /var/log/ chmod 设置用户对文件的读、写、执行权限�
   <link rel="preload stylesheet" as="style" href="https://telzhou618.github.io/main.min.css" />
 
   
+  
+  
+  
+  
+  <link rel="preload" as="image" href="https://telzhou618.github.io/theme.svg" />
 
   
-     
-  <link rel="preload" as="image" href="https://telzhou618.github.io/theme.png" />
+  
+  
+  
+  <link rel="preload" as="image" href="https://s.gravatar.com/avatar/9ff9514e4c37a5cb11be475190289857778d613942c4d6364c16e770a4cb66a0?s=80" />
+  
+  
 
   
-  
-  
-  
-
   
   <link rel="preload" as="image" href="https://telzhou618.github.io/github.svg" />
   
   
 
+  
+  
+
+  
   
   
   <link
@@ -108,8 +123,22 @@ chown -R admin /var/log/ chmod 设置用户对文件的读、写、执行权限�
   src="https://cdn.jsdelivr.net/npm/katex@0.16.7/dist/contrib/auto-render.min.js"
   integrity="sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05"
   crossorigin="anonymous"
-  onload="renderMathInElement(document.body);"
 ></script>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () =>
+    renderMathInElement(document.body, {
+      
+      
+      delimiters: [
+        { left: '$$', right: '$$', display: true },
+        { left: '$', right: '$', display: false },
+      ],
+      
+      throwOnError: false,
+    }),
+  );
+</script>
 
   
   
@@ -120,17 +149,28 @@ chown -R admin /var/log/ chmod 设置用户对文件的读、写、执行权限�
   <link rel="apple-touch-icon" href="https://telzhou618.github.io/apple-touch-icon.png" />
 
   
-  <meta name="generator" content="Hugo 0.114.1">
+  <meta name="generator" content="Hugo 0.121.1">
 
   
   
-
   
   
   
-  
-  
-  
+  <meta itemprop="name" content="Linux 常用命令">
+<meta itemprop="description" content="less 从文件开头查看少量内容命令，命令格式：less [参数] 文件 。
+参数：
+- /字符串：向下搜索 - ?字符串：向上搜索 - n：重复前一个搜索(向下搜索) - N：反向重复前一个搜索(向上搜索) - 翻一页 - f：前进一页 - b：回退一页 - 翻半页： - d：前进半页 - u：后退半页 - 翻一行： - e/j：前进一行 - y/k：后退一行 实例1：查看日志, -N 显示行号
+less -N /var/a.log 实例2：跳转到最后一行，并滚动打印。
+shift &#43; f 操作1：在滚动打印的基础上停止滚动
+control &#43; c 操作2：向上搜索关键词
+?kewwaord &#43; enter 按n继续向上搜索相同字符串 按N继续向下搜索相同字符串 操作3：向下搜索关键词
+/kewwaord &#43; enter 按N继续向下搜索相同字符串 按n继续向上搜索相同字符串 chown 设置文件所有者对文件的权限。
+实例1：给admin用户授于/var/log.a.log文件权限
+chown admin /var/log.a.log 实例2：递归给某个用户授于整个目录权限
+chown -R admin /var/log/ chmod 设置用户对文件的读、写、执行权限。 命令格式："><meta itemprop="datePublished" content="2023-06-28T14:43:58+08:00" />
+<meta itemprop="dateModified" content="2023-06-28T14:43:58+08:00" />
+<meta itemprop="wordCount" content="331">
+<meta itemprop="keywords" content="" />
   
   <meta property="og:title" content="Linux 常用命令" />
 <meta property="og:description" content="less 从文件开头查看少量内容命令，命令格式：less [参数] 文件 。
@@ -149,25 +189,9 @@ chown -R admin /var/log/ chmod 设置用户对文件的读、写、执行权限�
 <meta property="article:published_time" content="2023-06-28T14:43:58+08:00" />
 <meta property="article:modified_time" content="2023-06-28T14:43:58+08:00" />
 
+
   
-  <meta itemprop="name" content="Linux 常用命令">
-<meta itemprop="description" content="less 从文件开头查看少量内容命令，命令格式：less [参数] 文件 。
-参数：
-- /字符串：向下搜索 - ?字符串：向上搜索 - n：重复前一个搜索(向下搜索) - N：反向重复前一个搜索(向上搜索) - 翻一页 - f：前进一页 - b：回退一页 - 翻半页： - d：前进半页 - u：后退半页 - 翻一行： - e/j：前进一行 - y/k：后退一行 实例1：查看日志, -N 显示行号
-less -N /var/a.log 实例2：跳转到最后一行，并滚动打印。
-shift &#43; f 操作1：在滚动打印的基础上停止滚动
-control &#43; c 操作2：向上搜索关键词
-?kewwaord &#43; enter 按n继续向上搜索相同字符串 按N继续向下搜索相同字符串 操作3：向下搜索关键词
-/kewwaord &#43; enter 按N继续向下搜索相同字符串 按n继续向上搜索相同字符串 chown 设置文件所有者对文件的权限。
-实例1：给admin用户授于/var/log.a.log文件权限
-chown admin /var/log.a.log 实例2：递归给某个用户授于整个目录权限
-chown -R admin /var/log/ chmod 设置用户对文件的读、写、执行权限。 命令格式："><meta itemprop="datePublished" content="2023-06-28T14:43:58+08:00" />
-<meta itemprop="dateModified" content="2023-06-28T14:43:58+08:00" />
-<meta itemprop="wordCount" content="331">
-<meta itemprop="keywords" content="" />
-  
-  <meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="Linux 常用命令"/>
+  <meta name="twitter:card" content="summary"/><meta name="twitter:title" content="Linux 常用命令"/>
 <meta name="twitter:description" content="less 从文件开头查看少量内容命令，命令格式：less [参数] 文件 。
 参数：
 - /字符串：向下搜索 - ?字符串：向上搜索 - n：重复前一个搜索(向下搜索) - N：反向重复前一个搜索(向上搜索) - 翻一页 - f：前进一页 - b：回退一页 - 翻半页： - d：前进半页 - u：后退半页 - 翻一行： - e/j：前进一行 - y/k：后退一行 实例1：查看日志, -N 显示行号
@@ -180,6 +204,10 @@ control &#43; c 操作2：向上搜索关键词
 chown admin /var/log.a.log 实例2：递归给某个用户授于整个目录权限
 chown -R admin /var/log/ chmod 设置用户对文件的读、写、执行权限。 命令格式："/>
 
+  
+  
+  
+  <link rel="canonical" href="https://telzhou618.github.io/post/linux/" />
   
   
 </head>
@@ -206,6 +234,7 @@ chown -R admin /var/log/ chmod 设置用户对文件的读、写、执行权限�
   ></div>
 
   
+
   <script>
     
     const htmlClass = document.documentElement.classList;
@@ -253,6 +282,22 @@ chown -R admin /var/log/ chmod 设置用户对文件的读、写、执行权限�
     class="nav-wrapper fixed inset-x-0 top-full z-40 flex h-full select-none flex-col justify-center pb-16 duration-200 dark:bg-black lg:static lg:h-auto lg:flex-row lg:!bg-transparent lg:pb-0 lg:transition-none"
   >
     
+    
+    <nav class="lg:ml-12 lg:flex lg:flex-row lg:items-center lg:space-x-6">
+      
+      <a
+        class="block text-center text-2xl leading-[5rem] lg:text-base lg:font-normal"
+        href="/post/"
+        >Posts</a
+      >
+      
+      <a
+        class="block text-center text-2xl leading-[5rem] lg:text-base lg:font-normal"
+        href="/about/"
+        >About</a
+      >
+      
+    </nav>
     
 
     
@@ -454,6 +499,7 @@ chown -R admin /var/log/ chmod 设置用户对文件的读、写、执行权限�
   
   
   
+  
   <nav class="mt-24 flex rounded-lg bg-black/[3%] text-lg dark:bg-white/[8%]">
     
     <a
@@ -470,6 +516,7 @@ chown -R admin /var/log/ chmod 设置用户对文件的读、写、执行权限�
     >
     
   </nav>
+  
   
 
   
@@ -506,6 +553,11 @@ chown -R admin /var/log/ chmod 设置用户对文件的读、写、执行权限�
     })();
   </script>
   
+
+  
+
+
+  
 </article>
 
 
@@ -515,7 +567,7 @@ chown -R admin /var/log/ chmod 设置用户对文件的读、写、执行权限�
   class="opaco mx-auto flex h-[4.5rem] max-w-3xl items-center px-8 text-[0.9em] opacity-60"
 >
   <div class="mr-auto">
-    &copy; 2023
+    &copy; 2024
     <a class="link" href="https://telzhou618.github.io">Home</a>
   </div>
   <a class="link mx-6" href="https://gohugo.io/" rel="noopener" target="_blank"

@@ -1,4 +1,9 @@
-<!DOCTYPE html>
+<!doctype html>
+
+
+
+
+
 
 
 
@@ -51,6 +56,7 @@
   
   
   
+  
   <meta name="description" content="调试按钮说明 Stream 调试 实例代码：
 // 1.Stream 调试 List&lt;Integer&gt; list1 = Lists.newArrayList(1, 5, 3, 2, 4); List&lt;Integer&gt; list2 = list1.stream() .filter(o -&gt; o &gt; 2) .sorted() .collect(Collectors.toList()); System.out.println(list2); 在 stram() 处设置断点，debug 运行。
 可以看到Debug视图中 Trace Current Steam Chain 图标会点亮。
@@ -70,21 +76,30 @@ Optional 调试 实例代码：
   <link rel="preload stylesheet" as="style" href="https://telzhou618.github.io/main.min.css" />
 
   
+  
+  
+  
+  
+  <link rel="preload" as="image" href="https://telzhou618.github.io/theme.svg" />
 
   
-     
-  <link rel="preload" as="image" href="https://telzhou618.github.io/theme.png" />
+  
+  
+  
+  <link rel="preload" as="image" href="https://s.gravatar.com/avatar/9ff9514e4c37a5cb11be475190289857778d613942c4d6364c16e770a4cb66a0?s=80" />
+  
+  
 
   
-  
-  
-  
-
   
   <link rel="preload" as="image" href="https://telzhou618.github.io/github.svg" />
   
   
 
+  
+  
+
+  
   
   
   <link
@@ -104,8 +119,22 @@ Optional 调试 实例代码：
   src="https://cdn.jsdelivr.net/npm/katex@0.16.7/dist/contrib/auto-render.min.js"
   integrity="sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05"
   crossorigin="anonymous"
-  onload="renderMathInElement(document.body);"
 ></script>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () =>
+    renderMathInElement(document.body, {
+      
+      
+      delimiters: [
+        { left: '$$', right: '$$', display: true },
+        { left: '$', right: '$', display: false },
+      ],
+      
+      throwOnError: false,
+    }),
+  );
+</script>
 
   
   
@@ -120,13 +149,20 @@ Optional 调试 实例代码：
 
   
   
-
   
   
   
-  
-  
-  
+  <meta itemprop="name" content="JAVA8 debug 技巧">
+<meta itemprop="description" content="调试按钮说明 Stream 调试 实例代码：
+// 1.Stream 调试 List&lt;Integer&gt; list1 = Lists.newArrayList(1, 5, 3, 2, 4); List&lt;Integer&gt; list2 = list1.stream() .filter(o -&gt; o &gt; 2) .sorted() .collect(Collectors.toList()); System.out.println(list2); 在 stram() 处设置断点，debug 运行。
+可以看到Debug视图中 Trace Current Steam Chain 图标会点亮。
+点击该图标弹出 Stream Trace 视图。可以看到 filter、sorted、collect 每一个方法执行之后的结果。
+ok，成功。
+Optional 调试 实例代码：
+// 2.Optional 调试 User user = new User() .setId(1) .setName(&#34;tom&#34;) .setArea(new Area().setProvince(&#34;beijing&#34;)); String province = Optional.ofNullable(user) .map(User::getArea) .map(Area::getProvince) .orElse(&#34;未知&#34;); System.out.println(province); 在 Optaionl 处加断点，debug 运行，可以看到 Evaluate Express 图标。"><meta itemprop="datePublished" content="2022-06-28T11:44:07+08:00" />
+<meta itemprop="dateModified" content="2022-06-28T11:44:07+08:00" />
+<meta itemprop="wordCount" content="210">
+<meta itemprop="keywords" content="" />
   
   <meta property="og:title" content="JAVA8 debug 技巧" />
 <meta property="og:description" content="调试按钮说明 Stream 调试 实例代码：
@@ -138,22 +174,10 @@ Optional 调试 实例代码：
 // 2.Optional 调试 User user = new User() .setId(1) .setName(&#34;tom&#34;) .setArea(new Area().setProvince(&#34;beijing&#34;)); String province = Optional.ofNullable(user) .map(User::getArea) .map(Area::getProvince) .orElse(&#34;未知&#34;); System.out.println(province); 在 Optaionl 处加断点，debug 运行，可以看到 Evaluate Express 图标。" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://telzhou618.github.io/post/java8-debug/" /><meta property="article:section" content="post" />
-<meta property="article:published_time" content="2022-06-21T11:44:07+08:00" />
-<meta property="article:modified_time" content="2022-06-21T11:44:07+08:00" />
+<meta property="article:published_time" content="2022-06-28T11:44:07+08:00" />
+<meta property="article:modified_time" content="2022-06-28T11:44:07+08:00" />
 
 
-  
-  <meta itemprop="name" content="JAVA8 debug 技巧">
-<meta itemprop="description" content="调试按钮说明 Stream 调试 实例代码：
-// 1.Stream 调试 List&lt;Integer&gt; list1 = Lists.newArrayList(1, 5, 3, 2, 4); List&lt;Integer&gt; list2 = list1.stream() .filter(o -&gt; o &gt; 2) .sorted() .collect(Collectors.toList()); System.out.println(list2); 在 stram() 处设置断点，debug 运行。
-可以看到Debug视图中 Trace Current Steam Chain 图标会点亮。
-点击该图标弹出 Stream Trace 视图。可以看到 filter、sorted、collect 每一个方法执行之后的结果。
-ok，成功。
-Optional 调试 实例代码：
-// 2.Optional 调试 User user = new User() .setId(1) .setName(&#34;tom&#34;) .setArea(new Area().setProvince(&#34;beijing&#34;)); String province = Optional.ofNullable(user) .map(User::getArea) .map(Area::getProvince) .orElse(&#34;未知&#34;); System.out.println(province); 在 Optaionl 处加断点，debug 运行，可以看到 Evaluate Express 图标。"><meta itemprop="datePublished" content="2022-06-21T11:44:07+08:00" />
-<meta itemprop="dateModified" content="2022-06-21T11:44:07+08:00" />
-<meta itemprop="wordCount" content="210">
-<meta itemprop="keywords" content="" />
   
   <meta name="twitter:card" content="summary"/><meta name="twitter:title" content="JAVA8 debug 技巧"/>
 <meta name="twitter:description" content="调试按钮说明 Stream 调试 实例代码：
@@ -164,6 +188,10 @@ ok，成功。
 Optional 调试 实例代码：
 // 2.Optional 调试 User user = new User() .setId(1) .setName(&#34;tom&#34;) .setArea(new Area().setProvince(&#34;beijing&#34;)); String province = Optional.ofNullable(user) .map(User::getArea) .map(Area::getProvince) .orElse(&#34;未知&#34;); System.out.println(province); 在 Optaionl 处加断点，debug 运行，可以看到 Evaluate Express 图标。"/>
 
+  
+  
+  
+  <link rel="canonical" href="https://telzhou618.github.io/post/java8-debug/" />
   
   
 </head>
@@ -190,6 +218,7 @@ Optional 调试 实例代码：
   ></div>
 
   
+
   <script>
     
     const htmlClass = document.documentElement.classList;
@@ -238,6 +267,22 @@ Optional 调试 实例代码：
   >
     
     
+    <nav class="lg:ml-12 lg:flex lg:flex-row lg:items-center lg:space-x-6">
+      
+      <a
+        class="block text-center text-2xl leading-[5rem] lg:text-base lg:font-normal"
+        href="/post/"
+        >Posts</a
+      >
+      
+      <a
+        class="block text-center text-2xl leading-[5rem] lg:text-base lg:font-normal"
+        href="/about/"
+        >About</a
+      >
+      
+    </nav>
+    
 
     
     <nav
@@ -272,7 +317,7 @@ Optional 调试 实例代码：
     
     <div class="text-sm antialiased opacity-60">
       
-      <time>Jun 21, 2022</time>
+      <time>Jun 28, 2022</time>
       
       
       
@@ -389,22 +434,24 @@ Optional 调试 实例代码：
   
   
   
+  
   <nav class="mt-24 flex rounded-lg bg-black/[3%] text-lg dark:bg-white/[8%]">
     
     <a
       class="flex w-1/2 items-center rounded-l-md p-6 pr-3 font-semibold no-underline hover:bg-black/[2%] dark:hover:bg-white/[3%]"
-      href="https://telzhou618.github.io/post/kafka/"
-      ><span class="mr-1.5">←</span><span>一文搞懂 kafka</span></a
+      href="https://telzhou618.github.io/post/commons-pool2/"
+      ><span class="mr-1.5">←</span><span>Commons-pool2 应用与实战</span></a
     >
     
     
     <a
       class="ml-auto flex w-1/2 items-center justify-end rounded-r-md p-6 pl-3 font-semibold no-underline hover:bg-black/[2%] dark:hover:bg-white/[3%]"
-      href="https://telzhou618.github.io/post/vscode/"
-      ><span>Vscode 常用快捷键</span><span class="ml-1.5">→</span></a
+      href="https://telzhou618.github.io/post/jvm/"
+      ><span>JVM 常用参数</span><span class="ml-1.5">→</span></a
     >
     
   </nav>
+  
   
 
   
@@ -441,6 +488,11 @@ Optional 调试 实例代码：
     })();
   </script>
   
+
+  
+
+
+  
 </article>
 
 
@@ -450,7 +502,7 @@ Optional 调试 实例代码：
   class="opaco mx-auto flex h-[4.5rem] max-w-3xl items-center px-8 text-[0.9em] opacity-60"
 >
   <div class="mr-auto">
-    &copy; 2023
+    &copy; 2024
     <a class="link" href="https://telzhou618.github.io">Home</a>
   </div>
   <a class="link mx-6" href="https://gohugo.io/" rel="noopener" target="_blank"

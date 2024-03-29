@@ -1,4 +1,9 @@
-<!DOCTYPE html>
+<!doctype html>
+
+
+
+
+
 
 
 
@@ -51,6 +56,7 @@
   
   
   
+  
   <meta name="description" content="索引是帮助MySQL高效获取数据的排好序的数据结构。
 几个MySQL命令 mysql.server start // 启动MySQL mysql.server stop // 停止MYSQL ./mysqld_safe --data=../data // 从data备份中恢复数据 ./mysql_secure_installation // 修改管理员密码 索引的优缺点 优点
 索引大大减少了服务器需要扫描的数据量。 索引可以帮助服务器避免排序和临时表。 索引可以将随机IO变为顺序IO。 缺点
@@ -68,21 +74,30 @@ explain select * from employees where name = &#39;Lucy&#39;; 下面介绍下 Exp
   <link rel="preload stylesheet" as="style" href="https://telzhou618.github.io/main.min.css" />
 
   
+  
+  
+  
+  
+  <link rel="preload" as="image" href="https://telzhou618.github.io/theme.svg" />
 
   
-     
-  <link rel="preload" as="image" href="https://telzhou618.github.io/theme.png" />
+  
+  
+  
+  <link rel="preload" as="image" href="https://s.gravatar.com/avatar/9ff9514e4c37a5cb11be475190289857778d613942c4d6364c16e770a4cb66a0?s=80" />
+  
+  
 
   
-  
-  
-  
-
   
   <link rel="preload" as="image" href="https://telzhou618.github.io/github.svg" />
   
   
 
+  
+  
+
+  
   
   
   <link
@@ -102,8 +117,22 @@ explain select * from employees where name = &#39;Lucy&#39;; 下面介绍下 Exp
   src="https://cdn.jsdelivr.net/npm/katex@0.16.7/dist/contrib/auto-render.min.js"
   integrity="sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05"
   crossorigin="anonymous"
-  onload="renderMathInElement(document.body);"
 ></script>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () =>
+    renderMathInElement(document.body, {
+      
+      
+      delimiters: [
+        { left: '$$', right: '$$', display: true },
+        { left: '$', right: '$', display: false },
+      ],
+      
+      throwOnError: false,
+    }),
+  );
+</script>
 
   
   
@@ -118,13 +147,18 @@ explain select * from employees where name = &#39;Lucy&#39;; 下面介绍下 Exp
 
   
   
-
   
   
   
-  
-  
-  
+  <meta itemprop="name" content="MySQL 优化及索引设计规范">
+<meta itemprop="description" content="索引是帮助MySQL高效获取数据的排好序的数据结构。
+几个MySQL命令 mysql.server start // 启动MySQL mysql.server stop // 停止MYSQL ./mysqld_safe --data=../data // 从data备份中恢复数据 ./mysql_secure_installation // 修改管理员密码 索引的优缺点 优点
+索引大大减少了服务器需要扫描的数据量。 索引可以帮助服务器避免排序和临时表。 索引可以将随机IO变为顺序IO。 缺点
+创建索引和维护索引要耗费时间 ，这种时间随着数据量的增加而增加。 索引需要占物理空间 。 索引的分类 主键索引(聚簇索引、聚集索引)、二级索引（非聚集索引）。 普通索引、唯一索引、全文索引。 独立索引、复合索引、前缀索引。 B&#43;Tree 索引、Hash索引。 索引数据结构 常见的索引数据结构有Hash表、二叉树、平衡二叉树、红黑树、B-Tree、B&#43;Tree。 Hash 索引：Hash 表只能做等值匹配，效率很高。但是不支持范围查找和排序，因为取每个数据要做hash运算，只有取出来才能知道他是什么。 二叉树：二叉树极端情况下树会变成一个链表，也不适合做索引。 平衡二叉树：平衡二叉树无法支持很大的数据，数据量大时，树的高度依然很高，效率不高。 红黑树：红黑树通过限制节点的颜色控制数据变化时树的旋转次数，插入、删除数据时性能有一定提升，但树高依然无法控制，无法支持大数据量。 B-tree：非叶子节点存储真实数据，占用空间大，可存储的索引会减少。 B&#43;tree：所有数据存在叶子节点，非叶子节点只存索引，可容纳更多的索引数据。 SQL性能分析工具Explain 工具详解 在一条查询语句前加 explain 可以获得SQL语句的执行计划，可看到使用了什么索引，大致扫描了多少行等信息，从而分析出SQL语句的瓶颈在哪里。 explain select * from employees where name = &lsquo;Lucy&rsquo;; Explain 工具详解 在一条查询语句前加 explain 可以获得SQL语句的执行计划，可看到使用了什么索引，大致扫描了多少行等信息，从而分析出SQL语句的瓶颈在哪里。
+explain select * from employees where name = &#39;Lucy&#39;; 下面介绍下 Explain 中的列。"><meta itemprop="datePublished" content="2022-06-28T11:44:07+08:00" />
+<meta itemprop="dateModified" content="2022-06-28T11:44:07+08:00" />
+<meta itemprop="wordCount" content="1087">
+<meta itemprop="keywords" content="" />
   
   <meta property="og:title" content="MySQL 优化及索引设计规范" />
 <meta property="og:description" content="索引是帮助MySQL高效获取数据的排好序的数据结构。
@@ -134,20 +168,10 @@ explain select * from employees where name = &#39;Lucy&#39;; 下面介绍下 Exp
 explain select * from employees where name = &#39;Lucy&#39;; 下面介绍下 Explain 中的列。" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://telzhou618.github.io/post/mysql-review/" /><meta property="article:section" content="post" />
-<meta property="article:published_time" content="2023-08-28T11:44:07+08:00" />
-<meta property="article:modified_time" content="2023-08-28T11:44:07+08:00" />
+<meta property="article:published_time" content="2022-06-28T11:44:07+08:00" />
+<meta property="article:modified_time" content="2022-06-28T11:44:07+08:00" />
 
 
-  
-  <meta itemprop="name" content="MySQL 优化及索引设计规范">
-<meta itemprop="description" content="索引是帮助MySQL高效获取数据的排好序的数据结构。
-几个MySQL命令 mysql.server start // 启动MySQL mysql.server stop // 停止MYSQL ./mysqld_safe --data=../data // 从data备份中恢复数据 ./mysql_secure_installation // 修改管理员密码 索引的优缺点 优点
-索引大大减少了服务器需要扫描的数据量。 索引可以帮助服务器避免排序和临时表。 索引可以将随机IO变为顺序IO。 缺点
-创建索引和维护索引要耗费时间 ，这种时间随着数据量的增加而增加。 索引需要占物理空间 。 索引的分类 主键索引(聚簇索引、聚集索引)、二级索引（非聚集索引）。 普通索引、唯一索引、全文索引。 独立索引、复合索引、前缀索引。 B&#43;Tree 索引、Hash索引。 索引数据结构 常见的索引数据结构有Hash表、二叉树、平衡二叉树、红黑树、B-Tree、B&#43;Tree。 Hash 索引：Hash 表只能做等值匹配，效率很高。但是不支持范围查找和排序，因为取每个数据要做hash运算，只有取出来才能知道他是什么。 二叉树：二叉树极端情况下树会变成一个链表，也不适合做索引。 平衡二叉树：平衡二叉树无法支持很大的数据，数据量大时，树的高度依然很高，效率不高。 红黑树：红黑树通过限制节点的颜色控制数据变化时树的旋转次数，插入、删除数据时性能有一定提升，但树高依然无法控制，无法支持大数据量。 B-tree：非叶子节点存储真实数据，占用空间大，可存储的索引会减少。 B&#43;tree：所有数据存在叶子节点，非叶子节点只存索引，可容纳更多的索引数据。 SQL性能分析工具Explain 工具详解 在一条查询语句前加 explain 可以获得SQL语句的执行计划，可看到使用了什么索引，大致扫描了多少行等信息，从而分析出SQL语句的瓶颈在哪里。 explain select * from employees where name = &lsquo;Lucy&rsquo;; Explain 工具详解 在一条查询语句前加 explain 可以获得SQL语句的执行计划，可看到使用了什么索引，大致扫描了多少行等信息，从而分析出SQL语句的瓶颈在哪里。
-explain select * from employees where name = &#39;Lucy&#39;; 下面介绍下 Explain 中的列。"><meta itemprop="datePublished" content="2023-08-28T11:44:07+08:00" />
-<meta itemprop="dateModified" content="2023-08-28T11:44:07+08:00" />
-<meta itemprop="wordCount" content="1087">
-<meta itemprop="keywords" content="" />
   
   <meta name="twitter:card" content="summary"/><meta name="twitter:title" content="MySQL 优化及索引设计规范"/>
 <meta name="twitter:description" content="索引是帮助MySQL高效获取数据的排好序的数据结构。
@@ -156,6 +180,10 @@ explain select * from employees where name = &#39;Lucy&#39;; 下面介绍下 Exp
 创建索引和维护索引要耗费时间 ，这种时间随着数据量的增加而增加。 索引需要占物理空间 。 索引的分类 主键索引(聚簇索引、聚集索引)、二级索引（非聚集索引）。 普通索引、唯一索引、全文索引。 独立索引、复合索引、前缀索引。 B&#43;Tree 索引、Hash索引。 索引数据结构 常见的索引数据结构有Hash表、二叉树、平衡二叉树、红黑树、B-Tree、B&#43;Tree。 Hash 索引：Hash 表只能做等值匹配，效率很高。但是不支持范围查找和排序，因为取每个数据要做hash运算，只有取出来才能知道他是什么。 二叉树：二叉树极端情况下树会变成一个链表，也不适合做索引。 平衡二叉树：平衡二叉树无法支持很大的数据，数据量大时，树的高度依然很高，效率不高。 红黑树：红黑树通过限制节点的颜色控制数据变化时树的旋转次数，插入、删除数据时性能有一定提升，但树高依然无法控制，无法支持大数据量。 B-tree：非叶子节点存储真实数据，占用空间大，可存储的索引会减少。 B&#43;tree：所有数据存在叶子节点，非叶子节点只存索引，可容纳更多的索引数据。 SQL性能分析工具Explain 工具详解 在一条查询语句前加 explain 可以获得SQL语句的执行计划，可看到使用了什么索引，大致扫描了多少行等信息，从而分析出SQL语句的瓶颈在哪里。 explain select * from employees where name = &lsquo;Lucy&rsquo;; Explain 工具详解 在一条查询语句前加 explain 可以获得SQL语句的执行计划，可看到使用了什么索引，大致扫描了多少行等信息，从而分析出SQL语句的瓶颈在哪里。
 explain select * from employees where name = &#39;Lucy&#39;; 下面介绍下 Explain 中的列。"/>
 
+  
+  
+  
+  <link rel="canonical" href="https://telzhou618.github.io/post/mysql-review/" />
   
   
 </head>
@@ -182,6 +210,7 @@ explain select * from employees where name = &#39;Lucy&#39;; 下面介绍下 Exp
   ></div>
 
   
+
   <script>
     
     const htmlClass = document.documentElement.classList;
@@ -230,6 +259,22 @@ explain select * from employees where name = &#39;Lucy&#39;; 下面介绍下 Exp
   >
     
     
+    <nav class="lg:ml-12 lg:flex lg:flex-row lg:items-center lg:space-x-6">
+      
+      <a
+        class="block text-center text-2xl leading-[5rem] lg:text-base lg:font-normal"
+        href="/post/"
+        >Posts</a
+      >
+      
+      <a
+        class="block text-center text-2xl leading-[5rem] lg:text-base lg:font-normal"
+        href="/about/"
+        >About</a
+      >
+      
+    </nav>
+    
 
     
     <nav
@@ -264,7 +309,7 @@ explain select * from employees where name = &#39;Lucy&#39;; 下面介绍下 Exp
     
     <div class="text-sm antialiased opacity-60">
       
-      <time>Aug 28, 2023</time>
+      <time>Jun 28, 2022</time>
       
       
       
@@ -430,7 +475,7 @@ datetime：8字节 如果字段允许为 NULL，需要1字节记录是否为 NUL
 </ul>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#66d9ef">EXPLAIN</span> <span style="color:#66d9ef">SELECT</span> <span style="color:#f92672">*</span> <span style="color:#66d9ef">FROM</span> employees <span style="color:#66d9ef">WHERE</span> name <span style="color:#66d9ef">like</span> <span style="color:#e6db74">&#39;LiLei%&#39;</span> <span style="color:#66d9ef">AND</span> age <span style="color:#f92672">=</span> <span style="color:#ae81ff">22</span> <span style="color:#66d9ef">AND</span> <span style="color:#66d9ef">position</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;manager&#39;</span>;
 </span></span></code></pre></div><p>在MySQL5.6之前的版本，这个查询只能在联合索引里匹配到名字是&rsquo;LiLei&rsquo;开头的索引，然后拿这些索引对应的主键逐个回表，到主键索引上找出相应的记录，再比对age和position这两个字段的值是否符合。</p>
-<p>MySQL 5.6引入了索引下推优化，可以在索引遍历过程中，对索引中包含的所有字段先做判断，过滤掉不符合条件的记录之后再回表，可以有效的减少回表次数。使用了索引下推优化后，上面那个查询在联合索引里匹配到名字是&rsquo;LiLei'
+<p>MySQL 5.6引入了索引下推优化，可以在索引遍历过程中，对索引中包含的所有字段先做判断，过滤掉不符合条件的记录之后再回表，可以有效的减少回表次数。使用了索引下推优化后，上面那个查询在联合索引里匹配到名字是&rsquo;LiLei&rsquo;
 开头的索引之后，同时还会在索引里过滤age和position这两个字段，拿着过滤完剩下的索引对应的主键id再回表查整行数据。</p>
 <p>索引下推会减少回表次数，对于innodb引擎的表索引下推只能用于二级索引，innodb的主键索引（聚簇索引）树叶子节点上保存的是全行数据，所以这个时候索引下推并不会起到减少查询全行数据的效果。</p>
 <p><!-- raw HTML omitted -->为什么范围查找Mysql没有用索引下推优化？<!-- raw HTML omitted --></p>
@@ -685,22 +730,24 @@ buffer 内容。 那么如果 a 字段没有索引呢，那就走下面的 BNL�
   
   
   
+  
   <nav class="mt-24 flex rounded-lg bg-black/[3%] text-lg dark:bg-white/[8%]">
     
     <a
       class="flex w-1/2 items-center rounded-l-md p-6 pr-3 font-semibold no-underline hover:bg-black/[2%] dark:hover:bg-white/[3%]"
-      href="https://telzhou618.github.io/post/rocketmq/"
-      ><span class="mr-1.5">←</span><span>一文搞懂 RocketMQ</span></a
+      href="https://telzhou618.github.io/post/mybatis/"
+      ><span class="mr-1.5">←</span><span>MyBatis 源码解析</span></a
     >
     
     
     <a
       class="ml-auto flex w-1/2 items-center justify-end rounded-r-md p-6 pl-3 font-semibold no-underline hover:bg-black/[2%] dark:hover:bg-white/[3%]"
-      href="https://telzhou618.github.io/post/redis/"
-      ><span>Redis 从入门到入土</span><span class="ml-1.5">→</span></a
+      href="https://telzhou618.github.io/post/netty/"
+      ><span>Netty 和 NIO 全面掌握</span><span class="ml-1.5">→</span></a
     >
     
   </nav>
+  
   
 
   
@@ -737,6 +784,11 @@ buffer 内容。 那么如果 a 字段没有索引呢，那就走下面的 BNL�
     })();
   </script>
   
+
+  
+
+
+  
 </article>
 
 
@@ -746,7 +798,7 @@ buffer 内容。 那么如果 a 字段没有索引呢，那就走下面的 BNL�
   class="opaco mx-auto flex h-[4.5rem] max-w-3xl items-center px-8 text-[0.9em] opacity-60"
 >
   <div class="mr-auto">
-    &copy; 2023
+    &copy; 2024
     <a class="link" href="https://telzhou618.github.io">Home</a>
   </div>
   <a class="link mx-6" href="https://gohugo.io/" rel="noopener" target="_blank"

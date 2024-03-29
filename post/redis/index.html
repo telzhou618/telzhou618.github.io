@@ -1,4 +1,9 @@
-<!DOCTYPE html>
+<!doctype html>
+
+
+
+
+
 
 
 
@@ -51,6 +56,7 @@
   
   
   
+  
   <meta name="description" content="Redis 是什么 Redis 是一个高性能的基于内存实现的K-V存储数据库 。
 Redis 的优点 性能极高，Redis能读的速度是110000次/s,写的速度是81000次/s 。 支持持久化，可以将内存中的数据保存在磁盘中，重启的时候可以再次加载进行使用。 多种数据类型，同时还提供list，set，zset，hash等数据结构的存储。 支持主从复制，自动同步，可实现读写分离。 丰富的特性，支持pub/sub，key过期策略，事务，支持多个DB等。 Redis 的缺点 基于内存存储，单机容量有限。 重启会加载磁盘缓存到内存，这期间不能提供服务。 主从复制采用全量复制，这个过程会占用更多内存和网络资源。 Redis 应用场景 缓存数据，常见应用。
 计数器，单线程可避免并发，保证不出错，性能毫秒级。
@@ -74,21 +80,30 @@ sudo add-apt-repository ppa:redislabs/redis sudo apt-get update sudo apt-get ins
   <link rel="preload stylesheet" as="style" href="https://telzhou618.github.io/main.min.css" />
 
   
+  
+  
+  
+  
+  <link rel="preload" as="image" href="https://telzhou618.github.io/theme.svg" />
 
   
-     
-  <link rel="preload" as="image" href="https://telzhou618.github.io/theme.png" />
+  
+  
+  
+  <link rel="preload" as="image" href="https://s.gravatar.com/avatar/9ff9514e4c37a5cb11be475190289857778d613942c4d6364c16e770a4cb66a0?s=80" />
+  
+  
 
   
-  
-  
-  
-
   
   <link rel="preload" as="image" href="https://telzhou618.github.io/github.svg" />
   
   
 
+  
+  
+
+  
   
   
   <link
@@ -108,8 +123,22 @@ sudo add-apt-repository ppa:redislabs/redis sudo apt-get update sudo apt-get ins
   src="https://cdn.jsdelivr.net/npm/katex@0.16.7/dist/contrib/auto-render.min.js"
   integrity="sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05"
   crossorigin="anonymous"
-  onload="renderMathInElement(document.body);"
 ></script>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () =>
+    renderMathInElement(document.body, {
+      
+      
+      delimiters: [
+        { left: '$$', right: '$$', display: true },
+        { left: '$', right: '$', display: false },
+      ],
+      
+      throwOnError: false,
+    }),
+  );
+</script>
 
   
   
@@ -124,13 +153,24 @@ sudo add-apt-repository ppa:redislabs/redis sudo apt-get update sudo apt-get ins
 
   
   
-
   
   
   
-  
-  
-  
+  <meta itemprop="name" content="Redis 从入门到入土">
+<meta itemprop="description" content="Redis 是什么 Redis 是一个高性能的基于内存实现的K-V存储数据库 。
+Redis 的优点 性能极高，Redis能读的速度是110000次/s,写的速度是81000次/s 。 支持持久化，可以将内存中的数据保存在磁盘中，重启的时候可以再次加载进行使用。 多种数据类型，同时还提供list，set，zset，hash等数据结构的存储。 支持主从复制，自动同步，可实现读写分离。 丰富的特性，支持pub/sub，key过期策略，事务，支持多个DB等。 Redis 的缺点 基于内存存储，单机容量有限。 重启会加载磁盘缓存到内存，这期间不能提供服务。 主从复制采用全量复制，这个过程会占用更多内存和网络资源。 Redis 应用场景 缓存数据，常见应用。
+计数器，单线程可避免并发，保证不出错，性能毫秒级。
+队列，可作为简单消息队列使用。
+分布式锁与单线程机制
+位操作，如统计在线列表
+最新列表，获取最新10条新闻数据
+排行榜，消费排行榜
+Redis 基础 Redis 下载安装安装 从源码安装
+# download wget https://download.redis.io/releases/redis-6.2.5.tar.gz tar xzf redis-6.2.5.tar.gz cd redis-6.2.5 make # run redis-server src/redis-server # test src/redis-cli redis&gt; set foo bar OK redis&gt; get foo &#34;bar&#34; Ubuntu 安装
+sudo add-apt-repository ppa:redislabs/redis sudo apt-get update sudo apt-get install redis Mac 安装"><meta itemprop="datePublished" content="2023-06-28T14:44:07+08:00" />
+<meta itemprop="dateModified" content="2023-06-28T14:44:07+08:00" />
+<meta itemprop="wordCount" content="1336">
+<meta itemprop="keywords" content="" />
   
   <meta property="og:title" content="Redis 从入门到入土" />
 <meta property="og:description" content="Redis 是什么 Redis 是一个高性能的基于内存实现的K-V存储数据库 。
@@ -151,22 +191,6 @@ sudo add-apt-repository ppa:redislabs/redis sudo apt-get update sudo apt-get ins
 
 
   
-  <meta itemprop="name" content="Redis 从入门到入土">
-<meta itemprop="description" content="Redis 是什么 Redis 是一个高性能的基于内存实现的K-V存储数据库 。
-Redis 的优点 性能极高，Redis能读的速度是110000次/s,写的速度是81000次/s 。 支持持久化，可以将内存中的数据保存在磁盘中，重启的时候可以再次加载进行使用。 多种数据类型，同时还提供list，set，zset，hash等数据结构的存储。 支持主从复制，自动同步，可实现读写分离。 丰富的特性，支持pub/sub，key过期策略，事务，支持多个DB等。 Redis 的缺点 基于内存存储，单机容量有限。 重启会加载磁盘缓存到内存，这期间不能提供服务。 主从复制采用全量复制，这个过程会占用更多内存和网络资源。 Redis 应用场景 缓存数据，常见应用。
-计数器，单线程可避免并发，保证不出错，性能毫秒级。
-队列，可作为简单消息队列使用。
-分布式锁与单线程机制
-位操作，如统计在线列表
-最新列表，获取最新10条新闻数据
-排行榜，消费排行榜
-Redis 基础 Redis 下载安装安装 从源码安装
-# download wget https://download.redis.io/releases/redis-6.2.5.tar.gz tar xzf redis-6.2.5.tar.gz cd redis-6.2.5 make # run redis-server src/redis-server # test src/redis-cli redis&gt; set foo bar OK redis&gt; get foo &#34;bar&#34; Ubuntu 安装
-sudo add-apt-repository ppa:redislabs/redis sudo apt-get update sudo apt-get install redis Mac 安装"><meta itemprop="datePublished" content="2023-06-28T14:44:07+08:00" />
-<meta itemprop="dateModified" content="2023-06-28T14:44:07+08:00" />
-<meta itemprop="wordCount" content="1336">
-<meta itemprop="keywords" content="" />
-  
   <meta name="twitter:card" content="summary"/><meta name="twitter:title" content="Redis 从入门到入土"/>
 <meta name="twitter:description" content="Redis 是什么 Redis 是一个高性能的基于内存实现的K-V存储数据库 。
 Redis 的优点 性能极高，Redis能读的速度是110000次/s,写的速度是81000次/s 。 支持持久化，可以将内存中的数据保存在磁盘中，重启的时候可以再次加载进行使用。 多种数据类型，同时还提供list，set，zset，hash等数据结构的存储。 支持主从复制，自动同步，可实现读写分离。 丰富的特性，支持pub/sub，key过期策略，事务，支持多个DB等。 Redis 的缺点 基于内存存储，单机容量有限。 重启会加载磁盘缓存到内存，这期间不能提供服务。 主从复制采用全量复制，这个过程会占用更多内存和网络资源。 Redis 应用场景 缓存数据，常见应用。
@@ -180,6 +204,10 @@ Redis 基础 Redis 下载安装安装 从源码安装
 # download wget https://download.redis.io/releases/redis-6.2.5.tar.gz tar xzf redis-6.2.5.tar.gz cd redis-6.2.5 make # run redis-server src/redis-server # test src/redis-cli redis&gt; set foo bar OK redis&gt; get foo &#34;bar&#34; Ubuntu 安装
 sudo add-apt-repository ppa:redislabs/redis sudo apt-get update sudo apt-get install redis Mac 安装"/>
 
+  
+  
+  
+  <link rel="canonical" href="https://telzhou618.github.io/post/redis/" />
   
   
 </head>
@@ -206,6 +234,7 @@ sudo add-apt-repository ppa:redislabs/redis sudo apt-get update sudo apt-get ins
   ></div>
 
   
+
   <script>
     
     const htmlClass = document.documentElement.classList;
@@ -253,6 +282,22 @@ sudo add-apt-repository ppa:redislabs/redis sudo apt-get update sudo apt-get ins
     class="nav-wrapper fixed inset-x-0 top-full z-40 flex h-full select-none flex-col justify-center pb-16 duration-200 dark:bg-black lg:static lg:h-auto lg:flex-row lg:!bg-transparent lg:pb-0 lg:transition-none"
   >
     
+    
+    <nav class="lg:ml-12 lg:flex lg:flex-row lg:items-center lg:space-x-6">
+      
+      <a
+        class="block text-center text-2xl leading-[5rem] lg:text-base lg:font-normal"
+        href="/post/"
+        >Posts</a
+      >
+      
+      <a
+        class="block text-center text-2xl leading-[5rem] lg:text-base lg:font-normal"
+        href="/about/"
+        >About</a
+      >
+      
+    </nav>
     
 
     
@@ -948,22 +993,24 @@ sudo add-apt-repository ppa:redislabs/redis sudo apt-get update sudo apt-get ins
   
   
   
+  
   <nav class="mt-24 flex rounded-lg bg-black/[3%] text-lg dark:bg-white/[8%]">
     
     <a
       class="flex w-1/2 items-center rounded-l-md p-6 pr-3 font-semibold no-underline hover:bg-black/[2%] dark:hover:bg-white/[3%]"
-      href="https://telzhou618.github.io/post/mysql-review/"
-      ><span class="mr-1.5">←</span><span>MySQL 优化及索引设计规范</span></a
+      href="https://telzhou618.github.io/post/otter1/"
+      ><span class="mr-1.5">←</span><span>Otter数据同步1 - 环境搭建</span></a
     >
     
     
     <a
       class="ml-auto flex w-1/2 items-center justify-end rounded-r-md p-6 pl-3 font-semibold no-underline hover:bg-black/[2%] dark:hover:bg-white/[3%]"
-      href="https://telzhou618.github.io/post/mybatis/"
-      ><span>MyBatis 源码解析</span><span class="ml-1.5">→</span></a
+      href="https://telzhou618.github.io/post/spring-aop/"
+      ><span>Spring AOP 从入门到源码解析</span><span class="ml-1.5">→</span></a
     >
     
   </nav>
+  
   
 
   
@@ -1000,6 +1047,11 @@ sudo add-apt-repository ppa:redislabs/redis sudo apt-get update sudo apt-get ins
     })();
   </script>
   
+
+  
+
+
+  
 </article>
 
 
@@ -1009,7 +1061,7 @@ sudo add-apt-repository ppa:redislabs/redis sudo apt-get update sudo apt-get ins
   class="opaco mx-auto flex h-[4.5rem] max-w-3xl items-center px-8 text-[0.9em] opacity-60"
 >
   <div class="mr-auto">
-    &copy; 2023
+    &copy; 2024
     <a class="link" href="https://telzhou618.github.io">Home</a>
   </div>
   <a class="link mx-6" href="https://gohugo.io/" rel="noopener" target="_blank"
