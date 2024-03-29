@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<html
+  class="not-ready lg:text-base"
+  style="--bg: #faf8f1"
+  lang="en-us"
+>
+  <head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, shrink-to-fit=no"
+  />
+
+  
+  <title>MYSQL 表空间分析 - Home</title>
+
+  
+  <meta name="theme-color" />
+
+  
+  
+  
+  <meta name="description" content="删除数据并释放空间命令 drop table table_name 立刻释放磁盘空间 ，不管是 Innodb和MyISAM ； truncate table table_name立刻释放磁盘空间 ，不管是 Innodb和MyISAM; delete from table_name 删除表的全部数据，对于MyISAM 会立刻释放磁盘空间 ，而InnoDB 不会释放磁盘空间； delete from table_name where xx 带条件的删除, 不管是innodb还是MyISAM都不会释放磁盘空间；delete操作后使用optimize table table_name 释放磁盘空间，优化表期间会锁定表，所以要在空闲时段执行optimize table 查看表空间占用大小 MySQL 表空间信息保存在哪 information_schema.TABLES 中。
+查看所有数据库的容量和大小 select table_schema as &#39;数据库&#39;, sum(table_rows) as &#39;记录数&#39;, sum(truncate(data_length/1024/1024, 2)) as &#39;数据容量(MB)&#39;, sum(truncate(index_length/1024/1024, 2)) as &#39;索引容量(MB)&#39;, sum(truncate(data_free/1024/1024, 2)) as &#39;碎片空间容量(MB)&#39; from information_schema.tables group by table_schema order by sum(data_length) desc, sum(index_length) desc 查看指定数据库各个表容量大小 select table_schema as &#39;数据库&#39;, table_name as &#39;表名&#39;, table_rows as &#39;记录数&#39;, truncate(data_length/1024/1024, 2) as &#39;数据容量(MB)&#39;, truncate(index_length/1024/1024, 2) as &#39;索引容量(MB)&#39;, sum(truncate(data_free/1024/1024, 2)) as &#39;碎片空间容量(MB)&#39; from information_schema." />
+  <meta name="author" content="telzhou618" />
+  
+
+  
+  
+  
+  
+  
+  
+  <link rel="preload stylesheet" as="style" href="https://telzhou618.github.io/main.min.css" />
+
+  
+
+  
+     
+  <link rel="preload" as="image" href="https://telzhou618.github.io/theme.png" />
+
+  
+  
+  
+  
+
+  
+  <link rel="preload" as="image" href="https://telzhou618.github.io/github.svg" />
+  
+  
+
+  
+  
+  <link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/katex@0.16.7/dist/katex.min.css"
+  integrity="sha384-3UiQGuEI4TTMaFmGIZumfRPtfKQ3trwQE2JgosJxCnGmQpL/lJdjpcHkaaFwHlcI"
+  crossorigin="anonymous"
+/>
+<script
+  defer
+  src="https://cdn.jsdelivr.net/npm/katex@0.16.7/dist/katex.min.js"
+  integrity="sha384-G0zcxDFp5LWZtDuRMnBkk3EphCK1lhEf4UEyEM693ka574TZGwo4IWwS6QLzM/2t"
+  crossorigin="anonymous"
+></script>
+<script
+  defer
+  src="https://cdn.jsdelivr.net/npm/katex@0.16.7/dist/contrib/auto-render.min.js"
+  integrity="sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05"
+  crossorigin="anonymous"
+  onload="renderMathInElement(document.body);"
+></script>
+
+  
+  
+  
+
+  
+  <link rel="icon" href="https://telzhou618.github.io/favicon.ico" />
+  <link rel="apple-touch-icon" href="https://telzhou618.github.io/apple-touch-icon.png" />
+
+  
+  <meta name="generator" content="Hugo 0.114.1">
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+  
+  <meta property="og:title" content="MYSQL 表空间分析" />
+<meta property="og:description" content="删除数据并释放空间命令 drop table table_name 立刻释放磁盘空间 ，不管是 Innodb和MyISAM ； truncate table table_name立刻释放磁盘空间 ，不管是 Innodb和MyISAM; delete from table_name 删除表的全部数据，对于MyISAM 会立刻释放磁盘空间 ，而InnoDB 不会释放磁盘空间； delete from table_name where xx 带条件的删除, 不管是innodb还是MyISAM都不会释放磁盘空间；delete操作后使用optimize table table_name 释放磁盘空间，优化表期间会锁定表，所以要在空闲时段执行optimize table 查看表空间占用大小 MySQL 表空间信息保存在哪 information_schema.TABLES 中。
+查看所有数据库的容量和大小 select table_schema as &#39;数据库&#39;, sum(table_rows) as &#39;记录数&#39;, sum(truncate(data_length/1024/1024, 2)) as &#39;数据容量(MB)&#39;, sum(truncate(index_length/1024/1024, 2)) as &#39;索引容量(MB)&#39;, sum(truncate(data_free/1024/1024, 2)) as &#39;碎片空间容量(MB)&#39; from information_schema.tables group by table_schema order by sum(data_length) desc, sum(index_length) desc 查看指定数据库各个表容量大小 select table_schema as &#39;数据库&#39;, table_name as &#39;表名&#39;, table_rows as &#39;记录数&#39;, truncate(data_length/1024/1024, 2) as &#39;数据容量(MB)&#39;, truncate(index_length/1024/1024, 2) as &#39;索引容量(MB)&#39;, sum(truncate(data_free/1024/1024, 2)) as &#39;碎片空间容量(MB)&#39; from information_schema." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://telzhou618.github.io/post/mysql_information_schema/" /><meta property="article:section" content="post" />
+<meta property="article:published_time" content="2023-07-10T21:36:57+08:00" />
+<meta property="article:modified_time" content="2023-07-10T21:36:57+08:00" />
+
+  
+  <meta itemprop="name" content="MYSQL 表空间分析">
+<meta itemprop="description" content="删除数据并释放空间命令 drop table table_name 立刻释放磁盘空间 ，不管是 Innodb和MyISAM ； truncate table table_name立刻释放磁盘空间 ，不管是 Innodb和MyISAM; delete from table_name 删除表的全部数据，对于MyISAM 会立刻释放磁盘空间 ，而InnoDB 不会释放磁盘空间； delete from table_name where xx 带条件的删除, 不管是innodb还是MyISAM都不会释放磁盘空间；delete操作后使用optimize table table_name 释放磁盘空间，优化表期间会锁定表，所以要在空闲时段执行optimize table 查看表空间占用大小 MySQL 表空间信息保存在哪 information_schema.TABLES 中。
+查看所有数据库的容量和大小 select table_schema as &#39;数据库&#39;, sum(table_rows) as &#39;记录数&#39;, sum(truncate(data_length/1024/1024, 2)) as &#39;数据容量(MB)&#39;, sum(truncate(index_length/1024/1024, 2)) as &#39;索引容量(MB)&#39;, sum(truncate(data_free/1024/1024, 2)) as &#39;碎片空间容量(MB)&#39; from information_schema.tables group by table_schema order by sum(data_length) desc, sum(index_length) desc 查看指定数据库各个表容量大小 select table_schema as &#39;数据库&#39;, table_name as &#39;表名&#39;, table_rows as &#39;记录数&#39;, truncate(data_length/1024/1024, 2) as &#39;数据容量(MB)&#39;, truncate(index_length/1024/1024, 2) as &#39;索引容量(MB)&#39;, sum(truncate(data_free/1024/1024, 2)) as &#39;碎片空间容量(MB)&#39; from information_schema."><meta itemprop="datePublished" content="2023-07-10T21:36:57+08:00" />
+<meta itemprop="dateModified" content="2023-07-10T21:36:57+08:00" />
+<meta itemprop="wordCount" content="223">
+<meta itemprop="keywords" content="" />
+  
+  <meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="MYSQL 表空间分析"/>
+<meta name="twitter:description" content="删除数据并释放空间命令 drop table table_name 立刻释放磁盘空间 ，不管是 Innodb和MyISAM ； truncate table table_name立刻释放磁盘空间 ，不管是 Innodb和MyISAM; delete from table_name 删除表的全部数据，对于MyISAM 会立刻释放磁盘空间 ，而InnoDB 不会释放磁盘空间； delete from table_name where xx 带条件的删除, 不管是innodb还是MyISAM都不会释放磁盘空间；delete操作后使用optimize table table_name 释放磁盘空间，优化表期间会锁定表，所以要在空闲时段执行optimize table 查看表空间占用大小 MySQL 表空间信息保存在哪 information_schema.TABLES 中。
+查看所有数据库的容量和大小 select table_schema as &#39;数据库&#39;, sum(table_rows) as &#39;记录数&#39;, sum(truncate(data_length/1024/1024, 2)) as &#39;数据容量(MB)&#39;, sum(truncate(index_length/1024/1024, 2)) as &#39;索引容量(MB)&#39;, sum(truncate(data_free/1024/1024, 2)) as &#39;碎片空间容量(MB)&#39; from information_schema.tables group by table_schema order by sum(data_length) desc, sum(index_length) desc 查看指定数据库各个表容量大小 select table_schema as &#39;数据库&#39;, table_name as &#39;表名&#39;, table_rows as &#39;记录数&#39;, truncate(data_length/1024/1024, 2) as &#39;数据容量(MB)&#39;, truncate(index_length/1024/1024, 2) as &#39;索引容量(MB)&#39;, sum(truncate(data_free/1024/1024, 2)) as &#39;碎片空间容量(MB)&#39; from information_schema."/>
+
+  
+  
+</head>
+
+  <body class="text-black duration-200 ease-out dark:text-white">
+    <header class="mx-auto flex h-[4.5rem] max-w-3xl px-8 lg:justify-center">
+  <div class="relative z-50 mr-auto flex items-center">
+    <a
+      class="-translate-x-[1px] -translate-y-[1px] text-2xl font-semibold"
+      href="https://telzhou618.github.io"
+      >Home</a
+    >
+    <div
+      class="btn-dark text-[0] ml-4 h-6 w-6 shrink-0 cursor-pointer [background:url(./theme.svg)_left_center/cover_no-repeat] dark:invert dark:[background-position:right]"
+      role="button"
+      aria-label="Dark"
+    ></div>
+  </div>
+
+  <div
+    class="btn-menu relative z-50 -mr-8 flex h-[4.5rem] w-[5rem] shrink-0 cursor-pointer flex-col items-center justify-center gap-2.5 lg:hidden"
+    role="button"
+    aria-label="Menu"
+  ></div>
+
+  
+  <script>
+    
+    const htmlClass = document.documentElement.classList;
+    setTimeout(() => {
+      htmlClass.remove('not-ready');
+    }, 10);
+
+    
+    const btnMenu = document.querySelector('.btn-menu');
+    btnMenu.addEventListener('click', () => {
+      htmlClass.toggle('open');
+    });
+
+    
+    const metaTheme = document.querySelector('meta[name="theme-color"]');
+    const lightBg = '#faf8f1'.replace(/"/g, '');
+    const setDark = (isDark) => {
+      metaTheme.setAttribute('content', isDark ? '#000' : lightBg);
+      htmlClass[isDark ? 'add' : 'remove']('dark');
+      localStorage.setItem('dark', isDark);
+    };
+
+    
+    const darkScheme = window.matchMedia('(prefers-color-scheme: dark)');
+    if (htmlClass.contains('dark')) {
+      setDark(true);
+    } else {
+      const darkVal = localStorage.getItem('dark');
+      setDark(darkVal ? darkVal === 'true' : darkScheme.matches);
+    }
+
+    
+    darkScheme.addEventListener('change', (event) => {
+      setDark(event.matches);
+    });
+
+    
+    const btnDark = document.querySelector('.btn-dark');
+    btnDark.addEventListener('click', () => {
+      setDark(localStorage.getItem('dark') !== 'true');
+    });
+  </script>
+
+  <div
+    class="nav-wrapper fixed inset-x-0 top-full z-40 flex h-full select-none flex-col justify-center pb-16 duration-200 dark:bg-black lg:static lg:h-auto lg:flex-row lg:!bg-transparent lg:pb-0 lg:transition-none"
+  >
+    
+    
+
+    
+    <nav
+      class="mt-12 flex justify-center space-x-10 dark:invert lg:ml-12 lg:mt-0 lg:items-center lg:space-x-6"
+    >
+      
+      <a
+        class="h-8 w-8 text-[0] [background:var(--url)_center_center/cover_no-repeat] lg:h-6 lg:w-6"
+        style="--url: url(./github.svg)"
+        href="https://github.com/telzhou618"
+        target="_blank"
+        rel="me"
+      >
+        github
+      </a>
+      
+    </nav>
+    
+  </div>
+</header>
+
+
+    <main
+      class="prose prose-neutral relative mx-auto min-h-[calc(100%-9rem)] max-w-3xl px-8 pb-16 pt-12 dark:prose-invert"
+    >
+      
+
+<article>
+  <header class="mb-16">
+    <h1 class="!my-0 pb-2.5">MYSQL 表空间分析</h1>
+
+    
+    <div class="text-sm antialiased opacity-60">
+      
+      <time>Jul 10, 2023</time>
+      
+      
+      
+      
+    </div>
+    
+  </header>
+
+  <section><h2 id="删除数据并释放空间命令">删除数据并释放空间命令</h2>
+<ul>
+<li>drop table table_name 立刻释放磁盘空间 ，不管是 Innodb和MyISAM ；</li>
+<li>truncate table table_name立刻释放磁盘空间 ，不管是 Innodb和MyISAM;</li>
+<li>delete from table_name 删除表的全部数据，对于MyISAM 会立刻释放磁盘空间 ，而InnoDB 不会释放磁盘空间；</li>
+<li>delete from table_name where xx 带条件的删除, 不管是innodb还是MyISAM都不会释放磁盘空间；delete操作后使用optimize table table_name 释放磁盘空间，优化表期间会锁定表，所以要在空闲时段执行optimize table</li>
+</ul>
+<h2 id="查看表空间占用大小">查看表空间占用大小</h2>
+<p>MySQL  表空间信息保存在哪 information_schema.TABLES  中。</p>
+<ul>
+<li>查看所有数据库的容量和大小</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#66d9ef">select</span>
+</span></span><span style="display:flex;"><span>table_schema <span style="color:#66d9ef">as</span> <span style="color:#e6db74">&#39;数据库&#39;</span>,
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">sum</span>(table_rows) <span style="color:#66d9ef">as</span> <span style="color:#e6db74">&#39;记录数&#39;</span>,
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">sum</span>(<span style="color:#66d9ef">truncate</span>(data_length<span style="color:#f92672">/</span><span style="color:#ae81ff">1024</span><span style="color:#f92672">/</span><span style="color:#ae81ff">1024</span>, <span style="color:#ae81ff">2</span>)) <span style="color:#66d9ef">as</span> <span style="color:#e6db74">&#39;数据容量(MB)&#39;</span>,
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">sum</span>(<span style="color:#66d9ef">truncate</span>(index_length<span style="color:#f92672">/</span><span style="color:#ae81ff">1024</span><span style="color:#f92672">/</span><span style="color:#ae81ff">1024</span>, <span style="color:#ae81ff">2</span>)) <span style="color:#66d9ef">as</span> <span style="color:#e6db74">&#39;索引容量(MB)&#39;</span>,
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">sum</span>(<span style="color:#66d9ef">truncate</span>(data_free<span style="color:#f92672">/</span><span style="color:#ae81ff">1024</span><span style="color:#f92672">/</span><span style="color:#ae81ff">1024</span>, <span style="color:#ae81ff">2</span>)) <span style="color:#66d9ef">as</span> <span style="color:#e6db74">&#39;碎片空间容量(MB)&#39;</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">from</span> information_schema.tables
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">group</span> <span style="color:#66d9ef">by</span> table_schema
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">order</span> <span style="color:#66d9ef">by</span> <span style="color:#66d9ef">sum</span>(data_length) <span style="color:#66d9ef">desc</span>, <span style="color:#66d9ef">sum</span>(index_length) <span style="color:#66d9ef">desc</span>
+</span></span></code></pre></div><ul>
+<li>查看指定数据库各个表容量大小</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#66d9ef">select</span>
+</span></span><span style="display:flex;"><span>table_schema <span style="color:#66d9ef">as</span> <span style="color:#e6db74">&#39;数据库&#39;</span>,
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">table_name</span> <span style="color:#66d9ef">as</span> <span style="color:#e6db74">&#39;表名&#39;</span>,
+</span></span><span style="display:flex;"><span>table_rows <span style="color:#66d9ef">as</span> <span style="color:#e6db74">&#39;记录数&#39;</span>,
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">truncate</span>(data_length<span style="color:#f92672">/</span><span style="color:#ae81ff">1024</span><span style="color:#f92672">/</span><span style="color:#ae81ff">1024</span>, <span style="color:#ae81ff">2</span>) <span style="color:#66d9ef">as</span> <span style="color:#e6db74">&#39;数据容量(MB)&#39;</span>,
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">truncate</span>(index_length<span style="color:#f92672">/</span><span style="color:#ae81ff">1024</span><span style="color:#f92672">/</span><span style="color:#ae81ff">1024</span>, <span style="color:#ae81ff">2</span>) <span style="color:#66d9ef">as</span> <span style="color:#e6db74">&#39;索引容量(MB)&#39;</span>,
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">sum</span>(<span style="color:#66d9ef">truncate</span>(data_free<span style="color:#f92672">/</span><span style="color:#ae81ff">1024</span><span style="color:#f92672">/</span><span style="color:#ae81ff">1024</span>, <span style="color:#ae81ff">2</span>)) <span style="color:#66d9ef">as</span> <span style="color:#e6db74">&#39;碎片空间容量(MB)&#39;</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">from</span> information_schema.tables
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">where</span> table_schema<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;mysql&#39;</span> <span style="color:#75715e">-- 数据库名称
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">order</span> <span style="color:#66d9ef">by</span> data_length <span style="color:#66d9ef">desc</span>, index_length <span style="color:#66d9ef">desc</span>;
+</span></span></code></pre></div><ul>
+<li>查询所有数据库占用磁盘空间大小</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#66d9ef">select</span> 
+</span></span><span style="display:flex;"><span>TABLE_SCHEMA, 
+</span></span><span style="display:flex;"><span>concat(<span style="color:#66d9ef">truncate</span>(<span style="color:#66d9ef">sum</span>(data_length)<span style="color:#f92672">/</span><span style="color:#ae81ff">1024</span><span style="color:#f92672">/</span><span style="color:#ae81ff">1024</span>,<span style="color:#ae81ff">2</span>),<span style="color:#e6db74">&#39; MB&#39;</span>) <span style="color:#66d9ef">as</span> data_size,
+</span></span><span style="display:flex;"><span>concat(<span style="color:#66d9ef">truncate</span>(<span style="color:#66d9ef">sum</span>(index_length)<span style="color:#f92672">/</span><span style="color:#ae81ff">1024</span><span style="color:#f92672">/</span><span style="color:#ae81ff">1024</span>,<span style="color:#ae81ff">2</span>),<span style="color:#e6db74">&#39; MB&#39;</span>) <span style="color:#66d9ef">as</span> index_size,
+</span></span><span style="display:flex;"><span>concat(<span style="color:#66d9ef">truncate</span>(<span style="color:#66d9ef">sum</span>(data_free)<span style="color:#f92672">/</span><span style="color:#ae81ff">1024</span><span style="color:#f92672">/</span><span style="color:#ae81ff">1024</span>,<span style="color:#ae81ff">2</span>),<span style="color:#e6db74">&#39; MB&#39;</span>) <span style="color:#66d9ef">as</span> data_free_size
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">from</span> information_schema.tables
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">group</span> <span style="color:#66d9ef">by</span> TABLE_SCHEMA
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">ORDER</span> <span style="color:#66d9ef">BY</span> data_size <span style="color:#66d9ef">desc</span>;
+</span></span></code></pre></div><ul>
+<li>查询单个库中所有表磁盘空间大小</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#66d9ef">select</span> 
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">TABLE_NAME</span>, 
+</span></span><span style="display:flex;"><span>concat(<span style="color:#66d9ef">truncate</span>(data_length<span style="color:#f92672">/</span><span style="color:#ae81ff">1024</span><span style="color:#f92672">/</span><span style="color:#ae81ff">1024</span>,<span style="color:#ae81ff">2</span>),<span style="color:#e6db74">&#39; MB&#39;</span>) <span style="color:#66d9ef">as</span> data_size,
+</span></span><span style="display:flex;"><span>concat(<span style="color:#66d9ef">truncate</span>(index_length<span style="color:#f92672">/</span><span style="color:#ae81ff">1024</span><span style="color:#f92672">/</span><span style="color:#ae81ff">1024</span>,<span style="color:#ae81ff">2</span>),<span style="color:#e6db74">&#39; MB&#39;</span>) <span style="color:#66d9ef">as</span> index_size,
+</span></span><span style="display:flex;"><span>concat(<span style="color:#66d9ef">truncate</span>(<span style="color:#66d9ef">sum</span>(data_free)<span style="color:#f92672">/</span><span style="color:#ae81ff">1024</span><span style="color:#f92672">/</span><span style="color:#ae81ff">1024</span>,<span style="color:#ae81ff">2</span>),<span style="color:#e6db74">&#39; MB&#39;</span>) <span style="color:#66d9ef">as</span> data_free_size
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">from</span> information_schema.tables 
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">where</span> TABLE_SCHEMA <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;查询的表名&#39;</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">group</span> <span style="color:#66d9ef">by</span> <span style="color:#66d9ef">TABLE_NAME</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">order</span> <span style="color:#66d9ef">by</span> data_length <span style="color:#66d9ef">desc</span>;
+</span></span></code></pre></div><blockquote>
+<p>truncate 是MYSQL的系统函数，作用是按照小数点截取，但不进行四舍五入， TRUNCATE(X,D) ，其中X是数值，D是保留小数的位数。
+如： TRUNCATE(123.4567, 3); 结果是 123.456，TRUNCATE(123.4567, 2); 结果是 123.45</p>
+</blockquote>
+<ul>
+<li>information_schema.TABLES   表常用字段及说明
+<table>
+<thead>
+<tr>
+<th>字段</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Table_catalog</td>
+<td>数据表登记目录</td>
+</tr>
+<tr>
+<td>Table_schema</td>
+<td>数据表所属的数据库名</td>
+</tr>
+<tr>
+<td>Table_name</td>
+<td>表名称</td>
+</tr>
+<tr>
+<td>Table_type</td>
+<td>表类型[system view|base table]</td>
+</tr>
+<tr>
+<td>Engine</td>
+<td>使用的数据库引擎[MyISAM|CSV|InnoDB]</td>
+</tr>
+<tr>
+<td>Version</td>
+<td>版本，默认值10</td>
+</tr>
+<tr>
+<td>Row_format</td>
+<td>行格式[Compact|Dynamic|Fixed]</td>
+</tr>
+<tr>
+<td>Table_rows</td>
+<td>表里所存多少行数据</td>
+</tr>
+<tr>
+<td>Avg_row_length</td>
+<td>平均行长度</td>
+</tr>
+<tr>
+<td>Data_length</td>
+<td>数据长度</td>
+</tr>
+<tr>
+<td>Max_data_length</td>
+<td>最大数据长度</td>
+</tr>
+<tr>
+<td>Index_length</td>
+<td>索引长度</td>
+</tr>
+<tr>
+<td>Data_free</td>
+<td>空间碎片</td>
+</tr>
+<tr>
+<td>Auto_increment</td>
+<td>做自增主键的自动增量当前值</td>
+</tr>
+<tr>
+<td>Create_time</td>
+<td>表的创建时间</td>
+</tr>
+<tr>
+<td>Update_time</td>
+<td>表的更新时间</td>
+</tr>
+<tr>
+<td>Check_time</td>
+<td>表的检查时间</td>
+</tr>
+<tr>
+<td>Table_collation</td>
+<td>表的字符校验编码集</td>
+</tr>
+<tr>
+<td>Checksum</td>
+<td>校验和</td>
+</tr>
+<tr>
+<td>Create_options</td>
+<td>创建选项</td>
+</tr>
+<tr>
+<td>Table_comment</td>
+<td>表的注释、备注</td>
+</tr>
+</tbody>
+</table>
+</li>
+</ul>
+<h2 id="参考">参考</h2>
+<ul>
+<li>MYSQL 删除数据后释放空间：<a href="https://www.jianshu.com/p/ebe6ac68099a">https://www.jianshu.com/p/ebe6ac68099a</a></li>
+<li>MySQL 查看数据库表容量大小和磁盘空间占用大小： <a href="https://my.oschina.net/90design/blog/4330825">https://my.oschina.net/90design/blog/4330825</a></li>
+<li>mysql中information_schema.tables字段说明：<a href="https://blog.csdn.net/weixin_40918067/article/details/116868906">https://blog.csdn.net/weixin_40918067/article/details/116868906</a></li>
+<li>MySQL的TRUNCATE()函数： <a href="https://blog.csdn.net/Fekerkk/article/details/122536574">https://blog.csdn.net/Fekerkk/article/details/122536574</a></li>
+</ul>
+</section>
+
+  
+  
+
+  
+  
+  
+  <nav class="mt-24 flex rounded-lg bg-black/[3%] text-lg dark:bg-white/[8%]">
+    
+    
+    <a
+      class="ml-auto flex w-1/2 items-center justify-end rounded-r-md p-6 pl-3 font-semibold no-underline hover:bg-black/[2%] dark:hover:bg-white/[3%]"
+      href="https://telzhou618.github.io/post/java-spi/"
+      ><span>Java SPI 应用</span><span class="ml-1.5">→</span></a
+    >
+    
+  </nav>
+  
+
+  
+  
+
+  
+  
+  <div class="mt-24" id="graphcomment"></div>
+  <script type="text/javascript">
+    var __semio__params = {
+      graphcommentId: 'a42bc435-1a67-9bc8-2cde-72ec7ba0d2fb',
+      behaviour: {
+        
+      },
+      
+    };
+
+    function __semio__onload() {
+      __semio__gc_graphlogin(__semio__params);
+    }
+
+    (function () {
+      var gc = document.createElement('script');
+      gc.type = 'text/javascript';
+      gc.async = true;
+      gc.onload = __semio__onload;
+      gc.defer = true;
+      gc.src =
+        'https://integration.graphcomment.com/gc_graphlogin.js?' + Date.now();
+      (
+        document.getElementsByTagName('head')[0] ||
+        document.getElementsByTagName('body')[0]
+      ).appendChild(gc);
+    })();
+  </script>
+  
+</article>
+
+
+    </main>
+
+    <footer
+  class="opaco mx-auto flex h-[4.5rem] max-w-3xl items-center px-8 text-[0.9em] opacity-60"
+>
+  <div class="mr-auto">
+    &copy; 2023
+    <a class="link" href="https://telzhou618.github.io">Home</a>
+  </div>
+  <a class="link mx-6" href="https://gohugo.io/" rel="noopener" target="_blank"
+    >Powered by Hugo️️</a
+  >️
+  <a
+    class="link"
+    href="https://github.com/nanxiaobei/hugo-paper"
+    rel="noopener"
+    target="_blank"
+    >✎ Paper</a
+  >
+</footer>
+
+  </body>
+</html>
