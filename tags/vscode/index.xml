@@ -1,0 +1,16 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+  <channel>
+    <title>vscode - 标签 - 扁舟的博客</title>
+    <link>https://telzhou618.github.io/tags/vscode/</link>
+    <description>vscode - 标签 | 扁舟的博客</description>
+    <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>telzhou618@qq.com (telzhou618)</managingEditor>
+      <webMaster>telzhou618@qq.com (telzhou618)</webMaster><lastBuildDate>Tue, 28 Jun 2022 11:44:07 &#43;0800</lastBuildDate><atom:link href="https://telzhou618.github.io/tags/vscode/" rel="self" type="application/rss+xml" /><item>
+  <title>Vscode 常用快捷键</title>
+  <link>https://telzhou618.github.io/posts/vscode/</link>
+  <pubDate>Tue, 28 Jun 2022 11:44:07 &#43;0800</pubDate>
+  <author>telzhou618</author>
+  <guid>https://telzhou618.github.io/posts/vscode/</guid>
+  <description><![CDATA[查找Command + F 查找替换Command + R 多行编辑Shit + Option + I 先 Comand+A 批量选中多行，再Shift+Optaion+i 插入多行光标。 多行]]></description>
+</item>
+</channel>
+</rss>

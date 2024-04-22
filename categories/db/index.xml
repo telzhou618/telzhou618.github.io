@@ -1,0 +1,32 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+  <channel>
+    <title>db - 分类 - 扁舟的博客</title>
+    <link>https://telzhou618.github.io/categories/db/</link>
+    <description>db - 分类 | 扁舟的博客</description>
+    <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>telzhou618@qq.com (telzhou618)</managingEditor>
+      <webMaster>telzhou618@qq.com (telzhou618)</webMaster><lastBuildDate>Mon, 10 Jul 2023 21:36:57 &#43;0800</lastBuildDate><atom:link href="https://telzhou618.github.io/categories/db/" rel="self" type="application/rss+xml" /><item>
+  <title>MYSQL 表空间分析</title>
+  <link>https://telzhou618.github.io/posts/mysql_information_schema/</link>
+  <pubDate>Mon, 10 Jul 2023 21:36:57 &#43;0800</pubDate>
+  <author>telzhou618</author>
+  <guid>https://telzhou618.github.io/posts/mysql_information_schema/</guid>
+  <description><![CDATA[删除数据并释放空间命令 drop table table_name 立刻释放磁盘空间 ，不管是 Innodb和MyISAM ； truncate table table_name立刻释放磁盘空间 ，不管是 Innodb]]></description>
+</item>
+<item>
+  <title>Redis 从入门到精通</title>
+  <link>https://telzhou618.github.io/posts/redis/</link>
+  <pubDate>Wed, 28 Jun 2023 14:44:07 &#43;0800</pubDate>
+  <author>telzhou618</author>
+  <guid>https://telzhou618.github.io/posts/redis/</guid>
+  <description><![CDATA[Redis 是什么Redis 是一个高性能的基于内存实现的K-V存储数据库 。 Redis 的优点 性能极高，Redis能读的速度是110000次/s,写的速度是810]]></description>
+</item>
+<item>
+  <title>MySQL 优化及索引设计规范</title>
+  <link>https://telzhou618.github.io/posts/mysql-review/</link>
+  <pubDate>Tue, 28 Jun 2022 11:44:07 &#43;0800</pubDate>
+  <author>telzhou618</author>
+  <guid>https://telzhou618.github.io/posts/mysql-review/</guid>
+  <description><![CDATA[索引是帮助MySQL高效获取数据的排好序的数据结构。 几个MySQL命令 1 2 3 4 mysql.server start // 启动MySQL mysql.server stop // 停止MYSQL ./mysqld_safe --data=../data // 从data备份中]]></description>
+</item>
+</channel>
+</rss>

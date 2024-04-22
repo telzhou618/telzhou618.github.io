@@ -1,0 +1,88 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+  <channel>
+    <title>java - 标签 - 扁舟的博客</title>
+    <link>https://telzhou618.github.io/tags/java/</link>
+    <description>java - 标签 | 扁舟的博客</description>
+    <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>telzhou618@qq.com (telzhou618)</managingEditor>
+      <webMaster>telzhou618@qq.com (telzhou618)</webMaster><lastBuildDate>Wed, 05 Jul 2023 16:15:58 &#43;0800</lastBuildDate><atom:link href="https://telzhou618.github.io/tags/java/" rel="self" type="application/rss+xml" /><item>
+  <title>Java SPI 应用</title>
+  <link>https://telzhou618.github.io/posts/java-spi/</link>
+  <pubDate>Wed, 05 Jul 2023 16:15:58 &#43;0800</pubDate>
+  <author>telzhou618</author>
+  <guid>https://telzhou618.github.io/posts/java-spi/</guid>
+  <description><![CDATA[Java SPI（Service Provider Interface）是Java平台提供的一种机制，用于实现服务发现和扩展的功能。它允许开发人员定义一组接口，然后允]]></description>
+</item>
+<item>
+  <title>Spring AOP 从入门到源码解析</title>
+  <link>https://telzhou618.github.io/posts/spring-aop/</link>
+  <pubDate>Wed, 28 Jun 2023 14:44:07 &#43;0800</pubDate>
+  <author>telzhou618</author>
+  <guid>https://telzhou618.github.io/posts/spring-aop/</guid>
+  <description><![CDATA[先学会如何使用 Spring-boot 或 Spring-cloud 中使用AOP在Spring-boot 工程中使用AOP功能，先引入相关的依赖。 pom.xml 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21]]></description>
+</item>
+<item>
+  <title>Commons-pool2 应用与实战</title>
+  <link>https://telzhou618.github.io/posts/commons-pool2/</link>
+  <pubDate>Tue, 28 Jun 2022 11:44:07 &#43;0800</pubDate>
+  <author>telzhou618</author>
+  <guid>https://telzhou618.github.io/posts/commons-pool2/</guid>
+  <description><![CDATA[把创建耗时的对象提前创建好，放在池中管理，需要时直接取，用完归还，可以做对象复用，避免用时创建慢且提高系统的效率。 比如数据库连接、网络连接、]]></description>
+</item>
+<item>
+  <title>JAVA8 debug 技巧</title>
+  <link>https://telzhou618.github.io/posts/java8-debug/</link>
+  <pubDate>Tue, 28 Jun 2022 11:44:07 &#43;0800</pubDate>
+  <author>telzhou618</author>
+  <guid>https://telzhou618.github.io/posts/java8-debug/</guid>
+  <description><![CDATA[调试按钮说明 Stream 调试实例代码： 1 2 3 4 5 6 7 // 1.Stream 调试 List&lt;Integer&gt; list1 = Lists.newArrayList(1, 5, 3, 2, 4); List&lt;Integer&gt; list2 = list1.stream() .filter(o -&gt; o &gt; 2) .sorted() .collect(Collectors.toList()); System.out.println(list2); 在 stram() 处设置断点，debug 运行。 可以看到Debug]]></description>
+</item>
+<item>
+  <title>JVM 常用参数</title>
+  <link>https://telzhou618.github.io/posts/jvm/</link>
+  <pubDate>Tue, 28 Jun 2022 11:44:07 &#43;0800</pubDate>
+  <author>telzhou618</author>
+  <guid>https://telzhou618.github.io/posts/jvm/</guid>
+  <description><![CDATA[开启TLAB开启开启TLAB后,为没个线程预先分配一块内存，创建对象优先使用TLAB内存分配空间。 1 2 XX:+UseTLAB # 开启TLAB，默认开启 XX:TLABSize # 设置缓存]]></description>
+</item>
+<item>
+  <title>MyBatis 源码解析</title>
+  <link>https://telzhou618.github.io/posts/mybatis/</link>
+  <pubDate>Tue, 28 Jun 2022 11:44:07 &#43;0800</pubDate>
+  <author>telzhou618</author>
+  <guid>https://telzhou618.github.io/posts/mybatis/</guid>
+  <description><![CDATA[一款轻量级的ORM框架。 MyBatis 的优点 封装底层乏味的JDBC操作，让开发中更关注业务。 SQL语句写在XML里和代码分离，便于维护，低耦合。 MyBatis 的缺点]]></description>
+</item>
+<item>
+  <title>Redis 或 Zookeeper 实现分布式锁</title>
+  <link>https://telzhou618.github.io/posts/distributed-lock/</link>
+  <pubDate>Tue, 28 Jun 2022 11:44:07 &#43;0800</pubDate>
+  <author>telzhou618</author>
+  <guid>https://telzhou618.github.io/posts/distributed-lock/</guid>
+  <description><![CDATA[分布式锁是为了解决跨进程、跨服务应用在高并发场景下造成线程不安全的问题的一种同步加锁的技术方案，在互联网公司有广泛的使用场景，如秒杀项目减库]]></description>
+</item>
+<item>
+  <title>Spring 事务源码解析</title>
+  <link>https://telzhou618.github.io/posts/spring-transaction/</link>
+  <pubDate>Tue, 28 Jun 2022 11:44:07 &#43;0800</pubDate>
+  <author>telzhou618</author>
+  <guid>https://telzhou618.github.io/posts/spring-transaction/</guid>
+  <description><![CDATA[Spring 事务利用AOP原理实现,主要过程和AOP原理一样，可以分为三步，启用事务、生成代理对对象、执行。 从如何使用事务开始本实例使用Spring的]]></description>
+</item>
+<item>
+  <title>Spring容器注册bean有哪些方式？</title>
+  <link>https://telzhou618.github.io/posts/spring-ioc-bean-register/</link>
+  <pubDate>Tue, 28 Jun 2022 11:44:07 &#43;0800</pubDate>
+  <author>telzhou618</author>
+  <guid>https://telzhou618.github.io/posts/spring-ioc-bean-register/</guid>
+  <description><![CDATA[常见注册bean对象到spring容器的方式: @Component、@Controller、@Service、@Repository 方式 @Bean 工]]></description>
+</item>
+<item>
+  <title>一文搞懂 RocketMQ</title>
+  <link>https://telzhou618.github.io/posts/rocketmq/</link>
+  <pubDate>Tue, 28 Jun 2022 11:44:07 &#43;0800</pubDate>
+  <author>telzhou618</author>
+  <guid>https://telzhou618.github.io/posts/rocketmq/</guid>
+  <description><![CDATA[RocketMQ 集群架构图 RocketMQ 四大核心集群 NameServer 集群：作为注册中心，维护着所有的broker和topic的映射关系，以及路由功能，多台部署，之间不互相通信。 Br]]></description>
+</item>
+</channel>
+</rss>

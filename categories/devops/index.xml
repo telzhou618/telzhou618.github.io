@@ -1,0 +1,16 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+  <channel>
+    <title>devops - 分类 - 扁舟的博客</title>
+    <link>https://telzhou618.github.io/categories/devops/</link>
+    <description>devops - 分类 | 扁舟的博客</description>
+    <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>telzhou618@qq.com (telzhou618)</managingEditor>
+      <webMaster>telzhou618@qq.com (telzhou618)</webMaster><lastBuildDate>Wed, 28 Jun 2023 14:21:07 &#43;0800</lastBuildDate><atom:link href="https://telzhou618.github.io/categories/devops/" rel="self" type="application/rss+xml" /><item>
+  <title>Docker &amp; Docker-compose</title>
+  <link>https://telzhou618.github.io/posts/docker/</link>
+  <pubDate>Wed, 28 Jun 2023 14:21:07 &#43;0800</pubDate>
+  <author>telzhou618</author>
+  <guid>https://telzhou618.github.io/posts/docker/</guid>
+  <description><![CDATA[Docker 架构 Docker 主要组件包括 Client、Daemon、Images、Container、Registry。 Client ： docker客户端 Daemon：do]]></description>
+</item>
+</channel>
+</rss>

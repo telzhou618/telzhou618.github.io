@@ -1,0 +1,882 @@
+<!DOCTYPE html>
+<html itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+  <head>
+    
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+    <meta name="robots" content="noodp" />
+    <title>Docker &amp; Docker-compose - 扁舟的博客</title><meta name="author" content="telzhou618">
+<meta name="author-link" content="https://github.com/telzhou618">
+<meta name="description" content="Docker 架构 Docker 主要组件包括 Client、Daemon、Images、Container、Registry。 Client ： docker客户端 Daemon：do" /><meta name="keywords" content='docker' /><meta itemprop="name" content="Docker &amp; Docker-compose">
+<meta itemprop="description" content="Docker 架构 Docker 主要组件包括 Client、Daemon、Images、Container、Registry。 Client ： docker客户端 Daemon：do"><meta itemprop="datePublished" content="2023-06-28T14:21:07+08:00" />
+<meta itemprop="dateModified" content="2023-06-28T14:21:07+08:00" />
+<meta itemprop="wordCount" content="1952">
+<meta itemprop="keywords" content="docker," /><meta property="og:title" content="Docker &amp; Docker-compose" />
+<meta property="og:description" content="Docker 架构 Docker 主要组件包括 Client、Daemon、Images、Container、Registry。 Client ： docker客户端 Daemon：do" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://telzhou618.github.io/posts/docker/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2023-06-28T14:21:07+08:00" />
+<meta property="article:modified_time" content="2023-06-28T14:21:07+08:00" />
+
+<meta name="twitter:card" content="summary"/><meta name="twitter:title" content="Docker &amp; Docker-compose"/>
+<meta name="twitter:description" content="Docker 架构 Docker 主要组件包括 Client、Daemon、Images、Container、Registry。 Client ： docker客户端 Daemon：do"/>
+<meta name="application-name" content="FixIt">
+<meta name="apple-mobile-web-app-title" content="FixIt"><meta name="theme-color" data-light="#f8f8f8" data-dark="#252627" content="#f8f8f8"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" href="https://telzhou618.github.io/posts/docker/" /><link rel="prev" href="https://telzhou618.github.io/posts/homebrew/" /><link rel="next" href="https://telzhou618.github.io/posts/linux/" /><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "BlogPosting",
+    "headline": "Docker \u0026 Docker-compose",
+    "inLanguage": "zh-CN",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https:\/\/telzhou618.github.io\/posts\/docker\/"
+    },"genre": "posts","keywords": "docker","wordcount":  1952 ,
+    "url": "https:\/\/telzhou618.github.io\/posts\/docker\/","datePublished": "2023-06-28T14:21:07+08:00","dateModified": "2023-06-28T14:21:07+08:00","publisher": {
+      "@type": "Organization",
+      "name": ""},"author": {
+        "@type": "Person",
+        "name": "telzhou618"
+      },"description": ""
+  }
+  </script></head>
+  <body data-header-desktop="sticky" data-header-mobile="auto"><script>(window.localStorage?.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('data-theme', 'dark');</script><div class="wrapper" data-page-style="normal"><header class="desktop animate__faster" id="header-desktop">
+  <div class="header-wrapper">
+    <div class="header-title">
+      <a href="/" title="扁舟的博客"><span class="header-title-text">扁舟的博客</span></a><span class="header-subtitle"></span></div>
+    <nav>
+      <ul class="menu"><li class="menu-item active">
+              <a
+                class="menu-link"
+                href="/posts/"
+                title="Posts"
+                
+              >Posts</a></li><li class="menu-item">
+              <a
+                class="menu-link"
+                href="/"
+                
+                
+              >Archives</a></li><li class="menu-item">
+              <a
+                class="menu-link"
+                href="/categories/"
+                title="Categories"
+                
+              >Categories</a></li><li class="menu-item">
+              <a
+                class="menu-link"
+                href="/tags/"
+                title="Tags"
+                
+              >Tags</a></li><li class="menu-item">
+              <a
+                class="menu-link"
+                href="/about/"
+                title="About"
+                
+              >About</a></li><li class="menu-item delimiter"></li><li class="menu-item search" id="search-desktop">
+            <input type="text" placeholder="搜索文章标题或内容……" id="search-input-desktop">
+            <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+              <i class="fa-solid fa-search fa-fw" aria-hidden="true"></i>
+            </a>
+            <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+              <i class="fa-solid fa-times-circle fa-fw" aria-hidden="true"></i>
+            </a>
+            <span class="search-button search-loading" id="search-loading-desktop">
+              <i class="fa-solid fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+            </span>
+          </li><li class="menu-item theme-switch" title="切换主题">
+          <i class="fa-solid fa-adjust fa-fw" aria-hidden="true"></i>
+        </li></ul>
+    </nav>
+  </div>
+</header><header class="mobile animate__faster" id="header-mobile">
+  <div class="header-container">
+    <div class="header-wrapper">
+      <div class="header-title">
+        <a href="/" title="扁舟的博客"><span class="header-title-text">扁舟的博客</span></a><span class="header-subtitle"></span></div>
+      <div class="menu-toggle" id="menu-toggle-mobile">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+    <nav>
+      <ul class="menu" id="menu-mobile"><li class="search-wrapper">
+            <div class="search mobile" id="search-mobile">
+              <input type="text" placeholder="搜索文章标题或内容……" id="search-input-mobile">
+              <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                <i class="fa-solid fa-search fa-fw" aria-hidden="true"></i>
+              </a>
+              <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                <i class="fa-solid fa-times-circle fa-fw" aria-hidden="true"></i>
+              </a>
+              <span class="search-button search-loading" id="search-loading-mobile">
+                <i class="fa-solid fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+              </span>
+            </div>
+            <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+              取消
+            </a>
+          </li><li
+              class="menu-item active"
+            ><a
+                  class="menu-link"
+                  href="/posts/"
+                  title="Posts"
+                  
+                >Posts</a></li><li
+              class="menu-item"
+            ><a
+                  class="menu-link"
+                  href="/"
+                  
+                  
+                >Archives</a></li><li
+              class="menu-item"
+            ><a
+                  class="menu-link"
+                  href="/categories/"
+                  title="Categories"
+                  
+                >Categories</a></li><li
+              class="menu-item"
+            ><a
+                  class="menu-link"
+                  href="/tags/"
+                  title="Tags"
+                  
+                >Tags</a></li><li
+              class="menu-item"
+            ><a
+                  class="menu-link"
+                  href="/about/"
+                  title="About"
+                  
+                >About</a></li><li class="menu-item menu-system">
+          <span class="menu-system-item theme-switch" title="切换主题"><i class="fa-solid fa-adjust fa-fw" aria-hidden="true"></i></span></li>
+      </ul>
+    </nav>
+  </div>
+</header><div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+  </div>
+  <div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+  </div><main class="container"><aside class="aside-collection animate__animated animate__fadeIn animate__faster" aria-label="合集"></aside>
+
+  <article class="page single">
+    <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span>Docker &amp; Docker-compose</span>
+      </h1></div><div class="post-meta">
+      <div class="post-meta-line"><span class="post-author"><a href="https://github.com/telzhou618" title="作者"target="_blank" rel="external nofollow noopener noreferrer author" class="author"><img loading="lazy" src="https://avatars.githubusercontent.com/u/6360011?v=4" alt="telzhou618" data-title="telzhou618" class="avatar" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/>&nbsp;telzhou618</a></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/devops/" class="post-category" title="分类 - devops"><i class="fa-regular fa-folder fa-fw" aria-hidden="true"></i> devops</a></span></div><div class="post-meta-line"><span title="发布于 2023-06-28 14:21:07"><i class="fa-solid fa-calendar-days fa-fw me-1" aria-hidden="true"></i><time datetime="2023-06-28">2023-06-28</time></span>&nbsp;<span title="1952 字"><i class="fa-solid fa-pencil-alt fa-fw me-1" aria-hidden="true"></i>约 2000 字</span>&nbsp;<span><i class="fa-regular fa-clock fa-fw me-1" aria-hidden="true"></i>预计阅读 4 分钟</span>&nbsp;</div>
+    </div><div class="details toc" id="toc-static" data-kept="false">
+        <div class="details-summary toc-title">
+          <span>目录</span>
+          <span><i class="details-icon fa-solid fa-angle-right" aria-hidden="true"></i></span>
+        </div>
+        <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#docker-架构">Docker 架构</a></li>
+    <li><a href="#docker-常用命令">Docker 常用命令</a>
+      <ul>
+        <li><a href="#镜像相关的命令">镜像相关的命令</a>
+          <ul>
+            <li><a href="#搜索镜像">搜索镜像</a></li>
+            <li><a href="#下载镜像">下载镜像</a></li>
+            <li><a href="#查看镜像">查看镜像</a></li>
+            <li><a href="#删除镜像">删除镜像</a></li>
+          </ul>
+        </li>
+        <li><a href="#容器相关的命令">容器相关的命令</a>
+          <ul>
+            <li><a href="#运行docker镜像">运行Docker镜像</a></li>
+            <li><a href="#列出容器列表">列出容器列表</a></li>
+            <li><a href="#停止容器">停止容器</a></li>
+            <li><a href="#启动容器">启动容器</a></li>
+            <li><a href="#查看日志">查看日志</a></li>
+            <li><a href="#查看容器信息">查看容器信息</a></li>
+            <li><a href="#查看容器里的进程">查看容器里的进程</a></li>
+            <li><a href="#文件传输">文件传输</a></li>
+            <li><a href="#进入到容器的-shell">进入到容器的 shell</a></li>
+            <li><a href="#删除容器">删除容器</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#docker-构建镜像">Docker 构建镜像</a>
+      <ul>
+        <li><a href="#dockerfile-命令">Dockerfile 命令</a></li>
+        <li><a href="#编写dockerfile">编写Dockerfile</a></li>
+        <li><a href="#构建镜像">构建镜像</a></li>
+        <li><a href="#上传到docker镜像仓库">上传到Docker镜像仓库</a></li>
+      </ul>
+    </li>
+    <li><a href="#docker-compose">Docker-Compose</a>
+      <ul>
+        <li><a href="#编写-docker-compose-文件">编写 docker-compose 文件</a></li>
+        <li><a href="#启动容器-1">启动容器</a></li>
+        <li><a href="#配置文件常用参数">配置文件常用参数</a></li>
+        <li><a href="#docker-compose-常用操作命令">docker-compose 常用操作命令</a></li>
+      </ul>
+    </li>
+    <li><a href="#prometheus--grafana-搭建监控">prometheus + grafana 搭建监控</a>
+      <ul>
+        <li><a href="#安装-redis-exporter">安装 redis-exporter</a></li>
+        <li><a href="#安装-prometheus">安装 prometheus</a></li>
+        <li><a href="#安装grafana">安装grafana</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+      </div><div class="content" id="content"><h2 id="docker-架构" class="heading-element">
+  <a href="#docker-%e6%9e%b6%e6%9e%84" class="heading-mark"></a>Docker 架构</h2><p><img loading="lazy" src="https://raw.githubusercontent.com/telzhou618/images/main/img/image-20210810154908558.png" alt="image-20210810154908558" srcset="https://raw.githubusercontent.com/telzhou618/images/main/img/image-20210810154908558.png?size=small, https://raw.githubusercontent.com/telzhou618/images/main/img/image-20210810154908558.png?size=medium 1.5x, https://raw.githubusercontent.com/telzhou618/images/main/img/image-20210810154908558.png?size=large 2x" data-title="image-20210810154908558" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></p>
+<p>Docker 主要组件包括 Client、Daemon、Images、Container、Registry。</p>
+<ul>
+<li>Client ： docker客户端</li>
+<li>Daemon：docker服务端守护进程。</li>
+<li>Images：docker镜像，有点像jar包。</li>
+<li>Container：运行docker镜像的容器，像Tomcat。</li>
+<li>Registry：docker镜像仓库，像maven仓库。</li>
+</ul>
+<h2 id="docker-常用命令" class="heading-element">
+  <a href="#docker-%e5%b8%b8%e7%94%a8%e5%91%bd%e4%bb%a4" class="heading-mark"></a>Docker 常用命令</h2><h3 id="镜像相关的命令" class="heading-element">
+  <a href="#%e9%95%9c%e5%83%8f%e7%9b%b8%e5%85%b3%e7%9a%84%e5%91%bd%e4%bb%a4" class="heading-mark"></a>镜像相关的命令</h3><h4 id="搜索镜像" class="heading-element">
+  <a href="#%e6%90%9c%e7%b4%a2%e9%95%9c%e5%83%8f" class="heading-mark"></a>搜索镜像</h4><div class="highlight" id="id-1"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">docker search java  // 搜索镜像</span></span></code></pre></td></tr></table>
+</div>
+</div><h4 id="下载镜像" class="heading-element">
+  <a href="#%e4%b8%8b%e8%bd%bd%e9%95%9c%e5%83%8f" class="heading-mark"></a>下载镜像</h4><div class="highlight" id="id-2"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">docker pull java:8  // 下载镜像</span></span></code></pre></td></tr></table>
+</div>
+</div><h4 id="查看镜像" class="heading-element">
+  <a href="#%e6%9f%a5%e7%9c%8b%e9%95%9c%e5%83%8f" class="heading-mark"></a>查看镜像</h4><div class="highlight" id="id-3"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">docker images  // 查看镜像</span></span></code></pre></td></tr></table>
+</div>
+</div><h4 id="删除镜像" class="heading-element">
+  <a href="#%e5%88%a0%e9%99%a4%e9%95%9c%e5%83%8f" class="heading-mark"></a>删除镜像</h4><div class="highlight" id="id-4"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">docker rmi java  // 删除镜像，加-f强制删除
+</span></span><span class="line"><span class="cl">docker rmi <span class="k">$(</span>docker images ‐q<span class="k">)</span> // 删除所有镜像</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="容器相关的命令" class="heading-element">
+  <a href="#%e5%ae%b9%e5%99%a8%e7%9b%b8%e5%85%b3%e7%9a%84%e5%91%bd%e4%bb%a4" class="heading-mark"></a>容器相关的命令</h3><h4 id="运行docker镜像" class="heading-element">
+  <a href="#%e8%bf%90%e8%a1%8cdocker%e9%95%9c%e5%83%8f" class="heading-mark"></a>运行Docker镜像</h4><div class="highlight" id="id-5"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">docker run -d -p 8080:80 nginx:least</span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>-d 后台运行</li>
+<li>-p 指定端口
+<ul>
+<li>如：8080:8080，宿主主机端口：容器端口</li>
+</ul>
+</li>
+<li>-m 指定容器的内存大小
+<ul>
+<li>如 ：-m 500M</li>
+</ul>
+</li>
+<li>-e 指定环境变量
+<ul>
+<li>如：-e  JAVA_OPTS=&rsquo;‐Xms1028M ‐Xmx1028M ‐Xmn512M ‐Xss512K ‐XX:MetaspaceSize=256M ‐XX:MaxMetaspaceSize= 256M'</li>
+</ul>
+</li>
+<li>-net 设置网络
+<ul>
+<li>&ndash;net=bridge 桥接，默认</li>
+<li>&ndash;net=host 容器使用宿主网络，不安全。</li>
+<li>&ndash;net=container=容器ID，使用和其他容器一样的网络</li>
+</ul>
+</li>
+<li>-v 指定挂在目录
+<ul>
+<li>如: /var/nginx/logs : /nginx/logs , 宿主主机：容器主机。</li>
+</ul>
+</li>
+</ul>
+<h4 id="列出容器列表" class="heading-element">
+  <a href="#%e5%88%97%e5%87%ba%e5%ae%b9%e5%99%a8%e5%88%97%e8%a1%a8" class="heading-mark"></a>列出容器列表</h4><div class="highlight" id="id-6"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">docker ps  // 加 -a 可列出所有的容器，包含停止的容器</span></span></code></pre></td></tr></table>
+</div>
+</div><h4 id="停止容器" class="heading-element">
+  <a href="#%e5%81%9c%e6%ad%a2%e5%ae%b9%e5%99%a8" class="heading-mark"></a>停止容器</h4><div class="highlight" id="id-7"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">docker stop <span class="o">[</span>容器ID<span class="o">]</span>  // 停止容器
+</span></span><span class="line"><span class="cl">docker <span class="nb">kill</span> <span class="o">[</span>容器ID<span class="o">]</span>  // 强制停止容器</span></span></code></pre></td></tr></table>
+</div>
+</div><h4 id="启动容器" class="heading-element">
+  <a href="#%e5%90%af%e5%8a%a8%e5%ae%b9%e5%99%a8" class="heading-mark"></a>启动容器</h4><div class="highlight" id="id-8"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">docker start <span class="o">[</span>容器ID<span class="o">]</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h4 id="查看日志" class="heading-element">
+  <a href="#%e6%9f%a5%e7%9c%8b%e6%97%a5%e5%bf%97" class="heading-mark"></a>查看日志</h4><div class="highlight" id="id-9"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">docker container logs <span class="o">[</span>容器ID<span class="o">]</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h4 id="查看容器信息" class="heading-element">
+  <a href="#%e6%9f%a5%e7%9c%8b%e5%ae%b9%e5%99%a8%e4%bf%a1%e6%81%af" class="heading-mark"></a>查看容器信息</h4><div class="highlight" id="id-10"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">docker inspect <span class="o">[</span>容器ID<span class="o">]</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h4 id="查看容器里的进程" class="heading-element">
+  <a href="#%e6%9f%a5%e7%9c%8b%e5%ae%b9%e5%99%a8%e9%87%8c%e7%9a%84%e8%bf%9b%e7%a8%8b" class="heading-mark"></a>查看容器里的进程</h4><div class="highlight" id="id-11"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">docker top [容器ID]</span></span></code></pre></td></tr></table>
+</div>
+</div><h4 id="文件传输" class="heading-element">
+  <a href="#%e6%96%87%e4%bb%b6%e4%bc%a0%e8%be%93" class="heading-mark"></a>文件传输</h4><div class="highlight" id="id-12"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">docker cp [容器ID]:/容器文件路径 宿主主机文件路径	// 从容器cp到主机
+</span></span><span class="line"><span class="cl">docker cp 宿主主机文件路径 [容器ID]:/容器文件路径	// 从主机cp到容器</span></span></code></pre></td></tr></table>
+</div>
+</div><h4 id="进入到容器的-shell" class="heading-element">
+  <a href="#%e8%bf%9b%e5%85%a5%e5%88%b0%e5%ae%b9%e5%99%a8%e7%9a%84-shell" class="heading-mark"></a>进入到容器的 shell</h4><div class="highlight" id="id-13"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">docker <span class="nb">exec</span> -it <span class="o">[</span>容器ID<span class="o">]</span> /bin/bash</span></span></code></pre></td></tr></table>
+</div>
+</div><h4 id="删除容器" class="heading-element">
+  <a href="#%e5%88%a0%e9%99%a4%e5%ae%b9%e5%99%a8" class="heading-mark"></a>删除容器</h4><div class="highlight" id="id-14"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">docker rm <span class="o">[</span>容器ID<span class="o">]</span> // 删除已停止的容器
+</span></span><span class="line"><span class="cl">docker rm -f <span class="o">[</span>容器ID<span class="o">]</span> // 强制删除正在运行的容器
+</span></span><span class="line"><span class="cl">docker rm ‐f <span class="k">$(</span>docker ps ‐a ‐q<span class="k">)</span> // 强制删除所有容器</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="docker-构建镜像" class="heading-element">
+  <a href="#docker-%e6%9e%84%e5%bb%ba%e9%95%9c%e5%83%8f" class="heading-mark"></a>Docker 构建镜像</h2><h3 id="dockerfile-命令" class="heading-element">
+  <a href="#dockerfile-%e5%91%bd%e4%bb%a4" class="heading-mark"></a>Dockerfile 命令</h3><ul>
+<li>FROM 指定基础镜像，如 java:8</li>
+<li>RUN 构建镜像执行的命令。</li>
+<li>ADD 文件复制</li>
+<li>COPY 文件复制，不支持URL和压缩。</li>
+<li>CMD 容器启动命令。</li>
+<li>EXPOSE 容器暴露端口。</li>
+<li>WORKID 容器工作路径。</li>
+<li>ENV 环境变量。</li>
+<li>ENTRPINT 和CMD类似。</li>
+<li>VOLUME 指定存储目录，如：VOLUME[&quot;/data&quot;]。</li>
+</ul>
+<h3 id="编写dockerfile" class="heading-element">
+  <a href="#%e7%bc%96%e5%86%99dockerfile" class="heading-mark"></a>编写Dockerfile</h3><p>执行 vi Dockerfile编写镜像文件</p>
+<div class="highlight" id="id-15"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-dockerfile" data-lang="dockerfile"><span class="line"><span class="cl"><span class="c"># 基础镜像</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="k">FROM</span><span class="s"> java:8</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="c"># 复制文件</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="k">ADD</span> java-demo.jar /app.jar<span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="c"># 暴露端口</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="k">EXPOSE</span><span class="s"> 8080</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="c"># 运行程序</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="k">CMD</span> java -jar /app.jar</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="构建镜像" class="heading-element">
+  <a href="#%e6%9e%84%e5%bb%ba%e9%95%9c%e5%83%8f" class="heading-mark"></a>构建镜像</h3><p>在Dockerfile 文件所在的目录执行以下命令构建镜像。</p>
+<div class="highlight" id="id-16"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">docker build -t java-demo:0.0.1 .</span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>-t 指定镜像的名称和版本，不指定版本默认为latest</li>
+<li>&lsquo;.&rsquo; 点代表Dockerfile文件的位置</li>
+</ul>
+<h3 id="上传到docker镜像仓库" class="heading-element">
+  <a href="#%e4%b8%8a%e4%bc%a0%e5%88%b0docker%e9%95%9c%e5%83%8f%e4%bb%93%e5%ba%93" class="heading-mark"></a>上传到Docker镜像仓库</h3><ul>
+<li>在docker hub 注册账号</li>
+<li>在控制台使用 docker login 命令登录</li>
+<li>给镜像打一个tag分组名称, 如： docker tag java-demo.jar:0.0.1  zhangsan/java-demo.jar:0.0.1</li>
+<li>push到远程仓库, 如：docker push zhangsan/java-demo.jar</li>
+</ul>
+<h2 id="docker-compose" class="heading-element">
+  <a href="#docker-compose" class="heading-mark"></a>Docker-Compose</h2><p>可以批量管理多个容器。</p>
+<h3 id="编写-docker-compose-文件" class="heading-element">
+  <a href="#%e7%bc%96%e5%86%99-docker-compose-%e6%96%87%e4%bb%b6" class="heading-mark"></a>编写 docker-compose 文件</h3><ul>
+<li>以Redis为例，执行 vi docker-compose-redis.yml。</li>
+</ul>
+<div class="highlight" id="id-17"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-dockerfile" data-lang="dockerfile"><span class="line"><span class="cl">version: <span class="s1">&#39;3&#39;</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span>services:<span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span>  <span class="c1"># redis</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span>  redis:<span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span>    image: redis<span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span>    volumes:<span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span>      - /var/volumes/redis_data:/data<span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span>    restart: always<span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span>    ports:<span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span>      - <span class="s2">&#34;6379:6379&#34;</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="启动容器-1" class="heading-element">
+  <a href="#%e5%90%af%e5%8a%a8%e5%ae%b9%e5%99%a8-1" class="heading-mark"></a>启动容器</h3><div class="highlight" id="id-18"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">docker-compose -f docker-compose-redis.yml up -d
+</span></span><span class="line"><span class="cl">docker-compose -f docker-compose-redis.yml up -d --build // 每次重新打包新的镜像</span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>-f 指定compose 文件，默认查找docker-compose.yml.</li>
+<li>-d 后台启动。</li>
+</ul>
+<h3 id="配置文件常用参数" class="heading-element">
+  <a href="#%e9%85%8d%e7%bd%ae%e6%96%87%e4%bb%b6%e5%b8%b8%e7%94%a8%e5%8f%82%e6%95%b0" class="heading-mark"></a>配置文件常用参数</h3><ul>
+<li>image 指定镜像名称或ID</li>
+</ul>
+<div class="highlight" id="id-19"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="l">image：java</span></span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>build 指定Dockerfile文件的路径</li>
+</ul>
+<div class="highlight" id="id-20"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="w"> </span><span class="nt">build</span><span class="p">:</span><span class="w"> </span><span class="l">./dir</span></span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>command 覆盖容器启动后默认执行的命令。</li>
+<li>links 连接其他容器</li>
+</ul>
+<div class="highlight" id="id-21"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">web</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nt">links</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">		</span>- <span class="l">db</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">		</span>- <span class="l">redis</span></span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>
+<p>external_links 连接外部容器，格式和links一样。</p>
+</li>
+<li>
+<p>ports 暴露端口信息，格式：宿主主机端口：容器端口,只指定容器端口时宿主主机端口随机</p>
+</li>
+</ul>
+<div class="highlight" id="id-22"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">ports</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span>- <span class="s2">&#34;8081&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span>- <span class="s2">&#34;8080:8080&#34;</span></span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>expose 只保留容器端口</li>
+</ul>
+<div class="highlight" id="id-23"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">expose</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span>- <span class="s2">&#34;8000&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span>- <span class="s2">&#34;9000&#34;</span></span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>volumes 卷挂在路径，格式：宿主主机路径:容器路径</li>
+</ul>
+<div class="highlight" id="id-24"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">volumes</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span>- <span class="l">/opt/data:/var/lib/mysql</span></span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>environment 设置环境变量</li>
+</ul>
+<div class="highlight" id="id-25"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">environment</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="l">RACK_ENV dev</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nt">SHOW</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span></span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>net 设置网络</li>
+</ul>
+<div class="highlight" id="id-26"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">net</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;bridge&#34;</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">net</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;host&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">net</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;none&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">net</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;container:[service name or container name/id]&#34;</span></span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>dns 设置dns,可以一个，也可以是多个</li>
+</ul>
+<div class="highlight" id="id-27"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">dns</span><span class="p">:</span><span class="w"> </span><span class="m">8.8.8.8</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">dns</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span>- <span class="m">8.8.8.8</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span>- <span class="m">9.9.9.9</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="docker-compose-常用操作命令" class="heading-element">
+  <a href="#docker-compose-%e5%b8%b8%e7%94%a8%e6%93%8d%e4%bd%9c%e5%91%bd%e4%bb%a4" class="heading-mark"></a>docker-compose 常用操作命令</h3><ul>
+<li>查看容器</li>
+</ul>
+<div class="highlight" id="id-28"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">docker-compose -f docker-compose.yml ps</span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>关闭/启动/重启某个容器</li>
+</ul>
+<div class="highlight" id="id-29"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">docker-compose -f docker-compose.yml stop/start/restart &lt;服务名称&gt; // 不加服务名则会操作所有容器</span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>查看容器日志</li>
+</ul>
+<div class="highlight" id="id-30"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">docker-compose -f docker-compose.yml logs -f 						 	// 查看所有容器日志
+</span></span><span class="line"><span class="cl">docker-compose -f docker-compose.yml logs -f	&lt;服务名&gt; 		// 查看指定容器日志
+</span></span><span class="line"><span class="cl">docker-compose -f docker-compose.yml logs -f &gt;&gt; app.log <span class="p">&amp;</span> // 把日志输出到文件</span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>重新构建镜像并启动</li>
+</ul>
+<div class="highlight" id="id-31"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">docker-compose -f docker-compose.yml up --build -d</span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>重新构建 cokder-compose.yml 有变化的容器并启动</li>
+</ul>
+<div class="highlight" id="id-32"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">docker-compose -f docker-compose.yml up --fore-recreate -d</span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>停掉容器并删除</li>
+</ul>
+<div class="highlight" id="id-33"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">docker-compose -f docker-compose.yml down</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="prometheus--grafana-搭建监控" class="heading-element">
+  <a href="#prometheus--grafana-%e6%90%ad%e5%bb%ba%e7%9b%91%e6%8e%a7" class="heading-mark"></a>prometheus + grafana 搭建监控</h2><h3 id="安装-redis-exporter" class="heading-element">
+  <a href="#%e5%ae%89%e8%a3%85-redis-exporter" class="heading-mark"></a>安装 redis-exporter</h3><div class="highlight" id="id-34"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">docker run -d <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>	--name redis_exporter <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>	-p 9121:9121 <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>	-v /etc/localtime:/etc/localtime:ro <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>	oliver006/redis_exporter <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>	--redis.addr redis://192.168.202.101:6379 <span class="se">\ </span><span class="c1"># redis 地址</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="安装-prometheus" class="heading-element">
+  <a href="#%e5%ae%89%e8%a3%85-prometheus" class="heading-mark"></a>安装 prometheus</h3><div class="highlight" id="id-35"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="nb">cd</span> /opt
+</span></span><span class="line"><span class="cl">mkdir prometheus
+</span></span><span class="line"><span class="cl"><span class="nb">cd</span> /opt/prometheus
+</span></span><span class="line"><span class="cl">vi prometheus.yml</span></span></code></pre></td></tr></table>
+</div>
+</div><p>prometheus.yml</p>
+<div class="highlight" id="id-36"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">global</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">scrape_interval</span><span class="p">:</span><span class="w"> </span><span class="l">5s</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">scrape_configs</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span>- <span class="nt">job_name</span><span class="p">:</span><span class="w"> </span><span class="l">prometheus</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">static_configs</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="nt">targets</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s1">&#39;localhost:9090&#39;</span><span class="p">]</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">labels</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="nt">instance</span><span class="p">:</span><span class="w"> </span><span class="l">prometheus</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span>- <span class="nt">job_name</span><span class="p">:</span><span class="w"> </span><span class="l">redis</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">static_configs</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="nt">targets</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s1">&#39;192.168.202.101:9121&#39;</span><span class="p">]</span><span class="w"> </span><span class="c"># redis_exporter 地址</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">labels</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="nt">instance</span><span class="p">:</span><span class="w"> </span><span class="l">redis</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>docker 启动 prometheus</p>
+<div class="highlight" id="id-37"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">docker run  -d <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>  -p 9090:9090 <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>  --name<span class="o">=</span>prometheus <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>  -v /etc/localtime:/etc/localtime:ro <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>  -v /opt/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml  <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>  prom/prometheus</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="安装grafana" class="heading-element">
+  <a href="#%e5%ae%89%e8%a3%85grafana" class="heading-mark"></a>安装grafana</h3><div class="highlight" id="id-38"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="nb">cd</span> /opt
+</span></span><span class="line"><span class="cl">mkdir grafana-storage
+</span></span><span class="line"><span class="cl">chmod <span class="m">777</span> grafana-storage</span></span></code></pre></td></tr></table>
+</div>
+</div><div class="highlight" id="id-39"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="c1"># grafana</span>
+</span></span><span class="line"><span class="cl">docker run -d <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>  -p 3000:3000 <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>  --name<span class="o">=</span>grafana <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>  -v /opt/grafana-storage:/var/lib/grafana <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>  -v /etc/localtime:/etc/localtime:ro <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>  grafana/grafana</span></span></code></pre></td></tr></table>
+</div>
+</div><div class="highlight" id="id-40"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">docker run -d --name node_exporter <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>	-p 9100:9100 <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>	--restart<span class="o">=</span>always <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>	--net<span class="o">=</span><span class="s2">&#34;host&#34;</span> <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>	--pid<span class="o">=</span><span class="s2">&#34;host&#34;</span> <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>	-v <span class="s2">&#34;/proc:/host/proc:ro&#34;</span> <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>	-v <span class="s2">&#34;/sys:/host/sys:ro&#34;</span> <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>	-v <span class="s2">&#34;/:/rootfs:ro&#34;</span> <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>	prom/node-exporter <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>	--path.procfs<span class="o">=</span>/host/proc <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>	--path.rootfs<span class="o">=</span>/rootfs <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>	--path.sysfs<span class="o">=</span>/host/sys <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>	--collector.filesystem.ignored-mount-points<span class="o">=</span><span class="s1">&#39;^/(sys|proc|dev|host|etc)($$|/)&#39;</span></span></span></code></pre></td></tr></table>
+</div>
+</div></div><div class="post-footer" id="post-footer">
+  <div class="post-info">
+    <div class="post-info-line">
+      <div class="post-info-mod">
+        <span title="更新于 2023-06-28 14:21:07">更新于 2023-06-28&nbsp;</span>
+      </div><div class="post-info-license">
+            <span><a rel="license external nofollow noopener noreferrer" href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a></span>
+          </div></div><div class="post-info-line">
+        <div class="post-info-md"><span><a href="/posts/docker/index.md" title="阅读原始文档" class="link-to-markdown">阅读原始文档</a></span><span><a href="https://github.com/telzhou618/hugo-blog/blob/main/content/posts%5cdocker.md?plain=1" title="查看源码"target="_blank" rel="external nofollow noopener noreferrer" class="link-to-source">查看源码</a></span><span><a href="https://github.com/telzhou618/hugo-blog/edit/main/content/posts%5cdocker.md" title="编辑此页"target="_blank" rel="external nofollow noopener noreferrer" class="link-to-edit">编辑此页</a></span><span><a href="https://github.com/telzhou618/hugo-blog/issues/new?title=[BUG]%20Docker&#43;%26&#43;Docker-compose&amp;body=%7cField%7cValue%7c%0A%7c-%7c-%7c%0A%7cTitle%7cDocker&#43;%26&#43;Docker-compose%7c%0A%7cURL%7chttps://telzhou618.github.io/posts/docker/%7c%0A%7cFilename%7chttps://github.com/telzhou618/hugo-blog/blob/main/content/posts%5cdocker.md?plain=1%7c" title="报告问题"target="_blank" rel="external nofollow noopener noreferrer" class="link-to-report">报告问题</a></span></div>
+        <div class="post-info-share">
+          <span><a href="javascript:void(0);" title="分享到 Twitter" data-sharer="twitter" data-url="https://telzhou618.github.io/posts/docker/" data-title="Docker &amp; Docker-compose" data-hashtags="docker"><i class="fa-brands fa-twitter fa-fw" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="https://telzhou618.github.io/posts/docker/" data-hashtag="docker"><i class="fa-brands fa-facebook-square fa-fw" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="https://telzhou618.github.io/posts/docker/" data-title="Docker &amp; Docker-compose"><i class="fa-brands fa-weibo fa-fw" aria-hidden="true"></i></a>
+  </span>
+        </div>
+      </div></div>
+
+  <div class="post-info-more">
+    <section class="post-tags"><i class="fa-solid fa-tags fa-fw me-1" aria-hidden="true"></i><a href="/tags/docker/" class="post-tag" title="标签 - docker">docker</a></section>
+    <section>
+      <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+    </section>
+  </div>
+
+  <div class="post-nav"><a href="/posts/homebrew/" class="post-nav-item" rel="prev" title="Homebrew 常用命令"><i class="fa-solid fa-angle-left fa-fw" aria-hidden="true"></i>Homebrew 常用命令</a>
+      <a href="/posts/linux/" class="post-nav-item" rel="next" title="Linux 常用命令">Linux 常用命令<i class="fa-solid fa-angle-right fa-fw" aria-hidden="true"></i></a></div>
+</div>
+</article>
+
+  <aside class="toc" id="toc-auto" aria-label="目录"><h2 class="toc-title">目录&nbsp;<i class="toc-icon fa-solid fa-angle-down fa-fw" aria-hidden="true"></i></h2>
+      <div class="toc-content" id="toc-content-auto"></div></aside></main><footer class="footer">
+    <div class="footer-container"><div class="footer-line powered">由 <a href="https://gohugo.io/" target="_blank" rel="external nofollow noopener noreferrer" title="Hugo 0.121.1"><img class="hugo-icon" src="/images/hugo.min.svg" alt="Hugo logo" /> Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/hugo-fixit/FixIt" target="_blank" rel="external" title="FixIt v0.3.2"><img class="fixit-icon" src="/images/fixit.min.svg" alt="FixIt logo" /> FixIt</a>
+        </div><div class="footer-line copyright" itemscope itemtype="http://schema.org/CreativeWork"><i class="fa-regular fa-copyright fa-fw" aria-hidden="true"></i>
+            <span itemprop="copyrightYear">2024</span><span class="author" itemprop="copyrightHolder">
+              <a href="https://github.com/telzhou618"target="_blank" rel="external nofollow noopener noreferrer">telzhou618</a></span></div></div>
+  </footer></div><div class="widgets"><div class="fixed-buttons animate__faster d-none"><div class="fixed-button back-to-top" role="button" aria-label="回到顶部"><i class="fa-solid fa-arrow-up fa-fw" aria-hidden="true"></i><span class="variant-numeric d-none">0%</span>
+        </div></div><div id="mask"></div><div class="reading-progress-bar" style="left: 0;top: 0;"></div><noscript>
+    <div class="noscript-warning">FixIt 主题在启用 JavaScript 的情况下效果最佳。</div>
+  </noscript>
+</div><link rel="preload" href="/lib/katex/katex.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/katex/katex.min.css"></noscript><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><link rel="stylesheet" href="/lib/pace/themes/blue/pace-theme-minimal.css"><script src="/lib/autocomplete/autocomplete.min.js" defer></script><script src="/lib/fuse/fuse.min.js" defer></script><script src="/lib/sharer/sharer.min.js" async defer></script><script src="/lib/katex/katex.min.js" defer></script><script src="/lib/katex/auto-render.min.js" defer></script><script src="/lib/katex/copy-tex.min.js" defer></script><script src="/lib/katex/mhchem.min.js" defer></script><script src="/lib/cookieconsent/cookieconsent.min.js" defer></script><script src="/lib/pace/pace.min.js" async defer></script><script>window.config={"code":{"copyTitle":"复制到剪贴板","editLockTitle":"锁定可编辑代码块","editUnLockTitle":"解锁可编辑代码块","editable":true,"maxShownLines":10},"comment":{"enable":false},"cookieconsent":{"content":{"dismiss":"同意","link":"了解更多","message":"本网站使用 Cookies 来改善您的浏览体验。"},"enable":true,"palette":{"button":{"background":"#f0f0f0"},"popup":{"background":"#1aa3ff"}},"theme":"edgeless"},"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":true,"left":"\\begin{equation}","right":"\\end{equation}"},{"display":true,"left":"\\begin{equation*}","right":"\\end{equation*}"},{"display":true,"left":"\\begin{align}","right":"\\end{align}"},{"display":true,"left":"\\begin{align*}","right":"\\end{align*}"},{"display":true,"left":"\\begin{alignat}","right":"\\end{alignat}"},{"display":true,"left":"\\begin{alignat*}","right":"\\end{alignat*}"},{"display":true,"left":"\\begin{gather}","right":"\\end{gather}"},{"display":true,"left":"\\begin{CD}","right":"\\end{CD}"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"search":{"distance":100,"findAllMatches":false,"fuseIndexURL":"/index.json","highlightTag":"em","ignoreFieldNorm":false,"ignoreLocation":false,"isCaseSensitive":false,"location":0,"maxResultLength":10,"minMatchCharLength":2,"noResultsFound":"没有找到结果","snippetLength":30,"threshold":0.3,"type":"fuse","useExtendedSearch":false}};</script><script src="/js/theme.min.js" defer></script></body>
+</html>

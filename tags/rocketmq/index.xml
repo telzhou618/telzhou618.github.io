@@ -1,0 +1,16 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+  <channel>
+    <title>rocketmq - 标签 - 扁舟的博客</title>
+    <link>https://telzhou618.github.io/tags/rocketmq/</link>
+    <description>rocketmq - 标签 | 扁舟的博客</description>
+    <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>telzhou618@qq.com (telzhou618)</managingEditor>
+      <webMaster>telzhou618@qq.com (telzhou618)</webMaster><lastBuildDate>Tue, 28 Jun 2022 11:44:07 &#43;0800</lastBuildDate><atom:link href="https://telzhou618.github.io/tags/rocketmq/" rel="self" type="application/rss+xml" /><item>
+  <title>一文搞懂 RocketMQ</title>
+  <link>https://telzhou618.github.io/posts/rocketmq/</link>
+  <pubDate>Tue, 28 Jun 2022 11:44:07 &#43;0800</pubDate>
+  <author>telzhou618</author>
+  <guid>https://telzhou618.github.io/posts/rocketmq/</guid>
+  <description><![CDATA[RocketMQ 集群架构图 RocketMQ 四大核心集群 NameServer 集群：作为注册中心，维护着所有的broker和topic的映射关系，以及路由功能，多台部署，之间不互相通信。 Br]]></description>
+</item>
+</channel>
+</rss>

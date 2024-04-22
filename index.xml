@@ -1,180 +1,100 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
   <channel>
-    <title>Home</title>
+    <title>扁舟的博客</title>
     <link>https://telzhou618.github.io/</link>
-    <description>Recent content on Home</description>
-    <generator>Hugo -- gohugo.io</generator>
-    <language>en-us</language>
-    <lastBuildDate>Mon, 10 Jul 2023 21:36:57 +0800</lastBuildDate>
-    <atom:link href="https://telzhou618.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <description>扁舟的博客</description>
+    <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>telzhou618@qq.com (telzhou618)</managingEditor>
+      <webMaster>telzhou618@qq.com (telzhou618)</webMaster><lastBuildDate>Mon, 10 Jul 2023 21:36:57 &#43;0800</lastBuildDate>
+      <atom:link href="https://telzhou618.github.io/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>MYSQL 表空间分析</title>
-      <link>https://telzhou618.github.io/post/mysql_information_schema/</link>
-      <pubDate>Mon, 10 Jul 2023 21:36:57 +0800</pubDate>
-      <guid>https://telzhou618.github.io/post/mysql_information_schema/</guid>
-      <description>删除数据并释放空间命令 drop table table_name 立刻释放磁盘空间 ，不管是 Innodb和MyISAM ； truncate table table_name立刻释放磁盘空间 ，不管是 Innodb和MyISAM; delete from table_name 删除表的全部数据，对于MyISAM 会立刻释放磁盘空间 ，而InnoDB 不会释放磁盘空间； delete from table_name where xx 带条件的删除, 不管是innodb还是MyISAM都不会释放磁盘空间；delete操作后使用optimize table table_name 释放磁盘空间，优化表期间会锁定表，所以要在空闲时段执行optimize table 查看表空间占用大小 MySQL 表空间信息保存在哪 information_schema.TABLES 中。&#xA;查看所有数据库的容量和大小 select table_schema as &amp;#39;数据库&amp;#39;, sum(table_rows) as &amp;#39;记录数&amp;#39;, sum(truncate(data_length/1024/1024, 2)) as &amp;#39;数据容量(MB)&amp;#39;, sum(truncate(index_length/1024/1024, 2)) as &amp;#39;索引容量(MB)&amp;#39;, sum(truncate(data_free/1024/1024, 2)) as &amp;#39;碎片空间容量(MB)&amp;#39; from information_schema.tables group by table_schema order by sum(data_length) desc, sum(index_length) desc 查看指定数据库各个表容量大小 select table_schema as &amp;#39;数据库&amp;#39;, table_name as &amp;#39;表名&amp;#39;, table_rows as &amp;#39;记录数&amp;#39;, truncate(data_length/1024/1024, 2) as &amp;#39;数据容量(MB)&amp;#39;, truncate(index_length/1024/1024, 2) as &amp;#39;索引容量(MB)&amp;#39;, sum(truncate(data_free/1024/1024, 2)) as &amp;#39;碎片空间容量(MB)&amp;#39; from information_schema.</description>
-    </item>
-    <item>
-      <title>Java SPI 应用</title>
-      <link>https://telzhou618.github.io/post/java-spi/</link>
-      <pubDate>Wed, 05 Jul 2023 16:15:58 +0800</pubDate>
-      <guid>https://telzhou618.github.io/post/java-spi/</guid>
-      <description>Java SPI（Service Provider Interface）是Java平台提供的一种机制，用于实现服务发现和扩展的功能。它允许开发人员定义一组接口，然后允许其他开发人员在应用程序中提供不同的实现。&#xA;举个例子 某应该需要外部提供数据，具体使用USB接口传输还是Typec接口传输并不关心，官方只需定义接口，USB厂商和typec厂商各自去实现接口即可，具体如下。 创建 maven 项目 data-trans-api 为接口项目, xml 配置如下&#xA;&amp;lt;?xml version=&amp;#34;1.0&amp;#34; encoding=&amp;#34;UTF-8&amp;#34;?&amp;gt; &amp;lt;project xmlns=&amp;#34;http://maven.apache.org/POM/4.0.0&amp;#34; xmlns:xsi=&amp;#34;http://www.w3.org/2001/XMLSchema-instance&amp;#34; xsi:schemaLocation=&amp;#34;http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd&amp;#34;&amp;gt; &amp;lt;parent&amp;gt; &amp;lt;artifactId&amp;gt;spi-demo&amp;lt;/artifactId&amp;gt; &amp;lt;groupId&amp;gt;org.example&amp;lt;/groupId&amp;gt; &amp;lt;version&amp;gt;1.0-SNAPSHOT&amp;lt;/version&amp;gt; &amp;lt;/parent&amp;gt; &amp;lt;modelVersion&amp;gt;4.0.0&amp;lt;/modelVersion&amp;gt; &amp;lt;artifactId&amp;gt;data-trans-api&amp;lt;/artifactId&amp;gt; &amp;lt;properties&amp;gt; &amp;lt;maven.compiler.source&amp;gt;8&amp;lt;/maven.compiler.source&amp;gt; &amp;lt;maven.compiler.target&amp;gt;8&amp;lt;/maven.compiler.target&amp;gt; &amp;lt;/properties&amp;gt; &amp;lt;/project&amp;gt; 定义接口&#xA;package com.example; public interface DataProvider { String getData(); } usb实现项目 创建一个名称为 usb 的 maven 项目，引入前面提供的 data-trans-api 包，完整的XML如下&#xA;&amp;lt;?xml version=&amp;#34;1.0&amp;#34; encoding=&amp;#34;UTF-8&amp;#34;?&amp;gt; &amp;lt;project xmlns=&amp;#34;http://maven.apache.org/POM/4.0.0&amp;#34; xmlns:xsi=&amp;#34;http://www.w3.org/2001/XMLSchema-instance&amp;#34; xsi:schemaLocation=&amp;#34;http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd&amp;#34;&amp;gt; &amp;lt;parent&amp;gt; &amp;lt;artifactId&amp;gt;spi-demo&amp;lt;/artifactId&amp;gt; &amp;lt;groupId&amp;gt;org.example&amp;lt;/groupId&amp;gt; &amp;lt;version&amp;gt;1.0-SNAPSHOT&amp;lt;/version&amp;gt; &amp;lt;/parent&amp;gt; &amp;lt;modelVersion&amp;gt;4.0.0&amp;lt;/modelVersion&amp;gt; &amp;lt;artifactId&amp;gt;usb&amp;lt;/artifactId&amp;gt; &amp;lt;properties&amp;gt; &amp;lt;maven.compiler.source&amp;gt;8&amp;lt;/maven.compiler.source&amp;gt; &amp;lt;maven.compiler.target&amp;gt;8&amp;lt;/maven.compiler.target&amp;gt; &amp;lt;/properties&amp;gt; &amp;lt;dependencies&amp;gt; &amp;lt;dependency&amp;gt; &amp;lt;groupId&amp;gt;org.</description>
-    </item>
-    <item>
-      <title>Otter数据同步2 - 配置同步</title>
-      <link>https://telzhou618.github.io/post/otter2/</link>
-      <pubDate>Wed, 28 Jun 2023 17:39:37 +0800</pubDate>
-      <guid>https://telzhou618.github.io/post/otter2/</guid>
-      <description>待完善&amp;hellip;</description>
-    </item>
-    <item>
-      <title>Otter数据同步1 - 环境搭建</title>
-      <link>https://telzhou618.github.io/post/otter1/</link>
-      <pubDate>Wed, 28 Jun 2023 17:39:33 +0800</pubDate>
-      <guid>https://telzhou618.github.io/post/otter1/</guid>
-      <description>otter 官网介绍 名称：otter [&amp;lsquo;ɒtə(r)] 译意： 水獭，数据搬运工 语言： 纯java开发 定位： 基于数据库增量日志解析，准实时同步到本机房或异地机房的mysql/oracle数据库. 一个分布式数据库同步系统。 更多介绍查看Github：https://github.com/alibaba/otter&#xA;架构及工作原理 Otter服务 包含以下组件或服务或组件：&#xA;Canal, 负责监听Bin-log，类似MYSQL的从库，本质上实现了MYSQL的协议，伪装成从库读取bin-log日志。 Manager 管理Otter的配置的后台, 比如管理数据库表之间的映射关系，会把配置推送到 Node。 Node 实现同步功能的核心服务，同时把同步结果实时反馈给Manager。 Zookeepr, 分布式调度，监控节点状态，这个不用解释，分布式系统都会用到。 otter 需要以上四个服务才能工作，搭建比较麻烦，稍后详细说明。&#xA;本次目标 假设要把tb_user表的数据同步到tb_user2, 用otter该如何实现？tb_user 表结构如下。&#xA;create table tb_user ( id int(11) unsigned auto_increment comment &amp;#39;ID&amp;#39; primary key, username varchar(100) default &amp;#39;&amp;#39; not null comment &amp;#39;用户名&amp;#39;, age int default 0 not null comment &amp;#39;年龄&amp;#39;, email varchar(64) default &amp;#39;&amp;#39; not null comment &amp;#39;邮箱&amp;#39;, created_time datetime default CURRENT_TIMESTAMP not null comment &amp;#39;创建时间&amp;#39;, modified_time datetime default CURRENT_TIMESTAMP not null on update CURRENT_TIMESTAMP comment &amp;#39;更新时间&amp;#39;, is_deleted tinyint(2) default 0 not null comment &amp;#39;是否删除&amp;#39; ) comment &amp;#39;用户信息表&amp;#39; charset = utf8mb4; tb_user2 表结构和tb_user相同。</description>
-    </item>
-    <item>
-      <title>Redis 从入门到入土</title>
-      <link>https://telzhou618.github.io/post/redis/</link>
-      <pubDate>Wed, 28 Jun 2023 14:44:07 +0800</pubDate>
-      <guid>https://telzhou618.github.io/post/redis/</guid>
-      <description>Redis 是什么 Redis 是一个高性能的基于内存实现的K-V存储数据库 。&#xA;Redis 的优点 性能极高，Redis能读的速度是110000次/s,写的速度是81000次/s 。 支持持久化，可以将内存中的数据保存在磁盘中，重启的时候可以再次加载进行使用。 多种数据类型，同时还提供list，set，zset，hash等数据结构的存储。 支持主从复制，自动同步，可实现读写分离。 丰富的特性，支持pub/sub，key过期策略，事务，支持多个DB等。 Redis 的缺点 基于内存存储，单机容量有限。 重启会加载磁盘缓存到内存，这期间不能提供服务。 主从复制采用全量复制，这个过程会占用更多内存和网络资源。 Redis 应用场景 缓存数据，常见应用。&#xA;计数器，单线程可避免并发，保证不出错，性能毫秒级。&#xA;队列，可作为简单消息队列使用。&#xA;分布式锁与单线程机制&#xA;位操作，如统计在线列表&#xA;最新列表，获取最新10条新闻数据&#xA;排行榜，消费排行榜&#xA;Redis 基础 Redis 下载安装安装 从源码安装&#xA;# download wget https://download.redis.io/releases/redis-6.2.5.tar.gz tar xzf redis-6.2.5.tar.gz cd redis-6.2.5 make # run redis-server src/redis-server # test src/redis-cli redis&amp;gt; set foo bar OK redis&amp;gt; get foo &amp;#34;bar&amp;#34; Ubuntu 安装&#xA;sudo add-apt-repository ppa:redislabs/redis sudo apt-get update sudo apt-get install redis Mac 安装</description>
-    </item>
-    <item>
-      <title>Spring AOP 从入门到源码解析</title>
-      <link>https://telzhou618.github.io/post/spring-aop/</link>
-      <pubDate>Wed, 28 Jun 2023 14:44:07 +0800</pubDate>
-      <guid>https://telzhou618.github.io/post/spring-aop/</guid>
-      <description>先学会如何使用 Spring-boot 或 Spring-cloud 中使用AOP 在Spring-boot 工程中使用AOP功能，先引入相关的依赖。&#xA;pom.xml&#xA;&amp;lt;dependency&amp;gt; &amp;lt;groupId&amp;gt;org.springframework.boot&amp;lt;/groupId&amp;gt; &amp;lt;artifactId&amp;gt;spring-boot-starter-web&amp;lt;/artifactId&amp;gt; &amp;lt;/dependency&amp;gt; &amp;lt;dependency&amp;gt; &amp;lt;groupId&amp;gt;org.springframework.boot&amp;lt;/groupId&amp;gt; &amp;lt;artifactId&amp;gt;spring-boot-starter-aop&amp;lt;/artifactId&amp;gt; &amp;lt;/dependency&amp;gt; &amp;lt;dependency&amp;gt; &amp;lt;groupId&amp;gt;org.projectlombok&amp;lt;/groupId&amp;gt; &amp;lt;artifactId&amp;gt;lombok&amp;lt;/artifactId&amp;gt; &amp;lt;version&amp;gt;1.18.22&amp;lt;/version&amp;gt; &amp;lt;/dependency&amp;gt; &amp;lt;dependency&amp;gt; &amp;lt;groupId&amp;gt;org.springframework.boot&amp;lt;/groupId&amp;gt; &amp;lt;artifactId&amp;gt;spring-boot-starter-test&amp;lt;/artifactId&amp;gt; &amp;lt;scope&amp;gt;test&amp;lt;/scope&amp;gt; &amp;lt;exclusions&amp;gt; &amp;lt;exclusion&amp;gt; &amp;lt;groupId&amp;gt;org.junit.vintage&amp;lt;/groupId&amp;gt; &amp;lt;artifactId&amp;gt;junit-vintage-engine&amp;lt;/artifactId&amp;gt; &amp;lt;/exclusion&amp;gt; &amp;lt;/exclusions&amp;gt; &amp;lt;/dependency&amp;gt; 测试业务接口 UserService.java&#xA;public interface UserService { void test(); } 测试业务接口实现类 UserServiceImp.java&#xA;@Slf4j @Service public class UserServiceImpl implements UserService { @Override public void test() { log.info(&amp;#34;执行业务方法test...&amp;#34;); } } 切面类 LogAspect.java&#xA;@Slf4j @Aspect @Component public class LogAspect { @Pointcut(&amp;#34;execution(public * com.</description>
-    </item>
-    <item>
-      <title>Linux 常用命令</title>
-      <link>https://telzhou618.github.io/post/linux/</link>
-      <pubDate>Wed, 28 Jun 2023 14:43:58 +0800</pubDate>
-      <guid>https://telzhou618.github.io/post/linux/</guid>
-      <description>less 从文件开头查看少量内容命令，命令格式：less [参数] 文件 。&#xA;参数：&#xA;- /字符串：向下搜索 - ?字符串：向上搜索 - n：重复前一个搜索(向下搜索) - N：反向重复前一个搜索(向上搜索) - 翻一页 - f：前进一页 - b：回退一页 - 翻半页： - d：前进半页 - u：后退半页 - 翻一行： - e/j：前进一行 - y/k：后退一行 实例1：查看日志, -N 显示行号&#xA;less -N /var/a.log 实例2：跳转到最后一行，并滚动打印。&#xA;shift + f 操作1：在滚动打印的基础上停止滚动&#xA;control + c 操作2：向上搜索关键词&#xA;?kewwaord + enter 按n继续向上搜索相同字符串 按N继续向下搜索相同字符串 操作3：向下搜索关键词&#xA;/kewwaord + enter 按N继续向下搜索相同字符串 按n继续向上搜索相同字符串 chown 设置文件所有者对文件的权限。&#xA;实例1：给admin用户授于/var/log.a.log文件权限&#xA;chown admin /var/log.a.log 实例2：递归给某个用户授于整个目录权限&#xA;chown -R admin /var/log/ chmod 设置用户对文件的读、写、执行权限。 命令格式：</description>
-    </item>
-    <item>
-      <title>Docker &amp; Docker-compose</title>
-      <link>https://telzhou618.github.io/post/docker/</link>
-      <pubDate>Wed, 28 Jun 2023 14:21:07 +0800</pubDate>
-      <guid>https://telzhou618.github.io/post/docker/</guid>
-      <description>Docker 架构 Docker 主要组件包括 Client、Daemon、Images、Container、Registry。&#xA;Client ： docker客户端 Daemon：docker服务端守护进程。 Images：docker镜像，有点像jar包。 Container：运行docker镜像的容器，像Tomcat。 Registry：docker镜像仓库，像maven仓库。 Docker 常用命令 镜像相关的命令 搜索镜像 docker search java // 搜索镜像 下载镜像 docker pull java:8 // 下载镜像 查看镜像 docker images // 查看镜像 删除镜像 docker rmi java // 删除镜像，加-f强制删除 docker rmi $(docker images ‐q) // 删除所有镜像 容器相关的命令 运行Docker镜像 docker run -d -p 8080:80 nginx:least -d 后台运行 -p 指定端口 如：8080:8080，宿主主机端口：容器端口 -m 指定容器的内存大小 如 ：-m 500M -e 指定环境变量 如：-e JAVA_OPTS=&amp;rsquo;‐Xms1028M ‐Xmx1028M ‐Xmn512M ‐Xss512K ‐XX:MetaspaceSize=256M ‐XX:MaxMetaspaceSize= 256M&#39; -net 设置网络 &amp;ndash;net=bridge 桥接，默认 &amp;ndash;net=host 容器使用宿主网络，不安全。 &amp;ndash;net=container=容器ID，使用和其他容器一样的网络 -v 指定挂在目录 如: /var/nginx/logs : /nginx/logs , 宿主主机：容器主机。 列出容器列表 docker ps // 加 -a 可列出所有的容器，包含停止的容器 停止容器 docker stop [容器ID] // 停止容器 docker kill [容器ID] // 强制停止容器 启动容器 docker start [容器ID] 查看日志 docker container logs [容器ID] 查看容器信息 docker inspect [容器ID] 查看容器里的进程 docker top [容器ID] 文件传输 docker cp [容器ID]:/容器文件路径 宿主主机文件路径&#x9;// 从容器cp到主机&#xD;docker cp 宿主主机文件路径 [容器ID]:/容器文件路径&#x9;// 从主机cp到容器 进入到容器的 shell docker exec -it [容器ID] /bin/bash 删除容器 docker rm [容器ID] // 删除已停止的容器 docker rm -f [容器ID] // 强制删除正在运行的容器 docker rm ‐f $(docker ps ‐a ‐q) // 强制删除所有容器 Docker 构建镜像 Dockerfile 命令 FROM 指定基础镜像，如 java:8 RUN 构建镜像执行的命令。 ADD 文件复制 COPY 文件复制，不支持URL和压缩。 CMD 容器启动命令。 EXPOSE 容器暴露端口。 WORKID 容器工作路径。 ENV 环境变量。 ENTRPINT 和CMD类似。 VOLUME 指定存储目录，如：VOLUME[&amp;quot;/data&amp;quot;]。 编写Dockerfile 执行 vi Dockerfile编写镜像文件</description>
-    </item>
-    <item>
-      <title>Homebrew 常用命令</title>
-      <link>https://telzhou618.github.io/post/homebrew/</link>
-      <pubDate>Wed, 28 Jun 2023 11:44:07 +0800</pubDate>
-      <guid>https://telzhou618.github.io/post/homebrew/</guid>
-      <description>mac 软件包管理工具 brew install #[包名] 安装包。 brew uninstall #[包名] 卸载包。 brew search #[包名] 查询包。 brew list #列出已安装的软件。 brew update #更新brew。 - brew outdated #查看可更新的包。 brew upgrade #(更新所有) 更新所有包。 brew upgrade [包名] #更新置顶包。 brew cleanup #清理所有包的旧版本。 brew cleanup [包名] #清理指定包的旧版本。 brew cleanup -n #查看可清理的旧版本包，不执行实际操作。 brew home #用浏览器打开brew的官方网站。 brew info [包名] #显示软件信息。 brew deps [包名] #显示包依赖。 brew install --cask [包名] #安装桌面软件。 服务管理 brew services list # 查询服务列表和状态 brew services run mysql # 启动mysql 服务 brew services start mysql # 启动 mysql 服务，并注册开机自启 brew services stop mysql # 停止 mysql 服务，并取消开机自启 brew services restart mysql # 重启 mysql 服务，并注册开机自启 brew services cleanup # 清除已卸载应用的无用配置 </description>
-    </item>
-    <item>
-      <title>Mac 修改环境变量</title>
-      <link>https://telzhou618.github.io/post/modify-env/</link>
-      <pubDate>Wed, 28 Jun 2023 11:40:09 +0800</pubDate>
-      <guid>https://telzhou618.github.io/post/modify-env/</guid>
-      <description>环境变量文件存储位置 &amp;gt; /etc/paths （全局建议修改这个文件 ） &amp;gt; /etc/profile （建议不修改这个文件 ） &amp;gt; /etc/bashrc （一般在这个文件中添加系统级环境变量） &amp;gt; ~/.profile 文件为系统的每个用户设置环境信息,当用户第一次登录时,该文件被执行.并从/etc/profile.d目录的配置文件中搜集shell的设置 &amp;gt; ~/.bashrc 每一个运行bash shell的用户执行此文件.当bash shell被打开时,该文件被读取 &amp;gt; ~/.bash_profile 该文件包含专用于你的bash shell的bash信息,当登录时以及每次打开新的shell时,该文件被读取 修改完让其生效 source ~/.bash_profile </description>
-    </item>
-    <item>
-      <title>Mac 更换控制台 shell</title>
-      <link>https://telzhou618.github.io/post/shell-change/</link>
-      <pubDate>Wed, 28 Jun 2023 11:37:30 +0800</pubDate>
-      <guid>https://telzhou618.github.io/post/shell-change/</guid>
-      <description>shell 常用命令 more /etc/shells # 查查有多少个shell echo $SHELL # 查看当前shell chsh -s /bin/bash # 切换到 bash chsh -s /bin/zsh&#x9;# 切换到zsh chsh -s /usr/local/bin/fish&#x9;#切换到fish </description>
-    </item>
-    <item>
-      <title>About</title>
-      <link>https://telzhou618.github.io/about/</link>
-      <pubDate>Tue, 27 Jun 2023 15:18:48 +0800</pubDate>
-      <guid>https://telzhou618.github.io/about/</guid>
-      <description>Java 程序员，略懂Python，联系邮箱：telzhou618@foxmail.com&#xA;开源贡献 个人主页：https://telzhou618.github.io 【框架】手写各种框架源码，https://github.com/telzhou618/java-source-code 【框架】管理后台框，https://gitee.com/zhougaojun/KangarooAdmin 【框架】SpringCloud商城框架，https://github.com/telzhou618/springcloud-mall 【框架】Dubbo 商城框架，https://github.com/telzhou618/vacomall 【文章】一文搞懂RocketMQ， https://telzhou618.github.io/post/rocketmq 【文章】MySQL优化及索引设计规范，https://telzhou618.github.io/post/mysql-review 【文章】SpringAOP从入门到源码解析，https://telzhou618.github.io/post/spring-aop 兴趣爱好 游泳和书法。</description>
-    </item>
-    <item>
-      <title>Commons-pool2 应用与实战</title>
-      <link>https://telzhou618.github.io/post/commons-pool2/</link>
-      <pubDate>Tue, 28 Jun 2022 11:44:07 +0800</pubDate>
-      <guid>https://telzhou618.github.io/post/commons-pool2/</guid>
-      <description>把创建耗时的对象提前创建好，放在池中管理，需要时直接取，用完归还，可以做对象复用，避免用时创建慢且提高系统的效率。 比如数据库连接、网络连接、大对象创建等都可以池化处理。&#xA;commons-pool的优点 对象复用，减少创建开销。对于数据库的连接池可以减少创建连接带来的开销，连接用完归还可以给其他线程复用。&#xA;三个核心对象 GenericObjectPool 连接池对象，继承自BaseGenericObjectPool 用双端阻塞队列LinkedBlockingDeque保存空闲链接，用ConcurrentHashMap保存所有的链接。&#xA;构造方法&#xA;public GenericKeyedObjectPool(KeyedPooledObjectFactory&amp;lt;K, T&amp;gt; factory, GenericKeyedObjectPoolConfig&amp;lt;T&amp;gt; config) { //... } GenericObjectPoolConfig和PooledObjectFactory是创建对象池所必须的两个对象，稍后详细说明。&#xA;重要方法&#xA;borrowObject() 从连接池中取对象。&#xA;returnObject() 归还对象。&#xA;PooledObjectFactory 生产对象的工厂，有如下一些方法：&#xA;makeObject() 生产一个对象 连接池初始化,驱逐过期连接后小于最小连接数，所有连接被占用且总连接数小于最大连接时调用。 destroyObject() 销毁一个对象 validateObject() 校验一个对象 activateObject() 重新激活一个对象 passivateObject() 钝化一个对象 没有特别要求可用PooledObjectFactory 的子类 BasePooledObjectFactory作为生产对象的工厂更简洁。&#xA;create() 生产对象的逻辑&#xA;wrap() 将对象包装成 PooledObject，必须支持多线程。&#xA;GenericObjectPoolConfig 连接池配置对象，继承自BaseObjectPoolConfig 。&#xA;常用参数：&#xA;maxTotal：对象池中管理的最多对象个数。默认值是8。 maxIdle：对象池中最大的空闲对象个数。默认值是8。 minIdle：对象池中最小的空闲对象个数。默认值是0。&#xA;实例代码 创建一个简单的连接对象，模拟数据库连接对象。&#xA;/** * 连接对象 */ @Getter @Setter @ToString static class Connection { private Integer id; public Connection(Integer id) { this.</description>
-    </item>
-    <item>
-      <title>JAVA8 debug 技巧</title>
-      <link>https://telzhou618.github.io/post/java8-debug/</link>
-      <pubDate>Tue, 28 Jun 2022 11:44:07 +0800</pubDate>
-      <guid>https://telzhou618.github.io/post/java8-debug/</guid>
-      <description>调试按钮说明 Stream 调试 实例代码：&#xA;// 1.Stream 调试 List&amp;lt;Integer&amp;gt; list1 = Lists.newArrayList(1, 5, 3, 2, 4); List&amp;lt;Integer&amp;gt; list2 = list1.stream() .filter(o -&amp;gt; o &amp;gt; 2) .sorted() .collect(Collectors.toList()); System.out.println(list2); 在 stram() 处设置断点，debug 运行。&#xA;可以看到Debug视图中 Trace Current Steam Chain 图标会点亮。&#xA;点击该图标弹出 Stream Trace 视图。可以看到 filter、sorted、collect 每一个方法执行之后的结果。&#xA;ok，成功。&#xA;Optional 调试 实例代码：&#xA;// 2.Optional 调试 User user = new User() .setId(1) .setName(&amp;#34;tom&amp;#34;) .setArea(new Area().setProvince(&amp;#34;beijing&amp;#34;)); String province = Optional.ofNullable(user) .map(User::getArea) .map(Area::getProvince) .orElse(&amp;#34;未知&amp;#34;); System.out.println(province); 在 Optaionl 处加断点，debug 运行，可以看到 Evaluate Express 图标。</description>
-    </item>
-    <item>
-      <title>JVM 常用参数</title>
-      <link>https://telzhou618.github.io/post/jvm/</link>
-      <pubDate>Tue, 28 Jun 2022 11:44:07 +0800</pubDate>
-      <guid>https://telzhou618.github.io/post/jvm/</guid>
-      <description>开启TLAB 开启开启TLAB后,为没个线程预先分配一块内存，创建对象优先使用TLAB内存分配空间。&#xA;XX:+UseTLAB # 开启TLAB，默认开启 XX:TLABSize # 设置缓存区大小 开启指针压缩 在64位平台的HotSpot中使用32位指针，内存使用会多出1.5倍左右，使用较大指针在主内存和缓存之间移动数据， 占用较大宽带，同时GC也会承受较大压力，默认开启！&#xA;XX:+UseCompressedOops 开启逃逸分析 jdk1.7 后默认开启。&#xA;-XX:+DoEscapeAnalysis 开启标量替换 jdk1.7 后默认开启。&#xA;-XX:+EliminateAllocations Serial收集器 -XX:+UseSerialGC -XX:+UseSerialOldGC Parallel Scavenge 收集器 -XX:+UseParallelGC -XX:+UseParallelOldGC ParNew 收集器 -XX:+UseParNewGC CMS收集器 -XX:+UseConcMarkSweepGC -XX:+UseConcMarkSweepGC：启用cms&#xA;-XX:ConcGCThreads：并发的GC线程数&#xA;-XX:+UseCMSCompactAtFullCollection：FullGC之后做压缩整理（减少碎片）&#xA;-XX:CMSFullGCsBeforeCompaction：多少次FullGC之后压缩一次，默认是0，代表每次FullGC后都会压缩一 次&#xA;-XX:CMSInitiatingOccupancyFraction: 当老年代使用达到该比例时会触发FullGC（默认是92，这是百分比）&#xA;-XX:+UseCMSInitiatingOccupancyOnly：只使用设定的回收阈值(-XX:CMSInitiatingOccupancyFraction设 定的值)，如果不指定，JVM仅在第一次使用设定值，后续则会自动调整&#xA;-XX:+CMSScavengeBeforeRemark：在CMS GC前启动一次minor gc，目的在于减少老年代对年轻代的引 用，降低CMS GC的标记阶段时的开销，一般CMS的GC耗时 80%都在标记阶段&#xA;-XX:+CMSParallellnitialMarkEnabled：表示在初始标记的时候多线程执行，缩短STW&#xA;-XX:+CMSParallelRemarkEnabled：在重新标记的时候多线程执行，缩短STW;&#xA;G1收集器 -XX:+UseG1GC:使用G1收集器&#xA;-XX:ParallelGCThreads:指定GC工作的线程数量&#xA;-XX:G1HeapRegionSize:指定分区大小(1MB~32MB，且必须是2的N次幂)，默认将整堆划分为2048个分区&#xA;-XX:MaxGCPauseMillis:目标暂停时间(默认200ms)&#xA;-XX:G1NewSizePercent:新生代内存初始空间(默认整堆5%)&#xA;-XX:G1MaxNewSizePercent:新生代内存最大空间&#xA;-XX:TargetSurvivorRatio:Survivor区的填充容量(默认50%)，Survivor区域里的一批对象(年龄1+年龄2+年龄n的多个 年龄对象)总和超过了Survivor区域的50%，此时就会把年龄n(含)以上的对象都放入老年代&#xA;-XX:MaxTenuringThreshold:最大年龄阈值(默认15)&#xA;-XX:InitiatingHeapOccupancyPercent:老年代占用空间达到整堆内存阈值(默认45%)，则执行新生代和老年代的混合 收集(MixedGC)，比如我们之前说的堆默认有2048个region，如果有接近1000个region都是老年代的region，则可能 就要触发MixedGC了&#xA;-XX:G1MixedGCLiveThresholdPercent(默认85%) region中的存活对象低于这个值时才会回收该region，如果超过这 个值，存活对象过多，回收的的意义不大。&#xA;-XX:G1MixedGCCountTarget:在一次回收过程中指定做几次筛选回收(默认8次)，在最后一个筛选回收阶段可以回收一 会，然后暂停回收，恢复系统运行，一会再开始回收，这样可以让系统不至于单次停顿时间过长。&#xA;-XX:G1HeapWastePercent(默认5%): gc过程中空出来的region是否充足阈值，在混合回收的时候，对Region回收都 是基于复制算法进行的，都是把要回收的Region里的存活对象放入其他Region，然后这个Region中的垃圾对象全部清 理掉，这样的话在回收过程就会不断空出来新的Region，一旦空闲出来的Region数量达到了堆内存的5%，此时就会立 即停止混合回收，意味着本次混合回收就结束了。</description>
-    </item>
-    <item>
-      <title>MyBatis 源码解析</title>
-      <link>https://telzhou618.github.io/post/mybatis/</link>
-      <pubDate>Tue, 28 Jun 2022 11:44:07 +0800</pubDate>
-      <guid>https://telzhou618.github.io/post/mybatis/</guid>
-      <description>一款轻量级的ORM框架。&#xA;MyBatis 的优点 封装底层乏味的JDBC操作，让开发中更关注业务。 SQL语句写在XML里和代码分离，便于维护，低耦合。 MyBatis 的缺点 相比全自动的hibernat, SQL编写工作量大。 对数据库SQL依赖比较强，移植性差。 MyBatis 核心组件 Configuration 配置类，MyBatis启动是会解析全局配置文件全局配置文件 mybatis-config.xml及所有的 XXXMapper.xml文件,解析结果存入Configuration对象中，该对象是单例的，存在会话的上下文，贯穿这个MyBatis的执行过程。&#xA;SqlSession SQL执行的顶层接口，定义了和数据库交互的所有方法，有CRUD及开始事务、提交事务、回滚事务等，有一个默认的实现类 DefaultSqlSession，持有Configuration和Executor对象，SqlSession本身没有做多少有用的事，具体的SQL语句执行委托给了Executor执行。&#xA;Executor 执行器，实现了SqlSession定义的SQL操作方法，实现了MyBatis的一级缓存，具体的SQL执行委托给它的下一级 StatementHandler。&#xA;StatementHandler 真正和数据交互的对象，实现了执行SQL语句，自身持有ParameterHandler和ResultSetHandler对象。&#xA;ParameterHandler 负责参数解析。&#xA;ResultSetHandler 负责处理SQL执行结果。&#xA;以上是MyBtais重要的几个组成部件，下面分析一下具体的源码执行流程。&#xA;MyBatis 源码分析 从Configuration配置解析开始 实例如下：&#xA;public static void main(String[] args) throws IOException { String resource = &amp;#34;mybatis-config.xml&amp;#34;; InputStream inputStream = Resources.getResourceAsStream(resource); SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(inputStream); SqlSession session = sqlSessionFactory.openSession(); Blog blog = session.selectOne(&amp;#34;com.example.mapper.BlogMapper.selectBlog&amp;#34;, 1); System.out.println(blog); } 从 new SqlSessionFactoryBuilder().build(inputStream) 入手解读配置解析&#xA;public SqlSessionFactory build(InputStream inputStream) { return build(inputStream, null, null); } public SqlSessionFactory build(InputStream inputStream, String environment, Properties properties) { try { XMLConfigBuilder parser = new XMLConfigBuilder(inputStream, environment, properties); return build(parser.</description>
-    </item>
-    <item>
-      <title>MySQL 优化及索引设计规范</title>
-      <link>https://telzhou618.github.io/post/mysql-review/</link>
-      <pubDate>Tue, 28 Jun 2022 11:44:07 +0800</pubDate>
-      <guid>https://telzhou618.github.io/post/mysql-review/</guid>
-      <description>索引是帮助MySQL高效获取数据的排好序的数据结构。&#xA;几个MySQL命令 mysql.server start // 启动MySQL mysql.server stop // 停止MYSQL ./mysqld_safe --data=../data // 从data备份中恢复数据 ./mysql_secure_installation // 修改管理员密码 索引的优缺点 优点&#xA;索引大大减少了服务器需要扫描的数据量。 索引可以帮助服务器避免排序和临时表。 索引可以将随机IO变为顺序IO。 缺点&#xA;创建索引和维护索引要耗费时间 ，这种时间随着数据量的增加而增加。 索引需要占物理空间 。 索引的分类 主键索引(聚簇索引、聚集索引)、二级索引（非聚集索引）。 普通索引、唯一索引、全文索引。 独立索引、复合索引、前缀索引。 B+Tree 索引、Hash索引。 索引数据结构 常见的索引数据结构有Hash表、二叉树、平衡二叉树、红黑树、B-Tree、B+Tree。 Hash 索引：Hash 表只能做等值匹配，效率很高。但是不支持范围查找和排序，因为取每个数据要做hash运算，只有取出来才能知道他是什么。 二叉树：二叉树极端情况下树会变成一个链表，也不适合做索引。 平衡二叉树：平衡二叉树无法支持很大的数据，数据量大时，树的高度依然很高，效率不高。 红黑树：红黑树通过限制节点的颜色控制数据变化时树的旋转次数，插入、删除数据时性能有一定提升，但树高依然无法控制，无法支持大数据量。 B-tree：非叶子节点存储真实数据，占用空间大，可存储的索引会减少。 B+tree：所有数据存在叶子节点，非叶子节点只存索引，可容纳更多的索引数据。 SQL性能分析工具Explain 工具详解 在一条查询语句前加 explain 可以获得SQL语句的执行计划，可看到使用了什么索引，大致扫描了多少行等信息，从而分析出SQL语句的瓶颈在哪里。 explain select * from employees where name = &amp;lsquo;Lucy&amp;rsquo;; Explain 工具详解 在一条查询语句前加 explain 可以获得SQL语句的执行计划，可看到使用了什么索引，大致扫描了多少行等信息，从而分析出SQL语句的瓶颈在哪里。&#xA;explain select * from employees where name = &amp;#39;Lucy&amp;#39;; 下面介绍下 Explain 中的列。</description>
-    </item>
-    <item>
-      <title>Netty 和 NIO 全面掌握</title>
-      <link>https://telzhou618.github.io/post/netty/</link>
-      <pubDate>Tue, 28 Jun 2022 11:44:07 +0800</pubDate>
-      <guid>https://telzhou618.github.io/post/netty/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>Redis 或 Zookeeper 实现分布式锁</title>
-      <link>https://telzhou618.github.io/post/distributed-lock/</link>
-      <pubDate>Tue, 28 Jun 2022 11:44:07 +0800</pubDate>
-      <guid>https://telzhou618.github.io/post/distributed-lock/</guid>
-      <description>分布式锁是为了解决跨进程、跨服务应用在高并发场景下造成线程不安全的问题的一种同步加锁的技术方案，在互联网公司有广泛的使用场景，如秒杀项目减库存场景，分布式锁可以保证所有参与者按顺序排队访问某一资源，谁排在最前面谁就有资格获得资源的使用权，排在后面的线程必须等到持有锁的线程释放锁才有可能获取资源使用权，后面的线程要么等待要么放弃。&#xA;分布式锁是缺点：造型系统 吞吐量、可用性 下降。&#xA;Redis 实现分布式锁 需要用到redisson包,新建spring-boot项目，导入redisson包 &amp;lt;dependency&amp;gt; &amp;lt;groupId&amp;gt;org.redisson&amp;lt;/groupId&amp;gt; &amp;lt;artifactId&amp;gt;redisson-spring-boot-starter&amp;lt;/artifactId&amp;gt; &amp;lt;version&amp;gt;3.15.6&amp;lt;/version&amp;gt; &amp;lt;/dependency&amp;gt; 配置Redis连接信息 spring: redis: database: 0 host: 127.0.0.1 port: 6379 锁的具体使用代码 @RestController @AllArgsConstructor public class DistributedLockRedissonController { private final RedissonClient redissonClient; private final StringRedisTemplate stringRedisTemplate; /** * redisson 分布式锁 */ @RequestMapping(&amp;#34;/redisson/doReduceStack&amp;#34;) public String doReduceStack() { // 检查库存 int store = Integer.parseInt(stringRedisTemplate.opsForValue().get(&amp;#34;store&amp;#34;)); if (store &amp;lt;= 0) { throw new RuntimeException(&amp;#34;库存不足&amp;#34;); } RLock lock = redissonClient.getLock(&amp;#34;lock&amp;#34;); try { lock.lock(); // 双重检查 store = Integer.</description>
-    </item>
-    <item>
-      <title>Spring 事务源码解析</title>
-      <link>https://telzhou618.github.io/post/spring-transaction/</link>
-      <pubDate>Tue, 28 Jun 2022 11:44:07 +0800</pubDate>
-      <guid>https://telzhou618.github.io/post/spring-transaction/</guid>
-      <description>Spring 事务利用AOP原理实现,主要过程和AOP原理一样，可以分为三步，启用事务、生成代理对对象、执行。&#xA;从如何使用事务开始 本实例使用Spring的 JdbcTemplate 作为操作数据库的工具，使用 druid 做为数据库连接池。&#xA;首先导入相关的 jar 包 &amp;lt;dependency&amp;gt; &amp;lt;groupId&amp;gt;mysql&amp;lt;/groupId&amp;gt; &amp;lt;artifactId&amp;gt;mysql-connector-java&amp;lt;/artifactId&amp;gt; &amp;lt;version&amp;gt;8.0.20&amp;lt;/version&amp;gt; &amp;lt;/dependency&amp;gt; &amp;lt;dependency&amp;gt; &amp;lt;groupId&amp;gt;com.alibaba&amp;lt;/groupId&amp;gt; &amp;lt;artifactId&amp;gt;druid&amp;lt;/artifactId&amp;gt; &amp;lt;version&amp;gt;1.2.4&amp;lt;/version&amp;gt; &amp;lt;/dependency&amp;gt; &amp;lt;dependency&amp;gt; &amp;lt;groupId&amp;gt;org.springframework&amp;lt;/groupId&amp;gt; &amp;lt;artifactId&amp;gt;spring-jdbc&amp;lt;/artifactId&amp;gt; &amp;lt;version&amp;gt;5.2.12.RELEASE&amp;lt;/version&amp;gt; &amp;lt;/dependency&amp;gt; &amp;lt;dependency&amp;gt; &amp;lt;groupId&amp;gt;org.springframework&amp;lt;/groupId&amp;gt; &amp;lt;artifactId&amp;gt;spring-tx&amp;lt;/artifactId&amp;gt; &amp;lt;version&amp;gt;5.2.12.RELEASE&amp;lt;/version&amp;gt; &amp;lt;/dependency&amp;gt; 在配置类上加上 @EnableTransactionManagement 注解表示开启Spring事务功能 @ComponentScan(&amp;#34;com.example&amp;#34;) @EnableTransactionManagement public class ApplicationMain {} 配置数据源、配置JdbcTemplate、配置事务管理器 @Configuration public class JdbcConfig { @Bean(initMethod = &amp;#34;init&amp;#34;) public DruidDataSource dataSource() { DruidDataSource dataSource = new DruidDataSource(); dataSource.setUrl(&amp;#34;jdbc:mysql://localhost/test?useUnicode=true&amp;amp;characterEncoding=utf-8&amp;#34;); dataSource.setUsername(&amp;#34;root&amp;#34;); dataSource.setPassword(&amp;#34;rootroot&amp;#34;); return dataSource; } @Bean public JdbcTemplate jdbcTemplate(DataSource dataSource) { return new JdbcTemplate(dataSource); } @Bean public TransactionManager transactionManager(DataSource dataSource) { return new DataSourceTransactionManager(dataSource); } } 创建测试表 blog、创建实体对象Blog create table blog ( id int auto_increment comment &amp;#39;id&amp;#39; primary key, title varchar(20) null comment &amp;#39;标题&amp;#39;, content varchar(100) null comment &amp;#39;内容&amp;#39; ) comment &amp;#39;blog表&amp;#39;; 创建实体对象 @Getter @Setter @ToString @Accessors(chain = true) public class Blog { private Integer id; private String title; private String content; } 创建 BlogService和一个 insert 方法插入一条记录，在方法上加上 @Transactional 注解，在执行插入数据成功后故意写个异常情况1/0，测试事务是否回滚。 @Service @AllArgsConstructor public class BlogService { private final JdbcTemplate jdbcTemplate; @Transactional(rollbackFor = Exception.</description>
-    </item>
-    <item>
-      <title>Spring容器注册bean有哪些方式？</title>
-      <link>https://telzhou618.github.io/post/spring-ioc-bean-register/</link>
-      <pubDate>Tue, 28 Jun 2022 11:44:07 +0800</pubDate>
-      <guid>https://telzhou618.github.io/post/spring-ioc-bean-register/</guid>
-      <description>常见注册bean对象到spring容器的方式:&#xA;@Component、@Controller、@Service、@Repository 方式 @Bean 工厂方式 @mport 普通类 @Import ImportSelector @Import ImportBeanDefinitionRegistrar 实现 BeanDefinitionRegistryPostProcessor#postProcessBeanDefinitionRegistry 方式一：@注解方式 最常见的可以用 @Component、@Controller、@Service、@Repository 注解方式注入对象到spring容器中。&#xA;@Component public class RequestTemplate{ } @Service public class UserServiceImpl implements UserService { } 方式二：Bean 工厂方式 @Configuration public class AppConfig { /** * 注册 user对象，默认方法名为beanName */ @Bean public User user(){ return new User(); } } 方式三：@Import 普通类 @Import(Cat.class) @Configuration public class AppConfig { } 方式四：@Import ImportSelector 可以通过 import 实现ImportSelector接口的类，重写selectImports方法可以再注册其他的类。&#xA;public class UserImportSelector implements ImportSelector { @Override public String[] selectImports(AnnotationMetadata importingClassMetadata) { // 注册User类型到spring容器中 return new String[]{User.</description>
-    </item>
-    <item>
-      <title>Vscode 常用快捷键</title>
-      <link>https://telzhou618.github.io/post/vscode/</link>
-      <pubDate>Tue, 28 Jun 2022 11:44:07 +0800</pubDate>
-      <guid>https://telzhou618.github.io/post/vscode/</guid>
-      <description>查找 Command + F&#xA;查找替换 Command + R&#xA;多行编辑 Shit + Option + I&#xA;先 Comand+A 批量选中多行，再Shift+Optaion+i 插入多行光标。&#xA;多行转一行 Control + Shift + j&#xA;先 Comand+A 批量选中多行，再 Control + Shift + j 转为一行。&#xA;批量替换 Command + Shift + L&#xA;方法一：先选中一个要编辑的内容，再 Command + Shift + L 就批量选中所有相同的内容，再编辑；&#xA;方法二：先Control + F 查找要编辑的内容，再 Command + Shift + L 就批量选中所有相同的内容，再Esc关闭查找框，再编辑。&#xA;方法三：先Controll + R ，输入查找和替换的内容，再点击替换框后面最后一个图标。</description>
-    </item>
-    <item>
-      <title>一文搞懂 kafka</title>
-      <link>https://telzhou618.github.io/post/kafka/</link>
-      <pubDate>Tue, 28 Jun 2022 11:44:07 +0800</pubDate>
-      <guid>https://telzhou618.github.io/post/kafka/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>一文搞懂 RocketMQ</title>
-      <link>https://telzhou618.github.io/post/rocketmq/</link>
-      <pubDate>Tue, 28 Jun 2022 11:44:07 +0800</pubDate>
-      <guid>https://telzhou618.github.io/post/rocketmq/</guid>
-      <description>RocketMQ 集群架构图 RocketMQ 四大核心集群 NameServer 集群：作为注册中心，维护着所有的broker和topic的映射关系，以及路由功能，多台部署，之间不互相通信。 Broker集群 ：负责消息存储，消息转发。 Producer集群 ：生产消息，一般是自己的Application集群。 Consumer集群：消费消息，一般是自己的Application集群。 RocketMQ 其他核心组件 Consumer Group：消费者组，集群模式相同Group的每个Consumer平均分摊消息，广播模式相同Group的每个Consumer都接收全量消息。 Topic：一类消息的集合，一个消息只能属于一个Topic。 Message：消息的载体。 Message Queue：消息分区，每个Topic下可以有多个分区。 Tag：给消息设置一个标签，消费者可以过滤出想要的消息。 RocketMQ 消息发送方式 单项发送 只负责发出去，不管是否成功，没有返回值，一般用在可靠性不高的场景，如记录日志。&#xA;producer.sendOneway(msg); 同步发送 需要同步等待消费发送的结果，有返回值，用在可靠性要求高，性能不高的场景。&#xA;// Send message to one of brokers SendResult sendResult = producer.send(msg); // Check whether the message has been delivered by the callback of sendResult System.out.printf(&amp;#34;%s%n&amp;#34;, sendResult); 异步发送 无需等待返回值，需要实现回调方法，消息发送完成会自动执行回调方法，用在可靠性和性能要求较高的场景。&#xA;producer.send(msg, new SendCallback() { @Override public void onSuccess(SendResult sendResult) { System.out.printf(&amp;#34;%-10d OK %s %n&amp;#34;, index, sendResult.</description>
-    </item>
-  </channel>
+  <title>MYSQL 表空间分析</title>
+  <link>https://telzhou618.github.io/posts/mysql_information_schema/</link>
+  <pubDate>Mon, 10 Jul 2023 21:36:57 &#43;0800</pubDate>
+  <author>telzhou618</author>
+  <guid>https://telzhou618.github.io/posts/mysql_information_schema/</guid>
+  <description><![CDATA[删除数据并释放空间命令 drop table table_name 立刻释放磁盘空间 ，不管是 Innodb和MyISAM ； truncate table table_name立刻释放磁盘空间 ，不管是 Innodb]]></description>
+</item>
+<item>
+  <title>Java SPI 应用</title>
+  <link>https://telzhou618.github.io/posts/java-spi/</link>
+  <pubDate>Wed, 05 Jul 2023 16:15:58 &#43;0800</pubDate>
+  <author>telzhou618</author>
+  <guid>https://telzhou618.github.io/posts/java-spi/</guid>
+  <description><![CDATA[Java SPI（Service Provider Interface）是Java平台提供的一种机制，用于实现服务发现和扩展的功能。它允许开发人员定义一组接口，然后允]]></description>
+</item>
+<item>
+  <title>Otter数据同步1 - 环境搭建</title>
+  <link>https://telzhou618.github.io/posts/otter1/</link>
+  <pubDate>Wed, 28 Jun 2023 17:39:33 &#43;0800</pubDate>
+  <author>telzhou618</author>
+  <guid>https://telzhou618.github.io/posts/otter1/</guid>
+  <description><![CDATA[<figure><img src="https://raw.githubusercontent.com/telzhou618/images/main/img02/1686739961279-58ffcfde-b8b0-4a9b-af4a-7630d29dd839.png"/><figcaption>
+            <h4>Otter架构</h4>
+        </figcaption>
+</figure>
+
+<h2 id="otter-官网介绍" class="heading-element">
+  <a href="#otter-%e5%ae%98%e7%bd%91%e4%bb%8b%e7%bb%8d" class="heading-mark"></a>otter 官网介绍</h2><p>名称：otter [&lsquo;ɒtə(r)]
+译意： 水獭，数据搬运工
+语言： 纯java开发
+定位： 基于数据库增量日志解析，准实时同步到本机房或异地机房的mysql/oracle数据库. 一个分布式数据库同步系统。
+更多介绍查看Github：<a href="https://github.com/alibaba/otter"target="_blank" rel="external nofollow noopener noreferrer">https://github.com/alibaba/otter</a></p>]]></description>
+</item>
+<item>
+  <title>Redis 从入门到精通</title>
+  <link>https://telzhou618.github.io/posts/redis/</link>
+  <pubDate>Wed, 28 Jun 2023 14:44:07 &#43;0800</pubDate>
+  <author>telzhou618</author>
+  <guid>https://telzhou618.github.io/posts/redis/</guid>
+  <description><![CDATA[Redis 是什么Redis 是一个高性能的基于内存实现的K-V存储数据库 。 Redis 的优点 性能极高，Redis能读的速度是110000次/s,写的速度是810]]></description>
+</item>
+<item>
+  <title>Spring AOP 从入门到源码解析</title>
+  <link>https://telzhou618.github.io/posts/spring-aop/</link>
+  <pubDate>Wed, 28 Jun 2023 14:44:07 &#43;0800</pubDate>
+  <author>telzhou618</author>
+  <guid>https://telzhou618.github.io/posts/spring-aop/</guid>
+  <description><![CDATA[先学会如何使用 Spring-boot 或 Spring-cloud 中使用AOP在Spring-boot 工程中使用AOP功能，先引入相关的依赖。 pom.xml 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21]]></description>
+</item>
+<item>
+  <title>Linux 常用命令</title>
+  <link>https://telzhou618.github.io/posts/linux/</link>
+  <pubDate>Wed, 28 Jun 2023 14:43:58 &#43;0800</pubDate>
+  <author>telzhou618</author>
+  <guid>https://telzhou618.github.io/posts/linux/</guid>
+  <description><![CDATA[less从文件开头查看少量内容命令，命令格式：less [参数] 文件 。 参数： 1 2 3 4 5 6 7 8 9 10 11 12 13 - /字符串：向下搜索 - ?字符串：向上搜索]]></description>
+</item>
+<item>
+  <title>Docker &amp; Docker-compose</title>
+  <link>https://telzhou618.github.io/posts/docker/</link>
+  <pubDate>Wed, 28 Jun 2023 14:21:07 &#43;0800</pubDate>
+  <author>telzhou618</author>
+  <guid>https://telzhou618.github.io/posts/docker/</guid>
+  <description><![CDATA[Docker 架构 Docker 主要组件包括 Client、Daemon、Images、Container、Registry。 Client ： docker客户端 Daemon：do]]></description>
+</item>
+<item>
+  <title>Homebrew 常用命令</title>
+  <link>https://telzhou618.github.io/posts/homebrew/</link>
+  <pubDate>Wed, 28 Jun 2023 11:44:07 &#43;0800</pubDate>
+  <author>telzhou618</author>
+  <guid>https://telzhou618.github.io/posts/homebrew/</guid>
+  <description><![CDATA[mac 软件包管理工具 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 brew install #[包名] 安装包。 brew uninstall #[包名] 卸载包。 brew search #[包名] 查询包。 brew list #列出已安装的软件。 brew update]]></description>
+</item>
+<item>
+  <title>Mac 修改环境变量</title>
+  <link>https://telzhou618.github.io/posts/modify-env/</link>
+  <pubDate>Wed, 28 Jun 2023 11:40:09 &#43;0800</pubDate>
+  <author>telzhou618</author>
+  <guid>https://telzhou618.github.io/posts/modify-env/</guid>
+  <description><![CDATA[环境变量文件存储位置 1 2 3 4 5 6 &gt; /etc/paths （全局建议修改这个文件 ） &gt; /etc/profile （建议不修改这个文件 ） &gt; /etc/bashrc （一般在这个文件中添加系统级环境变量） &gt; ~/.profile 文件为系]]></description>
+</item>
+<item>
+  <title>Mac 更换控制台 shell</title>
+  <link>https://telzhou618.github.io/posts/shell-change/</link>
+  <pubDate>Wed, 28 Jun 2023 11:37:30 &#43;0800</pubDate>
+  <author>telzhou618</author>
+  <guid>https://telzhou618.github.io/posts/shell-change/</guid>
+  <description><![CDATA[shell 常用命令 1 2 3 4 5 more /etc/shells # 查查有多少个shell echo $SHELL # 查看当前shell chsh -s /bin/bash # 切换到 bash chsh -s /bin/zsh # 切换到zsh chsh -s /usr/local/bin/fish #切换到fish]]></description>
+</item>
+</channel>
 </rss>

@@ -1,0 +1,24 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+  <channel>
+    <title>linux - 标签 - 扁舟的博客</title>
+    <link>https://telzhou618.github.io/tags/linux/</link>
+    <description>linux - 标签 | 扁舟的博客</description>
+    <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>telzhou618@qq.com (telzhou618)</managingEditor>
+      <webMaster>telzhou618@qq.com (telzhou618)</webMaster><lastBuildDate>Wed, 28 Jun 2023 14:43:58 &#43;0800</lastBuildDate><atom:link href="https://telzhou618.github.io/tags/linux/" rel="self" type="application/rss+xml" /><item>
+  <title>Linux 常用命令</title>
+  <link>https://telzhou618.github.io/posts/linux/</link>
+  <pubDate>Wed, 28 Jun 2023 14:43:58 &#43;0800</pubDate>
+  <author>telzhou618</author>
+  <guid>https://telzhou618.github.io/posts/linux/</guid>
+  <description><![CDATA[less从文件开头查看少量内容命令，命令格式：less [参数] 文件 。 参数： 1 2 3 4 5 6 7 8 9 10 11 12 13 - /字符串：向下搜索 - ?字符串：向上搜索]]></description>
+</item>
+<item>
+  <title>Mac 更换控制台 shell</title>
+  <link>https://telzhou618.github.io/posts/shell-change/</link>
+  <pubDate>Wed, 28 Jun 2023 11:37:30 &#43;0800</pubDate>
+  <author>telzhou618</author>
+  <guid>https://telzhou618.github.io/posts/shell-change/</guid>
+  <description><![CDATA[shell 常用命令 1 2 3 4 5 more /etc/shells # 查查有多少个shell echo $SHELL # 查看当前shell chsh -s /bin/bash # 切换到 bash chsh -s /bin/zsh # 切换到zsh chsh -s /usr/local/bin/fish #切换到fish]]></description>
+</item>
+</channel>
+</rss>

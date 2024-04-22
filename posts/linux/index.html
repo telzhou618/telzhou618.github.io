@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+  <head>
+    
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+    <meta name="robots" content="noodp" />
+    <title>Linux 常用命令 - 扁舟的博客</title><meta name="author" content="telzhou618">
+<meta name="author-link" content="https://github.com/telzhou618">
+<meta name="description" content="less从文件开头查看少量内容命令，命令格式：less [参数] 文件 。 参数： 1 2 3 4 5 6 7 8 9 10 11 12 13 - /字符串：向下搜索 - ?字符串：向上搜索" /><meta name="keywords" content='linux' /><meta itemprop="name" content="Linux 常用命令">
+<meta itemprop="description" content="less从文件开头查看少量内容命令，命令格式：less [参数] 文件 。 参数： 1 2 3 4 5 6 7 8 9 10 11 12 13 - /字符串：向下搜索 - ?字符串：向上搜索"><meta itemprop="datePublished" content="2023-06-28T14:43:58+08:00" />
+<meta itemprop="dateModified" content="2023-06-28T14:43:58+08:00" />
+<meta itemprop="wordCount" content="1635">
+<meta itemprop="keywords" content="linux," /><meta property="og:title" content="Linux 常用命令" />
+<meta property="og:description" content="less从文件开头查看少量内容命令，命令格式：less [参数] 文件 。 参数： 1 2 3 4 5 6 7 8 9 10 11 12 13 - /字符串：向下搜索 - ?字符串：向上搜索" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://telzhou618.github.io/posts/linux/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2023-06-28T14:43:58+08:00" />
+<meta property="article:modified_time" content="2023-06-28T14:43:58+08:00" />
+
+<meta name="twitter:card" content="summary"/><meta name="twitter:title" content="Linux 常用命令"/>
+<meta name="twitter:description" content="less从文件开头查看少量内容命令，命令格式：less [参数] 文件 。 参数： 1 2 3 4 5 6 7 8 9 10 11 12 13 - /字符串：向下搜索 - ?字符串：向上搜索"/>
+<meta name="application-name" content="FixIt">
+<meta name="apple-mobile-web-app-title" content="FixIt"><meta name="theme-color" data-light="#f8f8f8" data-dark="#252627" content="#f8f8f8"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" href="https://telzhou618.github.io/posts/linux/" /><link rel="prev" href="https://telzhou618.github.io/posts/docker/" /><link rel="next" href="https://telzhou618.github.io/posts/spring-aop/" /><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "BlogPosting",
+    "headline": "Linux 常用命令",
+    "inLanguage": "zh-CN",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https:\/\/telzhou618.github.io\/posts\/linux\/"
+    },"genre": "posts","keywords": "linux","wordcount":  1635 ,
+    "url": "https:\/\/telzhou618.github.io\/posts\/linux\/","datePublished": "2023-06-28T14:43:58+08:00","dateModified": "2023-06-28T14:43:58+08:00","publisher": {
+      "@type": "Organization",
+      "name": ""},"author": {
+        "@type": "Person",
+        "name": "telzhou618"
+      },"description": ""
+  }
+  </script></head>
+  <body data-header-desktop="sticky" data-header-mobile="auto"><script>(window.localStorage?.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('data-theme', 'dark');</script><div class="wrapper" data-page-style="normal"><header class="desktop animate__faster" id="header-desktop">
+  <div class="header-wrapper">
+    <div class="header-title">
+      <a href="/" title="扁舟的博客"><span class="header-title-text">扁舟的博客</span></a><span class="header-subtitle"></span></div>
+    <nav>
+      <ul class="menu"><li class="menu-item active">
+              <a
+                class="menu-link"
+                href="/posts/"
+                title="Posts"
+                
+              >Posts</a></li><li class="menu-item">
+              <a
+                class="menu-link"
+                href="/"
+                
+                
+              >Archives</a></li><li class="menu-item">
+              <a
+                class="menu-link"
+                href="/categories/"
+                title="Categories"
+                
+              >Categories</a></li><li class="menu-item">
+              <a
+                class="menu-link"
+                href="/tags/"
+                title="Tags"
+                
+              >Tags</a></li><li class="menu-item">
+              <a
+                class="menu-link"
+                href="/about/"
+                title="About"
+                
+              >About</a></li><li class="menu-item delimiter"></li><li class="menu-item search" id="search-desktop">
+            <input type="text" placeholder="搜索文章标题或内容……" id="search-input-desktop">
+            <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+              <i class="fa-solid fa-search fa-fw" aria-hidden="true"></i>
+            </a>
+            <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+              <i class="fa-solid fa-times-circle fa-fw" aria-hidden="true"></i>
+            </a>
+            <span class="search-button search-loading" id="search-loading-desktop">
+              <i class="fa-solid fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+            </span>
+          </li><li class="menu-item theme-switch" title="切换主题">
+          <i class="fa-solid fa-adjust fa-fw" aria-hidden="true"></i>
+        </li></ul>
+    </nav>
+  </div>
+</header><header class="mobile animate__faster" id="header-mobile">
+  <div class="header-container">
+    <div class="header-wrapper">
+      <div class="header-title">
+        <a href="/" title="扁舟的博客"><span class="header-title-text">扁舟的博客</span></a><span class="header-subtitle"></span></div>
+      <div class="menu-toggle" id="menu-toggle-mobile">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+    <nav>
+      <ul class="menu" id="menu-mobile"><li class="search-wrapper">
+            <div class="search mobile" id="search-mobile">
+              <input type="text" placeholder="搜索文章标题或内容……" id="search-input-mobile">
+              <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                <i class="fa-solid fa-search fa-fw" aria-hidden="true"></i>
+              </a>
+              <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                <i class="fa-solid fa-times-circle fa-fw" aria-hidden="true"></i>
+              </a>
+              <span class="search-button search-loading" id="search-loading-mobile">
+                <i class="fa-solid fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+              </span>
+            </div>
+            <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+              取消
+            </a>
+          </li><li
+              class="menu-item active"
+            ><a
+                  class="menu-link"
+                  href="/posts/"
+                  title="Posts"
+                  
+                >Posts</a></li><li
+              class="menu-item"
+            ><a
+                  class="menu-link"
+                  href="/"
+                  
+                  
+                >Archives</a></li><li
+              class="menu-item"
+            ><a
+                  class="menu-link"
+                  href="/categories/"
+                  title="Categories"
+                  
+                >Categories</a></li><li
+              class="menu-item"
+            ><a
+                  class="menu-link"
+                  href="/tags/"
+                  title="Tags"
+                  
+                >Tags</a></li><li
+              class="menu-item"
+            ><a
+                  class="menu-link"
+                  href="/about/"
+                  title="About"
+                  
+                >About</a></li><li class="menu-item menu-system">
+          <span class="menu-system-item theme-switch" title="切换主题"><i class="fa-solid fa-adjust fa-fw" aria-hidden="true"></i></span></li>
+      </ul>
+    </nav>
+  </div>
+</header><div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+  </div>
+  <div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+  </div><main class="container"><aside class="aside-collection animate__animated animate__fadeIn animate__faster" aria-label="合集"></aside>
+
+  <article class="page single">
+    <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span>Linux 常用命令</span>
+      </h1></div><div class="post-meta">
+      <div class="post-meta-line"><span class="post-author"><a href="https://github.com/telzhou618" title="作者"target="_blank" rel="external nofollow noopener noreferrer author" class="author"><img loading="lazy" src="https://avatars.githubusercontent.com/u/6360011?v=4" alt="telzhou618" data-title="telzhou618" class="avatar" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/>&nbsp;telzhou618</a></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/linux/" class="post-category" title="分类 - linux"><i class="fa-regular fa-folder fa-fw" aria-hidden="true"></i> linux</a></span></div><div class="post-meta-line"><span title="发布于 2023-06-28 14:43:58"><i class="fa-solid fa-calendar-days fa-fw me-1" aria-hidden="true"></i><time datetime="2023-06-28">2023-06-28</time></span>&nbsp;<span title="1635 字"><i class="fa-solid fa-pencil-alt fa-fw me-1" aria-hidden="true"></i>约 1700 字</span>&nbsp;<span><i class="fa-regular fa-clock fa-fw me-1" aria-hidden="true"></i>预计阅读 4 分钟</span>&nbsp;</div>
+    </div><div class="details toc" id="toc-static" data-kept="false">
+        <div class="details-summary toc-title">
+          <span>目录</span>
+          <span><i class="details-icon fa-solid fa-angle-right" aria-hidden="true"></i></span>
+        </div>
+        <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#less">less</a></li>
+    <li><a href="#chown">chown</a></li>
+    <li><a href="#chmod">chmod</a></li>
+    <li><a href="#lsof">lsof</a></li>
+    <li><a href="#rz">rz</a></li>
+    <li><a href="#sz">sz</a></li>
+    <li><a href="#scp">scp</a></li>
+    <li><a href="#find">find</a></li>
+    <li><a href="#netstat">netstat</a></li>
+    <li><a href="#ps">ps</a></li>
+    <li><a href="#ln">ln</a></li>
+    <li><a href="#top">top</a></li>
+    <li><a href="#htop">htop</a></li>
+  </ul>
+</nav></div>
+      </div><div class="content" id="content"><h2 id="less" class="heading-element">
+  <a href="#less" class="heading-mark"></a>less</h2><p>从文件开头查看少量内容命令，命令格式：less [参数] 文件 。</p>
+<p>参数：</p>
+<div class="highlight" id="id-1"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-markdown" data-lang="markdown"><span class="line"><span class="cl"><span class="k">-</span> /字符串：向下搜索
+</span></span><span class="line"><span class="cl"><span class="k">-</span> ?字符串：向上搜索
+</span></span><span class="line"><span class="cl"><span class="k">-</span> n：重复前一个搜索(向下搜索)
+</span></span><span class="line"><span class="cl"><span class="k">-</span> N：反向重复前一个搜索(向上搜索)
+</span></span><span class="line"><span class="cl"><span class="k">-</span> 翻一页
+</span></span><span class="line"><span class="cl">    <span class="k">-</span> f：前进一页
+</span></span><span class="line"><span class="cl">    <span class="k">-</span> b：回退一页
+</span></span><span class="line"><span class="cl"><span class="k">-</span> 翻半页：
+</span></span><span class="line"><span class="cl">    <span class="k">-</span> d：前进半页
+</span></span><span class="line"><span class="cl">    <span class="k">-</span> u：后退半页
+</span></span><span class="line"><span class="cl"><span class="k">-</span> 翻一行：
+</span></span><span class="line"><span class="cl">    <span class="k">-</span> e/j：前进一行
+</span></span><span class="line"><span class="cl">    - y/k：后退一行</span></span></code></pre></td></tr></table>
+</div>
+</div><p>实例1：查看日志, -N 显示行号</p>
+<div class="highlight" id="id-2"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">less -N /var/a.log</span></span></code></pre></td></tr></table>
+</div>
+</div><p>实例2：跳转到最后一行，并滚动打印。</p>
+<div class="highlight" id="id-3"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"><span class="nb">shift</span> + f</span></span></code></pre></td></tr></table>
+</div>
+</div><p>操作1：在滚动打印的基础上停止滚动</p>
+<div class="highlight" id="id-4"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">control + c</span></span></code></pre></td></tr></table>
+</div>
+</div><p>操作2：向上搜索关键词</p>
+<div class="highlight" id="id-5"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">?kewwaord + enter
+</span></span><span class="line"><span class="cl">按n继续向上搜索相同字符串
+</span></span><span class="line"><span class="cl">按N继续向下搜索相同字符串</span></span></code></pre></td></tr></table>
+</div>
+</div><p>操作3：向下搜索关键词</p>
+<div class="highlight" id="id-6"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">/kewwaord + enter
+</span></span><span class="line"><span class="cl">按N继续向下搜索相同字符串
+</span></span><span class="line"><span class="cl">按n继续向上搜索相同字符串</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="chown" class="heading-element">
+  <a href="#chown" class="heading-mark"></a>chown</h2><p>设置文件所有者对文件的权限。</p>
+<p>实例1：给admin用户授于/var/log.a.log文件权限</p>
+<div class="highlight" id="id-7"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">chown admin /var/log.a.log</span></span></code></pre></td></tr></table>
+</div>
+</div><p>实例2：递归给某个用户授于整个目录权限</p>
+<div class="highlight" id="id-8"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">chown -R admin /var/log/</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="chmod" class="heading-element">
+  <a href="#chmod" class="heading-mark"></a>chmod</h2><p>设置用户对文件的读、写、执行权限。
+<img loading="lazy" src="https://raw.githubusercontent.com/telzhou618/images/main/img02/1644229447505-8d572e68-0426-466e-a750-330c05e36803.png" alt="image.png" srcset="https://raw.githubusercontent.com/telzhou618/images/main/img02/1644229447505-8d572e68-0426-466e-a750-330c05e36803.png?size=small, https://raw.githubusercontent.com/telzhou618/images/main/img02/1644229447505-8d572e68-0426-466e-a750-330c05e36803.png?size=medium 1.5x, https://raw.githubusercontent.com/telzhou618/images/main/img02/1644229447505-8d572e68-0426-466e-a750-330c05e36803.png?size=large 2x" data-title="image.png" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></p>
+<p>命令格式：</p>
+<div class="highlight" id="id-9"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">chmod <span class="o">[</span>ugo+rwx<span class="o">]</span> file</span></span></code></pre></td></tr></table>
+</div>
+</div><p>参数：</p>
+<ul>
+<li>u - 文件拥有者、g - 拥有者同组的其他人、o - 其他用户、a - 所有用户。</li>
+<li>r - 读、w - 写、x - 执行</li>
+<li>-R 递归收取目录和子目录下所有文件权限</li>
+</ul>
+<p>实例1：将文件 file1.txt 设为所有人皆可读取</p>
+<div class="highlight" id="id-10"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">chmod ugo+r file1.txt
+</span></span><span class="line"><span class="cl"><span class="c1"># 等价</span>
+</span></span><span class="line"><span class="cl">chmod a+r file1.txt</span></span></code></pre></td></tr></table>
+</div>
+</div><p>实例2：所有文件所有人可读。</p>
+<div class="highlight" id="id-11"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">chmod -R a+r *</span></span></code></pre></td></tr></table>
+</div>
+</div><p>实例3：所有人读写执行</p>
+<div class="highlight" id="id-12"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">chmod <span class="m">777</span> file
+</span></span><span class="line"><span class="cl"><span class="c1"># 等价</span>
+</span></span><span class="line"><span class="cl">chmod <span class="nv">a</span><span class="o">=</span>rwx file</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="lsof" class="heading-element">
+  <a href="#lsof" class="heading-mark"></a>lsof</h2><p>查看端口占用情况。</p>
+<p>实例1：查看 占用9876 端口的进程。</p>
+<div class="highlight" id="id-13"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">lsof -i tcp:9876
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 执行结果</span>
+</span></span><span class="line"><span class="cl">COMMAND   PID       USER   FD   TYPE             DEVICE SIZE/OFF NODE NAME
+</span></span><span class="line"><span class="cl">java    <span class="m">71184</span> zhougaojun   69u  IPv6 0xd4d49114bb1da0f5      0t0  TCP *:sd <span class="o">(</span>LISTEN<span class="o">)</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>实例2：查找出正在监听的端口</p>
+<div class="highlight" id="id-14"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">lsof -i:80 -sTCP:LISTEN
+</span></span><span class="line"><span class="cl">lsof -i:80 <span class="p">|</span> grep LISTEN</span></span></code></pre></td></tr></table>
+</div>
+</div><p>实例3：另外可以用java自带的jps命令查看java应用进程</p>
+<div class="highlight" id="id-15"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">jps
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">#执行结果</span>
+</span></span><span class="line"><span class="cl"><span class="m">21873</span> Main
+</span></span><span class="line"><span class="cl"><span class="m">71184</span> NamesrvStartup</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="rz" class="heading-element">
+  <a href="#rz" class="heading-mark"></a>rz</h2><p>上传本地文件到远程linux服务器。</p>
+<div class="highlight" id="id-16"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">rz <span class="c1"># centos 输入rz命令唤回车起文件选择弹框</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="sz" class="heading-element">
+  <a href="#sz" class="heading-mark"></a>sz</h2><p>下载服务文件到本地。</p>
+<div class="highlight" id="id-17"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">sz a.txt	<span class="c1"># 下载文件a.txt到本地机器。</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="scp" class="heading-element">
+  <a href="#scp" class="heading-mark"></a>scp</h2><p>远程和本地之间传输文件, 加-r 拷贝整个文件夹。</p>
+<p>实例1：考配置远程服务器tomct.log文件到本地指定位置</p>
+<div class="highlight" id="id-18"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">scp root@192.168.1.100:/var/log/tomcat/tomcat.log  /home/myfile/ 
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">scp -r root@192.168.1.100:/data/ /home/myfile/ <span class="c1"># 拷贝文件夹到本地服务</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>实例2：拷贝本地文件到远程服务器</p>
+<div class="highlight" id="id-19"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">scp /home/myfile/test.txt root@192.168.1.100:/data/ <span class="c1"># 单文件拷贝</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">scp /home/myfile/test1.txt test2.cpp test3.bin test.* root@192.168.1.100:/data/ <span class="c1"># 多文件拷贝</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">scp -r /home/myfile/ root@192.168.1.100:/data/ <span class="c1"># 拷贝文件夹</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="find" class="heading-element">
+  <a href="#find" class="heading-mark"></a>find</h2><p>查找文件。</p>
+<p>实例1：在home目录下查找名为test的文件。</p>
+<div class="highlight" id="id-20"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">find /home -name test</span></span></code></pre></td></tr></table>
+</div>
+</div><p>实例2：在home目录下查找以test开头的文件。</p>
+<div class="highlight" id="id-21"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">find /home -name <span class="s2">&#34;test*&#34;</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>实例3：在home目录下查找大小大于100k的文件</p>
+<div class="highlight" id="id-22"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">find /home -size +100k</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="netstat" class="heading-element">
+  <a href="#netstat" class="heading-mark"></a>netstat</h2><p>显示各种网络信息，如查看TCP连接信息。</p>
+<p>参数：</p>
+<ul>
+<li>a (all)显示所有选项，默认不显示LISTEN相关</li>
+<li>t (tcp)仅显示tcp相关选项</li>
+<li>u (udp)仅显示udp相关选项</li>
+<li>n 拒绝显示别名，能显示数字的全部转化成数字。</li>
+<li>l 仅列出有在 Listen (监听) 的服務状态</li>
+<li>p 显示建立相关链接的程序名</li>
+<li>r 显示路由信息，路由表</li>
+<li>e 显示扩展信息，例如uid等</li>
+<li>s 按各个协议进行统计</li>
+<li>c 每隔一个固定时间，执行该netstat命令。</li>
+</ul>
+<p>实例：查看所有TCP连接的端口和进程信息。</p>
+<div class="highlight" id="id-23"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">netstat -antp</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="ps" class="heading-element">
+  <a href="#ps" class="heading-mark"></a>ps</h2><p>显示进程的状态，实例。</p>
+<div class="highlight" id="id-24"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">ps -ef	<span class="c1"># 显示进程及进程启动详细情况。</span>
+</span></span><span class="line"><span class="cl">ps -aux	<span class="c1"># 线程带CPU占用、内存信息等详细情况。</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>其他参数：</p>
+<ul>
+<li>a：显示一个终端的所有进程，除会话引线外；</li>
+<li>u：显示进程的归属用户及内存的使用情况；</li>
+<li>x：显示没有控制终端的进程；</li>
+<li>l：长格式显示更加详细的信息；</li>
+<li>e：显示所有进程；</li>
+</ul>
+<h2 id="ln" class="heading-element">
+  <a href="#ln" class="heading-mark"></a>ln</h2><p>生成链接文件，实例。</p>
+<div class="highlight" id="id-25"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">ln -s  source_file target_file	<span class="c1"># 生成软连接，也称为符号链接，相当于快捷方式。</span>
+</span></span><span class="line"><span class="cl">ln source_file target_file		<span class="c1"># 生成硬链接，也称为实体链接，相当于拷贝。</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="top" class="heading-element">
+  <a href="#top" class="heading-mark"></a>top</h2><p>监控CPU、内存、负载、线程等运营情况</p>
+<p>实例1: 基本用法</p>
+<div class="highlight" id="id-26"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">top 	<span class="c1">#	按CPU占用排序，然后按sheft + p</span>
+</span></span><span class="line"><span class="cl">top 	<span class="c1">#	按内存占用排序。然后按 sheft + m</span>
+</span></span><span class="line"><span class="cl">top -d <span class="m">2</span> 	<span class="c1"># 每个2秒执行一次top。</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>示例2：查看指定进程下的所有线程。</p>
+<div class="highlight" id="id-27"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">top -H -p <span class="o">[</span>pid<span class="o">]</span> <span class="c1"># 方式1，直接一步完成。</span>
+</span></span><span class="line"><span class="cl">top -p <span class="o">[</span>pid<span class="o">]</span>    <span class="c1"># 方式2，执行完需要按大写H。</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="htop" class="heading-element">
+  <a href="#htop" class="heading-mark"></a>htop</h2><p>以一种更友好的方式监控机器的运行状况，安装命令如下。</p>
+<div class="highlight" id="id-28"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">yum install htop -y  <span class="c1"># centos</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">brew install htop  <span class="c1"># mac</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>实例：直接执行htop可以监控CPU、内存、线程情况，并且以高亮的新式展示。
+<img loading="lazy" src="https://raw.githubusercontent.com/telzhou618/images/main/img02/image%20%284%29.png" alt="https://raw.githubusercontent.com/telzhou618/images/main/img02/image%20(4).png" srcset="https://raw.githubusercontent.com/telzhou618/images/main/img02/image%20%284%29.png?size=small, https://raw.githubusercontent.com/telzhou618/images/main/img02/image%20%284%29.png?size=medium 1.5x, https://raw.githubusercontent.com/telzhou618/images/main/img02/image%20%284%29.png?size=large 2x" data-title="https://raw.githubusercontent.com/telzhou618/images/main/img02/image%20(4).png" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></p>
+</div><div class="post-footer" id="post-footer">
+  <div class="post-info">
+    <div class="post-info-line">
+      <div class="post-info-mod">
+        <span title="更新于 2023-06-28 14:43:58">更新于 2023-06-28&nbsp;</span>
+      </div><div class="post-info-license">
+            <span><a rel="license external nofollow noopener noreferrer" href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a></span>
+          </div></div><div class="post-info-line">
+        <div class="post-info-md"><span><a href="/posts/linux/index.md" title="阅读原始文档" class="link-to-markdown">阅读原始文档</a></span><span><a href="https://github.com/telzhou618/hugo-blog/blob/main/content/posts%5clinux.md?plain=1" title="查看源码"target="_blank" rel="external nofollow noopener noreferrer" class="link-to-source">查看源码</a></span><span><a href="https://github.com/telzhou618/hugo-blog/edit/main/content/posts%5clinux.md" title="编辑此页"target="_blank" rel="external nofollow noopener noreferrer" class="link-to-edit">编辑此页</a></span><span><a href="https://github.com/telzhou618/hugo-blog/issues/new?title=[BUG]%20Linux&#43;%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4&amp;body=%7cField%7cValue%7c%0A%7c-%7c-%7c%0A%7cTitle%7cLinux&#43;%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4%7c%0A%7cURL%7chttps://telzhou618.github.io/posts/linux/%7c%0A%7cFilename%7chttps://github.com/telzhou618/hugo-blog/blob/main/content/posts%5clinux.md?plain=1%7c" title="报告问题"target="_blank" rel="external nofollow noopener noreferrer" class="link-to-report">报告问题</a></span></div>
+        <div class="post-info-share">
+          <span><a href="javascript:void(0);" title="分享到 Twitter" data-sharer="twitter" data-url="https://telzhou618.github.io/posts/linux/" data-title="Linux 常用命令" data-hashtags="linux"><i class="fa-brands fa-twitter fa-fw" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="https://telzhou618.github.io/posts/linux/" data-hashtag="linux"><i class="fa-brands fa-facebook-square fa-fw" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="https://telzhou618.github.io/posts/linux/" data-title="Linux 常用命令"><i class="fa-brands fa-weibo fa-fw" aria-hidden="true"></i></a>
+  </span>
+        </div>
+      </div></div>
+
+  <div class="post-info-more">
+    <section class="post-tags"><i class="fa-solid fa-tags fa-fw me-1" aria-hidden="true"></i><a href="/tags/linux/" class="post-tag" title="标签 - linux">linux</a></section>
+    <section>
+      <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+    </section>
+  </div>
+
+  <div class="post-nav"><a href="/posts/docker/" class="post-nav-item" rel="prev" title="Docker &amp; Docker-compose"><i class="fa-solid fa-angle-left fa-fw" aria-hidden="true"></i>Docker &amp; Docker-compose</a>
+      <a href="/posts/spring-aop/" class="post-nav-item" rel="next" title="Spring AOP 从入门到源码解析">Spring AOP 从入门到源码解析<i class="fa-solid fa-angle-right fa-fw" aria-hidden="true"></i></a></div>
+</div>
+</article>
+
+  <aside class="toc" id="toc-auto" aria-label="目录"><h2 class="toc-title">目录&nbsp;<i class="toc-icon fa-solid fa-angle-down fa-fw" aria-hidden="true"></i></h2>
+      <div class="toc-content" id="toc-content-auto"></div></aside></main><footer class="footer">
+    <div class="footer-container"><div class="footer-line powered">由 <a href="https://gohugo.io/" target="_blank" rel="external nofollow noopener noreferrer" title="Hugo 0.121.1"><img class="hugo-icon" src="/images/hugo.min.svg" alt="Hugo logo" /> Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/hugo-fixit/FixIt" target="_blank" rel="external" title="FixIt v0.3.2"><img class="fixit-icon" src="/images/fixit.min.svg" alt="FixIt logo" /> FixIt</a>
+        </div><div class="footer-line copyright" itemscope itemtype="http://schema.org/CreativeWork"><i class="fa-regular fa-copyright fa-fw" aria-hidden="true"></i>
+            <span itemprop="copyrightYear">2024</span><span class="author" itemprop="copyrightHolder">
+              <a href="https://github.com/telzhou618"target="_blank" rel="external nofollow noopener noreferrer">telzhou618</a></span></div></div>
+  </footer></div><div class="widgets"><div class="fixed-buttons animate__faster d-none"><div class="fixed-button back-to-top" role="button" aria-label="回到顶部"><i class="fa-solid fa-arrow-up fa-fw" aria-hidden="true"></i><span class="variant-numeric d-none">0%</span>
+        </div></div><div id="mask"></div><div class="reading-progress-bar" style="left: 0;top: 0;"></div><noscript>
+    <div class="noscript-warning">FixIt 主题在启用 JavaScript 的情况下效果最佳。</div>
+  </noscript>
+</div><link rel="preload" href="/lib/katex/katex.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/katex/katex.min.css"></noscript><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><link rel="stylesheet" href="/lib/pace/themes/blue/pace-theme-minimal.css"><script src="/lib/autocomplete/autocomplete.min.js" defer></script><script src="/lib/fuse/fuse.min.js" defer></script><script src="/lib/sharer/sharer.min.js" async defer></script><script src="/lib/katex/katex.min.js" defer></script><script src="/lib/katex/auto-render.min.js" defer></script><script src="/lib/katex/copy-tex.min.js" defer></script><script src="/lib/katex/mhchem.min.js" defer></script><script src="/lib/cookieconsent/cookieconsent.min.js" defer></script><script src="/lib/pace/pace.min.js" async defer></script><script>window.config={"code":{"copyTitle":"复制到剪贴板","editLockTitle":"锁定可编辑代码块","editUnLockTitle":"解锁可编辑代码块","editable":true,"maxShownLines":10},"comment":{"enable":false},"cookieconsent":{"content":{"dismiss":"同意","link":"了解更多","message":"本网站使用 Cookies 来改善您的浏览体验。"},"enable":true,"palette":{"button":{"background":"#f0f0f0"},"popup":{"background":"#1aa3ff"}},"theme":"edgeless"},"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":true,"left":"\\begin{equation}","right":"\\end{equation}"},{"display":true,"left":"\\begin{equation*}","right":"\\end{equation*}"},{"display":true,"left":"\\begin{align}","right":"\\end{align}"},{"display":true,"left":"\\begin{align*}","right":"\\end{align*}"},{"display":true,"left":"\\begin{alignat}","right":"\\end{alignat}"},{"display":true,"left":"\\begin{alignat*}","right":"\\end{alignat*}"},{"display":true,"left":"\\begin{gather}","right":"\\end{gather}"},{"display":true,"left":"\\begin{CD}","right":"\\end{CD}"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"search":{"distance":100,"findAllMatches":false,"fuseIndexURL":"/index.json","highlightTag":"em","ignoreFieldNorm":false,"ignoreLocation":false,"isCaseSensitive":false,"location":0,"maxResultLength":10,"minMatchCharLength":2,"noResultsFound":"没有找到结果","snippetLength":30,"threshold":0.3,"type":"fuse","useExtendedSearch":false}};</script><script src="/js/theme.min.js" defer></script></body>
+</html>

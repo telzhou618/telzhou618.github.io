@@ -1,0 +1,1538 @@
+<!DOCTYPE html>
+<html itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+  <head>
+    
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+    <meta name="robots" content="noodp" />
+    <title>Redis 从入门到精通 - 扁舟的博客</title><meta name="author" content="telzhou618">
+<meta name="author-link" content="https://github.com/telzhou618">
+<meta name="description" content="Redis 是什么Redis 是一个高性能的基于内存实现的K-V存储数据库 。 Redis 的优点 性能极高，Redis能读的速度是110000次/s,写的速度是810" /><meta name="keywords" content='redis' /><meta itemprop="name" content="Redis 从入门到精通">
+<meta itemprop="description" content="Redis 是什么Redis 是一个高性能的基于内存实现的K-V存储数据库 。 Redis 的优点 性能极高，Redis能读的速度是110000次/s,写的速度是810"><meta itemprop="datePublished" content="2023-06-28T14:44:07+08:00" />
+<meta itemprop="dateModified" content="2023-06-28T14:44:07+08:00" />
+<meta itemprop="wordCount" content="8385">
+<meta itemprop="keywords" content="redis," /><meta property="og:title" content="Redis 从入门到精通" />
+<meta property="og:description" content="Redis 是什么Redis 是一个高性能的基于内存实现的K-V存储数据库 。 Redis 的优点 性能极高，Redis能读的速度是110000次/s,写的速度是810" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://telzhou618.github.io/posts/redis/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2023-06-28T14:44:07+08:00" />
+<meta property="article:modified_time" content="2023-06-28T14:44:07+08:00" />
+
+<meta name="twitter:card" content="summary"/><meta name="twitter:title" content="Redis 从入门到精通"/>
+<meta name="twitter:description" content="Redis 是什么Redis 是一个高性能的基于内存实现的K-V存储数据库 。 Redis 的优点 性能极高，Redis能读的速度是110000次/s,写的速度是810"/>
+<meta name="application-name" content="FixIt">
+<meta name="apple-mobile-web-app-title" content="FixIt"><meta name="theme-color" data-light="#f8f8f8" data-dark="#252627" content="#f8f8f8"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" href="https://telzhou618.github.io/posts/redis/" /><link rel="prev" href="https://telzhou618.github.io/posts/spring-aop/" /><link rel="next" href="https://telzhou618.github.io/posts/otter1/" /><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "BlogPosting",
+    "headline": "Redis 从入门到精通",
+    "inLanguage": "zh-CN",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https:\/\/telzhou618.github.io\/posts\/redis\/"
+    },"genre": "posts","keywords": "redis","wordcount":  8385 ,
+    "url": "https:\/\/telzhou618.github.io\/posts\/redis\/","datePublished": "2023-06-28T14:44:07+08:00","dateModified": "2023-06-28T14:44:07+08:00","publisher": {
+      "@type": "Organization",
+      "name": ""},"author": {
+        "@type": "Person",
+        "name": "telzhou618"
+      },"description": ""
+  }
+  </script></head>
+  <body data-header-desktop="sticky" data-header-mobile="auto"><script>(window.localStorage?.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('data-theme', 'dark');</script><div class="wrapper" data-page-style="normal"><header class="desktop animate__faster" id="header-desktop">
+  <div class="header-wrapper">
+    <div class="header-title">
+      <a href="/" title="扁舟的博客"><span class="header-title-text">扁舟的博客</span></a><span class="header-subtitle"></span></div>
+    <nav>
+      <ul class="menu"><li class="menu-item active">
+              <a
+                class="menu-link"
+                href="/posts/"
+                title="Posts"
+                
+              >Posts</a></li><li class="menu-item">
+              <a
+                class="menu-link"
+                href="/"
+                
+                
+              >Archives</a></li><li class="menu-item">
+              <a
+                class="menu-link"
+                href="/categories/"
+                title="Categories"
+                
+              >Categories</a></li><li class="menu-item">
+              <a
+                class="menu-link"
+                href="/tags/"
+                title="Tags"
+                
+              >Tags</a></li><li class="menu-item">
+              <a
+                class="menu-link"
+                href="/about/"
+                title="About"
+                
+              >About</a></li><li class="menu-item delimiter"></li><li class="menu-item search" id="search-desktop">
+            <input type="text" placeholder="搜索文章标题或内容……" id="search-input-desktop">
+            <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+              <i class="fa-solid fa-search fa-fw" aria-hidden="true"></i>
+            </a>
+            <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+              <i class="fa-solid fa-times-circle fa-fw" aria-hidden="true"></i>
+            </a>
+            <span class="search-button search-loading" id="search-loading-desktop">
+              <i class="fa-solid fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+            </span>
+          </li><li class="menu-item theme-switch" title="切换主题">
+          <i class="fa-solid fa-adjust fa-fw" aria-hidden="true"></i>
+        </li></ul>
+    </nav>
+  </div>
+</header><header class="mobile animate__faster" id="header-mobile">
+  <div class="header-container">
+    <div class="header-wrapper">
+      <div class="header-title">
+        <a href="/" title="扁舟的博客"><span class="header-title-text">扁舟的博客</span></a><span class="header-subtitle"></span></div>
+      <div class="menu-toggle" id="menu-toggle-mobile">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+    <nav>
+      <ul class="menu" id="menu-mobile"><li class="search-wrapper">
+            <div class="search mobile" id="search-mobile">
+              <input type="text" placeholder="搜索文章标题或内容……" id="search-input-mobile">
+              <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                <i class="fa-solid fa-search fa-fw" aria-hidden="true"></i>
+              </a>
+              <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                <i class="fa-solid fa-times-circle fa-fw" aria-hidden="true"></i>
+              </a>
+              <span class="search-button search-loading" id="search-loading-mobile">
+                <i class="fa-solid fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+              </span>
+            </div>
+            <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+              取消
+            </a>
+          </li><li
+              class="menu-item active"
+            ><a
+                  class="menu-link"
+                  href="/posts/"
+                  title="Posts"
+                  
+                >Posts</a></li><li
+              class="menu-item"
+            ><a
+                  class="menu-link"
+                  href="/"
+                  
+                  
+                >Archives</a></li><li
+              class="menu-item"
+            ><a
+                  class="menu-link"
+                  href="/categories/"
+                  title="Categories"
+                  
+                >Categories</a></li><li
+              class="menu-item"
+            ><a
+                  class="menu-link"
+                  href="/tags/"
+                  title="Tags"
+                  
+                >Tags</a></li><li
+              class="menu-item"
+            ><a
+                  class="menu-link"
+                  href="/about/"
+                  title="About"
+                  
+                >About</a></li><li class="menu-item menu-system">
+          <span class="menu-system-item theme-switch" title="切换主题"><i class="fa-solid fa-adjust fa-fw" aria-hidden="true"></i></span></li>
+      </ul>
+    </nav>
+  </div>
+</header><div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+  </div>
+  <div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+  </div><main class="container"><aside class="aside-collection animate__animated animate__fadeIn animate__faster" aria-label="合集"></aside>
+
+  <article class="page single">
+    <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span>Redis 从入门到精通</span>
+      </h1></div><div class="post-meta">
+      <div class="post-meta-line"><span class="post-author"><a href="https://github.com/telzhou618" title="作者"target="_blank" rel="external nofollow noopener noreferrer author" class="author"><img loading="lazy" src="https://avatars.githubusercontent.com/u/6360011?v=4" alt="telzhou618" data-title="telzhou618" class="avatar" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/>&nbsp;telzhou618</a></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/db/" class="post-category" title="分类 - db"><i class="fa-regular fa-folder fa-fw" aria-hidden="true"></i> db</a>&ensp;<a href="/categories/%E4%B8%AD%E9%97%B4%E4%BB%B6/" class="post-category" title="分类 - 中间件"><i class="fa-regular fa-folder fa-fw" aria-hidden="true"></i> 中间件</a></span></div><div class="post-meta-line"><span title="发布于 2023-06-28 14:44:07"><i class="fa-solid fa-calendar-days fa-fw me-1" aria-hidden="true"></i><time datetime="2023-06-28">2023-06-28</time></span>&nbsp;<span title="8385 字"><i class="fa-solid fa-pencil-alt fa-fw me-1" aria-hidden="true"></i>约 8400 字</span>&nbsp;<span><i class="fa-regular fa-clock fa-fw me-1" aria-hidden="true"></i>预计阅读 17 分钟</span>&nbsp;</div>
+    </div><div class="details toc" id="toc-static" data-kept="false">
+        <div class="details-summary toc-title">
+          <span>目录</span>
+          <span><i class="details-icon fa-solid fa-angle-right" aria-hidden="true"></i></span>
+        </div>
+        <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#redis-是什么">Redis 是什么</a></li>
+    <li><a href="#redis-的优点">Redis 的优点</a></li>
+    <li><a href="#redis-的缺点">Redis 的缺点</a></li>
+    <li><a href="#redis-应用场景">Redis 应用场景</a></li>
+    <li><a href="#redis-基础">Redis 基础</a>
+      <ul>
+        <li><a href="#redis-下载安装安装">Redis 下载安装安装</a></li>
+        <li><a href="#jedis-链接redis">Jedis 链接Redis</a></li>
+        <li><a href="#redis-管道pipeline使用">Redis 管道（Pipeline）使用</a></li>
+        <li><a href="#redis-lua-脚本使用">Redis Lua 脚本使用</a></li>
+        <li><a href="#redis-key-淘汰策略">Redis Key 淘汰策略</a></li>
+        <li><a href="#redis-批量插入海量数据">Redis 批量插入海量数据</a></li>
+        <li><a href="#redis-遍历所有元素">Redis 遍历所有元素</a></li>
+      </ul>
+    </li>
+    <li><a href="#redis-持久化方案">Redis 持久化方案</a>
+      <ul>
+        <li><a href="#持久化之rdb-模式">持久化之rdb 模式</a></li>
+        <li><a href="#持久化之aof模式">持久化之aof模式</a></li>
+      </ul>
+    </li>
+    <li><a href="#redis-主从模式">Redis 主从模式</a>
+      <ul>
+        <li><a href="#主从模式配置">主从模式配置</a></li>
+        <li><a href="#主从工作原理">主从工作原理</a></li>
+        <li><a href="#主从模式的缺点">主从模式的缺点</a></li>
+      </ul>
+    </li>
+    <li><a href="#redis-哨兵模式">Redis 哨兵模式</a>
+      <ul>
+        <li><a href="#redis-哨兵架构搭建步骤"><strong>redis 哨兵架构搭建步骤</strong></a></li>
+        <li><a href="#jedis-连接哨兵">jedis 连接哨兵</a></li>
+        <li><a href="#spring-boot-连接哨兵">spring-boot 连接哨兵</a></li>
+        <li><a href="#哨兵模式的缺点">哨兵模式的缺点</a></li>
+      </ul>
+    </li>
+    <li><a href="#redis-集群模式">Redis 集群模式</a>
+      <ul>
+        <li><a href="#redis集群搭建">Redis集群搭建</a></li>
+        <li><a href="#java-操作redis集群">java 操作Redis集群</a></li>
+        <li><a href="#spring-boot-操作redis集群">Spring-boot 操作Redis集群</a></li>
+        <li><a href="#redis-集群原理分析">Redis 集群原理分析</a></li>
+      </ul>
+    </li>
+    <li><a href="#redis-核心原理">Redis 核心原理</a>
+      <ul>
+        <li><a href="#单线程模型">单线程模型</a></li>
+        <li><a href="#简单动态字符串sds">简单动态字符串SDS</a></li>
+        <li><a href="#链表">链表</a></li>
+        <li><a href="#跳跃表">跳跃表</a></li>
+      </ul>
+    </li>
+    <li><a href="#redis-常见问题及解决">Redis 常见问题及解决</a>
+      <ul>
+        <li><a href="#缓存穿透">缓存穿透</a></li>
+        <li><a href="#缓存失效击穿">缓存失效(击穿)</a></li>
+        <li><a href="#缓存雪崩">缓存雪崩</a></li>
+        <li><a href="#热点缓存失效重建">热点缓存失效重建</a></li>
+        <li><a href="#缓存与数据库不一致">缓存与数据库不一致</a></li>
+      </ul>
+    </li>
+    <li><a href="#redis-参考文档">Redis 参考文档</a></li>
+  </ul>
+</nav></div>
+      </div><div class="content" id="content"><p><img loading="lazy" src="https://raw.githubusercontent.com/telzhou618/images/main/img01/1*1gUAG0m0infLs92uSpw9nA.png" alt="img" srcset="https://raw.githubusercontent.com/telzhou618/images/main/img01/1*1gUAG0m0infLs92uSpw9nA.png?size=small, https://raw.githubusercontent.com/telzhou618/images/main/img01/1*1gUAG0m0infLs92uSpw9nA.png?size=medium 1.5x, https://raw.githubusercontent.com/telzhou618/images/main/img01/1*1gUAG0m0infLs92uSpw9nA.png?size=large 2x" data-title="img" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></p>
+<h2 id="redis-是什么" class="heading-element">
+  <a href="#redis-%e6%98%af%e4%bb%80%e4%b9%88" class="heading-mark"></a>Redis 是什么</h2><p>Redis 是一个高性能的基于内存实现的K-V存储数据库 。</p>
+<h2 id="redis-的优点" class="heading-element">
+  <a href="#redis-%e7%9a%84%e4%bc%98%e7%82%b9" class="heading-mark"></a>Redis 的优点</h2><ul>
+<li>性能极高，Redis能读的速度是110000次/s,写的速度是81000次/s 。</li>
+<li>支持持久化，可以将内存中的数据保存在磁盘中，重启的时候可以再次加载进行使用。</li>
+<li>多种数据类型，同时还提供list，set，zset，hash等数据结构的存储。</li>
+<li>支持主从复制，自动同步，可实现读写分离。</li>
+<li>丰富的特性，支持pub/sub，key过期策略，事务，支持多个DB等。</li>
+</ul>
+<h2 id="redis-的缺点" class="heading-element">
+  <a href="#redis-%e7%9a%84%e7%bc%ba%e7%82%b9" class="heading-mark"></a>Redis 的缺点</h2><ul>
+<li>基于内存存储，单机容量有限。</li>
+<li>重启会加载磁盘缓存到内存，这期间不能提供服务。</li>
+<li>主从复制采用全量复制，这个过程会占用更多内存和网络资源。</li>
+</ul>
+<h2 id="redis-应用场景" class="heading-element">
+  <a href="#redis-%e5%ba%94%e7%94%a8%e5%9c%ba%e6%99%af" class="heading-mark"></a>Redis 应用场景</h2><ul>
+<li>
+<p>缓存数据，常见应用。</p>
+</li>
+<li>
+<p>计数器，单线程可避免并发，保证不出错，性能毫秒级。</p>
+</li>
+<li>
+<p>队列，可作为简单消息队列使用。</p>
+</li>
+<li>
+<p>分布式锁与单线程机制</p>
+</li>
+<li>
+<p>位操作，如统计在线列表</p>
+</li>
+<li>
+<p>最新列表，获取最新10条新闻数据</p>
+</li>
+<li>
+<p>排行榜，消费排行榜</p>
+</li>
+</ul>
+<h2 id="redis-基础" class="heading-element">
+  <a href="#redis-%e5%9f%ba%e7%a1%80" class="heading-mark"></a>Redis 基础</h2><h3 id="redis-下载安装安装" class="heading-element">
+  <a href="#redis-%e4%b8%8b%e8%bd%bd%e5%ae%89%e8%a3%85%e5%ae%89%e8%a3%85" class="heading-mark"></a>Redis 下载安装安装</h3><p>从源码安装</p>
+<div class="highlight" id="id-1"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="c1"># download</span>
+</span></span><span class="line"><span class="cl">wget https://download.redis.io/releases/redis-6.2.5.tar.gz
+</span></span><span class="line"><span class="cl">tar xzf redis-6.2.5.tar.gz
+</span></span><span class="line"><span class="cl"><span class="nb">cd</span> redis-6.2.5
+</span></span><span class="line"><span class="cl">make
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># run redis-server</span>
+</span></span><span class="line"><span class="cl">src/redis-server
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># test</span>
+</span></span><span class="line"><span class="cl">src/redis-cli
+</span></span><span class="line"><span class="cl">redis&gt; <span class="nb">set</span> foo bar
+</span></span><span class="line"><span class="cl">OK
+</span></span><span class="line"><span class="cl">redis&gt; get foo
+</span></span><span class="line"><span class="cl"><span class="s2">&#34;bar&#34;</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>Ubuntu 安装</p>
+<div class="highlight" id="id-2"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo add-apt-repository ppa:redislabs/redis
+</span></span><span class="line"><span class="cl">sudo apt-get update
+</span></span><span class="line"><span class="cl">sudo apt-get install redis</span></span></code></pre></td></tr></table>
+</div>
+</div><p>Mac 安装</p>
+<div class="highlight" id="id-3"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">brew install redis</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="jedis-链接redis" class="heading-element">
+  <a href="#jedis-%e9%93%be%e6%8e%a5redis" class="heading-mark"></a>Jedis 链接Redis</h3><p>先引入jar包</p>
+<div class="highlight" id="id-4"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-xml" data-lang="xml"><span class="line"><span class="cl"><span class="nt">&lt;dependency&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;groupId&gt;</span>redis.clients<span class="nt">&lt;/groupId&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;artifactId&gt;</span>jedis<span class="nt">&lt;/artifactId&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;version&gt;</span>2.9.0<span class="nt">&lt;/version&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="nt">&lt;/dependency&gt;</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>JAVA 代码调用实例</p>
+<div class="highlight" id="id-5"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">JedisSingleTest</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">String</span><span class="o">[]</span><span class="w"> </span><span class="n">args</span><span class="p">)</span><span class="w"> </span><span class="kd">throws</span><span class="w"> </span><span class="n">IOException</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">JedisPoolConfig</span><span class="w"> </span><span class="n">jedisPoolConfig</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">JedisPoolConfig</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">jedisPoolConfig</span><span class="p">.</span><span class="na">setMaxTotal</span><span class="p">(</span><span class="n">20</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">jedisPoolConfig</span><span class="p">.</span><span class="na">setMaxIdle</span><span class="p">(</span><span class="n">10</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">jedisPoolConfig</span><span class="p">.</span><span class="na">setMinIdle</span><span class="p">(</span><span class="n">5</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">// timeout，这里既是连接超时又是读写超时，从Jedis 2.8开始有区分connectionTimeout和soTimeout的构造函数</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">JedisPool</span><span class="w"> </span><span class="n">jedisPool</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">JedisPool</span><span class="p">(</span><span class="n">jedisPoolConfig</span><span class="p">,</span><span class="w"> </span><span class="s">&#34;192.168.0.60&#34;</span><span class="p">,</span><span class="w"> </span><span class="n">6379</span><span class="p">,</span><span class="w"> </span><span class="n">3000</span><span class="p">,</span><span class="w"> </span><span class="kc">null</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">Jedis</span><span class="w"> </span><span class="n">jedis</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">null</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="c1">//从redis连接池里拿出一个连接执行命令</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="n">jedis</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">jedisPool</span><span class="p">.</span><span class="na">getResource</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="n">jedis</span><span class="p">.</span><span class="na">set</span><span class="p">(</span><span class="s">&#34;single&#34;</span><span class="p">,</span><span class="w"> </span><span class="s">&#34;zhuge&#34;</span><span class="p">));</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="n">jedis</span><span class="p">.</span><span class="na">get</span><span class="p">(</span><span class="s">&#34;single&#34;</span><span class="p">));</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="n">Exception</span><span class="w"> </span><span class="n">e</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="n">e</span><span class="p">.</span><span class="na">printStackTrace</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="k">finally</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="c1">//注意这里不是关闭连接，在JedisPool模式下，Jedis会被归还给资源池。</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">jedis</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">null</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">jedis</span><span class="p">.</span><span class="na">close</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="redis-管道pipeline使用" class="heading-element">
+  <a href="#redis-%e7%ae%a1%e9%81%93pipeline%e4%bd%bf%e7%94%a8" class="heading-mark"></a>Redis 管道（Pipeline）使用</h3><p>管道可以一次发送多个命令给Redis服务，减少网络开销，如果前面的命令执行失败，后面的命令会继续执行，不会被影响，最后把所有命令的执行结果一次返回。</p>
+<div class="highlight" id="id-6"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="n">Pipeline</span><span class="w"> </span><span class="n">pl</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">jedis</span><span class="p">.</span><span class="na">pipelined</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">10</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">pl</span><span class="p">.</span><span class="na">incr</span><span class="p">(</span><span class="s">&#34;pipelineKey&#34;</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">pl</span><span class="p">.</span><span class="na">set</span><span class="p">(</span><span class="s">&#34;zhuge&#34;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="s">&#34;zhuge&#34;</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">//模拟管道报错</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">// pl.setbit(&#34;zhuge&#34;, -1, true);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="n">List</span><span class="o">&lt;</span><span class="n">Object</span><span class="o">&gt;</span><span class="w"> </span><span class="n">results</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">pl</span><span class="p">.</span><span class="na">syncAndReturnAll</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="n">results</span><span class="p">);</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="redis-lua-脚本使用" class="heading-element">
+  <a href="#redis-lua-%e8%84%9a%e6%9c%ac%e4%bd%bf%e7%94%a8" class="heading-mark"></a>Redis Lua 脚本使用</h3><p>LUA 脚本可以代替Redis的事务执行，要么所有命令都执行成功，要么都失败，是原子性的，也可以减少网络开销。</p>
+<p>在Redis控制台执行：</p>
+<div class="highlight" id="id-7"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">127.0.0.1:6379&gt; <span class="nb">eval</span> <span class="s2">&#34;return {KEYS[1],KEYS[2],ARGV[1],ARGV[2]}&#34;</span> <span class="m">2</span> key1 key2 first second
+</span></span><span class="line"><span class="cl">1<span class="o">)</span> <span class="s2">&#34;key1&#34;</span>
+</span></span><span class="line"><span class="cl">2<span class="o">)</span> <span class="s2">&#34;key2&#34;</span>
+</span></span><span class="line"><span class="cl">3<span class="o">)</span> <span class="s2">&#34;first&#34;</span>
+</span></span><span class="line"><span class="cl">4<span class="o">)</span> <span class="s2">&#34;second&#34;</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>在代码中使用：</p>
+<p>模拟减库存操作，如果后面执行失败，减掉的库存会回滚。</p>
+<div class="highlight" id="id-8"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="n">jedis</span><span class="p">.</span><span class="na">set</span><span class="p">(</span><span class="s">&#34;product_stock_10016&#34;</span><span class="p">,</span><span class="w"> </span><span class="s">&#34;15&#34;</span><span class="p">);</span><span class="w">  </span><span class="c1">//初始化商品10016的库存</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="n">String</span><span class="w"> </span><span class="n">script</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&#34; local count = redis.call(&#39;get&#39;, KEYS[1]) &#34;</span><span class="w"> </span><span class="o">+</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                </span><span class="s">&#34; local a = tonumber(count) &#34;</span><span class="w"> </span><span class="o">+</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                </span><span class="s">&#34; local b = tonumber(ARGV[1]) &#34;</span><span class="w"> </span><span class="o">+</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                </span><span class="s">&#34; if a &gt;= b then &#34;</span><span class="w"> </span><span class="o">+</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                </span><span class="s">&#34;   redis.call(&#39;set&#39;, KEYS[1], a-b) &#34;</span><span class="w"> </span><span class="o">+</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                </span><span class="s">&#34;   return 1 &#34;</span><span class="w"> </span><span class="o">+</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                </span><span class="s">&#34; end &#34;</span><span class="w"> </span><span class="o">+</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                </span><span class="s">&#34; return 0 &#34;</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="n">Object</span><span class="w"> </span><span class="n">obj</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">jedis</span><span class="p">.</span><span class="na">eval</span><span class="p">(</span><span class="n">script</span><span class="p">,</span><span class="w"> </span><span class="n">Arrays</span><span class="p">.</span><span class="na">asList</span><span class="p">(</span><span class="s">&#34;product_stock_10016&#34;</span><span class="p">),</span><span class="w"> </span><span class="n">Arrays</span><span class="p">.</span><span class="na">asList</span><span class="p">(</span><span class="s">&#34;10&#34;</span><span class="p">));</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="n">obj</span><span class="p">);</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="redis-key-淘汰策略" class="heading-element">
+  <a href="#redis-key-%e6%b7%98%e6%b1%b0%e7%ad%96%e7%95%a5" class="heading-mark"></a>Redis Key 淘汰策略</h3><p>Redis缓存达到最大内存限制时会执行淘汰策略，如下命令设置最大内存。</p>
+<div class="highlight" id="id-9"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">maxmemory 100mb</span></span></code></pre></td></tr></table>
+</div>
+</div><p>如下配置key淘汰策略，默认noeviction（拒绝请求）。</p>
+<div class="highlight" id="id-10"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">maxmemory-policy noeviction</span></span></code></pre></td></tr></table>
+</div>
+</div><p>全部配置参数：</p>
+<ul>
+<li><strong>noeviction</strong>  达到内存限制时返回错误，直接拒绝，del命令除外，是Redis的默认策略。</li>
+<li><strong>allkeys-lru</strong> 尝试删除最近最少使用的，也就是优先驱逐最长时间没使用的。</li>
+<li><strong>volatile-lru</strong> 尝试删除最近最少的使用的，但仅限设置了过期时间的key。</li>
+<li><strong>allkeys-random</strong> 随机驱逐key。</li>
+<li><strong>volatile-random</strong> 随机驱逐key, 但仅限设置了过期时间的key。</li>
+<li><strong>volatile-ttl</strong> 驱逐设置了过期时间的key, 优先驱逐生存期较短的。</li>
+<li><strong>allkeys-lfu</strong> 优先驱逐最近最不常使用的，也就是优先驱逐一定时间内使用次数最少的，4.1 新增的。</li>
+<li><strong>volatile-lfu</strong> 优先驱逐最近最不常使用的，但仅限设置了过期时间的key，4.1 新增的。</li>
+</ul>
+<h3 id="redis-批量插入海量数据" class="heading-element">
+  <a href="#redis-%e6%89%b9%e9%87%8f%e6%8f%92%e5%85%a5%e6%b5%b7%e9%87%8f%e6%95%b0%e6%8d%ae" class="heading-mark"></a>Redis 批量插入海量数据</h3><p>假如用一条条执行 SET的方式插入百万级的数据量，虽然每条命令执行很快，但是网络来来回回折腾带来的开销也不容小觑，为了执行海量数据批量导入，可以结合redis管道完成。</p>
+<p>首先将要导入的数据以命令的方式写入到文件中，如下：</p>
+<p>/tmp/big-data.txt</p>
+<div class="highlight" id="id-11"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">SET name zhangsan
+</span></span><span class="line"><span class="cl">SET name1 lisi
+</span></span><span class="line"><span class="cl">SET name2 wangwu
+</span></span><span class="line"><span class="cl">SET name3 zhaoliu</span></span></code></pre></td></tr></table>
+</div>
+</div><p>然后执行以下命令导入</p>
+<div class="highlight" id="id-12"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">cat big-data.txt <span class="p">|</span> redis-cli --pipe</span></span></code></pre></td></tr></table>
+</div>
+</div><p>执行结果</p>
+<div class="highlight" id="id-13"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">All data transferred. Waiting <span class="k">for</span> the last reply...
+</span></span><span class="line"><span class="cl">Last reply received from server.
+</span></span><span class="line"><span class="cl">errors: 0, replies: <span class="m">1000000</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="redis-遍历所有元素" class="heading-element">
+  <a href="#redis-%e9%81%8d%e5%8e%86%e6%89%80%e6%9c%89%e5%85%83%e7%b4%a0" class="heading-mark"></a>Redis 遍历所有元素</h3><ul>
+<li><strong>keys * 遍历</strong></li>
+</ul>
+<p>keys * 会一次返回匹配到的所有key, 当数据量大时要慎用，避免阻塞redis。</p>
+<p>实例1：查询所有的key</p>
+<div class="highlight" id="id-14"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">127.0.0.1:6379&gt; keys *
+</span></span><span class="line"><span class="cl">1<span class="o">)</span> <span class="s2">&#34;name3&#34;</span>
+</span></span><span class="line"><span class="cl">2<span class="o">)</span> <span class="s2">&#34;name1&#34;</span>
+</span></span><span class="line"><span class="cl">3<span class="o">)</span> <span class="s2">&#34;name2&#34;</span>
+</span></span><span class="line"><span class="cl">4<span class="o">)</span> <span class="s2">&#34;name&#34;</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>实例2：查询所有前缀为name的key</p>
+<div class="highlight" id="id-15"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">127.0.0.1:6379&gt; keys name*
+</span></span><span class="line"><span class="cl">1<span class="o">)</span> <span class="s2">&#34;name3&#34;</span>
+</span></span><span class="line"><span class="cl">2<span class="o">)</span> <span class="s2">&#34;name1&#34;</span>
+</span></span><span class="line"><span class="cl">3<span class="o">)</span> <span class="s2">&#34;name2&#34;</span>
+</span></span><span class="line"><span class="cl">4<span class="o">)</span> <span class="s2">&#34;name&#34;</span></span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li><strong>scan 渐进式遍历</strong></li>
+</ul>
+<p>scan 遍历可以做到分页遍历，数据量大是比较合适，每次请求会返回下次一的游标，直达游标为0结束，但是在遍历过程中如果有key新增或删除可能出现新重复数据等情况，使用时要注意。</p>
+<p>命令格式</p>
+<div class="highlight" id="id-16"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">SCAN cursor <span class="o">[</span>MATCH pattern<span class="o">]</span> <span class="o">[</span>COUNT count<span class="o">]</span> </span></span></code></pre></td></tr></table>
+</div>
+</div><p>实例：扫描key前缀为name的元素，每次返回2条。</p>
+<div class="highlight" id="id-17"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">127.0.0.1:6379&gt; scan <span class="m">0</span> match name* count <span class="m">2</span>
+</span></span><span class="line"><span class="cl">1<span class="o">)</span> <span class="s2">&#34;1&#34;</span>
+</span></span><span class="line"><span class="cl">2<span class="o">)</span> 1<span class="o">)</span> <span class="s2">&#34;name3&#34;</span>
+</span></span><span class="line"><span class="cl">   2<span class="o">)</span> <span class="s2">&#34;name2&#34;</span>
+</span></span><span class="line"><span class="cl">   3<span class="o">)</span> <span class="s2">&#34;name&#34;</span></span></span></code></pre></td></tr></table>
+</div>
+</div><div class="highlight" id="id-18"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">127.0.0.1:6379&gt; scan <span class="m">1</span> match name* count <span class="m">2</span>
+</span></span><span class="line"><span class="cl">1<span class="o">)</span> <span class="s2">&#34;0&#34;</span>
+</span></span><span class="line"><span class="cl">2<span class="o">)</span> 1<span class="o">)</span> <span class="s2">&#34;name1&#34;</span>
+</span></span><span class="line"><span class="cl">127.0.0.1:6379&gt;</span></span></code></pre></td></tr></table>
+</div>
+</div><blockquote>
+<p>当返回的 cursor 为0时结束。</p>
+</blockquote>
+<h2 id="redis-持久化方案" class="heading-element">
+  <a href="#redis-%e6%8c%81%e4%b9%85%e5%8c%96%e6%96%b9%e6%a1%88" class="heading-mark"></a>Redis 持久化方案</h2><h3 id="持久化之rdb-模式" class="heading-element">
+  <a href="#%e6%8c%81%e4%b9%85%e5%8c%96%e4%b9%8brdb-%e6%a8%a1%e5%bc%8f" class="heading-mark"></a>持久化之rdb 模式</h3><p>根据配置规则redis 会以生生二进制文件dump.rdb的方式持久化数据到磁盘，每次持久化会生成一个新的文件覆盖旧的文件，默认是开启的，配置方法如下所示。</p>
+<p><strong>开启rdb模式</strong></p>
+<div class="highlight" id="id-19"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">save <span class="m">900</span> <span class="m">1</span>
+</span></span><span class="line"><span class="cl">save <span class="m">300</span> <span class="m">10</span>
+</span></span><span class="line"><span class="cl">save <span class="m">60</span> <span class="m">10000</span> <span class="c1"># 60s内有10000个key被改动则触发rdb持久化</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>关闭RDB只需要将所有的save保存策略注释掉即可。</p>
+<p>还可以手动执行命令生成RDB快照，进入redis客户端执行命令<strong>save</strong>或<strong>bgsave</strong>可以生成dump.rdb文件， 每次命令执行都会将所有redis内存快照到一个新的rdb文件里，并覆盖原有rdb快照文件。save 会同步执行，阻塞客户端的操作，bgsave会fork一个子进程处理异步处理。</p>
+<h3 id="持久化之aof模式" class="heading-element">
+  <a href="#%e6%8c%81%e4%b9%85%e5%8c%96%e4%b9%8baof%e6%a8%a1%e5%bc%8f" class="heading-mark"></a>持久化之aof模式</h3><p>aof 是以记类似日志的方式持久化，默认是关闭的，需要执行以下命令开启。</p>
+<p><strong>开启aof模式</strong></p>
+<div class="highlight" id="id-20"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">appendonly yes</span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong>aof 策略配置</strong></p>
+<div class="highlight" id="id-21"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">appendfsync always <span class="c1"># 每次有新命令追加到 AOF 文件时就执行一次 fsync ，非常慢，也非常安全。</span>
+</span></span><span class="line"><span class="cl">appendfsync everysec <span class="c1"># 每秒 fsync 一次，足够快，并且在故障时只会丢失 1 秒钟的数据。</span>
+</span></span><span class="line"><span class="cl">appendfsync no <span class="c1"># 从不 fsync ，将数据交给操作系统来处理。更快，也更不安全的选择。</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong>aof 重写</strong></p>
+<p>多次修改同一个key的值后，经过aof重写会只保留最后一次修改的命令，这样可以保持aof文件只保留有效的命且减少占用存储空间，默认自动开启。</p>
+<div class="highlight" id="id-22"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">auto-aof-rewrite-percentage <span class="m">100</span>  <span class="c1"># aof文件自上一次重写后文件大小增长了100%则再次触发重写</span>
+</span></span><span class="line"><span class="cl">auto-aof-rewrite-min-size 64mb   <span class="c1"># aof文件至少要达到64M才会自动重写，文件太小恢复速度本来就 很快，重写的意义不大</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="redis-主从模式" class="heading-element">
+  <a href="#redis-%e4%b8%bb%e4%bb%8e%e6%a8%a1%e5%bc%8f" class="heading-mark"></a>Redis 主从模式</h2><p><img loading="lazy" src="https://raw.githubusercontent.com/telzhou618/images/main/img01/2adbc6e661eb44a2add519bb590e86e5%7Etplv-k3u1fbpfcp-watermark.image" alt="redis主从" srcset="https://raw.githubusercontent.com/telzhou618/images/main/img01/2adbc6e661eb44a2add519bb590e86e5%7Etplv-k3u1fbpfcp-watermark.image?size=small, https://raw.githubusercontent.com/telzhou618/images/main/img01/2adbc6e661eb44a2add519bb590e86e5%7Etplv-k3u1fbpfcp-watermark.image?size=medium 1.5x, https://raw.githubusercontent.com/telzhou618/images/main/img01/2adbc6e661eb44a2add519bb590e86e5%7Etplv-k3u1fbpfcp-watermark.image?size=large 2x" data-title="redis主从" class="suffix-invalid suffix-invalid__small suffix-invalid__large" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></p>
+<h3 id="主从模式配置" class="heading-element">
+  <a href="#%e4%b8%bb%e4%bb%8e%e6%a8%a1%e5%bc%8f%e9%85%8d%e7%bd%ae" class="heading-mark"></a>主从模式配置</h3><div class="highlight" id="id-23"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">1、复制一份redis.conf文件
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">2、将相关配置修改为如下值：
+</span></span><span class="line"><span class="cl">port <span class="m">6380</span>
+</span></span><span class="line"><span class="cl">pidfile /var/run/redis_6380.pid  <span class="c1"># 把pid进程号写入pidfile配置的文件</span>
+</span></span><span class="line"><span class="cl">logfile <span class="s2">&#34;6380.log&#34;</span>
+</span></span><span class="line"><span class="cl">dir /usr/local/redis-5.0.3/data/6380  <span class="c1"># 指定数据存放目录</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 需要注释掉bind</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># bind 127.0.0.1（bind绑定的是自己机器网卡的ip，如果有多块网卡可以配多个ip，代表允许客户端通过机器的哪些网卡ip去访问，内网一般可以不配置bind，注释掉即可）</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">3、配置主从复制
+</span></span><span class="line"><span class="cl">replicaof 192.168.0.60 <span class="m">6379</span>   <span class="c1"># 从本机6379的redis实例复制数据，Redis 5.0之前使用slaveof</span>
+</span></span><span class="line"><span class="cl">replica-read-only yes  <span class="c1"># 配置从节点只读</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">4、启动从节点
+</span></span><span class="line"><span class="cl">redis-server redis.conf
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">5、连接从节点
+</span></span><span class="line"><span class="cl">redis-cli -p <span class="m">6380</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">6、测试在6379实例上写数据，6380实例是否能及时同步新修改数据
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">7、可以自己再配置一个6381的从节点</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="主从工作原理" class="heading-element">
+  <a href="#%e4%b8%bb%e4%bb%8e%e5%b7%a5%e4%bd%9c%e5%8e%9f%e7%90%86" class="heading-mark"></a>主从工作原理</h3><p>如果你为master配置了一个slave，不管这个slave是否是第一次连接上Master，它都会发送一个<strong>PSYNC</strong>命令给master请求复制数据。</p>
+<p>master收到PSYNC命令后，会在后台进行数据持久化通过bgsave生成最新的rdb快照文件，持久化期间，master会继续接收客户端的请求，它会把这些可能修改数据集的请求缓存在内存中。当持久化进行完毕以后，master会把这份rdb文件数据集发送给slave，slave会把接收到的数据进行持久化生成rdb，然后再加载到内存中。然后，master再将之前缓存在内存中的命令发送给slave。</p>
+<p>当master与slave之间的连接由于某些原因而断开时，slave能够自动重连Master，如果master收到了多个slave并发连接请求，它只会进行一次持久化，而不是一个连接一次，然后再把这一份持久化的数据发送给多个并发连接的slave。</p>
+<h3 id="主从模式的缺点" class="heading-element">
+  <a href="#%e4%b8%bb%e4%bb%8e%e6%a8%a1%e5%bc%8f%e7%9a%84%e7%bc%ba%e7%82%b9" class="heading-mark"></a>主从模式的缺点</h3><p>无法实现自动故障转移，主节点挂了从节点需要手动顶上去。</p>
+<h2 id="redis-哨兵模式" class="heading-element">
+  <a href="#redis-%e5%93%a8%e5%85%b5%e6%a8%a1%e5%bc%8f" class="heading-mark"></a>Redis 哨兵模式</h2><p>sentinel哨兵是特殊的redis服务，不提供读写服务，主要用来监控redis实例节点。 哨兵架构下client端第一次从哨兵找出redis的主节点，后续就直接访问redis的主节点，不会每次都通过 sentinel代理访问redis的主节点，当redis的主节点发生变化，哨兵会第一时间感知到，并且将新的redis 主节点通知给client端(这里面redis的client端一般都实现了订阅功能，订阅sentinel发布的节点变动消息)</p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/telzhou618/images/main/img01/16560ce647c2583e%7Etplv-t2oaga2asx-watermark.image" alt="Redis哨兵" srcset="https://raw.githubusercontent.com/telzhou618/images/main/img01/16560ce647c2583e%7Etplv-t2oaga2asx-watermark.image?size=small, https://raw.githubusercontent.com/telzhou618/images/main/img01/16560ce647c2583e%7Etplv-t2oaga2asx-watermark.image?size=medium 1.5x, https://raw.githubusercontent.com/telzhou618/images/main/img01/16560ce647c2583e%7Etplv-t2oaga2asx-watermark.image?size=large 2x" data-title="Redis哨兵" class="suffix-invalid suffix-invalid__small suffix-invalid__large" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></p>
+<h3 id="redis-哨兵架构搭建步骤" class="heading-element">
+  <a href="#redis-%e5%93%a8%e5%85%b5%e6%9e%b6%e6%9e%84%e6%90%ad%e5%bb%ba%e6%ad%a5%e9%aa%a4" class="heading-mark"></a><strong>redis 哨兵架构搭建步骤</strong></h3><div class="highlight" id="id-24"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">1、复制一份sentinel.conf文件
+</span></span><span class="line"><span class="cl">cp sentinel.conf sentinel-26379.conf
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">2、将相关配置修改为如下值：
+</span></span><span class="line"><span class="cl">port <span class="m">26379</span>
+</span></span><span class="line"><span class="cl">daemonize yes
+</span></span><span class="line"><span class="cl">pidfile <span class="s2">&#34;/var/run/redis-sentinel-26379.pid&#34;</span>
+</span></span><span class="line"><span class="cl">logfile <span class="s2">&#34;26379.log&#34;</span>
+</span></span><span class="line"><span class="cl">dir <span class="s2">&#34;/usr/local/redis-5.0.3/data&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># sentinel monitor &lt;master-redis-name&gt; &lt;master-redis-ip&gt; &lt;master-redis-port&gt; &lt;quorum&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># quorum是一个数字，指明当有多少个sentinel认为一个master失效时(值一般为：sentinel总数/2 + 1)，master才算真正失效</span>
+</span></span><span class="line"><span class="cl">sentinel monitor mymaster 192.168.0.60 <span class="m">6379</span> <span class="m">2</span>   <span class="c1"># mymaster这个名字随便取，客户端访问时会用到</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">3、启动sentinel哨兵实例
+</span></span><span class="line"><span class="cl">src/redis-sentinel sentinel-26379.conf
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">4、查看sentinel的info信息
+</span></span><span class="line"><span class="cl">src/redis-cli -p <span class="m">26379</span>
+</span></span><span class="line"><span class="cl">127.0.0.1:26379&gt;info
+</span></span><span class="line"><span class="cl">可以看到Sentinel的info里已经识别出了redis的主从
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">5、可以自己再配置两个sentinel，端口26380和26381，注意上述配置文件里的对应数字都要修改</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="jedis-连接哨兵" class="heading-element">
+  <a href="#jedis-%e8%bf%9e%e6%8e%a5%e5%93%a8%e5%85%b5" class="heading-mark"></a>jedis 连接哨兵</h3><div class="highlight" id="id-25"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">JedisSentinelTest</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">String</span><span class="o">[]</span><span class="w"> </span><span class="n">args</span><span class="p">)</span><span class="w"> </span><span class="kd">throws</span><span class="w"> </span><span class="n">IOException</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">JedisPoolConfig</span><span class="w"> </span><span class="n">config</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">JedisPoolConfig</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">config</span><span class="p">.</span><span class="na">setMaxTotal</span><span class="p">(</span><span class="n">20</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">config</span><span class="p">.</span><span class="na">setMaxIdle</span><span class="p">(</span><span class="n">10</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">config</span><span class="p">.</span><span class="na">setMinIdle</span><span class="p">(</span><span class="n">5</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">String</span><span class="w"> </span><span class="n">masterName</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&#34;mymaster&#34;</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">Set</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span><span class="w"> </span><span class="n">sentinels</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">HashSet</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">sentinels</span><span class="p">.</span><span class="na">add</span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="n">HostAndPort</span><span class="p">(</span><span class="s">&#34;192.168.0.60&#34;</span><span class="p">,</span><span class="n">26379</span><span class="p">).</span><span class="na">toString</span><span class="p">());</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">sentinels</span><span class="p">.</span><span class="na">add</span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="n">HostAndPort</span><span class="p">(</span><span class="s">&#34;192.168.0.60&#34;</span><span class="p">,</span><span class="n">26380</span><span class="p">).</span><span class="na">toString</span><span class="p">());</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">sentinels</span><span class="p">.</span><span class="na">add</span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="n">HostAndPort</span><span class="p">(</span><span class="s">&#34;192.168.0.60&#34;</span><span class="p">,</span><span class="n">26381</span><span class="p">).</span><span class="na">toString</span><span class="p">());</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">//JedisSentinelPool其实本质跟JedisPool类似，都是与redis主节点建立的连接池</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">//JedisSentinelPool并不是说与sentinel建立的连接池，而是通过sentinel发现redis主节点并与其建立连接</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">JedisSentinelPool</span><span class="w"> </span><span class="n">jedisSentinelPool</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">JedisSentinelPool</span><span class="p">(</span><span class="n">masterName</span><span class="p">,</span><span class="w"> </span><span class="n">sentinels</span><span class="p">,</span><span class="w"> </span><span class="n">config</span><span class="p">,</span><span class="w"> </span><span class="n">3000</span><span class="p">,</span><span class="w"> </span><span class="kc">null</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">Jedis</span><span class="w"> </span><span class="n">jedis</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">null</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="n">jedis</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">jedisSentinelPool</span><span class="p">.</span><span class="na">getResource</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="n">jedis</span><span class="p">.</span><span class="na">set</span><span class="p">(</span><span class="s">&#34;sentinel&#34;</span><span class="p">,</span><span class="w"> </span><span class="s">&#34;zhuge&#34;</span><span class="p">));</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="n">jedis</span><span class="p">.</span><span class="na">get</span><span class="p">(</span><span class="s">&#34;sentinel&#34;</span><span class="p">));</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="n">Exception</span><span class="w"> </span><span class="n">e</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="n">e</span><span class="p">.</span><span class="na">printStackTrace</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="k">finally</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="c1">//注意这里不是关闭连接，在JedisPool模式下，Jedis会被归还给资源池。</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">jedis</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">null</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">jedis</span><span class="p">.</span><span class="na">close</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="spring-boot-连接哨兵" class="heading-element">
+  <a href="#spring-boot-%e8%bf%9e%e6%8e%a5%e5%93%a8%e5%85%b5" class="heading-mark"></a>spring-boot 连接哨兵</h3><p>引入依赖的jar包</p>
+<div class="highlight" id="id-26"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-xml" data-lang="xml"><span class="line"><span class="cl"><span class="nt">&lt;dependency&gt;</span>
+</span></span><span class="line"><span class="cl">   <span class="nt">&lt;groupId&gt;</span>org.springframework.boot<span class="nt">&lt;/groupId&gt;</span>
+</span></span><span class="line"><span class="cl">   <span class="nt">&lt;artifactId&gt;</span>spring-boot-starter-data-redis<span class="nt">&lt;/artifactId&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="nt">&lt;/dependency&gt;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nt">&lt;dependency&gt;</span>
+</span></span><span class="line"><span class="cl">   <span class="nt">&lt;groupId&gt;</span>org.apache.commons<span class="nt">&lt;/groupId&gt;</span>
+</span></span><span class="line"><span class="cl">   <span class="nt">&lt;artifactId&gt;</span>commons-pool2<span class="nt">&lt;/artifactId&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="nt">&lt;/dependency&gt;</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>配置连接信息</p>
+<div class="highlight" id="id-27"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">server</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="m">8080</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">spring</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">redis</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">database</span><span class="p">:</span><span class="w"> </span><span class="m">0</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">timeout</span><span class="p">:</span><span class="w"> </span><span class="m">3000</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">sentinel</span><span class="p">:</span><span class="w">    </span><span class="c">#哨兵模式</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">master</span><span class="p">:</span><span class="w"> </span><span class="l">mymaster</span><span class="w"> </span><span class="c">#主服务器所在集群名称</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">     </span><span class="nt">nodes</span><span class="p">:</span><span class="w"> </span><span class="m">192.168.0.60</span><span class="p">:</span><span class="m">26379</span><span class="p">,</span><span class="m">192.168.0.60</span><span class="p">:</span><span class="m">26380</span><span class="p">,</span><span class="m">192.168.0.60</span><span class="p">:</span><span class="m">26381</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">   </span><span class="nt">lettuce</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">pool</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">max-idle</span><span class="p">:</span><span class="w"> </span><span class="m">50</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">min-idle</span><span class="p">:</span><span class="w"> </span><span class="m">10</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">max-active</span><span class="p">:</span><span class="w"> </span><span class="m">100</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">max-wait</span><span class="p">:</span><span class="w"> </span><span class="m">1000</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>使用代码</p>
+<div class="highlight" id="id-28"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="nd">@RestController</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">IndexController</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kd">final</span><span class="w"> </span><span class="n">Logger</span><span class="w"> </span><span class="n">logger</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">LoggerFactory</span><span class="p">.</span><span class="na">getLogger</span><span class="p">(</span><span class="n">IndexController</span><span class="p">.</span><span class="na">class</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nd">@Autowired</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">StringRedisTemplate</span><span class="w"> </span><span class="n">stringRedisTemplate</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="cm">/**
+</span></span></span><span class="line"><span class="cl"><span class="cm">     * 测试节点挂了哨兵重新选举新的master节点，客户端是否能动态感知到
+</span></span></span><span class="line"><span class="cl"><span class="cm">     * 新的master选举出来后，哨兵会把消息发布出去，客户端实际上是实现了一个消息监听机制，
+</span></span></span><span class="line"><span class="cl"><span class="cm">     * 当哨兵把新master的消息发布出去，客户端会立马感知到新master的信息，从而动态切换访问的masterip
+</span></span></span><span class="line"><span class="cl"><span class="cm">     *
+</span></span></span><span class="line"><span class="cl"><span class="cm">     * @throws InterruptedException
+</span></span></span><span class="line"><span class="cl"><span class="cm">     */</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nd">@RequestMapping</span><span class="p">(</span><span class="s">&#34;/test_sentinel&#34;</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">testSentinel</span><span class="p">()</span><span class="w"> </span><span class="kd">throws</span><span class="w"> </span><span class="n">InterruptedException</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">1</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="kc">true</span><span class="p">){</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="k">try</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                </span><span class="n">stringRedisTemplate</span><span class="p">.</span><span class="na">opsForValue</span><span class="p">().</span><span class="na">set</span><span class="p">(</span><span class="s">&#34;zhuge&#34;</span><span class="o">+</span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="n">i</span><span class="o">+</span><span class="s">&#34;&#34;</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">&#34;设置key：&#34;</span><span class="o">+</span><span class="w"> </span><span class="s">&#34;zhuge&#34;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">i</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                </span><span class="n">i</span><span class="o">++</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                </span><span class="n">Thread</span><span class="p">.</span><span class="na">sleep</span><span class="p">(</span><span class="n">1000</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="p">}</span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="n">Exception</span><span class="w"> </span><span class="n">e</span><span class="p">){</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                </span><span class="n">logger</span><span class="p">.</span><span class="na">error</span><span class="p">(</span><span class="s">&#34;错误：&#34;</span><span class="p">,</span><span class="w"> </span><span class="n">e</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="哨兵模式的缺点" class="heading-element">
+  <a href="#%e5%93%a8%e5%85%b5%e6%a8%a1%e5%bc%8f%e7%9a%84%e7%bc%ba%e7%82%b9" class="heading-mark"></a>哨兵模式的缺点</h3><p>虽然实现了自动故障转移，主节点挂了从节点会自动顶上去，但集群中只能有一个主节点提供服务，无法适应大量的数据存储，一个节点的内存毕竟的有限的，下面的集模式可以改进次问题，Redis集群模式可以实现数据分片，把不同的数据存储在不同的节点上，理论上可以做到无限大内存。</p>
+<h2 id="redis-集群模式" class="heading-element">
+  <a href="#redis-%e9%9b%86%e7%be%a4%e6%a8%a1%e5%bc%8f" class="heading-mark"></a>Redis 集群模式</h2><p>Redis 集群至少需要3个主节点，一般需要给每个主节点配一个从节点。</p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/telzhou618/images/main/img01/1*1gUAG0m0infLs92uSpw9nA.png" alt="img" srcset="https://raw.githubusercontent.com/telzhou618/images/main/img01/1*1gUAG0m0infLs92uSpw9nA.png?size=small, https://raw.githubusercontent.com/telzhou618/images/main/img01/1*1gUAG0m0infLs92uSpw9nA.png?size=medium 1.5x, https://raw.githubusercontent.com/telzhou618/images/main/img01/1*1gUAG0m0infLs92uSpw9nA.png?size=large 2x" data-title="img" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></p>
+<h3 id="redis集群搭建" class="heading-element">
+  <a href="#redis%e9%9b%86%e7%be%a4%e6%90%ad%e5%bb%ba" class="heading-mark"></a>Redis集群搭建</h3><div class="highlight" id="id-29"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">第一步：在第一台机器的/usr/local下创建文件夹redis-cluster，然后在其下面分别创建2个文件夾如下
+</span></span><span class="line"><span class="cl">（1）mkdir -p /usr/local/redis-cluster
+</span></span><span class="line"><span class="cl">（2）mkdir <span class="m">8001</span> <span class="m">8004</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">第一步：把之前的redis.conf配置文件copy到8001下，修改如下内容：
+</span></span><span class="line"><span class="cl">（1）daemonize yes
+</span></span><span class="line"><span class="cl">（2）port 8001（分别对每个机器的端口号进行设置）
+</span></span><span class="line"><span class="cl">（3）pidfile /var/run/redis_8001.pid  <span class="c1"># 把pid进程号写入pidfile配置的文件</span>
+</span></span><span class="line"><span class="cl">（4）dir /usr/local/redis-cluster/8001/（指定数据文件存放位置，必须要指定不同的目录位置，不然会丢失数据）
+</span></span><span class="line"><span class="cl">（5）cluster-enabled yes（启动集群模式）
+</span></span><span class="line"><span class="cl">（6）cluster-config-file nodes-8001.conf（集群节点信息文件，这里800x最好和port对应上）
+</span></span><span class="line"><span class="cl">（7）cluster-node-timeout <span class="m">10000</span>
+</span></span><span class="line"><span class="cl"> <span class="o">(</span>8<span class="o">)</span><span class="c1"># bind 127.0.0.1（bind绑定的是自己机器网卡的ip，如果有多块网卡可以配多个ip，代表允许客户端通过机器的哪些网卡ip去访问，内网一般可以不配置bind，注释掉即可）</span>
+</span></span><span class="line"><span class="cl"> <span class="o">(</span>9<span class="o">)</span>protected-mode  no   （关闭保护模式）
+</span></span><span class="line"><span class="cl"> <span class="o">(</span>10<span class="o">)</span>appendonly yes
+</span></span><span class="line"><span class="cl">如果要设置密码需要增加如下配置：
+</span></span><span class="line"><span class="cl"> <span class="o">(</span>11<span class="o">)</span>requirepass zhuge     <span class="o">(</span>设置redis访问密码<span class="o">)</span>
+</span></span><span class="line"><span class="cl"> <span class="o">(</span>12<span class="o">)</span>masterauth zhuge      <span class="o">(</span>设置集群节点间访问密码，跟上面一致<span class="o">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">第三步：把修改后的配置文件，copy到8004，修改第2、3、4、6项里的端口号，可以用批量替换：
+</span></span><span class="line"><span class="cl">:%s/源字符串/目的字符串/g 
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">第四步：另外两台机器也需要做上面几步操作，第二台机器用8002和8005，第三台机器用8003和8006
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">第五步：分别启动6个redis实例，然后检查是否启动成功
+</span></span><span class="line"><span class="cl">（1）/usr/local/redis-5.0.3/src/redis-server /usr/local/redis-cluster/800*/redis.conf
+</span></span><span class="line"><span class="cl">（2）ps -ef <span class="p">|</span> grep redis 查看是否启动成功
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">第六步：用redis-cli创建整个redis集群<span class="o">(</span>redis5以前的版本集群是依靠ruby脚本redis-trib.rb实现<span class="o">)</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 下面命令里的1代表为每个创建的主服务器节点创建一个从服务器节点</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 执行这条命令需要确认三台机器之间的redis实例要能相互访问，可以先简单把所有机器防火墙关掉，如果不关闭防火墙则需要打开redis服务端口和集群节点gossip通信端口16379(默认是在redis端口号上加1W)</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 关闭防火墙</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># systemctl stop firewalld # 临时关闭防火墙</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># systemctl disable firewalld # 禁止开机启动</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 注意：下面这条创建集群的命令大家不要直接复制，里面的空格编码可能有问题导致创建集群不成功</span>
+</span></span><span class="line"><span class="cl">（1）/usr/local/redis-5.0.3/src/redis-cli -a zhuge --cluster create --cluster-replicas <span class="m">1</span> 192.168.0.61:8001 192.168.0.62:8002 192.168.0.63:8003 192.168.0.61:8004 192.168.0.62:8005 192.168.0.63:8006 
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">第七步：验证集群：
+</span></span><span class="line"><span class="cl">（1）连接任意一个客户端即可：./redis-cli -c -h -p <span class="o">(</span>-a访问服务端密码，-c表示集群模式，指定ip地址和端口号）
+</span></span><span class="line"><span class="cl">    如：/usr/local/redis-5.0.3/src/redis-cli -a zhuge -c -h 192.168.0.61 -p 800*
+</span></span><span class="line"><span class="cl">（2）进行验证： cluster info（查看集群信息）、cluster nodes（查看节点列表）
+</span></span><span class="line"><span class="cl">（3）进行数据操作验证
+</span></span><span class="line"><span class="cl">（4）关闭集群则需要逐个进行关闭，使用命令：
+</span></span><span class="line"><span class="cl">/usr/local/redis-5.0.3/src/redis-cli -a zhuge -c -h 192.168.0.60 -p 800* shutdown</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="java-操作redis集群" class="heading-element">
+  <a href="#java-%e6%93%8d%e4%bd%9credis%e9%9b%86%e7%be%a4" class="heading-mark"></a>java 操作Redis集群</h3><p>引入依赖</p>
+<div class="highlight" id="id-30"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-xml" data-lang="xml"><span class="line"><span class="cl"><span class="nt">&lt;dependency&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;groupId&gt;</span>redis.clients<span class="nt">&lt;/groupId&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;artifactId&gt;</span>jedis<span class="nt">&lt;/artifactId&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;version&gt;</span>2.9.0<span class="nt">&lt;/version&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="nt">&lt;/dependency&gt;</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>java 使用实例</p>
+<div class="highlight" id="id-31"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">JedisClusterTest</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">String</span><span class="o">[]</span><span class="w"> </span><span class="n">args</span><span class="p">)</span><span class="w"> </span><span class="kd">throws</span><span class="w"> </span><span class="n">IOException</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="n">JedisPoolConfig</span><span class="w"> </span><span class="n">config</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">JedisPoolConfig</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="n">config</span><span class="p">.</span><span class="na">setMaxTotal</span><span class="p">(</span><span class="n">20</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="n">config</span><span class="p">.</span><span class="na">setMaxIdle</span><span class="p">(</span><span class="n">10</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="n">config</span><span class="p">.</span><span class="na">setMinIdle</span><span class="p">(</span><span class="n">5</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="n">Set</span><span class="o">&lt;</span><span class="n">HostAndPort</span><span class="o">&gt;</span><span class="w"> </span><span class="n">jedisClusterNode</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">HashSet</span><span class="o">&lt;</span><span class="n">HostAndPort</span><span class="o">&gt;</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="n">jedisClusterNode</span><span class="p">.</span><span class="na">add</span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="n">HostAndPort</span><span class="p">(</span><span class="s">&#34;192.168.0.61&#34;</span><span class="p">,</span><span class="w"> </span><span class="n">8001</span><span class="p">));</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="n">jedisClusterNode</span><span class="p">.</span><span class="na">add</span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="n">HostAndPort</span><span class="p">(</span><span class="s">&#34;192.168.0.62&#34;</span><span class="p">,</span><span class="w"> </span><span class="n">8002</span><span class="p">));</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="n">jedisClusterNode</span><span class="p">.</span><span class="na">add</span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="n">HostAndPort</span><span class="p">(</span><span class="s">&#34;192.168.0.63&#34;</span><span class="p">,</span><span class="w"> </span><span class="n">8003</span><span class="p">));</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="n">jedisClusterNode</span><span class="p">.</span><span class="na">add</span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="n">HostAndPort</span><span class="p">(</span><span class="s">&#34;192.168.0.61&#34;</span><span class="p">,</span><span class="w"> </span><span class="n">8004</span><span class="p">));</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="n">jedisClusterNode</span><span class="p">.</span><span class="na">add</span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="n">HostAndPort</span><span class="p">(</span><span class="s">&#34;192.168.0.62&#34;</span><span class="p">,</span><span class="w"> </span><span class="n">8005</span><span class="p">));</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="n">jedisClusterNode</span><span class="p">.</span><span class="na">add</span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="n">HostAndPort</span><span class="p">(</span><span class="s">&#34;192.168.0.63&#34;</span><span class="p">,</span><span class="w"> </span><span class="n">8006</span><span class="p">));</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="n">JedisCluster</span><span class="w"> </span><span class="n">jedisCluster</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">null</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="k">try</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">//connectionTimeout：指的是连接一个url的连接等待时间</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">//soTimeout：指的是连接上一个url，获取response的返回等待时间</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">jedisCluster</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">JedisCluster</span><span class="p">(</span><span class="n">jedisClusterNode</span><span class="p">,</span><span class="w"> </span><span class="n">6000</span><span class="p">,</span><span class="w"> </span><span class="n">5000</span><span class="p">,</span><span class="w"> </span><span class="n">10</span><span class="p">,</span><span class="w"> </span><span class="s">&#34;zhuge&#34;</span><span class="p">,</span><span class="w"> </span><span class="n">config</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="n">jedisCluster</span><span class="p">.</span><span class="na">set</span><span class="p">(</span><span class="s">&#34;cluster&#34;</span><span class="p">,</span><span class="w"> </span><span class="s">&#34;zhuge&#34;</span><span class="p">));</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="n">jedisCluster</span><span class="p">.</span><span class="na">get</span><span class="p">(</span><span class="s">&#34;cluster&#34;</span><span class="p">));</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="n">Exception</span><span class="w"> </span><span class="n">e</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">e</span><span class="p">.</span><span class="na">printStackTrace</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="p">}</span><span class="w"> </span><span class="k">finally</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">jedisCluster</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">null</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="n">jedisCluster</span><span class="p">.</span><span class="na">close</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="spring-boot-操作redis集群" class="heading-element">
+  <a href="#spring-boot-%e6%93%8d%e4%bd%9credis%e9%9b%86%e7%be%a4" class="heading-mark"></a>Spring-boot 操作Redis集群</h3><p>引入依赖</p>
+<div class="highlight" id="id-32"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-xml" data-lang="xml"><span class="line"><span class="cl"><span class="nt">&lt;dependency&gt;</span>
+</span></span><span class="line"><span class="cl">   <span class="nt">&lt;groupId&gt;</span>org.springframework.boot<span class="nt">&lt;/groupId&gt;</span>
+</span></span><span class="line"><span class="cl">   <span class="nt">&lt;artifactId&gt;</span>spring-boot-starter-data-redis<span class="nt">&lt;/artifactId&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="nt">&lt;/dependency&gt;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nt">&lt;dependency&gt;</span>
+</span></span><span class="line"><span class="cl">   <span class="nt">&lt;groupId&gt;</span>org.apache.commons<span class="nt">&lt;/groupId&gt;</span>
+</span></span><span class="line"><span class="cl">   <span class="nt">&lt;artifactId&gt;</span>commons-pool2<span class="nt">&lt;/artifactId&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="nt">&lt;/dependency&gt;</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>配置链接信息</p>
+<div class="highlight" id="id-33"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">server</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="m">8080</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">spring</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">redis</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">database</span><span class="p">:</span><span class="w"> </span><span class="m">0</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">timeout</span><span class="p">:</span><span class="w"> </span><span class="m">3000</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="l">zhuge</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">cluster</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">nodes</span><span class="p">:</span><span class="w"> </span><span class="m">192.168.0.61</span><span class="p">:</span><span class="m">8001</span><span class="p">,</span><span class="m">192.168.0.62</span><span class="p">:</span><span class="m">8002</span><span class="p">,</span><span class="m">192.168.0.63</span><span class="p">:</span><span class="m">8003</span><span class="p">,</span><span class="m">192.168.0.61</span><span class="p">:</span><span class="m">8004</span><span class="p">,</span><span class="m">192.168.0.62</span><span class="p">:</span><span class="m">8005</span><span class="p">,</span><span class="m">192.168.0.63</span><span class="p">:</span><span class="m">8006</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">   </span><span class="nt">lettuce</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">pool</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">max-idle</span><span class="p">:</span><span class="w"> </span><span class="m">50</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">min-idle</span><span class="p">:</span><span class="w"> </span><span class="m">10</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">max-active</span><span class="p">:</span><span class="w"> </span><span class="m">100</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">max-wait</span><span class="p">:</span><span class="w"> </span><span class="m">1000</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>使用代码</p>
+<div class="highlight" id="id-34"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="nd">@RestController</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">IndexController</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="kd">private</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kd">final</span><span class="w"> </span><span class="n">Logger</span><span class="w"> </span><span class="n">logger</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">LoggerFactory</span><span class="p">.</span><span class="na">getLogger</span><span class="p">(</span><span class="n">IndexController</span><span class="p">.</span><span class="na">class</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nd">@Autowired</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="kd">private</span><span class="w"> </span><span class="n">StringRedisTemplate</span><span class="w"> </span><span class="n">stringRedisTemplate</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nd">@RequestMapping</span><span class="p">(</span><span class="s">&#34;/test_cluster&#34;</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">testCluster</span><span class="p">()</span><span class="w"> </span><span class="kd">throws</span><span class="w"> </span><span class="n">InterruptedException</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">stringRedisTemplate</span><span class="p">.</span><span class="na">opsForValue</span><span class="p">().</span><span class="na">set</span><span class="p">(</span><span class="s">&#34;zhuge&#34;</span><span class="p">,</span><span class="w"> </span><span class="s">&#34;666&#34;</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="n">stringRedisTemplate</span><span class="p">.</span><span class="na">opsForValue</span><span class="p">().</span><span class="na">get</span><span class="p">(</span><span class="s">&#34;zhuge&#34;</span><span class="p">));</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="redis-集群原理分析" class="heading-element">
+  <a href="#redis-%e9%9b%86%e7%be%a4%e5%8e%9f%e7%90%86%e5%88%86%e6%9e%90" class="heading-mark"></a>Redis 集群原理分析</h3><p>Redis Cluster 将所有数据划分为 16384 个 slots(槽位)，每个节点负责其中一部分槽位。槽位的信息存储于每个节点中。当 Redis Cluster 的客户端来连接集群时，它也会得到一份集群的槽位配置信息并将其缓存在客户端本地。这样当客户端要查找某个 key 时，可以直接定位到目标节点。同时因为槽位的信息可能会存在客户端与服务器不一致的情况，还需要纠正机制来实现槽位信息的校验调整。</p>
+<p>槽位定位算法</p>
+<p>Cluster 默认会对 key 值使用 crc16 算法进行 hash 得到一个整数值，然后用这个整数值对 16384 进行取模来得到具体槽位。HASH_SLOT = CRC16(key) mod 16384</p>
+<h2 id="redis-核心原理" class="heading-element">
+  <a href="#redis-%e6%a0%b8%e5%bf%83%e5%8e%9f%e7%90%86" class="heading-mark"></a>Redis 核心原理</h2><h3 id="单线程模型" class="heading-element">
+  <a href="#%e5%8d%95%e7%ba%bf%e7%a8%8b%e6%a8%a1%e5%9e%8b" class="heading-mark"></a>单线程模型</h3><p>Redis之所以快是因为：1、基于内存操作，2-单线程没有上下文切换，3.基于epoll事件分发模型。所有的连接都放在一个队列里，注册到事件分发器上，如果有客户端发送数据，分发器或通知线程处理。</p>
+<h3 id="简单动态字符串sds" class="heading-element">
+  <a href="#%e7%ae%80%e5%8d%95%e5%8a%a8%e6%80%81%e5%ad%97%e7%ac%a6%e4%b8%b2sds" class="heading-mark"></a>简单动态字符串SDS</h3><p>Redis 没用使用C自带的字符串，二是自己定义一个，成为sds简单动态字符串。</p>
+<p><img loading="lazy" src="http://redisbook.com/_images/graphviz-72760f6945c3742eca0df91a91cc379168eda82d.png" alt="IMG" srcset="http://redisbook.com/_images/graphviz-72760f6945c3742eca0df91a91cc379168eda82d.png?size=small, http://redisbook.com/_images/graphviz-72760f6945c3742eca0df91a91cc379168eda82d.png?size=medium 1.5x, http://redisbook.com/_images/graphviz-72760f6945c3742eca0df91a91cc379168eda82d.png?size=large 2x" data-title="IMG" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></p>
+<ul>
+<li>SDS源码</li>
+</ul>
+<div class="highlight" id="id-35"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="k">struct</span> <span class="n">sdshdr</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">// 记录 buf 数组中已使用字节的数量
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="c1">// 等于 SDS 所保存字符串的长度
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="kt">int</span> <span class="n">len</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">// 记录 buf 数组中未使用字节的数量
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="kt">int</span> <span class="n">free</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">// 字节数组，用于保存字符串
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="kt">char</span> <span class="n">buf</span><span class="p">[];</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>比起 C 字符串， SDS 具有以下优点
+<ul>
+<li>常数复杂度获取字符串长度, O(1)。</li>
+<li>杜绝缓冲区溢出，预先扩容，惰性缩容。</li>
+<li>减少修改字符串长度时所需的内存重分配次数。</li>
+<li>二进制安全。</li>
+<li>兼容部分 C 字符串函数。</li>
+</ul>
+</li>
+</ul>
+<h3 id="链表" class="heading-element">
+  <a href="#%e9%93%be%e8%a1%a8" class="heading-mark"></a>链表</h3><p>链表提供了高效的节点重排能力， 以及顺序性的节点访问方式， 并且可以通过增删节点来灵活地调整链表的长度。每个链表节点使用一个 <code>adlist.h/listNode</code> 结构来表示 ，多个 <code>listNode</code> 可以通过 <code>prev</code> 和 <code>next</code> 指针组成双端链表。</p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/telzhou618/images/main/img01/graphviz-167adfc2e52e078d4c0e3c8a9eddec54551602fb.png" alt="IMG" srcset="https://raw.githubusercontent.com/telzhou618/images/main/img01/graphviz-167adfc2e52e078d4c0e3c8a9eddec54551602fb.png?size=small, https://raw.githubusercontent.com/telzhou618/images/main/img01/graphviz-167adfc2e52e078d4c0e3c8a9eddec54551602fb.png?size=medium 1.5x, https://raw.githubusercontent.com/telzhou618/images/main/img01/graphviz-167adfc2e52e078d4c0e3c8a9eddec54551602fb.png?size=large 2x" data-title="IMG" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></p>
+<ul>
+<li>链表节点 listNode</li>
+</ul>
+<div class="highlight" id="id-36"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="k">typedef</span> <span class="k">struct</span> <span class="n">listNode</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 前置节点
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="k">struct</span> <span class="n">listNode</span> <span class="o">*</span><span class="n">prev</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 后置节点
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="k">struct</span> <span class="n">listNode</span> <span class="o">*</span><span class="n">next</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 节点的值
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="kt">void</span> <span class="o">*</span><span class="n">value</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span> <span class="n">listNode</span><span class="p">;</span></span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>链表源码</li>
+</ul>
+<div class="highlight" id="id-37"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="k">typedef</span> <span class="k">struct</span> <span class="n">list</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 表头节点
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">listNode</span> <span class="o">*</span><span class="n">head</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 表尾节点
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">listNode</span> <span class="o">*</span><span class="n">tail</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 链表所包含的节点数量
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">len</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 节点值复制函数
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="kt">void</span> <span class="o">*</span><span class="p">(</span><span class="o">*</span><span class="n">dup</span><span class="p">)(</span><span class="kt">void</span> <span class="o">*</span><span class="n">ptr</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 节点值释放函数
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="kt">void</span> <span class="p">(</span><span class="o">*</span><span class="n">free</span><span class="p">)(</span><span class="kt">void</span> <span class="o">*</span><span class="n">ptr</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 节点值对比函数
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="kt">int</span> <span class="p">(</span><span class="o">*</span><span class="n">match</span><span class="p">)(</span><span class="kt">void</span> <span class="o">*</span><span class="n">ptr</span><span class="p">,</span> <span class="kt">void</span> <span class="o">*</span><span class="n">key</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="p">}</span> <span class="n">list</span><span class="p">;</span></span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>用途：链表被广泛用于实现 Redis 的各种功能， 比如列表键， 发布与订阅， 慢查询， 监视器， 等等。</li>
+</ul>
+<h3 id="跳跃表" class="heading-element">
+  <a href="#%e8%b7%b3%e8%b7%83%e8%a1%a8" class="heading-mark"></a>跳跃表</h3><p>Redis 的有序集合是用跳跃表实现的，跳跃表（skiplist）是一种有序数据结构， 它通过在每个节点中维持多个指向其他节点的指针， 从而达到快速访问节点的目的，跳跃表由 <code>redis.h/zskiplistNode</code> 和 <code>redis.h/zskiplist</code> 两个结构定义。</p>
+<p><img loading="lazy" src="http://redisbook.com/_images/graphviz-8fc5de396a5b52c3d0b1991a1e09558ad055dd86.png" alt="IMG" srcset="http://redisbook.com/_images/graphviz-8fc5de396a5b52c3d0b1991a1e09558ad055dd86.png?size=small, http://redisbook.com/_images/graphviz-8fc5de396a5b52c3d0b1991a1e09558ad055dd86.png?size=medium 1.5x, http://redisbook.com/_images/graphviz-8fc5de396a5b52c3d0b1991a1e09558ad055dd86.png?size=large 2x" data-title="IMG" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></p>
+<ul>
+<li>跳跃表节点 zskiplistNode</li>
+</ul>
+<div class="highlight" id="id-38"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="k">typedef</span> <span class="k">struct</span> <span class="n">zskiplistNode</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 后退指针
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="k">struct</span> <span class="n">zskiplistNode</span> <span class="o">*</span><span class="n">backward</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 分值
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="kt">double</span> <span class="n">score</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 成员对象
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">robj</span> <span class="o">*</span><span class="n">obj</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 层
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="k">struct</span> <span class="n">zskiplistLevel</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// 前进指针
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="k">struct</span> <span class="n">zskiplistNode</span> <span class="o">*</span><span class="n">forward</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// 跨度
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">span</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span> <span class="n">level</span><span class="p">[];</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span> <span class="n">zskiplistNode</span><span class="p">;</span></span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>跳跃表 zskiplist</li>
+</ul>
+<div class="highlight" id="id-39"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="k">typedef</span> <span class="k">struct</span> <span class="n">zskiplist</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 表头节点和表尾节点
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="k">struct</span> <span class="n">zskiplistNode</span> <span class="o">*</span><span class="n">header</span><span class="p">,</span> <span class="o">*</span><span class="n">tail</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 表中节点的数量
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">length</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 表中层数最大的节点的层数
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="kt">int</span> <span class="n">level</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span> <span class="n">zskiplist</span><span class="p">;</span></span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>图 5-1 展示了一个跳跃表示例， 位于图片最左边的是 <code>zskiplist</code> 结构， 该结构包含以下属性：
+<ul>
+<li><code>header</code> ：指向跳跃表的表头节点。</li>
+<li><code>tail</code> ：指向跳跃表的表尾节点。</li>
+<li><code>level</code> ：记录目前跳跃表内，层数最大的那个节点的层数（表头节点的层数不计算在内）。</li>
+<li><code>length</code> ：记录跳跃表的长度，也即是，跳跃表目前包含节点的数量（表头节点不计算在内）。</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li>
+<p>位于 <code>zskiplist</code> 结构右方的是四个 <code>zskiplistNode</code> 结构， 该结构包含以下属性：</p>
+<ul>
+<li>层（level）：节点中用 <code>L1</code> 、 <code>L2</code> 、 <code>L3</code> 等字样标记节点的各个层， <code>L1</code> 代表第一层， <code>L2</code> 代表第二层，以此类推。每个层都带有两个属性：前进指针和跨度。前进指针用于访问位于表尾方向的其他节点，而跨度则记录了前进指针所指向节点和当前节点的距离。在上面的图片中，连线上带有数字的箭头就代表前进指针，而那个数字就是跨度。当程序从表头向表尾进行遍历时，访问会沿着层的前进指针进行。</li>
+<li>后退（backward）指针：节点中用 <code>BW</code> 字样标记节点的后退指针，它指向位于当前节点的前一个节点。后退指针在程序从表尾向表头遍历时使用。</li>
+<li>分值（score）：各个节点中的 <code>1.0</code> 、 <code>2.0</code> 和 <code>3.0</code> 是节点所保存的分值。在跳跃表中，节点按各自所保存的分值从小到大排列。</li>
+<li>成员对象（obj）：各个节点中的 <code>o1</code> 、 <code>o2</code> 和 <code>o3</code> 是节点所保存的成员对象。</li>
+</ul>
+</li>
+<li>
+<p>用途：Redis 的有序集合是用跳跃表实现的。</p>
+</li>
+</ul>
+<h2 id="redis-常见问题及解决" class="heading-element">
+  <a href="#redis-%e5%b8%b8%e8%a7%81%e9%97%ae%e9%a2%98%e5%8f%8a%e8%a7%a3%e5%86%b3" class="heading-mark"></a>Redis 常见问题及解决</h2><h3 id="缓存穿透" class="heading-element">
+  <a href="#%e7%bc%93%e5%ad%98%e7%a9%bf%e9%80%8f" class="heading-mark"></a>缓存穿透</h3><p>描述：查询了根本不存在的数据，导致请求打倒数据库。产生原因：自身业务代码或数据问题、恶意攻击、爬虫。</p>
+<p>解决方案：1.缓存空对象。2.布隆过滤器。功能：布隆过期中不存在的对象一定不存，存在的不一定存在；特点：只能加数据数据，不能删数据。需要预先把所有数据初始化到布隆过滤器；Redis对应的产品：Redison。</p>
+<h3 id="缓存失效击穿" class="heading-element">
+  <a href="#%e7%bc%93%e5%ad%98%e5%a4%b1%e6%95%88%e5%87%bb%e7%a9%bf" class="heading-mark"></a>缓存失效(击穿)</h3><p>描述：同一时间大量缓存失效导致请求直达数据库，造成数据库压力过大。</p>
+<p>解决方案：在设置过期时间时加上一个随机值。</p>
+<h3 id="缓存雪崩" class="heading-element">
+  <a href="#%e7%bc%93%e5%ad%98%e9%9b%aa%e5%b4%a9" class="heading-mark"></a>缓存雪崩</h3><p>描述：缓存无法支持大量请求宕机，请求全部打到数据库。</p>
+<p>解决方案：1.使用缓存高可用架构，如：Redis Sentinel 或 Redis Cluster。2.使用限流熔断并降级，如：Sentinel或Hystrix。3.提前演练，模拟宕机后做出一些应对情况。</p>
+<h3 id="热点缓存失效重建" class="heading-element">
+  <a href="#%e7%83%ad%e7%82%b9%e7%bc%93%e5%ad%98%e5%a4%b1%e6%95%88%e9%87%8d%e5%bb%ba" class="heading-mark"></a>热点缓存失效重建</h3><p>描述：热点缓存失效，重建又比较好耗时，出现这种情况时大量请求会直达后端，有大量线程重建缓存，会造成后端压力过大。</p>
+<p>解决方案：加一个分布式锁，只允许一个缓存重建缓存。</p>
+<h3 id="缓存与数据库不一致" class="heading-element">
+  <a href="#%e7%bc%93%e5%ad%98%e4%b8%8e%e6%95%b0%e6%8d%ae%e5%ba%93%e4%b8%8d%e4%b8%80%e8%87%b4" class="heading-mark"></a>缓存与数据库不一致</h3><p>描述：在并发情况同时操作数据库和缓存可能导致缓存与数据库不一致。</p>
+<p>解决方案：1.大部分场景是容忍短时间内缓存与数据库不一致的，只有设置过期时间即可，不能容忍不一致的可以加读写锁实现，但会牺牲一定的性能。</p>
+<h2 id="redis-参考文档" class="heading-element">
+  <a href="#redis-%e5%8f%82%e8%80%83%e6%96%87%e6%a1%a3" class="heading-mark"></a>Redis 参考文档</h2><ul>
+<li>
+<p>redis 官方文档： <a href="https://redis.io/documentation"target="_blank" rel="external nofollow noopener noreferrer">https://redis.io/documentation</a></p>
+</li>
+<li>
+<p>redis 设计与实现：<a href="http://redisbook.com/"target="_blank" rel="external nofollow noopener noreferrer">http://redisbook.com/</a></p>
+</li>
+</ul>
+</div><div class="post-footer" id="post-footer">
+  <div class="post-info">
+    <div class="post-info-line">
+      <div class="post-info-mod">
+        <span title="更新于 2023-06-28 14:44:07">更新于 2023-06-28&nbsp;</span>
+      </div><div class="post-info-license">
+            <span><a rel="license external nofollow noopener noreferrer" href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a></span>
+          </div></div><div class="post-info-line">
+        <div class="post-info-md"><span><a href="/posts/redis/index.md" title="阅读原始文档" class="link-to-markdown">阅读原始文档</a></span><span><a href="https://github.com/telzhou618/hugo-blog/blob/main/content/posts%5credis.md?plain=1" title="查看源码"target="_blank" rel="external nofollow noopener noreferrer" class="link-to-source">查看源码</a></span><span><a href="https://github.com/telzhou618/hugo-blog/edit/main/content/posts%5credis.md" title="编辑此页"target="_blank" rel="external nofollow noopener noreferrer" class="link-to-edit">编辑此页</a></span><span><a href="https://github.com/telzhou618/hugo-blog/issues/new?title=[BUG]%20Redis&#43;%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A&amp;body=%7cField%7cValue%7c%0A%7c-%7c-%7c%0A%7cTitle%7cRedis&#43;%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A%7c%0A%7cURL%7chttps://telzhou618.github.io/posts/redis/%7c%0A%7cFilename%7chttps://github.com/telzhou618/hugo-blog/blob/main/content/posts%5credis.md?plain=1%7c" title="报告问题"target="_blank" rel="external nofollow noopener noreferrer" class="link-to-report">报告问题</a></span></div>
+        <div class="post-info-share">
+          <span><a href="javascript:void(0);" title="分享到 Twitter" data-sharer="twitter" data-url="https://telzhou618.github.io/posts/redis/" data-title="Redis 从入门到精通" data-hashtags="redis"><i class="fa-brands fa-twitter fa-fw" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="https://telzhou618.github.io/posts/redis/" data-hashtag="redis"><i class="fa-brands fa-facebook-square fa-fw" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="https://telzhou618.github.io/posts/redis/" data-title="Redis 从入门到精通"><i class="fa-brands fa-weibo fa-fw" aria-hidden="true"></i></a>
+  </span>
+        </div>
+      </div></div>
+
+  <div class="post-info-more">
+    <section class="post-tags"><i class="fa-solid fa-tags fa-fw me-1" aria-hidden="true"></i><a href="/tags/redis/" class="post-tag" title="标签 - redis">redis</a></section>
+    <section>
+      <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+    </section>
+  </div>
+
+  <div class="post-nav"><a href="/posts/spring-aop/" class="post-nav-item" rel="prev" title="Spring AOP 从入门到源码解析"><i class="fa-solid fa-angle-left fa-fw" aria-hidden="true"></i>Spring AOP 从入门到源码解析</a>
+      <a href="/posts/otter1/" class="post-nav-item" rel="next" title="Otter数据同步1 - 环境搭建">Otter数据同步1 - 环境搭建<i class="fa-solid fa-angle-right fa-fw" aria-hidden="true"></i></a></div>
+</div>
+</article>
+
+  <aside class="toc" id="toc-auto" aria-label="目录"><h2 class="toc-title">目录&nbsp;<i class="toc-icon fa-solid fa-angle-down fa-fw" aria-hidden="true"></i></h2>
+      <div class="toc-content" id="toc-content-auto"></div></aside></main><footer class="footer">
+    <div class="footer-container"><div class="footer-line powered">由 <a href="https://gohugo.io/" target="_blank" rel="external nofollow noopener noreferrer" title="Hugo 0.121.1"><img class="hugo-icon" src="/images/hugo.min.svg" alt="Hugo logo" /> Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/hugo-fixit/FixIt" target="_blank" rel="external" title="FixIt v0.3.2"><img class="fixit-icon" src="/images/fixit.min.svg" alt="FixIt logo" /> FixIt</a>
+        </div><div class="footer-line copyright" itemscope itemtype="http://schema.org/CreativeWork"><i class="fa-regular fa-copyright fa-fw" aria-hidden="true"></i>
+            <span itemprop="copyrightYear">2024</span><span class="author" itemprop="copyrightHolder">
+              <a href="https://github.com/telzhou618"target="_blank" rel="external nofollow noopener noreferrer">telzhou618</a></span></div></div>
+  </footer></div><div class="widgets"><div class="fixed-buttons animate__faster d-none"><div class="fixed-button back-to-top" role="button" aria-label="回到顶部"><i class="fa-solid fa-arrow-up fa-fw" aria-hidden="true"></i><span class="variant-numeric d-none">0%</span>
+        </div></div><div id="mask"></div><div class="reading-progress-bar" style="left: 0;top: 0;"></div><noscript>
+    <div class="noscript-warning">FixIt 主题在启用 JavaScript 的情况下效果最佳。</div>
+  </noscript>
+</div><link rel="preload" href="/lib/katex/katex.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/katex/katex.min.css"></noscript><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><link rel="stylesheet" href="/lib/pace/themes/blue/pace-theme-minimal.css"><script src="/lib/autocomplete/autocomplete.min.js" defer></script><script src="/lib/fuse/fuse.min.js" defer></script><script src="/lib/sharer/sharer.min.js" async defer></script><script src="/lib/katex/katex.min.js" defer></script><script src="/lib/katex/auto-render.min.js" defer></script><script src="/lib/katex/copy-tex.min.js" defer></script><script src="/lib/katex/mhchem.min.js" defer></script><script src="/lib/cookieconsent/cookieconsent.min.js" defer></script><script src="/lib/pace/pace.min.js" async defer></script><script>window.config={"code":{"copyTitle":"复制到剪贴板","editLockTitle":"锁定可编辑代码块","editUnLockTitle":"解锁可编辑代码块","editable":true,"maxShownLines":10},"comment":{"enable":false},"cookieconsent":{"content":{"dismiss":"同意","link":"了解更多","message":"本网站使用 Cookies 来改善您的浏览体验。"},"enable":true,"palette":{"button":{"background":"#f0f0f0"},"popup":{"background":"#1aa3ff"}},"theme":"edgeless"},"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":true,"left":"\\begin{equation}","right":"\\end{equation}"},{"display":true,"left":"\\begin{equation*}","right":"\\end{equation*}"},{"display":true,"left":"\\begin{align}","right":"\\end{align}"},{"display":true,"left":"\\begin{align*}","right":"\\end{align*}"},{"display":true,"left":"\\begin{alignat}","right":"\\end{alignat}"},{"display":true,"left":"\\begin{alignat*}","right":"\\end{alignat*}"},{"display":true,"left":"\\begin{gather}","right":"\\end{gather}"},{"display":true,"left":"\\begin{CD}","right":"\\end{CD}"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"search":{"distance":100,"findAllMatches":false,"fuseIndexURL":"/index.json","highlightTag":"em","ignoreFieldNorm":false,"ignoreLocation":false,"isCaseSensitive":false,"location":0,"maxResultLength":10,"minMatchCharLength":2,"noResultsFound":"没有找到结果","snippetLength":30,"threshold":0.3,"type":"fuse","useExtendedSearch":false}};</script><script src="/js/theme.min.js" defer></script></body>
+</html>

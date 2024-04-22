@@ -1,0 +1,32 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+  <channel>
+    <title>spring - 标签 - 扁舟的博客</title>
+    <link>https://telzhou618.github.io/tags/spring/</link>
+    <description>spring - 标签 | 扁舟的博客</description>
+    <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>telzhou618@qq.com (telzhou618)</managingEditor>
+      <webMaster>telzhou618@qq.com (telzhou618)</webMaster><lastBuildDate>Wed, 28 Jun 2023 14:44:07 &#43;0800</lastBuildDate><atom:link href="https://telzhou618.github.io/tags/spring/" rel="self" type="application/rss+xml" /><item>
+  <title>Spring AOP 从入门到源码解析</title>
+  <link>https://telzhou618.github.io/posts/spring-aop/</link>
+  <pubDate>Wed, 28 Jun 2023 14:44:07 &#43;0800</pubDate>
+  <author>telzhou618</author>
+  <guid>https://telzhou618.github.io/posts/spring-aop/</guid>
+  <description><![CDATA[先学会如何使用 Spring-boot 或 Spring-cloud 中使用AOP在Spring-boot 工程中使用AOP功能，先引入相关的依赖。 pom.xml 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21]]></description>
+</item>
+<item>
+  <title>Spring 事务源码解析</title>
+  <link>https://telzhou618.github.io/posts/spring-transaction/</link>
+  <pubDate>Tue, 28 Jun 2022 11:44:07 &#43;0800</pubDate>
+  <author>telzhou618</author>
+  <guid>https://telzhou618.github.io/posts/spring-transaction/</guid>
+  <description><![CDATA[Spring 事务利用AOP原理实现,主要过程和AOP原理一样，可以分为三步，启用事务、生成代理对对象、执行。 从如何使用事务开始本实例使用Spring的]]></description>
+</item>
+<item>
+  <title>Spring容器注册bean有哪些方式？</title>
+  <link>https://telzhou618.github.io/posts/spring-ioc-bean-register/</link>
+  <pubDate>Tue, 28 Jun 2022 11:44:07 &#43;0800</pubDate>
+  <author>telzhou618</author>
+  <guid>https://telzhou618.github.io/posts/spring-ioc-bean-register/</guid>
+  <description><![CDATA[常见注册bean对象到spring容器的方式: @Component、@Controller、@Service、@Repository 方式 @Bean 工]]></description>
+</item>
+</channel>
+</rss>
