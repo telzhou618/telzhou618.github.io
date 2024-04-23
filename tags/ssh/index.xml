@@ -1,0 +1,16 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+  <channel>
+    <title>ssh - 标签 - 扁舟的博客</title>
+    <link>https://telzhou618.github.io/tags/ssh/</link>
+    <description>ssh - 标签 | 扁舟的博客</description>
+    <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>telzhou618@qq.com (telzhou618)</managingEditor>
+      <webMaster>telzhou618@qq.com (telzhou618)</webMaster><lastBuildDate>Sun, 23 Apr 2023 09:34:26 &#43;0800</lastBuildDate><atom:link href="https://telzhou618.github.io/tags/ssh/" rel="self" type="application/rss+xml" /><item>
+  <title>SSK key 免密访问 gitlab 配置</title>
+  <link>https://telzhou618.github.io/posts/ssh-key/</link>
+  <pubDate>Sun, 23 Apr 2023 09:34:26 &#43;0800</pubDate>
+  <author>telzhou618</author>
+  <guid>https://telzhou618.github.io/posts/ssh-key/</guid>
+  <description><![CDATA[安装最新 git安装在最新yum源,ius源官方：https://ius.io/setup 1 2 3 yum install \ https://repo.ius.io/ius-release-el7.rpm \ https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm 安装 git 1 2 3 yum remove git yum install -y git236 git --version linux 配]]></description>
+</item>
+</channel>
+</rss>

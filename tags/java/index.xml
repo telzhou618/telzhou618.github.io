@@ -4,21 +4,21 @@
     <link>https://telzhou618.github.io/tags/java/</link>
     <description>java - 标签 | 扁舟的博客</description>
     <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>telzhou618@qq.com (telzhou618)</managingEditor>
-      <webMaster>telzhou618@qq.com (telzhou618)</webMaster><lastBuildDate>Wed, 05 Jul 2023 16:15:58 &#43;0800</lastBuildDate><atom:link href="https://telzhou618.github.io/tags/java/" rel="self" type="application/rss+xml" /><item>
-  <title>Java SPI 应用</title>
-  <link>https://telzhou618.github.io/posts/java-spi/</link>
-  <pubDate>Wed, 05 Jul 2023 16:15:58 &#43;0800</pubDate>
-  <author>telzhou618</author>
-  <guid>https://telzhou618.github.io/posts/java-spi/</guid>
-  <description><![CDATA[Java SPI（Service Provider Interface）是Java平台提供的一种机制，用于实现服务发现和扩展的功能。它允许开发人员定义一组接口，然后允]]></description>
-</item>
-<item>
+      <webMaster>telzhou618@qq.com (telzhou618)</webMaster><lastBuildDate>Wed, 28 Jun 2023 14:44:07 &#43;0800</lastBuildDate><atom:link href="https://telzhou618.github.io/tags/java/" rel="self" type="application/rss+xml" /><item>
   <title>Spring AOP 从入门到源码解析</title>
   <link>https://telzhou618.github.io/posts/spring-aop/</link>
   <pubDate>Wed, 28 Jun 2023 14:44:07 &#43;0800</pubDate>
   <author>telzhou618</author>
   <guid>https://telzhou618.github.io/posts/spring-aop/</guid>
   <description><![CDATA[先学会如何使用 Spring-boot 或 Spring-cloud 中使用AOP在Spring-boot 工程中使用AOP功能，先引入相关的依赖。 pom.xml 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21]]></description>
+</item>
+<item>
+  <title>Java SPI 应用</title>
+  <link>https://telzhou618.github.io/posts/java-spi/</link>
+  <pubDate>Sun, 05 Mar 2023 16:15:58 &#43;0800</pubDate>
+  <author>telzhou618</author>
+  <guid>https://telzhou618.github.io/posts/java-spi/</guid>
+  <description><![CDATA[Java SPI（Service Provider Interface）是Java平台提供的一种机制，用于实现服务发现和扩展的功能。它允许开发人员定义一组接口，然后允]]></description>
 </item>
 <item>
   <title>Commons-pool2 应用与实战</title>

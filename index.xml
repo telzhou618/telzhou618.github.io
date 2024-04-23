@@ -4,41 +4,87 @@
     <link>https://telzhou618.github.io/</link>
     <description>扁舟的博客</description>
     <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>telzhou618@qq.com (telzhou618)</managingEditor>
-      <webMaster>telzhou618@qq.com (telzhou618)</webMaster><lastBuildDate>Mon, 10 Jul 2023 21:36:57 &#43;0800</lastBuildDate>
+      <webMaster>telzhou618@qq.com (telzhou618)</webMaster><lastBuildDate>Mon, 28 Aug 2023 11:44:07 &#43;0800</lastBuildDate>
       <atom:link href="https://telzhou618.github.io/index.xml" rel="self" type="application/rss+xml" />
     <item>
+  <title>MySQL 优化及索引设计规范</title>
+  <link>https://telzhou618.github.io/posts/mysql-review/</link>
+  <pubDate>Mon, 28 Aug 2023 11:44:07 &#43;0800</pubDate>
+  <author>telzhou618</author>
+  <guid>https://telzhou618.github.io/posts/mysql-review/</guid>
+  <description><![CDATA[<p>索引是帮助MySQL高效获取数据的排好序的数据结构。</p>
+<h2 id="几个mysql命令" class="heading-element">
+  <a href="#%e5%87%a0%e4%b8%aamysql%e5%91%bd%e4%bb%a4" class="heading-mark"></a>几个MySQL命令</h2><div class="highlight" id="id-1"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">mysql.server start // 启动MySQL
+</span></span><span class="line"><span class="cl">mysql.server stop  // 停止MYSQL
+</span></span><span class="line"><span class="cl">./mysqld_safe --data<span class="o">=</span>../data // 从data备份中恢复数据
+</span></span><span class="line"><span class="cl">./mysql_secure_installation // 修改管理员密码</span></span></code></pre></td></tr></table>
+</div>
+</div>]]></description>
+</item>
+<item>
   <title>MYSQL 表空间分析</title>
   <link>https://telzhou618.github.io/posts/mysql_information_schema/</link>
   <pubDate>Mon, 10 Jul 2023 21:36:57 &#43;0800</pubDate>
   <author>telzhou618</author>
   <guid>https://telzhou618.github.io/posts/mysql_information_schema/</guid>
-  <description><![CDATA[删除数据并释放空间命令 drop table table_name 立刻释放磁盘空间 ，不管是 Innodb和MyISAM ； truncate table table_name立刻释放磁盘空间 ，不管是 Innodb]]></description>
+  <description><![CDATA[<h2 id="删除数据并释放空间命令" class="heading-element">
+  <a href="#%e5%88%a0%e9%99%a4%e6%95%b0%e6%8d%ae%e5%b9%b6%e9%87%8a%e6%94%be%e7%a9%ba%e9%97%b4%e5%91%bd%e4%bb%a4" class="heading-mark"></a>删除数据并释放空间命令</h2><ol>
+<li>立刻释放磁盘空间 ，不管是 Innodb和MyISAM</li>
+</ol>
+<div class="highlight" id="id-1"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="k">drop</span><span class="w"> </span><span class="k">table</span><span class="w"> </span><span class="k">table_name</span><span class="w"> </span></span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="2">
+<li>立刻释放磁盘空间 ，不管是 Innodb和MyISAM</li>
+</ol>
+<div class="highlight" id="id-2"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="k">truncate</span><span class="w"> </span><span class="k">table</span><span class="w"> </span><span class="k">table_name</span></span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="3">
+<li>删除表的全部数据，对于MyISAM 会立刻释放磁盘空间 ，而InnoDB 不会释放磁盘空间</li>
+</ol>
+<div class="highlight" id="id-3"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="k">delete</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="k">table_name</span><span class="w"> </span></span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="4">
+<li>带条件的删除, 不管是innodb还是MyISAM都不会释放磁盘空间；delete操作后使用optimize table table_name 释放磁盘空间，优化表期间会锁定表，所以要在空闲时段执行optimize table</li>
+</ol>
+<div class="highlight" id="id-4"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="k">delete</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="k">table_name</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="n">xx</span><span class="w"> </span></span></span></code></pre></td></tr></table>
+</div>
+</div>]]></description>
 </item>
 <item>
-  <title>Java SPI 应用</title>
-  <link>https://telzhou618.github.io/posts/java-spi/</link>
-  <pubDate>Wed, 05 Jul 2023 16:15:58 &#43;0800</pubDate>
-  <author>telzhou618</author>
-  <guid>https://telzhou618.github.io/posts/java-spi/</guid>
-  <description><![CDATA[Java SPI（Service Provider Interface）是Java平台提供的一种机制，用于实现服务发现和扩展的功能。它允许开发人员定义一组接口，然后允]]></description>
-</item>
-<item>
-  <title>Otter数据同步1 - 环境搭建</title>
+  <title>Otter数据同步 - 环境搭建</title>
   <link>https://telzhou618.github.io/posts/otter1/</link>
   <pubDate>Wed, 28 Jun 2023 17:39:33 &#43;0800</pubDate>
   <author>telzhou618</author>
   <guid>https://telzhou618.github.io/posts/otter1/</guid>
-  <description><![CDATA[<figure><img src="https://raw.githubusercontent.com/telzhou618/images/main/img02/1686739961279-58ffcfde-b8b0-4a9b-af4a-7630d29dd839.png"/><figcaption>
-            <h4>Otter架构</h4>
-        </figcaption>
-</figure>
-
-<h2 id="otter-官网介绍" class="heading-element">
-  <a href="#otter-%e5%ae%98%e7%bd%91%e4%bb%8b%e7%bb%8d" class="heading-mark"></a>otter 官网介绍</h2><p>名称：otter [&lsquo;ɒtə(r)]
-译意： 水獭，数据搬运工
-语言： 纯java开发
-定位： 基于数据库增量日志解析，准实时同步到本机房或异地机房的mysql/oracle数据库. 一个分布式数据库同步系统。
-更多介绍查看Github：<a href="https://github.com/alibaba/otter"target="_blank" rel="external nofollow noopener noreferrer">https://github.com/alibaba/otter</a></p>]]></description>
+  <description><![CDATA[Otter架构 otter 官网介绍名称：otter [&lsquo;ɒtə(r)] 译意： 水獭，数据搬运工 语言： 纯java开发 定位： 基于数据库增量日志解析]]></description>
 </item>
 <item>
   <title>Redis 从入门到精通</title>
@@ -46,7 +92,7 @@
   <pubDate>Wed, 28 Jun 2023 14:44:07 &#43;0800</pubDate>
   <author>telzhou618</author>
   <guid>https://telzhou618.github.io/posts/redis/</guid>
-  <description><![CDATA[Redis 是什么Redis 是一个高性能的基于内存实现的K-V存储数据库 。 Redis 的优点 性能极高，Redis能读的速度是110000次/s,写的速度是810]]></description>
+  <description><![CDATA[Redis分布式架构 Redis 是什么Redis 是一个高性能的基于内存实现的K-V存储数据库 。 Redis 的优点 性能极高，Redis能读的速度是110000次/]]></description>
 </item>
 <item>
   <title>Spring AOP 从入门到源码解析</title>
@@ -70,7 +116,7 @@
   <pubDate>Wed, 28 Jun 2023 14:21:07 &#43;0800</pubDate>
   <author>telzhou618</author>
   <guid>https://telzhou618.github.io/posts/docker/</guid>
-  <description><![CDATA[Docker 架构 Docker 主要组件包括 Client、Daemon、Images、Container、Registry。 Client ： docker客户端 Daemon：do]]></description>
+  <description><![CDATA[Docker 架构 Docker架构 Docker 主要组件包括 Client、Daemon、Images、Container、Registry。 Client ： docker客户端 D]]></description>
 </item>
 <item>
   <title>Homebrew 常用命令</title>

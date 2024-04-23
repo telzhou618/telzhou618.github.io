@@ -5,22 +5,12 @@
     <description>otter - 标签 | 扁舟的博客</description>
     <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>telzhou618@qq.com (telzhou618)</managingEditor>
       <webMaster>telzhou618@qq.com (telzhou618)</webMaster><lastBuildDate>Wed, 28 Jun 2023 17:39:33 &#43;0800</lastBuildDate><atom:link href="https://telzhou618.github.io/tags/otter/" rel="self" type="application/rss+xml" /><item>
-  <title>Otter数据同步1 - 环境搭建</title>
+  <title>Otter数据同步 - 环境搭建</title>
   <link>https://telzhou618.github.io/posts/otter1/</link>
   <pubDate>Wed, 28 Jun 2023 17:39:33 &#43;0800</pubDate>
   <author>telzhou618</author>
   <guid>https://telzhou618.github.io/posts/otter1/</guid>
-  <description><![CDATA[<figure><img src="https://raw.githubusercontent.com/telzhou618/images/main/img02/1686739961279-58ffcfde-b8b0-4a9b-af4a-7630d29dd839.png"/><figcaption>
-            <h4>Otter架构</h4>
-        </figcaption>
-</figure>
-
-<h2 id="otter-官网介绍" class="heading-element">
-  <a href="#otter-%e5%ae%98%e7%bd%91%e4%bb%8b%e7%bb%8d" class="heading-mark"></a>otter 官网介绍</h2><p>名称：otter [&lsquo;ɒtə(r)]
-译意： 水獭，数据搬运工
-语言： 纯java开发
-定位： 基于数据库增量日志解析，准实时同步到本机房或异地机房的mysql/oracle数据库. 一个分布式数据库同步系统。
-更多介绍查看Github：<a href="https://github.com/alibaba/otter"target="_blank" rel="external nofollow noopener noreferrer">https://github.com/alibaba/otter</a></p>]]></description>
+  <description><![CDATA[Otter架构 otter 官网介绍名称：otter [&lsquo;ɒtə(r)] 译意： 水獭，数据搬运工 语言： 纯java开发 定位： 基于数据库增量日志解析]]></description>
 </item>
 </channel>
 </rss>

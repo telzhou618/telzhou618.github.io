@@ -1,7 +1,8 @@
 # Redis 从入门到精通
 
 
-![img](https://raw.githubusercontent.com/telzhou618/images/main/img01/1*1gUAG0m0infLs92uSpw9nA.png)
+{{&lt; figure src=&#34;https://raw.githubusercontent.com/telzhou618/images/main/img01/1*1gUAG0m0infLs92uSpw9nA.png&#34; title=&#34;Redis分布式架构&#34; &gt;}}
+
 
 ## Redis 是什么
 

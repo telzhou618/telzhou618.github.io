@@ -10,6 +10,7 @@ mysql.server stop  // 停止MYSQL
 ./mysqld_safe --data=../data // 从data备份中恢复数据
 ./mysql_secure_installation // 修改管理员密码
 ```
+&lt;!--more--&gt;
 
 ## 索引的优缺点
 
@@ -20,6 +21,7 @@ mysql.server stop  // 停止MYSQL
 - 索引可以将随机IO变为顺序IO。
 
 缺点
+
 
 - 创建索引和维护索引要耗费时间 ，这种时间随着数据量的增加而增加。
 - 索引需要占物理空间 。

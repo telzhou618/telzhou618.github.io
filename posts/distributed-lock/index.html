@@ -23,7 +23,7 @@
 <meta name="application-name" content="FixIt">
 <meta name="apple-mobile-web-app-title" content="FixIt"><meta name="theme-color" data-light="#f8f8f8" data-dark="#252627" content="#f8f8f8"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" href="https://telzhou618.github.io/posts/distributed-lock/" /><link rel="prev" href="https://telzhou618.github.io/posts/spring-transaction/" /><link rel="next" href="https://telzhou618.github.io/posts/mysql-review/" /><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" href="https://telzhou618.github.io/posts/distributed-lock/" /><link rel="prev" href="https://telzhou618.github.io/posts/spring-transaction/" /><link rel="next" href="https://telzhou618.github.io/posts/mybatis/" /><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><script type="application/ld+json">
   {
@@ -54,31 +54,31 @@
                 href="/posts/"
                 title="Posts"
                 
-              >Posts</a></li><li class="menu-item">
+              >文章</a></li><li class="menu-item">
               <a
                 class="menu-link"
                 href="/"
                 
                 
-              >Archives</a></li><li class="menu-item">
+              >归档</a></li><li class="menu-item">
               <a
                 class="menu-link"
                 href="/categories/"
                 title="Categories"
                 
-              >Categories</a></li><li class="menu-item">
+              >分类</a></li><li class="menu-item">
               <a
                 class="menu-link"
                 href="/tags/"
                 title="Tags"
                 
-              >Tags</a></li><li class="menu-item">
+              >标签</a></li><li class="menu-item">
               <a
                 class="menu-link"
                 href="/about/"
-                title="About"
+                title="About me"
                 
-              >About</a></li><li class="menu-item delimiter"></li><li class="menu-item search" id="search-desktop">
+              >关于</a></li><li class="menu-item delimiter"></li><li class="menu-item search" id="search-desktop">
             <input type="text" placeholder="搜索文章标题或内容……" id="search-input-desktop">
             <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
               <i class="fa-solid fa-search fa-fw" aria-hidden="true"></i>
@@ -127,35 +127,35 @@
                   href="/posts/"
                   title="Posts"
                   
-                >Posts</a></li><li
+                >文章</a></li><li
               class="menu-item"
             ><a
                   class="menu-link"
                   href="/"
                   
                   
-                >Archives</a></li><li
+                >归档</a></li><li
               class="menu-item"
             ><a
                   class="menu-link"
                   href="/categories/"
                   title="Categories"
                   
-                >Categories</a></li><li
+                >分类</a></li><li
               class="menu-item"
             ><a
                   class="menu-link"
                   href="/tags/"
                   title="Tags"
                   
-                >Tags</a></li><li
+                >标签</a></li><li
               class="menu-item"
             ><a
                   class="menu-link"
                   href="/about/"
-                  title="About"
+                  title="About me"
                   
-                >About</a></li><li class="menu-item menu-system">
+                >关于</a></li><li class="menu-item menu-system">
           <span class="menu-system-item theme-switch" title="切换主题"><i class="fa-solid fa-adjust fa-fw" aria-hidden="true"></i></span></li>
       </ul>
     </nav>
@@ -170,7 +170,7 @@
   <article class="page single">
     <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span>Redis 或 Zookeeper 实现分布式锁</span>
       </h1></div><div class="post-meta">
-      <div class="post-meta-line"><span class="post-author"><a href="https://github.com/telzhou618" title="作者"target="_blank" rel="external nofollow noopener noreferrer author" class="author"><img loading="lazy" src="https://avatars.githubusercontent.com/u/6360011?v=4" alt="telzhou618" data-title="telzhou618" class="avatar" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/>&nbsp;telzhou618</a></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/java/" class="post-category" title="分类 - java"><i class="fa-regular fa-folder fa-fw" aria-hidden="true"></i> java</a></span></div><div class="post-meta-line"><span title="发布于 2022-06-28 11:44:07"><i class="fa-solid fa-calendar-days fa-fw me-1" aria-hidden="true"></i><time datetime="2022-06-28">2022-06-28</time></span>&nbsp;<span title="953 字"><i class="fa-solid fa-pencil-alt fa-fw me-1" aria-hidden="true"></i>约 1000 字</span>&nbsp;<span><i class="fa-regular fa-clock fa-fw me-1" aria-hidden="true"></i>预计阅读 2 分钟</span>&nbsp;</div>
+      <div class="post-meta-line"><span class="post-author"><a href="https://github.com/telzhou618" title="作者"target="_blank" rel="external nofollow noopener noreferrer author" class="author"><img loading="lazy" src="https://raw.githubusercontent.com/telzhou618/images/main/img03/20240423112108.png" alt="telzhou618" data-title="telzhou618" class="avatar" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/>&nbsp;telzhou618</a></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/java/" class="post-category" title="分类 - java"><i class="fa-regular fa-folder fa-fw" aria-hidden="true"></i> java</a></span></div><div class="post-meta-line"><span title="发布于 2022-06-28 11:44:07"><i class="fa-solid fa-calendar-days fa-fw me-1" aria-hidden="true"></i><time datetime="2022-06-28">2022-06-28</time></span>&nbsp;<span title="953 字"><i class="fa-solid fa-pencil-alt fa-fw me-1" aria-hidden="true"></i>约 1000 字</span>&nbsp;<span><i class="fa-regular fa-clock fa-fw me-1" aria-hidden="true"></i>预计阅读 2 分钟</span>&nbsp;</div>
     </div><div class="details toc" id="toc-static" data-kept="false">
         <div class="details-summary toc-title">
           <span>目录</span>
@@ -492,7 +492,7 @@
   </div>
 
   <div class="post-nav"><a href="/posts/spring-transaction/" class="post-nav-item" rel="prev" title="Spring 事务源码解析"><i class="fa-solid fa-angle-left fa-fw" aria-hidden="true"></i>Spring 事务源码解析</a>
-      <a href="/posts/mysql-review/" class="post-nav-item" rel="next" title="MySQL 优化及索引设计规范">MySQL 优化及索引设计规范<i class="fa-solid fa-angle-right fa-fw" aria-hidden="true"></i></a></div>
+      <a href="/posts/mybatis/" class="post-nav-item" rel="next" title="MyBatis 源码解析">MyBatis 源码解析<i class="fa-solid fa-angle-right fa-fw" aria-hidden="true"></i></a></div>
 </div>
 </article>
 

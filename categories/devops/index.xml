@@ -10,7 +10,361 @@
   <pubDate>Wed, 28 Jun 2023 14:21:07 &#43;0800</pubDate>
   <author>telzhou618</author>
   <guid>https://telzhou618.github.io/posts/docker/</guid>
-  <description><![CDATA[Docker 架构 Docker 主要组件包括 Client、Daemon、Images、Container、Registry。 Client ： docker客户端 Daemon：do]]></description>
+  <description><![CDATA[Docker 架构 Docker架构 Docker 主要组件包括 Client、Daemon、Images、Container、Registry。 Client ： docker客户端 D]]></description>
+</item>
+<item>
+  <title>SSK key 免密访问 gitlab 配置</title>
+  <link>https://telzhou618.github.io/posts/ssh-key/</link>
+  <pubDate>Sun, 23 Apr 2023 09:34:26 &#43;0800</pubDate>
+  <author>telzhou618</author>
+  <guid>https://telzhou618.github.io/posts/ssh-key/</guid>
+  <description><![CDATA[安装最新 git安装在最新yum源,ius源官方：https://ius.io/setup 1 2 3 yum install \ https://repo.ius.io/ius-release-el7.rpm \ https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm 安装 git 1 2 3 yum remove git yum install -y git236 git --version linux 配]]></description>
+</item>
+<item>
+  <title>CentOS 安装Docker</title>
+  <link>https://telzhou618.github.io/posts/docker-install/</link>
+  <pubDate>Tue, 11 Apr 2023 10:08:32 &#43;0800</pubDate>
+  <author>telzhou618</author>
+  <guid>https://telzhou618.github.io/posts/docker-install/</guid>
+  <description><![CDATA[<h2 id="docker-安装" class="heading-element">
+  <a href="#docker-%e5%ae%89%e8%a3%85" class="heading-mark"></a>docker 安装</h2><p>卸载旧的docker</p>
+<div class="highlight" id="id-1"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">sudo yum remove -y docker*</span></span></code></pre></td></tr></table>
+</div>
+</div><p>安装 yum-utils</p>
+<div class="highlight" id="id-2"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">yum install -y yum-utils</span></span></code></pre></td></tr></table>
+</div>
+</div><p>设置docker 源</p>
+<div class="highlight" id="id-3"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">yum-config-manager --add-repo http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo
+</span></span><span class="line"><span class="cl">yum makecache fast</span></span></code></pre></td></tr></table>
+</div>
+</div><p>查看docker所有版本</p>
+<div class="highlight" id="id-4"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">yum list docker-ce --showduplicates <span class="p">|</span> sort -r</span></span></code></pre></td></tr></table>
+</div>
+</div><p>安装docker</p>
+<div class="highlight" id="id-5"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">yum install -y docker-ce-3:19.03.9-3.el7.x86_64</span></span></code></pre></td></tr></table>
+</div>
+</div><p>设置为开机启动</p>
+<div class="highlight" id="id-6"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">systemctl start docker 
+</span></span><span class="line"><span class="cl">systemctl <span class="nb">enable</span> docker</span></span></code></pre></td></tr></table>
+</div>
+</div><p>验证是否成功</p>
+<div class="highlight" id="id-7"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">dokcer version</span></span></code></pre></td></tr></table>
+</div>
+</div><p><img loading="lazy" src="https://raw.githubusercontent.com/telzhou618/images/main/img03/20240423101515.png" alt="https://raw.githubusercontent.com/telzhou618/images/main/img03/20240423101515.png" srcset="https://raw.githubusercontent.com/telzhou618/images/main/img03/20240423101515.png?size=small, https://raw.githubusercontent.com/telzhou618/images/main/img03/20240423101515.png?size=medium 1.5x, https://raw.githubusercontent.com/telzhou618/images/main/img03/20240423101515.png?size=large 2x" data-title="https://raw.githubusercontent.com/telzhou618/images/main/img03/20240423101515.png" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></p>
+<p>修改阿里云 docker 镜像源加速，<a href="https://cr.console.aliyun.com/cn-hangzhou/instances/mirrors"target="_blank" rel="external nofollow noopener noreferrer">https://cr.console.aliyun.com/cn-hangzhou/instances/mirrors</a>
+<img loading="lazy" src="https://raw.githubusercontent.com/telzhou618/images/main/img03/20240423101725.png" alt="https://raw.githubusercontent.com/telzhou618/images/main/img03/20240423101725.png" srcset="https://raw.githubusercontent.com/telzhou618/images/main/img03/20240423101725.png?size=small, https://raw.githubusercontent.com/telzhou618/images/main/img03/20240423101725.png?size=medium 1.5x, https://raw.githubusercontent.com/telzhou618/images/main/img03/20240423101725.png?size=large 2x" data-title="https://raw.githubusercontent.com/telzhou618/images/main/img03/20240423101725.png" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></p>
+<div class="highlight" id="id-8"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">sudo mkdir -p /etc/docker
+</span></span><span class="line"><span class="cl">sudo tee /etc/docker/daemon.json <span class="s">&lt;&lt;-&#39;EOF&#39;
+</span></span></span><span class="line"><span class="cl"><span class="s">{
+</span></span></span><span class="line"><span class="cl"><span class="s">  &#34;registry-mirrors&#34;: [&#34;https://0qnvd2nu.mirror.aliyuncs.com&#34;]
+</span></span></span><span class="line"><span class="cl"><span class="s">}
+</span></span></span><span class="line"><span class="cl"><span class="s">EOF</span>
+</span></span><span class="line"><span class="cl">sudo systemctl daemon-reload
+</span></span><span class="line"><span class="cl">sudo systemctl restart docker</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="部署-tomcat" class="heading-element">
+  <a href="#%e9%83%a8%e7%bd%b2-tomcat" class="heading-mark"></a>部署 Tomcat</h2><p>拉取镜像</p>
+<div class="highlight" id="id-9"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">docker pull tomcat:7.0.59</span></span></code></pre></td></tr></table>
+</div>
+</div><p><img loading="lazy" src="https://raw.githubusercontent.com/telzhou618/images/main/img03/20240423103421.png" alt="https://raw.githubusercontent.com/telzhou618/images/main/img03/20240423103421.png" srcset="https://raw.githubusercontent.com/telzhou618/images/main/img03/20240423103421.png?size=small, https://raw.githubusercontent.com/telzhou618/images/main/img03/20240423103421.png?size=medium 1.5x, https://raw.githubusercontent.com/telzhou618/images/main/img03/20240423103421.png?size=large 2x" data-title="https://raw.githubusercontent.com/telzhou618/images/main/img03/20240423103421.png" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/>
+查看镜像</p>
+<div class="highlight" id="id-10"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">docker images</span></span></code></pre></td></tr></table>
+</div>
+</div><p><img loading="lazy" src="https://raw.githubusercontent.com/telzhou618/images/main/img03/20240423103456.png" alt="https://raw.githubusercontent.com/telzhou618/images/main/img03/20240423103456.png" srcset="https://raw.githubusercontent.com/telzhou618/images/main/img03/20240423103456.png?size=small, https://raw.githubusercontent.com/telzhou618/images/main/img03/20240423103456.png?size=medium 1.5x, https://raw.githubusercontent.com/telzhou618/images/main/img03/20240423103456.png?size=large 2x" data-title="https://raw.githubusercontent.com/telzhou618/images/main/img03/20240423103456.png" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/>
+启动容器</p>
+<div class="highlight" id="id-11"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">docker run -d -p 8080:8080  --name my-tomcat tomcat:7.0.59</span></span></code></pre></td></tr></table>
+</div>
+</div><p><img loading="lazy" src="https://raw.githubusercontent.com/telzhou618/images/main/img03/20240423103612.png" alt="https://raw.githubusercontent.com/telzhou618/images/main/img03/20240423103612.png" srcset="https://raw.githubusercontent.com/telzhou618/images/main/img03/20240423103612.png?size=small, https://raw.githubusercontent.com/telzhou618/images/main/img03/20240423103612.png?size=medium 1.5x, https://raw.githubusercontent.com/telzhou618/images/main/img03/20240423103612.png?size=large 2x" data-title="https://raw.githubusercontent.com/telzhou618/images/main/img03/20240423103612.png" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/>
+访问测试, http://192.168.1.5:8080
+<img loading="lazy" src="https://raw.githubusercontent.com/telzhou618/images/main/img03/20240423104056.png" alt="https://raw.githubusercontent.com/telzhou618/images/main/img03/20240423104056.png" srcset="https://raw.githubusercontent.com/telzhou618/images/main/img03/20240423104056.png?size=small, https://raw.githubusercontent.com/telzhou618/images/main/img03/20240423104056.png?size=medium 1.5x, https://raw.githubusercontent.com/telzhou618/images/main/img03/20240423104056.png?size=large 2x" data-title="https://raw.githubusercontent.com/telzhou618/images/main/img03/20240423104056.png" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></p>
+<h2 id="常用命令" class="heading-element">
+  <a href="#%e5%b8%b8%e7%94%a8%e5%91%bd%e4%bb%a4" class="heading-mark"></a>常用命令</h2><p>当然！以下是从提供的 shell 脚本中提取出的各个 Docker 命令：</p>
+<ol>
+<li><strong>拉取 Docker 镜像:</strong></li>
+</ol>
+<div class="highlight" id="id-12"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">docker pull java:8</span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="2">
+<li><strong>查看本地 Docker 镜像:</strong></li>
+</ol>
+<div class="highlight" id="id-13"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">docker images</span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="3">
+<li><strong>删除本地 Docker 镜像:</strong></li>
+</ol>
+<div class="highlight" id="id-14"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">docker rmi java</span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="4">
+<li><strong>删除所有本地 Docker 镜像:</strong></li>
+</ol>
+<div class="highlight" id="id-15"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">docker rmi <span class="k">$(</span>docker images -q<span class="k">)</span></span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="5">
+<li><strong>运行 Docker 容器:</strong></li>
+</ol>
+<div class="highlight" id="id-16"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">docker run -d -p 8080:8080 --name my-tomcat tomcat:7.0.59</span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="6">
+<li><strong>查看正在运行的 Docker 容器:</strong></li>
+</ol>
+<div class="highlight" id="id-17"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">docker ps</span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="7">
+<li><strong>查看所有 Docker 容器（包括停止的）:</strong></li>
+</ol>
+<div class="highlight" id="id-18"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">docker ps -a</span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="8">
+<li><strong>停止 Docker 容器:</strong></li>
+</ol>
+<div class="highlight" id="id-19"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">docker stop 7c5721a009cc</span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="9">
+<li><strong>强制停止 Docker 容器:</strong></li>
+</ol>
+<div class="highlight" id="id-20"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">docker <span class="nb">kill</span> 7c5721a009cc</span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="10">
+<li><strong>启动 Docker 容器:</strong></li>
+</ol>
+<div class="highlight" id="id-21"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">docker start 7c5721a009cc</span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="11">
+<li><strong>查看 Docker 容器内部信息:</strong></li>
+</ol>
+<div class="highlight" id="id-22"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">docker inspect 7c5721a009cc</span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="12">
+<li><strong>查看 Docker 容器日志:</strong></li>
+</ol>
+<div class="highlight" id="id-23"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">docker container logs 7c5721a009cc</span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="13">
+<li><strong>监控 Docker 容器日志:</strong></li>
+</ol>
+<div class="highlight" id="id-24"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">docker container logs 7c5721a009cc -f</span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="14">
+<li><strong>查看 Docker 容器内进程:</strong></li>
+</ol>
+<div class="highlight" id="id-25"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">docker top 7c5721a009cc</span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="15">
+<li><strong>复制文件到/从 Docker 容器:</strong></li>
+</ol>
+<div class="highlight" id="id-26"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">docker cp 7c5721a009cc:/etc/nginx/nginx.conf /mydata/nginx  <span class="c1"># 从容器复制到主机</span>
+</span></span><span class="line"><span class="cl">docker cp /mydata/nginx/nginx.conf 7c5721a009cc:/etc/nginx/  <span class="c1"># 从主机复制到容器</span></span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="16">
+<li><strong>进入 Docker 容器 Shell:</strong></li>
+</ol>
+<div class="highlight" id="id-27"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">docker <span class="nb">exec</span> -it 7c5721a009cc /bin/bash</span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="17">
+<li><strong>删除 Docker 容器:</strong></li>
+</ol>
+<div class="highlight" id="id-28"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">docker rm 7c5721a009cc  <span class="c1"># 只能删除已停止的容器</span>
+</span></span><span class="line"><span class="cl">docker rm -f 7c5721a009cc  <span class="c1"># 可以强制删除正在运行的容器</span></span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="18">
+<li><strong>强制删除所有 Docker 容器:</strong></li>
+</ol>
+<div class="highlight" id="id-29"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">docker rm -f <span class="k">$(</span>docker ps -a -q<span class="k">)</span></span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="19">
+<li><strong>从 Dockerfile 构建 Docker 镜像:</strong></li>
+</ol>
+<div class="highlight" id="id-30"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">docker build -t demo:1.0.0 .</span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="19">
+<li><strong>查看容器的CPU、内存</strong></li>
+</ol>
+<div class="highlight" id="id-31"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">docker stats</span></span></code></pre></td></tr></table>
+</div>
+</div><p>这些命令用于在命令行界面有效地管理 Docker 容器、镜像及相关操作。每个命令都在 Docker 生态系统中具有特定的用途。</p>
+<h2 id="dockerfile-编写" class="heading-element">
+  <a href="#dockerfile-%e7%bc%96%e5%86%99" class="heading-mark"></a>Dockerfile 编写</h2><p><img loading="lazy" src="https://raw.githubusercontent.com/telzhou618/images/main/img03/20240423110348.png" alt="https://raw.githubusercontent.com/telzhou618/images/main/img03/20240423110348.png" srcset="https://raw.githubusercontent.com/telzhou618/images/main/img03/20240423110348.png?size=small, https://raw.githubusercontent.com/telzhou618/images/main/img03/20240423110348.png?size=medium 1.5x, https://raw.githubusercontent.com/telzhou618/images/main/img03/20240423110348.png?size=large 2x" data-title="https://raw.githubusercontent.com/telzhou618/images/main/img03/20240423110348.png" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/>
+构建 spring-boot 项目镜像</p>
+<div class="highlight" id="id-32"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">From java:8
+</span></span><span class="line"><span class="cl">ADD target/demo.jar /app.jar
+</span></span><span class="line"><span class="cl">EXPOSE <span class="m">8080</span>
+</span></span><span class="line"><span class="cl">ENTRYPOINT java <span class="si">${</span><span class="nv">JAVA_OPTS</span><span class="si">}</span> -jar /app.jar</span></span></code></pre></td></tr></table>
+</div>
+</div>]]></description>
 </item>
 </channel>
 </rss>

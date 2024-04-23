@@ -2,8 +2,7 @@
 
 ##  Docker 架构
 
-![image-20210810154908558](https://raw.githubusercontent.com/telzhou618/images/main/img/image-20210810154908558.png)
-
+{{&lt; figure src=&#34;https://raw.githubusercontent.com/telzhou618/images/main/img/image-20210810154908558.png&#34; title=&#34;Docker架构&#34; &gt;}}
 
 
 Docker 主要组件包括 Client、Daemon、Images、Container、Registry。
@@ -27,20 +26,20 @@ docker search java  // 搜索镜像
 #### 下载镜像
 
 ```sh
-docker pull java:8  // 下载镜像
+docker pull java:8  # 下载镜像
 ```
 
 #### 查看镜像
 
 ```sh
-docker images  // 查看镜像
+docker images  # 查看镜像
 ```
 
 #### 删除镜像
 
 ```sh
-docker rmi java  // 删除镜像，加-f强制删除
-docker rmi $(docker images ‐q) // 删除所有镜像
+docker rmi java  # 删除镜像，加-f强制删除
+docker rmi $(docker images ‐q) # 删除所有镜像
 ```
 
 ### 容器相关的命令
@@ -68,7 +67,7 @@ docker run -d -p 8080:80 nginx:least
 #### 列出容器列表
 
 ```sh
-docker ps  // 加 -a 可列出所有的容器，包含停止的容器
+docker ps  # 加 -a 可列出所有的容器，包含停止的容器
 ```
 
 #### 停止容器

@@ -2,10 +2,25 @@
 
 
 ## 删除数据并释放空间命令
-- drop table table_name 立刻释放磁盘空间 ，不管是 Innodb和MyISAM ；
-- truncate table table_name立刻释放磁盘空间 ，不管是 Innodb和MyISAM;
-- delete from table_name 删除表的全部数据，对于MyISAM 会立刻释放磁盘空间 ，而InnoDB 不会释放磁盘空间；
-- delete from table_name where xx 带条件的删除, 不管是innodb还是MyISAM都不会释放磁盘空间；delete操作后使用optimize table table_name 释放磁盘空间，优化表期间会锁定表，所以要在空闲时段执行optimize table
+1. 立刻释放磁盘空间 ，不管是 Innodb和MyISAM
+```sql
+drop table table_name 
+```
+2. 立刻释放磁盘空间 ，不管是 Innodb和MyISAM
+```sql
+truncate table table_name
+```
+3. 删除表的全部数据，对于MyISAM 会立刻释放磁盘空间 ，而InnoDB 不会释放磁盘空间
+```sql
+delete from table_name 
+```
+4. 带条件的删除, 不管是innodb还是MyISAM都不会释放磁盘空间；delete操作后使用optimize table table_name 释放磁盘空间，优化表期间会锁定表，所以要在空闲时段执行optimize table
+```sql
+delete from table_name where xx 
+```
+
+&lt;!--more--&gt;
+
 ## 查看表空间占用大小
 MySQL  表空间信息保存在哪 information_schema.TABLES  中。
 

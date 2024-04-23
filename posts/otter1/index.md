@@ -1,4 +1,4 @@
-# Otter数据同步1 - 环境搭建
+# Otter数据同步 - 环境搭建
 
 
 {{&lt; figure src=&#34;https://raw.githubusercontent.com/telzhou618/images/main/img02/1686739961279-58ffcfde-b8b0-4a9b-af4a-7630d29dd839.png&#34; title=&#34;Otter架构&#34; &gt;}}
@@ -10,7 +10,6 @@
 语言： 纯java开发
 定位： 基于数据库增量日志解析，准实时同步到本机房或异地机房的mysql/oracle数据库. 一个分布式数据库同步系统。
 更多介绍查看Github：[https://github.com/alibaba/otter](https://github.com/alibaba/otter)
-&lt;!--more--&gt;
 
 ## 架构及工作原理
 1. Canal, 负责监听Bin-log，类似MYSQL的从库，本质上实现了MYSQL的协议，伪装成从库读取bin-log日志。
