@@ -1,16 +1,8 @@
 # MySQL 优化及索引设计规范
 
 索引是帮助MySQL高效获取数据的排好序的数据结构。
-
-## 几个MySQL命令
-
-```shell
-mysql.server start // 启动MySQL
-mysql.server stop  // 停止MYSQL
-./mysqld_safe --data=../data // 从data备份中恢复数据
-./mysql_secure_installation // 修改管理员密码
-```
 &lt;!--more--&gt;
+
 
 ## 索引的优缺点
 
@@ -36,7 +28,7 @@ mysql.server stop  // 停止MYSQL
 ## 索引数据结构
 
 常见的索引数据结构有Hash表、二叉树、平衡二叉树、红黑树、B-Tree、B&#43;Tree。
-![](/_static/mysql/m0.png)
+![](https://raw.githubusercontent.com/telzhou618/images/main/img03/m0.png)
 
 1. Hash 索引：Hash 表只能做等值匹配，效率很高。但是不支持范围查找和排序，因为取每个数据要做hash运算，只有取出来才能知道他是什么。
 2. 二叉树：二叉树极端情况下树会变成一个链表，也不适合做索引。
@@ -46,6 +38,15 @@ mysql.server stop  // 停止MYSQL
 6. B&#43;tree：所有数据存在叶子节点，非叶子节点只存索引，可容纳更多的索引数据。 SQL性能分析工具Explain 工具详解 在一条查询语句前加 explain
    可以获得SQL语句的执行计划，可看到使用了什么索引，大致扫描了多少行等信息，从而分析出SQL语句的瓶颈在哪里。 explain select * from employees where name = &#39;Lucy&#39;;
 
+## 几个MySQL命令
+
+```shell
+mysql.server start // 启动MySQL
+mysql.server stop  // 停止MYSQL
+./mysqld_safe --data=../data // 从data备份中恢复数据
+./mysql_secure_installation // 修改管理员密码
+```
+
 ## Explain 工具详解
 
 在一条查询语句前加 explain 可以获得SQL语句的执行计划，可看到使用了什么索引，大致扫描了多少行等信息，从而分析出SQL语句的瓶颈在哪里。
@@ -54,7 +55,8 @@ mysql.server stop  // 停止MYSQL
 explain select * from employees where name = &#39;Lucy&#39;;
 ```
 
-![](/_static/mysql/m1.png)
+![](https://raw.githubusercontent.com/telzhou618/images/main/img03/m1.png)
+
 下面介绍下 Explain 中的列。
 
 - id
@@ -205,7 +207,7 @@ KK% 也不一定就会走索引下推。
 ## 一条SQL语句是如何执行的
 
 大体来说，MySQL 可以分为 Server 层和存储引擎层两部分。
-![](/_static/mysql/m2.png)
+![](https://raw.githubusercontent.com/telzhou618/images/main/img03/m2.png)
 
 - Server层
 
@@ -456,10 +458,10 @@ create table t2 like t1;
 ```sql
 EXPLAIN select * from t1 inner join t2 on t1.a = t2.a;
 ```
-![](/_static/mysql/m5.png)
+![](https://raw.githubusercontent.com/telzhou618/images/main/img03/m5.png)
 
 执行计划原理图
-![](/_static/mysql/m3.png)
+![](https://raw.githubusercontent.com/telzhou618/images/main/img03/m3.png)
 
 执行步骤
 
@@ -478,11 +480,11 @@ buffer 内容。 那么如果 a 字段没有索引呢，那就走下面的 BNL�
 ```sql
 EXPLAIN select * from t1 inner join t2 on t1.b = t2.b;
 ```
-![](/_static/mysql/m5.png)
+![](https://raw.githubusercontent.com/telzhou618/images/main/img03/m5.png)
 明显 Extra 中有Using join buffer。。。说明就是BNL算法，因为关联字段 b 上没索引。
 
 BNL 执行计划
-![](/_static/mysql/m4.png)
+![](https://raw.githubusercontent.com/telzhou618/images/main/img03/m4.png)
 
 执行步骤 
 

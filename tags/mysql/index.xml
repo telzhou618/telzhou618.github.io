@@ -10,22 +10,7 @@
   <pubDate>Mon, 28 Aug 2023 11:44:07 &#43;0800</pubDate>
   <author>telzhou618</author>
   <guid>https://telzhou618.github.io/posts/mysql-review/</guid>
-  <description><![CDATA[<p>索引是帮助MySQL高效获取数据的排好序的数据结构。</p>
-<h2 id="几个mysql命令" class="heading-element">
-  <a href="#%e5%87%a0%e4%b8%aamysql%e5%91%bd%e4%bb%a4" class="heading-mark"></a>几个MySQL命令</h2><div class="highlight" id="id-1"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">mysql.server start // 启动MySQL
-</span></span><span class="line"><span class="cl">mysql.server stop  // 停止MYSQL
-</span></span><span class="line"><span class="cl">./mysqld_safe --data<span class="o">=</span>../data // 从data备份中恢复数据
-</span></span><span class="line"><span class="cl">./mysql_secure_installation // 修改管理员密码</span></span></code></pre></td></tr></table>
-</div>
-</div>]]></description>
+  <description><![CDATA[<p>索引是帮助MySQL高效获取数据的排好序的数据结构。</p>]]></description>
 </item>
 <item>
   <title>MYSQL 表空间分析</title>
