@@ -277,7 +277,7 @@ mysql8.0已经移除了查询缓存功能。
 
 Bin-log 日志 记录CUD执行的日志，用于恢复数据。
 
-## MySQL是如何选择索引的 (Trace 工具)
+## 如何选择索引 - Trace 工具
 
 Trace 工具可以清楚的看到一条SQL的详细执行步骤，开启 Trace 工具对MySQL性能有一定的影响，一般只有临时分析问题时开启，用完关闭。
 
@@ -304,7 +304,7 @@ mysql
 &gt; set session optimizer_trace=&#34;enabled=off&#34;; --关闭trace
 ```
 
-## MySQL 深入优化之 Order by 与 Group By 优化
+## 深入优化 - Order by 与 Group By 优化
 
 ```sql
 explain select * from employees where name = &#39;LiLei&#39; order by age;
@@ -380,7 +380,7 @@ MySQL 通过比较系统变量 max_length_for_sort_data(默认1024字节) 的大
     1、如果 字段的总长度小于max_length_for_sort_data ，那么使用 单路排序模式； 
     2、如果 字段的总长度大于max_length_for_sort_data ，那么使用 双路排序模∙式。
 
-## MySQL 深入优化之分页优化
+## 深入优化 - 分页优化
 
 创建实例表：
 
@@ -429,7 +429,7 @@ inner join (select id from employees order by name limit 90000,5) ed on e.id = e
 覆盖索引，找到所有满足条件的记录ID列表，再拿这个结果去聚簇索引扫描。这里用到了临时表 &lt;derived2&gt;,type 虽然为ALL，表示全表扫描，但这个临时表也只有5条记录，所以很快。
 优化关键：想办法让条件查询、排序返回的值尽量最少，尽量走索引，再取那这个结果到主键索引中查。
 
-## MySQL深入优化之 关联查询 Join 优化
+## 深入优化 - 关联查询 Join 优化
 
 创建实例表 t1,t2
 
@@ -502,7 +502,7 @@ join_buffer 的大小是由参数 join_buffer_size 设定的，默认值是 256k
 
 关联字段加索引，让mysql做join操作时尽量选择NLJ算法。 小表驱动大表，写多表连接sql时如果明确知道哪张表是小表可以用straight_join写法固定连接驱动方式，省去mysql优化器自己判断的时间。
 
-## MySQL 深入优化之 COUNT(*) 优化
+## 深入优化 - COUNT(*) 优化
 
 实例SQL
 
@@ -534,7 +534,7 @@ EXPLAIN select count(*) from employees;
 单独维护总行数。myisam 存储引擎的表，行数会维护在磁盘上，count时会直接返回，不再扫描。 show table status like &#39;表名&#39;， 可得到表的预估行数。 将行数维护在 redis 里，但一致性很难保证。
 将行数维护在本地库，插入和删除和更新行数放在一个事务里，可保证一致性。 注意：count(字段)不会计算null值的行。
 
-## MySQL 深入优化之 如何选择数据类型
+## 深入优化 - 如何选择数据类型
 
 - 选择数据类型的原则
     - 确定合适的大类型：数字、字符串、时间、二进制；
