@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+  <head>
+    
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+    <meta name="robots" content="noodp" />
+    <title>微服务 - 扁舟的博客</title><meta name="author" content="telzhou618">
+<meta name="author-link" content="https://github.com/telzhou618">
+<meta name="description" content="微服务的优缺点 优点 易于开发和维护， 每个模块独立开发，不同的人负责不同的模块，互不干涉，减少冲突，提高效率。 易独立部署易扩展，每个服务费独立部" /><meta name="keywords" content='draft' /><meta itemprop="name" content="微服务">
+<meta itemprop="description" content="微服务的优缺点 优点 易于开发和维护， 每个模块独立开发，不同的人负责不同的模块，互不干涉，减少冲突，提高效率。 易独立部署易扩展，每个服务费独立部"><meta itemprop="datePublished" content="2024-04-24T10:45:43+08:00" />
+<meta itemprop="dateModified" content="2024-04-24T10:45:43+08:00" />
+<meta itemprop="wordCount" content="661">
+<meta itemprop="keywords" content="draft," /><meta property="og:title" content="微服务" />
+<meta property="og:description" content="微服务的优缺点 优点 易于开发和维护， 每个模块独立开发，不同的人负责不同的模块，互不干涉，减少冲突，提高效率。 易独立部署易扩展，每个服务费独立部" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://telzhou618.github.io/drafts/57808a6/" /><meta property="article:section" content="drafts" />
+<meta property="article:published_time" content="2024-04-24T10:45:43+08:00" />
+<meta property="article:modified_time" content="2024-04-24T10:45:43+08:00" />
+
+<meta name="twitter:card" content="summary"/><meta name="twitter:title" content="微服务"/>
+<meta name="twitter:description" content="微服务的优缺点 优点 易于开发和维护， 每个模块独立开发，不同的人负责不同的模块，互不干涉，减少冲突，提高效率。 易独立部署易扩展，每个服务费独立部"/>
+<meta name="application-name" content="FixIt">
+<meta name="apple-mobile-web-app-title" content="FixIt"><meta name="theme-color" data-light="#f8f8f8" data-dark="#252627" content="#f8f8f8"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" href="https://telzhou618.github.io/drafts/57808a6/" /><link rel="prev" href="https://telzhou618.github.io/drafts/704c8ae/" /><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "BlogPosting",
+    "headline": "微服务",
+    "inLanguage": "zh-CN",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https:\/\/telzhou618.github.io\/drafts\/57808a6\/"
+    },"genre": "drafts","keywords": "draft","wordcount":  661 ,
+    "url": "https:\/\/telzhou618.github.io\/drafts\/57808a6\/","datePublished": "2024-04-24T10:45:43+08:00","dateModified": "2024-04-24T10:45:43+08:00","publisher": {
+      "@type": "Organization",
+      "name": ""},"author": {
+        "@type": "Person",
+        "name": "telzhou618"
+      },"description": ""
+  }
+  </script></head>
+  <body data-header-desktop="sticky" data-header-mobile="auto"><script>(window.localStorage?.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('data-theme', 'dark');</script><div class="wrapper" data-page-style="normal"><header class="desktop animate__faster" id="header-desktop">
+  <div class="header-wrapper">
+    <div class="header-title">
+      <a href="/" title="扁舟的博客"><span class="header-title-text">扁舟的博客</span></a><span class="header-subtitle"></span></div>
+    <nav>
+      <ul class="menu"><li class="menu-item">
+              <a
+                class="menu-link"
+                href="/posts/"
+                title="Posts"
+                
+              >文章</a></li><li class="menu-item">
+              <a
+                class="menu-link"
+                href="/"
+                
+                
+              >归档</a></li><li class="menu-item">
+              <a
+                class="menu-link"
+                href="/categories/"
+                title="Categories"
+                
+              >分类</a></li><li class="menu-item">
+              <a
+                class="menu-link"
+                href="/tags/"
+                title="Tags"
+                
+              >标签</a></li><li class="menu-item">
+              <a
+                class="menu-link"
+                href="/about/"
+                title="About me"
+                
+              >关于</a></li><li class="menu-item delimiter"></li><li class="menu-item search" id="search-desktop">
+            <input type="text" placeholder="搜索文章标题或内容……" id="search-input-desktop">
+            <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+              <i class="fa-solid fa-search fa-fw" aria-hidden="true"></i>
+            </a>
+            <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+              <i class="fa-solid fa-times-circle fa-fw" aria-hidden="true"></i>
+            </a>
+            <span class="search-button search-loading" id="search-loading-desktop">
+              <i class="fa-solid fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+            </span>
+          </li><li class="menu-item theme-switch" title="切换主题">
+          <i class="fa-solid fa-adjust fa-fw" aria-hidden="true"></i>
+        </li></ul>
+    </nav>
+  </div>
+</header><header class="mobile animate__faster" id="header-mobile">
+  <div class="header-container">
+    <div class="header-wrapper">
+      <div class="header-title">
+        <a href="/" title="扁舟的博客"><span class="header-title-text">扁舟的博客</span></a><span class="header-subtitle"></span></div>
+      <div class="menu-toggle" id="menu-toggle-mobile">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+    <nav>
+      <ul class="menu" id="menu-mobile"><li class="search-wrapper">
+            <div class="search mobile" id="search-mobile">
+              <input type="text" placeholder="搜索文章标题或内容……" id="search-input-mobile">
+              <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                <i class="fa-solid fa-search fa-fw" aria-hidden="true"></i>
+              </a>
+              <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                <i class="fa-solid fa-times-circle fa-fw" aria-hidden="true"></i>
+              </a>
+              <span class="search-button search-loading" id="search-loading-mobile">
+                <i class="fa-solid fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+              </span>
+            </div>
+            <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+              取消
+            </a>
+          </li><li
+              class="menu-item"
+            ><a
+                  class="menu-link"
+                  href="/posts/"
+                  title="Posts"
+                  
+                >文章</a></li><li
+              class="menu-item"
+            ><a
+                  class="menu-link"
+                  href="/"
+                  
+                  
+                >归档</a></li><li
+              class="menu-item"
+            ><a
+                  class="menu-link"
+                  href="/categories/"
+                  title="Categories"
+                  
+                >分类</a></li><li
+              class="menu-item"
+            ><a
+                  class="menu-link"
+                  href="/tags/"
+                  title="Tags"
+                  
+                >标签</a></li><li
+              class="menu-item"
+            ><a
+                  class="menu-link"
+                  href="/about/"
+                  title="About me"
+                  
+                >关于</a></li><li class="menu-item menu-system">
+          <span class="menu-system-item theme-switch" title="切换主题"><i class="fa-solid fa-adjust fa-fw" aria-hidden="true"></i></span></li>
+      </ul>
+    </nav>
+  </div>
+</header><div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+  </div>
+  <div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+  </div><main class="container"><article class="page single special">
+    <div class="header"><h1 class="single-title animate__animated animate__pulse animate__faster">微服务</h1></div><div
+      class="content"
+      id="content"
+      
+      
+    ><h2 id="微服务的优缺点" class="heading-element">
+  <a href="#%e5%be%ae%e6%9c%8d%e5%8a%a1%e7%9a%84%e4%bc%98%e7%bc%ba%e7%82%b9" class="heading-mark"></a>微服务的优缺点</h2><h3 id="优点" class="heading-element">
+  <a href="#%e4%bc%98%e7%82%b9" class="heading-mark"></a>优点</h3><ol>
+<li><strong>易于开发和维护</strong>，
+每个模块独立开发，不同的人负责不同的模块，互不干涉，减少冲突，提高效率。</li>
+<li><strong>易独立部署易扩展</strong>，每个服务费独立部署，易于弹性伸缩，不同的微服务部署不同的数量，资源利用率高。</li>
+<li><strong>技术选择更具多样性</strong>，不同的微服务可以使用不同的语言，选择性更多，人尽其才，物尽其用。</li>
+<li><strong>可靠性和容错能力、并发能力强</strong>，个别微服务的故障不会影响整个系统的稳定性，同时不同的请求发到不同的服务，调度不同机器的计算机资源，并发能力强。</li>
+</ol>
+<h3 id="缺点" class="heading-element">
+  <a href="#%e7%bc%ba%e7%82%b9" class="heading-mark"></a>缺点</h3><ol>
+<li><strong>技术更复杂</strong>，微服务之后需要服务器注册、发现、负载均衡、分布式链路跟踪等技术的支持。</li>
+<li><strong>运维成本高</strong>，拆分成多个服务后，运维部署成功高，需要额外的工具支持。</li>
+<li><strong>服务间通信的开销</strong>，跨网络调用，带来一定的新能损失。</li>
+<li><strong>数据一致性问题</strong>，夸多个节点调用数据一致性难保证，需要分布式事务、补偿机制来保证。</li>
+</ol>
+<h2 id="微服务拆分的原则" class="heading-element">
+  <a href="#%e5%be%ae%e6%9c%8d%e5%8a%a1%e6%8b%86%e5%88%86%e7%9a%84%e5%8e%9f%e5%88%99" class="heading-mark"></a>微服务拆分的原则</h2><ol>
+<li><strong>低耦合内聚</strong>, 相同的业务，关联度高的放在一起，保证单一职责，边界清晰，避免重复开发，不要你中有我，我中有你，比如一个商城，可以拆分陈商品、订单、用户、支付、物流等。</li>
+<li><strong>避免循环调用</strong>,避免微服务直接复杂的调用关系，不要出现直接或间接的循环依赖，比如:A-&gt;B-&gt;A, 或A-&gt;B-&gt;C-A，滚雪球事件就是这么发生的，出问题都不好排查。</li>
+<li><strong>尽量设计通用接口</strong>,不要为某一个业务方做定制接口，比如：查询订单，提供一个查询基础信息和完整信息的接口。</li>
+<li><strong>服务之间调用关系要清晰</strong>,分层调用，不能反向调用或同层直接互相调用。</li>
+<li><strong>微服务拆分要渐进式进行</strong>,不要一下子拆的太细，太细运维成本也会增加，根据业务情况调整。</li>
+</ol>
+</div><div id="comments"><div id="gitalk" class="comment"></div><noscript>
+        Please enable JavaScript to view the comments powered by <a href="https://github.com/gitalk/gitalk" rel="external nofollow noopener noreferrer">Gitalk</a>.
+      </noscript></div></article></main><footer class="footer">
+    <div class="footer-container"><div class="footer-line powered">由 <a href="https://gohugo.io/" target="_blank" rel="external nofollow noopener noreferrer" title="Hugo 0.121.1"><img class="hugo-icon" src="/images/hugo.min.svg" alt="Hugo logo" /> Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/hugo-fixit/FixIt" target="_blank" rel="external" title="FixIt v0.3.2"><img class="fixit-icon" src="/images/fixit.min.svg" alt="FixIt logo" /> FixIt</a>
+        </div><div class="footer-line copyright" itemscope itemtype="http://schema.org/CreativeWork"><i class="fa-regular fa-copyright fa-fw" aria-hidden="true"></i>
+            <span itemprop="copyrightYear">2024</span><span class="author" itemprop="copyrightHolder">
+              <a href="https://github.com/telzhou618"target="_blank" rel="external nofollow noopener noreferrer">telzhou618</a></span></div></div>
+  </footer></div><div class="widgets"><div class="fixed-buttons animate__faster d-none"><div class="fixed-button back-to-top" role="button" aria-label="回到顶部"><i class="fa-solid fa-arrow-up fa-fw" aria-hidden="true"></i><span class="variant-numeric d-none">0%</span>
+        </div><div class="fixed-button view-comments d-none" role="button" aria-label="查看评论"><i class="fa-solid fa-comment fa-fw" aria-hidden="true"></i></div></div><div id="mask"></div><div class="reading-progress-bar" style="left: 0;top: 0;"></div><noscript>
+    <div class="noscript-warning">FixIt 主题在启用 JavaScript 的情况下效果最佳。</div>
+  </noscript>
+</div><link rel="stylesheet" href="/lib/gitalk/gitalk.min.css"><link rel="preload" href="/lib/katex/katex.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/katex/katex.min.css"></noscript><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><link rel="stylesheet" href="/lib/pace/themes/blue/pace-theme-minimal.css"><script src="/lib/gitalk/gitalk.min.js"></script><script src="/lib/autocomplete/autocomplete.min.js" defer></script><script src="/lib/fuse/fuse.min.js" defer></script><script src="/lib/sharer/sharer.min.js" async defer></script><script src="/lib/katex/katex.min.js" defer></script><script src="/lib/katex/auto-render.min.js" defer></script><script src="/lib/katex/copy-tex.min.js" defer></script><script src="/lib/katex/mhchem.min.js" defer></script><script src="/lib/cookieconsent/cookieconsent.min.js" defer></script><script src="/lib/pace/pace.min.js" async defer></script><script>window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":20},"comment":{"enable":true,"expired":false,"gitalk":{"admin":["telzhou618"],"clientID":"Iv1.8ffe89ccf06594a1","clientSecret":"9f0b65b0841a8ea3a7c28abce140eba79f8b69f8","id":"2024-04-24T10:45:43+08:00","owner":"telzhou618","repo":"https://github.com/telzhou618/hugo-blog-comments.git","title":"微服务"}},"cookieconsent":{"content":{"dismiss":"同意","link":"了解更多","message":"本网站使用 Cookies 来改善您的浏览体验。"},"enable":true,"palette":{"button":{"background":"#f0f0f0"},"popup":{"background":"#1aa3ff"}},"theme":"edgeless"},"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":true,"left":"\\begin{equation}","right":"\\end{equation}"},{"display":true,"left":"\\begin{equation*}","right":"\\end{equation*}"},{"display":true,"left":"\\begin{align}","right":"\\end{align}"},{"display":true,"left":"\\begin{align*}","right":"\\end{align*}"},{"display":true,"left":"\\begin{alignat}","right":"\\end{alignat}"},{"display":true,"left":"\\begin{alignat*}","right":"\\end{alignat*}"},{"display":true,"left":"\\begin{gather}","right":"\\end{gather}"},{"display":true,"left":"\\begin{CD}","right":"\\end{CD}"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"search":{"distance":100,"findAllMatches":false,"fuseIndexURL":"/index.json","highlightTag":"em","ignoreFieldNorm":false,"ignoreLocation":false,"isCaseSensitive":false,"location":0,"maxResultLength":10,"minMatchCharLength":2,"noResultsFound":"没有找到结果","snippetLength":30,"threshold":0.3,"type":"fuse","useExtendedSearch":false}};</script><script src="/js/theme.min.js" defer></script></body>
+</html>
