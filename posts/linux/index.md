@@ -64,7 +64,7 @@ chown -R admin /var/log/
 ## chmod
 
 设置用户对文件的读、写、执行权限。
-![image.png](https://raw.githubusercontent.com/telzhou618/images/main/img02/1644229447505-8d572e68-0426-466e-a750-330c05e36803.png)
+![image.png](https://raw.gitmirror.com/telzhou618/images/main/img02/1644229447505-8d572e68-0426-466e-a750-330c05e36803.png)
 
 命令格式：
 ```shell
@@ -245,7 +245,7 @@ yum install htop -y  # centos
 brew install htop  # mac
 ```
 实例：直接执行htop可以监控CPU、内存、线程情况，并且以高亮的新式展示。
-![](https://raw.githubusercontent.com/telzhou618/images/main/img02/image%20(4).png)
+![](https://raw.gitmirror.com/telzhou618/images/main/img02/image%20(4).png)
 
 
 ---

@@ -33,10 +33,10 @@ systemctl enable docker
 ```shell
 dokcer version
 ```
-![](https://raw.githubusercontent.com/telzhou618/images/main/img03/20240423101515.png)
+![](https://raw.gitmirror.com/telzhou618/images/main/img03/20240423101515.png)
 
 修改阿里云 docker 镜像源加速，[https://cr.console.aliyun.com/cn-hangzhou/instances/mirrors](https://cr.console.aliyun.com/cn-hangzhou/instances/mirrors)
-![](https://raw.githubusercontent.com/telzhou618/images/main/img03/20240423101725.png)
+![](https://raw.gitmirror.com/telzhou618/images/main/img03/20240423101725.png)
 
 ```shell
 sudo mkdir -p /etc/docker
@@ -54,19 +54,19 @@ sudo systemctl restart docker
 ```shell
 docker pull tomcat:7.0.59
 ```
-![](https://raw.githubusercontent.com/telzhou618/images/main/img03/20240423103421.png)
+![](https://raw.gitmirror.com/telzhou618/images/main/img03/20240423103421.png)
 查看镜像
 ```shell
 docker images
 ```
-![](https://raw.githubusercontent.com/telzhou618/images/main/img03/20240423103456.png)
+![](https://raw.gitmirror.com/telzhou618/images/main/img03/20240423103456.png)
 启动容器
 ```shell
 docker run -d -p 8080:8080  --name my-tomcat tomcat:7.0.59
 ```
-![](https://raw.githubusercontent.com/telzhou618/images/main/img03/20240423103612.png)
+![](https://raw.gitmirror.com/telzhou618/images/main/img03/20240423103612.png)
 访问测试, http://192.168.1.5:8080
-![](https://raw.githubusercontent.com/telzhou618/images/main/img03/20240423104056.png)
+![](https://raw.gitmirror.com/telzhou618/images/main/img03/20240423104056.png)
 
 ## 常用命令
 
@@ -177,7 +177,7 @@ docker stats
 
 ## Dockerfile 编写
 
-![](https://raw.githubusercontent.com/telzhou618/images/main/img03/20240423110348.png)
+![](https://raw.gitmirror.com/telzhou618/images/main/img03/20240423110348.png)
 构建 spring-boot 项目镜像
 ```shell
 From java:8

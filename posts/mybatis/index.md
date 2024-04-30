@@ -2,7 +2,7 @@
 
 一款轻量级的ORM框架。
 
-![image-20210730150741225](https://raw.githubusercontent.com/telzhou618/images/main/img/image-20210730150741225.png)
+![image-20210730150741225](https://raw.gitmirror.com/telzhou618/images/main/img/image-20210730150741225.png)
 
 ## MyBatis 的优点
 
@@ -456,7 +456,7 @@ public class DefaultResultSetHandler implements ResultSetHandler {
 
 ## MyBatis 源码完整流程图
 
-![](https://raw.githubusercontent.com/telzhou618/images/main/img/MyBatis%E6%BA%90%E7%A0%81%E6%89%A7%E8%A1%8C%E6%B5%81%E7%A8%8B%20(1).png)
+![](https://raw.gitmirror.com/telzhou618/images/main/img/MyBatis%E6%BA%90%E7%A0%81%E6%89%A7%E8%A1%8C%E6%B5%81%E7%A8%8B%20(1).png)
 
 ---
 

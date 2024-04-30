@@ -170,7 +170,7 @@ public class AopAutoConfiguration {
 
 Spring-AOP 的原理可以划分为三个步骤，总共做了三件事，分别是解析切面、创建动态代理、调用代理方法。
 
-![image-20211208172327744](https://raw.githubusercontent.com/telzhou618/images/main/img01/image-20211208172327744.png)
+![image-20211208172327744](https://raw.gitmirror.com/telzhou618/images/main/img01/image-20211208172327744.png)
 
 解析切面：
 
@@ -236,7 +236,7 @@ class AspectJAutoProxyRegistrar implements ImportBeanDefinitionRegistrar {
 
 关键是注册了另一个bean，AnnotationAwareAspectJAutoProxyCreator 。
 
-![image-20211208170900734](https://raw.githubusercontent.com/telzhou618/images/main/img01/image-20211208170900734.png)
+![image-20211208170900734](https://raw.gitmirror.com/telzhou618/images/main/img01/image-20211208170900734.png)
 
 
 
@@ -442,7 +442,7 @@ buildAspectJAdvisors 的代码很长，这里略过，只说一下核心逻辑�
 
 AOP创建动态代理有两种方式，如果代理目标实现了接口，则采用JDK动态代理，如果没有实现接口，则采用Cglib动态代理。
 
-![image-20211209164425900](https://raw.githubusercontent.com/telzhou618/images/main/img01/image-20211209164425900.png)
+![image-20211209164425900](https://raw.gitmirror.com/telzhou618/images/main/img01/image-20211209164425900.png)
 
 ### 代理创建入口方法 postProcessAfterInitialization 
 
@@ -907,7 +907,7 @@ private static class CglibMethodInvocation extends ReflectiveMethodInvocation {
 
 
 
-![](https://raw.githubusercontent.com/telzhou618/images/main/img01/Spring%20AOP%20%E5%8A%A0%E8%BD%BD%E6%B5%81%E7%A8%8B.png)
+![](https://raw.gitmirror.com/telzhou618/images/main/img01/Spring%20AOP%20%E5%8A%A0%E8%BD%BD%E6%B5%81%E7%A8%8B.png)
 
 
 

@@ -19,8 +19,6 @@ delete from table_name
 delete from table_name where xx 
 ```
 
-&lt;!--more--&gt;
-
 ## 查看表空间占用大小
 MySQL  表空间信息保存在哪 information_schema.TABLES  中。
 

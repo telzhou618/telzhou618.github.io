@@ -6,7 +6,7 @@
 
 
 
-![image-20210811195620000](https://raw.githubusercontent.com/telzhou618/images/main/img/image-20210811195620000.png)
+![image-20210811195620000](https://raw.gitmirror.com/telzhou618/images/main/img/image-20210811195620000.png)
 
 ## commons-pool的优点
 
@@ -148,11 +148,11 @@ minIdle：对象池中最小的空闲对象个数。默认值是0。
 
 先注释归还对象的方法 pool.returnObject(connection)，执行结果如下，只能取到5个连接对象，因为设置的最大连接数是5。
 
-![image-20210729144629504](https://raw.githubusercontent.com/telzhou618/images/main/img/image-20210729144629504.png)
+![image-20210729144629504](https://raw.gitmirror.com/telzhou618/images/main/img/image-20210729144629504.png)
 
 在打开  pool.returnObject(connection) 代码，每次获取的第一个连接，说明归还了对象可以接着用，实现连接对象复用。
 
-![image-20210729144822189](https://raw.githubusercontent.com/telzhou618/images/main/img/image-20210729144822189.png)
+![image-20210729144822189](https://raw.gitmirror.com/telzhou618/images/main/img/image-20210729144822189.png)
 
 ## Redis客户端jedis的的连接池典型应用
 

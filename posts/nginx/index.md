@@ -17,7 +17,7 @@ sudo yum install -y nginx
 systemctl start nginx
 ```
 访问: http://localhost, Nginx 默认端口是80，可以省略
-![](https://raw.githubusercontent.com/telzhou618/images/main/img03/img.png)
+![](https://raw.gitmirror.com/telzhou618/images/main/img03/img.png)
 
 
 ## Nginx 常用命令
@@ -95,7 +95,7 @@ nginx -s reload
 ```
 访问 www.gitlab.net 测试,ok!
 
-![](https://raw.githubusercontent.com/telzhou618/images/main/img03/20240423004633.png)
+![](https://raw.gitmirror.com/telzhou618/images/main/img03/20240423004633.png)
 
 
 

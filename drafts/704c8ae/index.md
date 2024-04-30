@@ -13,7 +13,7 @@ docker pull jenkins
 docker run -d -p  8088:8080 -p 50000:50000 -v /docker/jenkins_home:/var/jenkins_home jenkins
 ```
 报错了，挂在的目录 /docker/jenkins_home 无权限
-![](https://raw.githubusercontent.com/telzhou618/images/main/img03/20240424004723.png)
+![](https://raw.gitmirror.com/telzhou618/images/main/img03/20240424004723.png)
 
 解决方案：更改宿主机挂载目录的权限,使用 chmod 命令将 /docker/jenkins_home 目录的权限更改为允许容器内的用户写入
 ```shell
@@ -25,16 +25,16 @@ sudo chmod 777 /docker/jenkins_home
 ```shell
 docker ps 
 ```
-![](https://raw.githubusercontent.com/telzhou618/images/main/img03/20240424005631.png)
+![](https://raw.gitmirror.com/telzhou618/images/main/img03/20240424005631.png)
 
 打开浏览器，输入宿主主机ip:8080 看到下面结果说明jk安装成功。
-![](https://raw.githubusercontent.com/telzhou618/images/main/img03/20240424005839.png)
+![](https://raw.gitmirror.com/telzhou618/images/main/img03/20240424005839.png)
 
 登录jenkins, 根据界面提示密码在 /var/jenkins_home/secrets/initialAdminPassword,docker 启动时做了目录映射，对应宿主机的目录为 /docker/jenkins_home/
 ```shell
 cat /docker/jenkins_home/secrets/initialAdminPassword 
 ```
-![](https://raw.githubusercontent.com/telzhou618/images/main/img03/20240424010359.png)
+![](https://raw.gitmirror.com/telzhou618/images/main/img03/20240424010359.png)
 输入密码后登录
 
 

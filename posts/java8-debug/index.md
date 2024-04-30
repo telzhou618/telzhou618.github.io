@@ -2,9 +2,9 @@
 
 ## 调试按钮说明
 
-![img](https://raw.githubusercontent.com/telzhou618/images/main/img/1630499068947-f460c3fd-c3ef-4491-afe3-2b634262a20e.png)
+![img](https://raw.gitmirror.com/telzhou618/images/main/img/1630499068947-f460c3fd-c3ef-4491-afe3-2b634262a20e.png)
 
-![img](https://raw.githubusercontent.com/telzhou618/images/main/img/1630499070530-c0c628e6-7a56-444a-a191-0ba3dd980a24.png)
+![img](https://raw.gitmirror.com/telzhou618/images/main/img/1630499070530-c0c628e6-7a56-444a-a191-0ba3dd980a24.png)
 
 ## Stream 调试
 
@@ -24,11 +24,11 @@ System.out.println(list2);
 
 可以看到Debug视图中 Trace Current Steam Chain 图标会点亮。
 
-![img](https://raw.githubusercontent.com/telzhou618/images/main/img/1630499069843-06f36ac6-8d74-4221-ae28-635c665d27aa.png)
+![img](https://raw.gitmirror.com/telzhou618/images/main/img/1630499069843-06f36ac6-8d74-4221-ae28-635c665d27aa.png)
 
 点击该图标弹出 Stream Trace 视图。可以看到 filter、sorted、collect 每一个方法执行之后的结果。
 
-![img](https://raw.githubusercontent.com/telzhou618/images/main/img/1630499069429-3bd7b09b-29c4-4d9f-9afd-07fcbc008a91.png)
+![img](https://raw.gitmirror.com/telzhou618/images/main/img/1630499069429-3bd7b09b-29c4-4d9f-9afd-07fcbc008a91.png)
 
 ok，成功。
 
@@ -54,11 +54,11 @@ System.out.println(province);
 
 在 Optaionl 处加断点，debug 运行，可以看到 Evaluate Express 图标。
 
-![img](https://raw.githubusercontent.com/telzhou618/images/main/img/1630499069962-409b0f79-b58e-45ca-8bf6-c44b21b7a783.png)
+![img](https://raw.gitmirror.com/telzhou618/images/main/img/1630499069962-409b0f79-b58e-45ca-8bf6-c44b21b7a783.png)
 
 点击该图标弹出 Evaluate 视图，输入需要调试的代码，点击右下角 Evaluate 图标，可以看到执行结果。
 
-![img](https://raw.githubusercontent.com/telzhou618/images/main/img/1630499070454-e069bfaa-cb0a-4152-b548-0aefc97c62b5.png)
+![img](https://raw.gitmirror.com/telzhou618/images/main/img/1630499070454-e069bfaa-cb0a-4152-b548-0aefc97c62b5.png)
 
 注：Optaionl 不像 Stream 那样，有专门的调试器，他需要借助 Evaluate Express 视图完成调试。
 
@@ -82,7 +82,7 @@ for (Integer x : integerList) {
 
 在需要的地方加断点，在断点上右键弹出条件断点视图，输入条件表达式，点击 Done。
 
-![img](https://raw.githubusercontent.com/telzhou618/images/main/img/1630499070871-4c1848d9-49ed-4759-b3d4-912fee6a369c.png)
+![img](https://raw.gitmirror.com/telzhou618/images/main/img/1630499070871-4c1848d9-49ed-4759-b3d4-912fee6a369c.png)
 
 然后 debug 运行, 只有当 x 的值为 5 的时候才会停住，进入断点。
 
@@ -111,11 +111,11 @@ System.out.println(&#34;主线程&#34;);
 
 先在线程内设置断点，在断点上右键选择 Thread 类型。
 
-![img](https://raw.githubusercontent.com/telzhou618/images/main/img/1630499071776-c8742633-1c45-4780-a71f-6fa9427e412e.png)
+![img](https://raw.gitmirror.com/telzhou618/images/main/img/1630499071776-c8742633-1c45-4780-a71f-6fa9427e412e.png)
 
 然后 debug 运行项目，在 Debug 的 Frames 视图可以方便的选择要执行的线程，选择后可继续一步步调试代码。
 
-![img](https://raw.githubusercontent.com/telzhou618/images/main/img/1630499071948-a700a80a-9491-46eb-bb4b-c148aaa5108a.png)
+![img](https://raw.gitmirror.com/telzhou618/images/main/img/1630499071948-a700a80a-9491-46eb-bb4b-c148aaa5108a.png)
 
 
 
@@ -155,7 +155,7 @@ public static void main(String[] args) {
 
 但是对于修改了共享数据的方法，如果回退再执行一次，可能产生异常数据。
 
-![img](https://raw.githubusercontent.com/telzhou618/images/main/img/1630499072085-26b843ff-3385-4f6e-aa54-88e3dcef190b.png)
+![img](https://raw.gitmirror.com/telzhou618/images/main/img/1630499072085-26b843ff-3385-4f6e-aa54-88e3dcef190b.png)
 
 ## 强制返回
 
@@ -165,11 +165,11 @@ Debug 调试代码时，跟到一个无关痛痒的方法，有时候我们希�
 
 选择方法右键，选择Fore Return。
 
-![img](https://raw.githubusercontent.com/telzhou618/images/main/img/1630499072434-c1a5e750-1f2b-4193-ade0-e716953dda9c.png)
+![img](https://raw.gitmirror.com/telzhou618/images/main/img/1630499072434-c1a5e750-1f2b-4193-ade0-e716953dda9c.png)
 
 会弹出一个窗口，输入要返回的值即可。
 
-![img](https://raw.githubusercontent.com/telzhou618/images/main/img/1630499072285-8f20cdd7-a4cd-45ac-be2a-52035c06cea3.png)
+![img](https://raw.gitmirror.com/telzhou618/images/main/img/1630499072285-8f20cdd7-a4cd-45ac-be2a-52035c06cea3.png)
 
 ## 热修改变量的值
 
@@ -177,11 +177,11 @@ Debug 调试代码时，跟到一个无关痛痒的方法，有时候我们希�
 
 首先在 Variables 视图选要修改的变量，右键选择Set Value。
 
-![img](https://raw.githubusercontent.com/telzhou618/images/main/img/1630499073255-7299d943-bd91-4986-82fa-fef5d29db917.png)
+![img](https://raw.gitmirror.com/telzhou618/images/main/img/1630499073255-7299d943-bd91-4986-82fa-fef5d29db917.png)
 
 输入要修改的内容，回车可进行热修改。
 
-![img](https://raw.githubusercontent.com/telzhou618/images/main/img/1630499073224-eaf43192-cce7-48ed-a617-cfd7a7572f56.png)
+![img](https://raw.gitmirror.com/telzhou618/images/main/img/1630499073224-eaf43192-cce7-48ed-a617-cfd7a7572f56.png)
 
 ---
 
