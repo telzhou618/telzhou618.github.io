@@ -1,8 +1,6 @@
 # MySQL 优化及索引设计规范
 
 
-{{&lt; figure src=&#34;https://raw.gitmirror.com/telzhou618/images/main/img03/20240428214159.png&#34; title=&#34;&#34; &gt;}}
-
 索引是帮助MySQL高效获取数据的排好序的数据结构。
 
 ## 索引的优缺点
@@ -208,6 +206,7 @@ KK% 也不一定就会走索引下推。
 ## 一条SQL语句是如何执行的
 
 大体来说，MySQL 可以分为 Server 层和存储引擎层两部分。
+
 ![](https://raw.gitmirror.com/telzhou618/images/main/img03/m2.png)
 
 - Server层

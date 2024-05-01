@@ -194,10 +194,7 @@
     <li><a href="#索引优化建议及设计原则">索引优化建议及设计原则</a></li>
   </ul>
 </nav></div>
-      </div><div class="content" id="content"><figure><img src="https://raw.gitmirror.com/telzhou618/images/main/img03/20240428214159.png"/>
-</figure>
-
-<p>索引是帮助MySQL高效获取数据的排好序的数据结构。</p>
+      </div><div class="content" id="content"><p>索引是帮助MySQL高效获取数据的排好序的数据结构。</p>
 <h2 id="索引的优缺点" class="heading-element">
   <a href="#%e7%b4%a2%e5%bc%95%e7%9a%84%e4%bc%98%e7%bc%ba%e7%82%b9" class="heading-mark"></a>索引的优缺点</h2><p>优点</p>
 <ul>
@@ -462,8 +459,8 @@ datetime：8字节 如果字段允许为 NULL，需要1字节记录是否为 NUL
 <p>估计应该是Mysql认为范围查找过滤的结果集过大，likeKK%在绝大多数情况来看，过滤后的结果集比较小，所以这里Mysql选择给likeKK%用了索引下推优化，当然这也不是绝对的，有时like
 KK% 也不一定就会走索引下推。</p>
 <h2 id="一条sql语句是如何执行的" class="heading-element">
-  <a href="#%e4%b8%80%e6%9d%a1sql%e8%af%ad%e5%8f%a5%e6%98%af%e5%a6%82%e4%bd%95%e6%89%a7%e8%a1%8c%e7%9a%84" class="heading-mark"></a>一条SQL语句是如何执行的</h2><p>大体来说，MySQL 可以分为 Server 层和存储引擎层两部分。
-<img loading="lazy" src="https://raw.gitmirror.com/telzhou618/images/main/img03/m2.png" alt="https://raw.gitmirror.com/telzhou618/images/main/img03/m2.png" srcset="https://raw.gitmirror.com/telzhou618/images/main/img03/m2.png?size=small, https://raw.gitmirror.com/telzhou618/images/main/img03/m2.png?size=medium 1.5x, https://raw.gitmirror.com/telzhou618/images/main/img03/m2.png?size=large 2x" data-title="https://raw.gitmirror.com/telzhou618/images/main/img03/m2.png" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></p>
+  <a href="#%e4%b8%80%e6%9d%a1sql%e8%af%ad%e5%8f%a5%e6%98%af%e5%a6%82%e4%bd%95%e6%89%a7%e8%a1%8c%e7%9a%84" class="heading-mark"></a>一条SQL语句是如何执行的</h2><p>大体来说，MySQL 可以分为 Server 层和存储引擎层两部分。</p>
+<p><img loading="lazy" src="https://raw.gitmirror.com/telzhou618/images/main/img03/m2.png" alt="https://raw.gitmirror.com/telzhou618/images/main/img03/m2.png" srcset="https://raw.gitmirror.com/telzhou618/images/main/img03/m2.png?size=small, https://raw.gitmirror.com/telzhou618/images/main/img03/m2.png?size=medium 1.5x, https://raw.gitmirror.com/telzhou618/images/main/img03/m2.png?size=large 2x" data-title="https://raw.gitmirror.com/telzhou618/images/main/img03/m2.png" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></p>
 <ul>
 <li>Server层</li>
 </ul>
