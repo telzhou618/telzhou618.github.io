@@ -6,19 +6,19 @@
     <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>telzhou618@qq.com (telzhou618)</managingEditor>
       <webMaster>telzhou618@qq.com (telzhou618)</webMaster><lastBuildDate>Wed, 24 Apr 2024 10:45:43 &#43;0800</lastBuildDate><atom:link href="https://telzhou618.github.io/tags/draft/" rel="self" type="application/rss+xml" /><item>
   <title>微服务</title>
-  <link>https://telzhou618.github.io/drafts/57808a6/</link>
+  <link>https://telzhou618.github.io/posts/57808a6/</link>
   <pubDate>Wed, 24 Apr 2024 10:45:43 &#43;0800</pubDate>
   <author>telzhou618</author>
-  <guid>https://telzhou618.github.io/drafts/57808a6/</guid>
+  <guid>https://telzhou618.github.io/posts/57808a6/</guid>
   <description><![CDATA[微服务的优缺点 优点 易于开发和维护， 每个模块独立开发，不同的人负责不同的模块，互不干涉，减少冲突，提高效率。 易独立部署易扩展，每个服务费独立部]]></description>
 </item>
 <item>
-  <title>Jenkins</title>
-  <link>https://telzhou618.github.io/drafts/704c8ae/</link>
-  <pubDate>Wed, 24 Apr 2024 00:48:45 &#43;0800</pubDate>
+  <title>Jenkins 的三种安装方式</title>
+  <link>https://telzhou618.github.io/posts/704c8ae/</link>
+  <pubDate>Sun, 24 Mar 2024 00:48:45 &#43;0800</pubDate>
   <author>telzhou618</author>
-  <guid>https://telzhou618.github.io/drafts/704c8ae/</guid>
-  <description><![CDATA[]]></description>
+  <guid>https://telzhou618.github.io/posts/704c8ae/</guid>
+  <description><![CDATA[docker 安装JK下载镜像 1 docker pull jenkins 启动 1 docker run -d -p 8088:8080 -p 50000:50000 -v /docker/jenkins_home:/var/jenkins_home jenkins 报错了，挂在的目录 /docker/jenkins_home 无权限 解决方案：更改宿主机挂载目录的权限,使用 chmod 命令将 /docker/jenkins_home 目录的权限更]]></description>
 </item>
 </channel>
 </rss>
