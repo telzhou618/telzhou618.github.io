@@ -1,4 +1,4 @@
-# 【k8s学习笔记】 Kunesphere CI/CD流谁线自动化部署
+# 【k8s学习笔记】 Kubesphere CI/CD流谁线自动化部署
 
 
 &lt;!--more--&gt;
