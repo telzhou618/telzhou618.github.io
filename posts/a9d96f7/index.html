@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+  <head>
+    
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+    <meta name="robots" content="noodp" />
+    <title>【k8s学习笔记】 Kunesphere CI/CD流谁线自动化部署 - 扁舟的博客</title><meta name="author" content="telzhou618">
+<meta name="author-link" content="https://github.com/telzhou618">
+<meta name="description" content="" /><meta name="keywords" content='k8s' /><meta itemprop="name" content="【k8s学习笔记】 Kunesphere CI/CD流谁线自动化部署">
+<meta itemprop="description" content=""><meta itemprop="datePublished" content="2024-05-06T18:26:14+08:00" />
+<meta itemprop="dateModified" content="2024-05-06T18:26:14+08:00" />
+<meta itemprop="wordCount" content="818">
+<meta itemprop="keywords" content="k8s," /><meta property="og:title" content="【k8s学习笔记】 Kunesphere CI/CD流谁线自动化部署" />
+<meta property="og:description" content="" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://telzhou618.github.io/posts/a9d96f7/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2024-05-06T18:26:14+08:00" />
+<meta property="article:modified_time" content="2024-05-06T18:26:14+08:00" />
+
+<meta name="twitter:card" content="summary"/><meta name="twitter:title" content="【k8s学习笔记】 Kunesphere CI/CD流谁线自动化部署"/>
+<meta name="twitter:description" content=""/>
+<meta name="application-name" content="FixIt">
+<meta name="apple-mobile-web-app-title" content="FixIt"><meta name="theme-color" data-light="#f8f8f8" data-dark="#252627" content="#f8f8f8"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" href="https://telzhou618.github.io/posts/a9d96f7/" /><link rel="prev" href="https://telzhou618.github.io/posts/fbb3944/" /><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "BlogPosting",
+    "headline": "【k8s学习笔记】 Kunesphere CI/CD流谁线自动化部署",
+    "inLanguage": "zh-CN",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https:\/\/telzhou618.github.io\/posts\/a9d96f7\/"
+    },"genre": "posts","keywords": "k8s","wordcount":  818 ,
+    "url": "https:\/\/telzhou618.github.io\/posts\/a9d96f7\/","datePublished": "2024-05-06T18:26:14+08:00","dateModified": "2024-05-06T18:26:14+08:00","publisher": {
+      "@type": "Organization",
+      "name": ""},"author": {
+        "@type": "Person",
+        "name": "telzhou618"
+      },"description": ""
+  }
+  </script></head>
+  <body data-header-desktop="sticky" data-header-mobile="auto"><script>(window.localStorage?.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('data-theme', 'dark');</script><div class="wrapper" data-page-style="normal"><header class="desktop animate__faster" id="header-desktop">
+  <div class="header-wrapper" data-github-corner="right">
+    <div class="header-title">
+      <a href="/" title="扁舟的博客"><span class="header-title-text">扁舟的博客</span></a><span class="header-subtitle"></span></div>
+    <nav>
+      <ul class="menu"><li class="menu-item active">
+              <a
+                class="menu-link"
+                href="/posts/"
+                title="Posts"
+                
+              >文章</a></li><li class="menu-item">
+              <a
+                class="menu-link"
+                href="/"
+                
+                
+              >归档</a></li><li class="menu-item">
+              <a
+                class="menu-link"
+                href="/categories/"
+                title="Categories"
+                
+              >分类</a></li><li class="menu-item">
+              <a
+                class="menu-link"
+                href="/tags/"
+                title="Tags"
+                
+              >标签</a></li><li class="menu-item">
+              <a
+                class="menu-link"
+                href="/about/"
+                title="About me"
+                
+              >关于</a></li><li class="menu-item delimiter"></li><li class="menu-item search" id="search-desktop">
+            <input type="text" placeholder="搜索文章标题或内容……" id="search-input-desktop">
+            <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+              <i class="fa-solid fa-search fa-fw" aria-hidden="true"></i>
+            </a>
+            <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+              <i class="fa-solid fa-times-circle fa-fw" aria-hidden="true"></i>
+            </a>
+            <span class="search-button search-loading" id="search-loading-desktop">
+              <i class="fa-solid fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+            </span>
+          </li><li class="menu-item theme-switch" title="切换主题">
+          <i class="fa-solid fa-adjust fa-fw" aria-hidden="true"></i>
+        </li></ul>
+    </nav>
+  </div>
+</header><header class="mobile animate__faster" id="header-mobile">
+  <div class="header-container">
+    <div class="header-wrapper">
+      <div class="header-title">
+        <a href="/" title="扁舟的博客"><span class="header-title-text">扁舟的博客</span></a><span class="header-subtitle"></span></div>
+      <div class="menu-toggle" id="menu-toggle-mobile">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+    <nav>
+      <ul class="menu" id="menu-mobile"><li class="search-wrapper">
+            <div class="search mobile" id="search-mobile">
+              <input type="text" placeholder="搜索文章标题或内容……" id="search-input-mobile">
+              <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                <i class="fa-solid fa-search fa-fw" aria-hidden="true"></i>
+              </a>
+              <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                <i class="fa-solid fa-times-circle fa-fw" aria-hidden="true"></i>
+              </a>
+              <span class="search-button search-loading" id="search-loading-mobile">
+                <i class="fa-solid fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+              </span>
+            </div>
+            <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+              取消
+            </a>
+          </li><li
+              class="menu-item active"
+            ><a
+                  class="menu-link"
+                  href="/posts/"
+                  title="Posts"
+                  
+                >文章</a></li><li
+              class="menu-item"
+            ><a
+                  class="menu-link"
+                  href="/"
+                  
+                  
+                >归档</a></li><li
+              class="menu-item"
+            ><a
+                  class="menu-link"
+                  href="/categories/"
+                  title="Categories"
+                  
+                >分类</a></li><li
+              class="menu-item"
+            ><a
+                  class="menu-link"
+                  href="/tags/"
+                  title="Tags"
+                  
+                >标签</a></li><li
+              class="menu-item"
+            ><a
+                  class="menu-link"
+                  href="/about/"
+                  title="About me"
+                  
+                >关于</a></li><li class="menu-item menu-system">
+          <span class="menu-system-item theme-switch" title="切换主题"><i class="fa-solid fa-adjust fa-fw" aria-hidden="true"></i></span></li>
+      </ul>
+    </nav>
+  </div>
+</header><div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+  </div>
+  <div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+  </div><main class="container"><aside class="aside-collection animate__animated animate__fadeIn animate__faster" aria-label="合集"></aside>
+
+  <article class="page single">
+    <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span>【k8s学习笔记】 Kunesphere CI/CD流谁线自动化部署</span>
+      </h1></div><div class="post-meta">
+      <div class="post-meta-line"><span class="post-author"><a href="https://github.com/telzhou618" title="作者"target="_blank" rel="external nofollow noopener noreferrer author" class="author"><img loading="lazy" src="https://raw.gitmirror.com/telzhou618/images/main/img03/20240423112108.png" alt="telzhou618" data-title="telzhou618" class="avatar" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/>&nbsp;telzhou618</a></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/devops/" class="post-category" title="分类 - devops"><i class="fa-regular fa-folder fa-fw" aria-hidden="true"></i> devops</a></span></div><div class="post-meta-line"><span title="发布于 2024-05-06 18:26:14"><i class="fa-solid fa-calendar-days fa-fw me-1" aria-hidden="true"></i><time datetime="2024-05-06">2024-05-06</time></span>&nbsp;<span title="818 字"><i class="fa-solid fa-pencil-alt fa-fw me-1" aria-hidden="true"></i>约 900 字</span>&nbsp;<span><i class="fa-regular fa-clock fa-fw me-1" aria-hidden="true"></i>预计阅读 2 分钟</span>&nbsp;</div>
+    </div><div class="details toc" id="toc-static" data-kept="false">
+        <div class="details-summary toc-title">
+          <span>目录</span>
+          <span><i class="details-icon fa-solid fa-angle-right" aria-hidden="true"></i></span>
+        </div>
+        <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#准备一个-springboot-项目">准备一个 springboot 项目</a></li>
+    <li><a href="#开启devops功能">开启devops功能</a></li>
+    <li><a href="#流水线部署">流水线部署</a></li>
+    <li><a href="#所需配置文件">所需配置文件</a></li>
+  </ul>
+</nav></div>
+      </div><div class="content" id="content"><h2 id="准备一个-springboot-项目" class="heading-element">
+  <a href="#%e5%87%86%e5%a4%87%e4%b8%80%e4%b8%aa-springboot-%e9%a1%b9%e7%9b%ae" class="heading-mark"></a>准备一个 springboot 项目</h2><p>项目如下，是一个简单的springboot项目</p>
+<p><img loading="lazy" src="https://raw.gitmirror.com/telzhou618/images/main/img03/20240506222151.png" alt="https://raw.gitmirror.com/telzhou618/images/main/img03/20240506222151.png" srcset="https://raw.gitmirror.com/telzhou618/images/main/img03/20240506222151.png?size=small, https://raw.gitmirror.com/telzhou618/images/main/img03/20240506222151.png?size=medium 1.5x, https://raw.gitmirror.com/telzhou618/images/main/img03/20240506222151.png?size=large 2x" data-title="https://raw.gitmirror.com/telzhou618/images/main/img03/20240506222151.png" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></p>
+<p>定义一个简单接口, 返回 helloworld</p>
+<div class="highlight" id="id-1"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="kn">package</span><span class="w"> </span><span class="nn">com.example.demo</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.boot.*</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.boot.autoconfigure.*</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.web.bind.annotation.*</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nd">@SpringBootApplication</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nd">@RestController</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">DemoApplication</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nd">@GetMapping</span><span class="p">(</span><span class="s">&#34;/&#34;</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="kd">public</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="nf">home</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">		</span><span class="k">return</span><span class="w"> </span><span class="s">&#34;hello world!!!&#34;</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">String</span><span class="o">[]</span><span class="w"> </span><span class="n">args</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">		</span><span class="n">SpringApplication</span><span class="p">.</span><span class="na">run</span><span class="p">(</span><span class="n">DemoApplication</span><span class="p">.</span><span class="na">class</span><span class="p">,</span><span class="w"> </span><span class="n">args</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>单元测试类 DemoApplicationTests.java</p>
+<div class="highlight" id="id-2"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="kn">package</span><span class="w"> </span><span class="nn">com.example.demo</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="kn">import</span><span class="w"> </span><span class="nn">org.junit.Test</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="kn">import</span><span class="w"> </span><span class="nn">org.junit.runner.RunWith</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.boot.test.context.SpringBootTest</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.boot.test.context.SpringBootTest.WebEnvironment</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.boot.test.web.client.TestRestTemplate</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.beans.factory.annotation.Autowired</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.test.context.junit4.SpringRunner</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="kn">import static</span><span class="w"> </span><span class="nn">org.assertj.core.api.Assertions.assertThat</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nd">@RunWith</span><span class="p">(</span><span class="n">SpringRunner</span><span class="p">.</span><span class="na">class</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nd">@SpringBootTest</span><span class="p">(</span><span class="n">webEnvironment</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">WebEnvironment</span><span class="p">.</span><span class="na">RANDOM_PORT</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">DemoApplicationTests</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nd">@Test</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">contextLoads</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nd">@Autowired</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="kd">private</span><span class="w"> </span><span class="n">TestRestTemplate</span><span class="w"> </span><span class="n">restTemplate</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nd">@Test</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">homeResponse</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">		</span><span class="n">String</span><span class="w"> </span><span class="n">body</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="na">restTemplate</span><span class="p">.</span><span class="na">getForObject</span><span class="p">(</span><span class="s">&#34;/&#34;</span><span class="p">,</span><span class="w"> </span><span class="n">String</span><span class="p">.</span><span class="na">class</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">		</span><span class="n">assertThat</span><span class="p">(</span><span class="n">body</span><span class="p">).</span><span class="na">isNotBlank</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="开启devops功能" class="heading-element">
+  <a href="#%e5%bc%80%e5%90%afdevops%e5%8a%9f%e8%83%bd" class="heading-mark"></a>开启devops功能</h2><p>登录 KubeSphere ，找到定制资源，搜索config</p>
+<p><img loading="lazy" src="https://raw.gitmirror.com/telzhou618/images/main/img03/20240506222844.png" alt="https://raw.gitmirror.com/telzhou618/images/main/img03/20240506222844.png" srcset="https://raw.gitmirror.com/telzhou618/images/main/img03/20240506222844.png?size=small, https://raw.gitmirror.com/telzhou618/images/main/img03/20240506222844.png?size=medium 1.5x, https://raw.gitmirror.com/telzhou618/images/main/img03/20240506222844.png?size=large 2x" data-title="https://raw.gitmirror.com/telzhou618/images/main/img03/20240506222844.png" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></p>
+<p>点击 ClusterConfiguration，然后点击三个点编辑YAML</p>
+<p><img loading="lazy" src="https://raw.gitmirror.com/telzhou618/images/main/img03/20240506223036.png" alt="https://raw.gitmirror.com/telzhou618/images/main/img03/20240506223036.png" srcset="https://raw.gitmirror.com/telzhou618/images/main/img03/20240506223036.png?size=small, https://raw.gitmirror.com/telzhou618/images/main/img03/20240506223036.png?size=medium 1.5x, https://raw.gitmirror.com/telzhou618/images/main/img03/20240506223036.png?size=large 2x" data-title="https://raw.gitmirror.com/telzhou618/images/main/img03/20240506223036.png" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></p>
+<p>编辑配置，将devops 的 enabled 改为true</p>
+<p><img loading="lazy" src="https://raw.gitmirror.com/telzhou618/images/main/img03/20240506223307.png" alt="https://raw.gitmirror.com/telzhou618/images/main/img03/20240506223307.png" srcset="https://raw.gitmirror.com/telzhou618/images/main/img03/20240506223307.png?size=small, https://raw.gitmirror.com/telzhou618/images/main/img03/20240506223307.png?size=medium 1.5x, https://raw.gitmirror.com/telzhou618/images/main/img03/20240506223307.png?size=large 2x" data-title="https://raw.gitmirror.com/telzhou618/images/main/img03/20240506223307.png" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></p>
+<h2 id="流水线部署" class="heading-element">
+  <a href="#%e6%b5%81%e6%b0%b4%e7%ba%bf%e9%83%a8%e7%bd%b2" class="heading-mark"></a>流水线部署</h2><p>创建流水线项目</p>
+<p><img loading="lazy" src="https://raw.gitmirror.com/telzhou618/images/main/img03/20240506230107.png" alt="https://raw.gitmirror.com/telzhou618/images/main/img03/20240506230107.png" srcset="https://raw.gitmirror.com/telzhou618/images/main/img03/20240506230107.png?size=small, https://raw.gitmirror.com/telzhou618/images/main/img03/20240506230107.png?size=medium 1.5x, https://raw.gitmirror.com/telzhou618/images/main/img03/20240506230107.png?size=large 2x" data-title="https://raw.gitmirror.com/telzhou618/images/main/img03/20240506230107.png" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></p>
+<p>进入项目创建流水线</p>
+<p><img loading="lazy" src="https://raw.gitmirror.com/telzhou618/images/main/img03/20240506230210.png" alt="https://raw.gitmirror.com/telzhou618/images/main/img03/20240506230210.png" srcset="https://raw.gitmirror.com/telzhou618/images/main/img03/20240506230210.png?size=small, https://raw.gitmirror.com/telzhou618/images/main/img03/20240506230210.png?size=medium 1.5x, https://raw.gitmirror.com/telzhou618/images/main/img03/20240506230210.png?size=large 2x" data-title="https://raw.gitmirror.com/telzhou618/images/main/img03/20240506230210.png" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></p>
+<p>编辑流水线</p>
+<p><img loading="lazy" src="https://raw.gitmirror.com/telzhou618/images/main/img03/20240506230257.png" alt="https://raw.gitmirror.com/telzhou618/images/main/img03/20240506230257.png" srcset="https://raw.gitmirror.com/telzhou618/images/main/img03/20240506230257.png?size=small, https://raw.gitmirror.com/telzhou618/images/main/img03/20240506230257.png?size=medium 1.5x, https://raw.gitmirror.com/telzhou618/images/main/img03/20240506230257.png?size=large 2x" data-title="https://raw.gitmirror.com/telzhou618/images/main/img03/20240506230257.png" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></p>
+<p>全局代理选择 maven</p>
+<p><img loading="lazy" src="https://raw.gitmirror.com/telzhou618/images/main/img03/20240506230346.png" alt="https://raw.gitmirror.com/telzhou618/images/main/img03/20240506230346.png" srcset="https://raw.gitmirror.com/telzhou618/images/main/img03/20240506230346.png?size=small, https://raw.gitmirror.com/telzhou618/images/main/img03/20240506230346.png?size=medium 1.5x, https://raw.gitmirror.com/telzhou618/images/main/img03/20240506230346.png?size=large 2x" data-title="https://raw.gitmirror.com/telzhou618/images/main/img03/20240506230346.png" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></p>
+<p>第一步拉取代码</p>
+<p><img loading="lazy" src="https://raw.gitmirror.com/telzhou618/images/main/img03/20240506230638.png" alt="https://raw.gitmirror.com/telzhou618/images/main/img03/20240506230638.png" srcset="https://raw.gitmirror.com/telzhou618/images/main/img03/20240506230638.png?size=small, https://raw.gitmirror.com/telzhou618/images/main/img03/20240506230638.png?size=medium 1.5x, https://raw.gitmirror.com/telzhou618/images/main/img03/20240506230638.png?size=large 2x" data-title="https://raw.gitmirror.com/telzhou618/images/main/img03/20240506230638.png" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></p>
+<p>第二部单元测试</p>
+<p><img loading="lazy" src="https://raw.gitmirror.com/telzhou618/images/main/img03/20240506230512.png" alt="https://raw.gitmirror.com/telzhou618/images/main/img03/20240506230512.png" srcset="https://raw.gitmirror.com/telzhou618/images/main/img03/20240506230512.png?size=small, https://raw.gitmirror.com/telzhou618/images/main/img03/20240506230512.png?size=medium 1.5x, https://raw.gitmirror.com/telzhou618/images/main/img03/20240506230512.png?size=large 2x" data-title="https://raw.gitmirror.com/telzhou618/images/main/img03/20240506230512.png" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></p>
+<p>第三部打包并构建镜像</p>
+<p><img loading="lazy" src="https://raw.gitmirror.com/telzhou618/images/main/img03/20240506230715.png" alt="https://raw.gitmirror.com/telzhou618/images/main/img03/20240506230715.png" srcset="https://raw.gitmirror.com/telzhou618/images/main/img03/20240506230715.png?size=small, https://raw.gitmirror.com/telzhou618/images/main/img03/20240506230715.png?size=medium 1.5x, https://raw.gitmirror.com/telzhou618/images/main/img03/20240506230715.png?size=large 2x" data-title="https://raw.gitmirror.com/telzhou618/images/main/img03/20240506230715.png" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></p>
+<p>部署到指定k8s集群</p>
+<p><img loading="lazy" src="https://raw.gitmirror.com/telzhou618/images/main/img03/20240506230750.png" alt="https://raw.gitmirror.com/telzhou618/images/main/img03/20240506230750.png" srcset="https://raw.gitmirror.com/telzhou618/images/main/img03/20240506230750.png?size=small, https://raw.gitmirror.com/telzhou618/images/main/img03/20240506230750.png?size=medium 1.5x, https://raw.gitmirror.com/telzhou618/images/main/img03/20240506230750.png?size=large 2x" data-title="https://raw.gitmirror.com/telzhou618/images/main/img03/20240506230750.png" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></p>
+<p>搞定！</p>
+<p>运行流水线</p>
+<p><img loading="lazy" src="https://raw.gitmirror.com/telzhou618/images/main/img03/20240506231244.png" alt="https://raw.gitmirror.com/telzhou618/images/main/img03/20240506231244.png" srcset="https://raw.gitmirror.com/telzhou618/images/main/img03/20240506231244.png?size=small, https://raw.gitmirror.com/telzhou618/images/main/img03/20240506231244.png?size=medium 1.5x, https://raw.gitmirror.com/telzhou618/images/main/img03/20240506231244.png?size=large 2x" data-title="https://raw.gitmirror.com/telzhou618/images/main/img03/20240506231244.png" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></p>
+<p><img loading="lazy" src="https://raw.gitmirror.com/telzhou618/images/main/img03/20240506231313.png" alt="https://raw.gitmirror.com/telzhou618/images/main/img03/20240506231313.png" srcset="https://raw.gitmirror.com/telzhou618/images/main/img03/20240506231313.png?size=small, https://raw.gitmirror.com/telzhou618/images/main/img03/20240506231313.png?size=medium 1.5x, https://raw.gitmirror.com/telzhou618/images/main/img03/20240506231313.png?size=large 2x" data-title="https://raw.gitmirror.com/telzhou618/images/main/img03/20240506231313.png" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></p>
+<p>运行日志</p>
+<p><img loading="lazy" src="https://raw.gitmirror.com/telzhou618/images/main/img03/20240506231341.png" alt="https://raw.gitmirror.com/telzhou618/images/main/img03/20240506231341.png" srcset="https://raw.gitmirror.com/telzhou618/images/main/img03/20240506231341.png?size=small, https://raw.gitmirror.com/telzhou618/images/main/img03/20240506231341.png?size=medium 1.5x, https://raw.gitmirror.com/telzhou618/images/main/img03/20240506231341.png?size=large 2x" data-title="https://raw.gitmirror.com/telzhou618/images/main/img03/20240506231341.png" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></p>
+<h2 id="所需配置文件" class="heading-element">
+  <a href="#%e6%89%80%e9%9c%80%e9%85%8d%e7%bd%ae%e6%96%87%e4%bb%b6" class="heading-mark"></a>所需配置文件</h2><p>完整的 jenkinsfile 文件内容</p>
+<div class="highlight" id="id-3"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span><span class="lnt">57
+</span><span class="lnt">58
+</span><span class="lnt">59
+</span><span class="lnt">60
+</span><span class="lnt">61
+</span><span class="lnt">62
+</span><span class="lnt">63
+</span><span class="lnt">64
+</span><span class="lnt">65
+</span><span class="lnt">66
+</span><span class="lnt">67
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"><span class="n">pipeline</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="n">agent</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">node</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="n">label</span> <span class="s1">&#39;maven&#39;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="n">stages</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">stage</span><span class="p">(</span><span class="s1">&#39;拉取代码&#39;</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="n">agent</span> <span class="n">none</span>
+</span></span><span class="line"><span class="cl">      <span class="n">steps</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">git</span><span class="p">(</span><span class="n">url</span><span class="p">:</span> <span class="s1">&#39;http://192.168.1.4/root/java-web-demo.git&#39;</span><span class="p">,</span> <span class="n">credentialsId</span><span class="p">:</span> <span class="s1">&#39;gitlab&#39;</span><span class="p">,</span> <span class="n">branch</span><span class="p">:</span> <span class="s1">&#39;master&#39;</span><span class="p">,</span> <span class="n">changelog</span><span class="p">:</span> <span class="bp">true</span><span class="p">,</span> <span class="n">poll</span><span class="p">:</span> <span class="bp">false</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">      <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">stage</span><span class="p">(</span><span class="s1">&#39;单元测试&#39;</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="n">agent</span> <span class="n">none</span>
+</span></span><span class="line"><span class="cl">      <span class="n">steps</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">container</span><span class="p">(</span><span class="s1">&#39;maven&#39;</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">          <span class="n">sh</span> <span class="s1">&#39;mvn clean test&#39;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">      <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">stage</span><span class="p">(</span><span class="s1">&#39;构建镜像&#39;</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="n">agent</span> <span class="n">none</span>
+</span></span><span class="line"><span class="cl">      <span class="n">steps</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">container</span><span class="p">(</span><span class="s1">&#39;maven&#39;</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">          <span class="n">sh</span> <span class="s1">&#39;mvn -Dmaven.test.skip=true clean package&#39;</span>
+</span></span><span class="line"><span class="cl">          <span class="n">sh</span> <span class="s1">&#39;docker build -f deploy/Dockerfile -t $REGISTRY/$DOCKERHUB_NAMESPACE/$APP_NAME:SNAPSHOT-$BUILD_NUMBER .&#39;</span>
+</span></span><span class="line"><span class="cl">          <span class="n">withCredentials</span><span class="p">([</span><span class="n">usernamePassword</span><span class="p">(</span><span class="n">credentialsId</span><span class="p">:</span> <span class="s1">&#39;dockerhub-id&#39;</span><span class="p">,</span> <span class="n">passwordVariable</span><span class="p">:</span> <span class="s1">&#39;DOCKER_PASSWORD&#39;</span><span class="p">,</span> <span class="n">usernameVariable</span><span class="p">:</span> <span class="s1">&#39;DOCKER_USERNAME&#39;</span><span class="p">)])</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">sh</span> <span class="s1">&#39;echo &#34;$DOCKER_PASSWORD&#34; | docker login $REGISTRY -u &#34;$DOCKER_USERNAME&#34; --password-stdin&#39;</span>
+</span></span><span class="line"><span class="cl">            <span class="n">sh</span> <span class="s1">&#39;docker push $REGISTRY/$DOCKERHUB_NAMESPACE/$APP_NAME:SNAPSHOT-$BUILD_NUMBER&#39;</span>
+</span></span><span class="line"><span class="cl">          <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">      <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">stage</span><span class="p">(</span><span class="s1">&#39;发布到test环境&#39;</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="n">agent</span> <span class="n">none</span>
+</span></span><span class="line"><span class="cl">      <span class="n">steps</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">container</span><span class="p">(</span><span class="s1">&#39;maven&#39;</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">          <span class="n">withCredentials</span><span class="p">([</span><span class="n">kubeconfigContent</span><span class="p">(</span><span class="n">credentialsId</span><span class="p">:</span> <span class="s1">&#39;demo-kubeconfig&#39;</span><span class="p">,</span> <span class="n">variable</span><span class="p">:</span> <span class="s1">&#39;KUBECONFIG_CONTENT&#39;</span><span class="p">)])</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">sh</span> <span class="s1">&#39;&#39;&#39;mkdir ~/.kube
+</span></span></span><span class="line"><span class="cl"><span class="s1">echo &#34;$KUBECONFIG_CONTENT&#34; &gt; ~/.kube/config
+</span></span></span><span class="line"><span class="cl"><span class="s1">envsubst &lt; deploy/k8s-deploy-test.yaml | kubectl apply -f -&#39;&#39;&#39;</span>
+</span></span><span class="line"><span class="cl">          <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">      <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="n">environment</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">DOCKER_CREDENTIAL_ID</span> <span class="o">=</span> <span class="s1">&#39;dockerhub-id&#39;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">GITHUB_CREDENTIAL_ID</span> <span class="o">=</span> <span class="s1">&#39;github-id&#39;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">KUBECONFIG_CREDENTIAL_ID</span> <span class="o">=</span> <span class="s1">&#39;demo-kubeconfig&#39;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">REGISTRY</span> <span class="o">=</span> <span class="s1">&#39;docker.io&#39;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">DOCKERHUB_NAMESPACE</span> <span class="o">=</span> <span class="s1">&#39;telzhou618&#39;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">GITHUB_ACCOUNT</span> <span class="o">=</span> <span class="s1">&#39;kubesphere&#39;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">APP_NAME</span> <span class="o">=</span> <span class="s1">&#39;java-web-demo-test&#39;</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>Dockerfile 文件</p>
+<div class="highlight" id="id-4"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-dockerfile" data-lang="dockerfile"><span class="line"><span class="cl"><span class="k">FROM</span><span class="s"> java:8u92-jre-alpine</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="k">MAINTAINER</span><span class="s"> &#34;telzhou618&#34;</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="k">ADD</span> target/java-web-demo-0.0.1-SNAPSHOT.jar app.jar<span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="k">EXPOSE</span><span class="s"> 8080</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="k">ENTRYPOINT</span> <span class="p">[</span><span class="s2">&#34;java&#34;</span><span class="p">,</span> <span class="s2">&#34;-jar&#34;</span><span class="p">,</span> <span class="s2">&#34;/app.jar&#34;</span><span class="p">]</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>k8s-deploy.yaml 文件, 一个 Deployment, 一个service</p>
+<div class="highlight" id="id-5"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">apps/v1</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">Deployment</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">labels</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">app</span><span class="p">:</span><span class="w"> </span><span class="l">java-web-demo-test</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">java-web-demo-test</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l">bbs</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">spec</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">replicas</span><span class="p">:</span><span class="w"> </span><span class="m">2</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">selector</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">matchLabels</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">app</span><span class="p">:</span><span class="w"> </span><span class="l">java-web-demo-test</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">template</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">metadata</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">labels</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">app</span><span class="p">:</span><span class="w"> </span><span class="l">java-web-demo-test</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">spec</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">containers</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">java-web-demo-test</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l">$REGISTRY/$DOCKERHUB_NAMESPACE/$APP_NAME:SNAPSHOT-$BUILD_NUMBER</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="nt">ports</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span>- <span class="nt">containerPort</span><span class="p">:</span><span class="w"> </span><span class="m">8080</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">              </span><span class="nt">protocol</span><span class="p">:</span><span class="w"> </span><span class="l">TCP</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="nt">resources</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="nt">limits</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">              </span><span class="nt">cpu</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;1&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="nt">requests</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">              </span><span class="nt">cpu</span><span class="p">:</span><span class="w"> </span><span class="l">500m</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">restartPolicy</span><span class="p">:</span><span class="w"> </span><span class="l">Always</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nn">---</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">v1</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">Service</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">labels</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">app</span><span class="p">:</span><span class="w"> </span><span class="l">java-web-demo-test</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">java-web-demo-test</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l">bbs</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">spec</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">ports</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">http</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="m">8080</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">protocol</span><span class="p">:</span><span class="w"> </span><span class="l">TCP</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">targetPort</span><span class="p">:</span><span class="w"> </span><span class="m">8080</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">nodePort</span><span class="p">:</span><span class="w"> </span><span class="m">30963</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">selector</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">app</span><span class="p">:</span><span class="w"> </span><span class="l">java-web-demo-test</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l">NodePort</span></span></span></code></pre></td></tr></table>
+</div>
+</div></div><div class="post-footer" id="post-footer">
+  <div class="post-info">
+    <div class="post-info-line">
+      <div class="post-info-mod">
+        <span title="更新于 2024-05-06 18:26:14">更新于 2024-05-06&nbsp;</span>
+      </div><div class="post-info-license">
+            <span><a rel="license external nofollow noopener noreferrer" href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a></span>
+          </div></div><div class="post-info-line">
+        <div class="post-info-md"><span><a href="/posts/a9d96f7/index.md" title="阅读原始文档" class="link-to-markdown">阅读原始文档</a></span><span><a href="https://github.com/telzhou618/hugo-blog/blob/main/content/posts%5ck8s-kunesphere-cicd.md?plain=1" title="查看源码"target="_blank" rel="external nofollow noopener noreferrer" class="link-to-source">查看源码</a></span><span><a href="https://github.com/telzhou618/hugo-blog/edit/main/content/posts%5ck8s-kunesphere-cicd.md" title="编辑此页"target="_blank" rel="external nofollow noopener noreferrer" class="link-to-edit">编辑此页</a></span><span><a href="https://github.com/telzhou618/hugo-blog/issues/new?title=[BUG]%20%E3%80%90k8s%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E3%80%91&#43;Kunesphere&#43;CI%2FCD%E6%B5%81%E8%B0%81%E7%BA%BF%E8%87%AA%E5%8A%A8%E5%8C%96%E9%83%A8%E7%BD%B2&amp;body=%7cField%7cValue%7c%0A%7c-%7c-%7c%0A%7cTitle%7c%E3%80%90k8s%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E3%80%91&#43;Kunesphere&#43;CI%2FCD%E6%B5%81%E8%B0%81%E7%BA%BF%E8%87%AA%E5%8A%A8%E5%8C%96%E9%83%A8%E7%BD%B2%7c%0A%7cURL%7chttps://telzhou618.github.io/posts/a9d96f7/%7c%0A%7cFilename%7chttps://github.com/telzhou618/hugo-blog/blob/main/content/posts%5ck8s-kunesphere-cicd.md?plain=1%7c" title="报告问题"target="_blank" rel="external nofollow noopener noreferrer" class="link-to-report">报告问题</a></span></div>
+        <div class="post-info-share">
+          <span><a href="javascript:void(0);" title="分享到 Twitter" data-sharer="twitter" data-url="https://telzhou618.github.io/posts/a9d96f7/" data-title="【k8s学习笔记】 Kunesphere CI/CD流谁线自动化部署" data-hashtags="k8s"><i class="fa-brands fa-twitter fa-fw" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="https://telzhou618.github.io/posts/a9d96f7/" data-hashtag="k8s"><i class="fa-brands fa-facebook-square fa-fw" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="https://telzhou618.github.io/posts/a9d96f7/" data-title="【k8s学习笔记】 Kunesphere CI/CD流谁线自动化部署"><i class="fa-brands fa-weibo fa-fw" aria-hidden="true"></i></a>
+  </span>
+        </div>
+      </div></div>
+
+  <div class="post-info-more">
+    <section class="post-tags"><i class="fa-solid fa-tags fa-fw me-1" aria-hidden="true"></i><a href="/tags/k8s/" class="post-tag" title="标签 - k8s">k8s</a></section>
+    <section>
+      <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+    </section>
+  </div>
+
+  <div class="post-nav"><a href="/posts/fbb3944/" class="post-nav-item" rel="prev" title="【k8s学习笔记】 Kubekey安装k8s和kubesphere"><i class="fa-solid fa-angle-left fa-fw" aria-hidden="true"></i>【k8s学习笔记】 Kubekey安装k8s和kubesphere</a></div>
+</div>
+</article>
+
+  <aside class="toc" id="toc-auto" aria-label="目录"><h2 class="toc-title">目录&nbsp;<i class="toc-icon fa-solid fa-angle-down fa-fw" aria-hidden="true"></i></h2>
+      <div class="toc-content" id="toc-content-auto"></div></aside></main><footer class="footer">
+    <div class="footer-container"><div class="footer-line powered">由 <a href="https://gohugo.io/" target="_blank" rel="external nofollow noopener noreferrer" title="Hugo 0.121.1"><img class="hugo-icon" src="/images/hugo.min.svg" alt="Hugo logo" /> Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/hugo-fixit/FixIt" target="_blank" rel="external" title="FixIt v0.3.2"><img class="fixit-icon" src="/images/fixit.min.svg" alt="FixIt logo" /> FixIt</a>
+        </div><div class="footer-line copyright" itemscope itemtype="http://schema.org/CreativeWork"><i class="fa-regular fa-copyright fa-fw" aria-hidden="true"></i>
+            <span itemprop="copyrightYear">2024</span><span class="author" itemprop="copyrightHolder">
+              <a href="https://github.com/telzhou618"target="_blank" rel="external nofollow noopener noreferrer">telzhou618</a></span></div></div>
+  </footer></div><div class="widgets"><div class="fixed-buttons animate__faster d-none"><div class="fixed-button back-to-top" role="button" aria-label="回到顶部"><i class="fa-solid fa-arrow-up fa-fw" aria-hidden="true"></i><span class="variant-numeric d-none">0%</span>
+        </div></div><a href="https://github.com/telzhou618" title="View my GitHub"target="_blank" rel="external nofollow" class="github-corner right d-none-mobile"><svg viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><div id="mask"></div><div class="reading-progress-bar" style="left: 0;top: 0;"></div><noscript>
+    <div class="noscript-warning">FixIt 主题在启用 JavaScript 的情况下效果最佳。</div>
+  </noscript>
+</div><link rel="preload" href="/lib/katex/katex.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/katex/katex.min.css"></noscript><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><link rel="stylesheet" href="/lib/pace/themes/blue/pace-theme-minimal.css"><script src="/lib/autocomplete/autocomplete.min.js" defer></script><script src="/lib/fuse/fuse.min.js" defer></script><script src="/lib/sharer/sharer.min.js" async defer></script><script src="/lib/katex/katex.min.js" defer></script><script src="/lib/katex/auto-render.min.js" defer></script><script src="/lib/katex/copy-tex.min.js" defer></script><script src="/lib/katex/mhchem.min.js" defer></script><script src="/lib/cookieconsent/cookieconsent.min.js" defer></script><script src="/lib/pace/pace.min.js" async defer></script><script>window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":20},"comment":{"enable":false},"cookieconsent":{"content":{"dismiss":"同意","link":"了解更多","message":"本网站使用 Cookies 来改善您的浏览体验。"},"enable":true,"palette":{"button":{"background":"#f0f0f0"},"popup":{"background":"#1aa3ff"}},"theme":"edgeless"},"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":true,"left":"\\begin{equation}","right":"\\end{equation}"},{"display":true,"left":"\\begin{equation*}","right":"\\end{equation*}"},{"display":true,"left":"\\begin{align}","right":"\\end{align}"},{"display":true,"left":"\\begin{align*}","right":"\\end{align*}"},{"display":true,"left":"\\begin{alignat}","right":"\\end{alignat}"},{"display":true,"left":"\\begin{alignat*}","right":"\\end{alignat*}"},{"display":true,"left":"\\begin{gather}","right":"\\end{gather}"},{"display":true,"left":"\\begin{CD}","right":"\\end{CD}"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"search":{"distance":100,"findAllMatches":false,"fuseIndexURL":"/index.json","highlightTag":"em","ignoreFieldNorm":false,"ignoreLocation":false,"isCaseSensitive":false,"location":0,"maxResultLength":10,"minMatchCharLength":2,"noResultsFound":"没有找到结果","snippetLength":30,"threshold":0.3,"type":"fuse","useExtendedSearch":false}};</script><script src="/js/theme.min.js" defer></script></body>
+</html>

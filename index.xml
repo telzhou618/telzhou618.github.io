@@ -4,10 +4,42 @@
     <link>https://telzhou618.github.io/</link>
     <description>扁舟的博客</description>
     <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>telzhou618@qq.com (telzhou618)</managingEditor>
-      <webMaster>telzhou618@qq.com (telzhou618)</webMaster><lastBuildDate>Wed, 24 Apr 2024 10:45:43 &#43;0800</lastBuildDate>
+      <webMaster>telzhou618@qq.com (telzhou618)</webMaster><lastBuildDate>Mon, 06 May 2024 18:26:14 &#43;0800</lastBuildDate>
       <atom:link href="https://telzhou618.github.io/index.xml" rel="self" type="application/rss+xml" />
     <item>
-  <title>微服务</title>
+  <title>【k8s学习笔记】 Kunesphere CI/CD流谁线自动化部署</title>
+  <link>https://telzhou618.github.io/posts/a9d96f7/</link>
+  <pubDate>Mon, 06 May 2024 18:26:14 &#43;0800</pubDate>
+  <author>telzhou618</author>
+  <guid>https://telzhou618.github.io/posts/a9d96f7/</guid>
+  <description><![CDATA[]]></description>
+</item>
+<item>
+  <title>【k8s学习笔记】 Kubekey安装k8s和kubesphere</title>
+  <link>https://telzhou618.github.io/posts/fbb3944/</link>
+  <pubDate>Mon, 06 May 2024 18:26:04 &#43;0800</pubDate>
+  <author>telzhou618</author>
+  <guid>https://telzhou618.github.io/posts/fbb3944/</guid>
+  <description><![CDATA[]]></description>
+</item>
+<item>
+  <title>【k8s学习笔记】 k8s安装和基本用法</title>
+  <link>https://telzhou618.github.io/posts/8a64657/</link>
+  <pubDate>Mon, 06 May 2024 18:25:28 &#43;0800</pubDate>
+  <author>telzhou618</author>
+  <guid>https://telzhou618.github.io/posts/8a64657/</guid>
+  <description><![CDATA[]]></description>
+</item>
+<item>
+  <title>centos 网络错误问题解决</title>
+  <link>https://telzhou618.github.io/posts/57808a3/</link>
+  <pubDate>Mon, 06 May 2024 10:45:43 &#43;0800</pubDate>
+  <author>telzhou618</author>
+  <guid>https://telzhou618.github.io/posts/57808a3/</guid>
+  <description><![CDATA[]]></description>
+</item>
+<item>
+  <title>微服务的优缺点</title>
   <link>https://telzhou618.github.io/posts/57808a6/</link>
   <pubDate>Wed, 24 Apr 2024 10:45:43 &#43;0800</pubDate>
   <author>telzhou618</author>
@@ -53,38 +85,6 @@
   <author>telzhou618</author>
   <guid>https://telzhou618.github.io/posts/redis/</guid>
   <description><![CDATA[Redis分布式架构 Redis 是什么Redis 是一个高性能的基于内存实现的K-V存储数据库 。 Redis 的优点 性能极高，Redis能读的速度是110000次/]]></description>
-</item>
-<item>
-  <title>Spring AOP 从入门到源码解析</title>
-  <link>https://telzhou618.github.io/posts/spring-aop/</link>
-  <pubDate>Wed, 28 Jun 2023 14:44:07 &#43;0800</pubDate>
-  <author>telzhou618</author>
-  <guid>https://telzhou618.github.io/posts/spring-aop/</guid>
-  <description><![CDATA[先学会如何使用 Spring-boot 或 Spring-cloud 中使用AOP在Spring-boot 工程中使用AOP功能，先引入相关的依赖。 pom.xml 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21]]></description>
-</item>
-<item>
-  <title>Linux 常用命令</title>
-  <link>https://telzhou618.github.io/posts/linux/</link>
-  <pubDate>Wed, 28 Jun 2023 14:43:58 &#43;0800</pubDate>
-  <author>telzhou618</author>
-  <guid>https://telzhou618.github.io/posts/linux/</guid>
-  <description><![CDATA[less从文件开头查看少量内容命令，命令格式：less [参数] 文件 。 参数： 1 2 3 4 5 6 7 8 9 10 11 12 13 - /字符串：向下搜索 - ?字符串：向上搜索]]></description>
-</item>
-<item>
-  <title>Docker &amp; Docker-compose</title>
-  <link>https://telzhou618.github.io/posts/docker/</link>
-  <pubDate>Wed, 28 Jun 2023 14:21:07 &#43;0800</pubDate>
-  <author>telzhou618</author>
-  <guid>https://telzhou618.github.io/posts/docker/</guid>
-  <description><![CDATA[Docker 架构 Docker架构 Docker 主要组件包括 Client、Daemon、Images、Container、Registry。 Client ： docker客户端 D]]></description>
-</item>
-<item>
-  <title>Homebrew 常用命令</title>
-  <link>https://telzhou618.github.io/posts/homebrew/</link>
-  <pubDate>Wed, 28 Jun 2023 11:44:07 &#43;0800</pubDate>
-  <author>telzhou618</author>
-  <guid>https://telzhou618.github.io/posts/homebrew/</guid>
-  <description><![CDATA[mac 软件包管理工具 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 brew install #[包名] 安装包。 brew uninstall #[包名] 卸载包。 brew search #[包名] 查询包。 brew list #列出已安装的软件。 brew update]]></description>
 </item>
 </channel>
 </rss>

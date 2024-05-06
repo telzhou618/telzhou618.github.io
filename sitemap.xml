@@ -2,12 +2,18 @@
   xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml"
   ><url>
-      <loc>https://telzhou618.github.io/categories/</loc><lastmod>2024-04-24T10:45:43&#43;08:00</lastmod></url><url>
-      <loc>https://telzhou618.github.io/tags/draft/</loc><lastmod>2024-04-24T10:45:43&#43;08:00</lastmod></url><url>
-      <loc>https://telzhou618.github.io/categories/draft/</loc><lastmod>2024-04-24T10:45:43&#43;08:00</lastmod></url><url>
-      <loc>https://telzhou618.github.io/posts/</loc><lastmod>2024-04-24T10:45:43&#43;08:00</lastmod></url><url>
-      <loc>https://telzhou618.github.io/tags/</loc><lastmod>2024-04-24T10:45:43&#43;08:00</lastmod></url><url>
-      <loc>https://telzhou618.github.io/</loc><lastmod>2024-04-24T10:45:43&#43;08:00</lastmod></url><url>
+      <loc>https://telzhou618.github.io/posts/a9d96f7/</loc><lastmod>2024-05-06T18:26:14&#43;08:00</lastmod></url><url>
+      <loc>https://telzhou618.github.io/categories/</loc><lastmod>2024-05-06T18:26:14&#43;08:00</lastmod></url><url>
+      <loc>https://telzhou618.github.io/categories/devops/</loc><lastmod>2024-05-06T18:26:14&#43;08:00</lastmod></url><url>
+      <loc>https://telzhou618.github.io/tags/k8s/</loc><lastmod>2024-05-06T18:26:14&#43;08:00</lastmod></url><url>
+      <loc>https://telzhou618.github.io/posts/</loc><lastmod>2024-05-06T18:26:14&#43;08:00</lastmod></url><url>
+      <loc>https://telzhou618.github.io/tags/</loc><lastmod>2024-05-06T18:26:14&#43;08:00</lastmod></url><url>
+      <loc>https://telzhou618.github.io/</loc><lastmod>2024-05-06T18:26:14&#43;08:00</lastmod></url><url>
+      <loc>https://telzhou618.github.io/posts/fbb3944/</loc><lastmod>2024-05-06T18:26:04&#43;08:00</lastmod></url><url>
+      <loc>https://telzhou618.github.io/posts/8a64657/</loc><lastmod>2024-05-06T18:25:28&#43;08:00</lastmod></url><url>
+      <loc>https://telzhou618.github.io/posts/57808a3/</loc><lastmod>2024-05-06T10:45:43&#43;08:00</lastmod></url><url>
+      <loc>https://telzhou618.github.io/tags/draft/</loc><lastmod>2024-05-06T10:45:43&#43;08:00</lastmod></url><url>
+      <loc>https://telzhou618.github.io/categories/draft/</loc><lastmod>2024-05-06T10:45:43&#43;08:00</lastmod></url><url>
       <loc>https://telzhou618.github.io/posts/57808a6/</loc><lastmod>2024-04-24T10:45:43&#43;08:00</lastmod></url><url>
       <loc>https://telzhou618.github.io/posts/704c8ae/</loc><lastmod>2024-03-24T00:48:45&#43;08:00</lastmod></url><url>
       <loc>https://telzhou618.github.io/categories/db/</loc><lastmod>2023-08-28T11:44:07&#43;08:00</lastmod></url><url>
@@ -26,7 +32,6 @@
       <loc>https://telzhou618.github.io/tags/linux/</loc><lastmod>2023-06-28T14:43:58&#43;08:00</lastmod></url><url>
       <loc>https://telzhou618.github.io/categories/linux/</loc><lastmod>2023-06-28T14:43:58&#43;08:00</lastmod></url><url>
       <loc>https://telzhou618.github.io/posts/linux/</loc><lastmod>2023-06-28T14:43:58&#43;08:00</lastmod></url><url>
-      <loc>https://telzhou618.github.io/categories/devops/</loc><lastmod>2023-06-28T14:21:07&#43;08:00</lastmod></url><url>
       <loc>https://telzhou618.github.io/tags/docker/</loc><lastmod>2023-06-28T14:21:07&#43;08:00</lastmod></url><url>
       <loc>https://telzhou618.github.io/posts/docker/</loc><lastmod>2023-06-28T14:21:07&#43;08:00</lastmod></url><url>
       <loc>https://telzhou618.github.io/posts/homebrew/</loc><lastmod>2023-06-28T11:44:07&#43;08:00</lastmod></url><url>
@@ -35,6 +40,7 @@
       <loc>https://telzhou618.github.io/posts/modify-env/</loc><lastmod>2023-06-28T11:40:09&#43;08:00</lastmod></url><url>
       <loc>https://telzhou618.github.io/posts/shell-change/</loc><lastmod>2023-06-28T11:37:30&#43;08:00</lastmod></url><url>
       <loc>https://telzhou618.github.io/about/</loc><lastmod>2023-06-27T15:18:48&#43;08:00</lastmod></url><url>
+      <loc>https://telzhou618.github.io/posts/f460746/</loc><lastmod>2023-05-02T13:17:07&#43;08:00</lastmod></url><url>
       <loc>https://telzhou618.github.io/tags/git/</loc><lastmod>2023-04-23T09:34:26&#43;08:00</lastmod></url><url>
       <loc>https://telzhou618.github.io/tags/ssh/</loc><lastmod>2023-04-23T09:34:26&#43;08:00</lastmod></url><url>
       <loc>https://telzhou618.github.io/posts/ssh-key/</loc><lastmod>2023-04-23T09:34:26&#43;08:00</lastmod></url><url>

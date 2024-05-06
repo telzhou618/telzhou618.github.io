@@ -4,7 +4,31 @@
     <link>https://telzhou618.github.io/categories/devops/</link>
     <description>devops - 分类 | 扁舟的博客</description>
     <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>telzhou618@qq.com (telzhou618)</managingEditor>
-      <webMaster>telzhou618@qq.com (telzhou618)</webMaster><lastBuildDate>Wed, 28 Jun 2023 14:21:07 &#43;0800</lastBuildDate><atom:link href="https://telzhou618.github.io/categories/devops/" rel="self" type="application/rss+xml" /><item>
+      <webMaster>telzhou618@qq.com (telzhou618)</webMaster><lastBuildDate>Mon, 06 May 2024 18:26:14 &#43;0800</lastBuildDate><atom:link href="https://telzhou618.github.io/categories/devops/" rel="self" type="application/rss+xml" /><item>
+  <title>【k8s学习笔记】 Kunesphere CI/CD流谁线自动化部署</title>
+  <link>https://telzhou618.github.io/posts/a9d96f7/</link>
+  <pubDate>Mon, 06 May 2024 18:26:14 &#43;0800</pubDate>
+  <author>telzhou618</author>
+  <guid>https://telzhou618.github.io/posts/a9d96f7/</guid>
+  <description><![CDATA[]]></description>
+</item>
+<item>
+  <title>【k8s学习笔记】 Kubekey安装k8s和kubesphere</title>
+  <link>https://telzhou618.github.io/posts/fbb3944/</link>
+  <pubDate>Mon, 06 May 2024 18:26:04 &#43;0800</pubDate>
+  <author>telzhou618</author>
+  <guid>https://telzhou618.github.io/posts/fbb3944/</guid>
+  <description><![CDATA[]]></description>
+</item>
+<item>
+  <title>【k8s学习笔记】 k8s安装和基本用法</title>
+  <link>https://telzhou618.github.io/posts/8a64657/</link>
+  <pubDate>Mon, 06 May 2024 18:25:28 &#43;0800</pubDate>
+  <author>telzhou618</author>
+  <guid>https://telzhou618.github.io/posts/8a64657/</guid>
+  <description><![CDATA[]]></description>
+</item>
+<item>
   <title>Docker &amp; Docker-compose</title>
   <link>https://telzhou618.github.io/posts/docker/</link>
   <pubDate>Wed, 28 Jun 2023 14:21:07 &#43;0800</pubDate>

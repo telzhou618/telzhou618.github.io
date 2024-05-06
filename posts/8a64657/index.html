@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+  <head>
+    
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+    <meta name="robots" content="noodp" />
+    <title>【k8s学习笔记】 k8s安装和基本用法 - 扁舟的博客</title><meta name="author" content="telzhou618">
+<meta name="author-link" content="https://github.com/telzhou618">
+<meta name="description" content="" /><meta name="keywords" content='k8s' /><meta itemprop="name" content="【k8s学习笔记】 k8s安装和基本用法">
+<meta itemprop="description" content=""><meta itemprop="datePublished" content="2024-05-06T18:25:28+08:00" />
+<meta itemprop="dateModified" content="2024-05-06T18:25:28+08:00" />
+<meta itemprop="wordCount" content="982">
+<meta itemprop="keywords" content="k8s," /><meta property="og:title" content="【k8s学习笔记】 k8s安装和基本用法" />
+<meta property="og:description" content="" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://telzhou618.github.io/posts/8a64657/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2024-05-06T18:25:28+08:00" />
+<meta property="article:modified_time" content="2024-05-06T18:25:28+08:00" />
+
+<meta name="twitter:card" content="summary"/><meta name="twitter:title" content="【k8s学习笔记】 k8s安装和基本用法"/>
+<meta name="twitter:description" content=""/>
+<meta name="application-name" content="FixIt">
+<meta name="apple-mobile-web-app-title" content="FixIt"><meta name="theme-color" data-light="#f8f8f8" data-dark="#252627" content="#f8f8f8"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" href="https://telzhou618.github.io/posts/8a64657/" /><link rel="prev" href="https://telzhou618.github.io/posts/57808a3/" /><link rel="next" href="https://telzhou618.github.io/posts/fbb3944/" /><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "BlogPosting",
+    "headline": "【k8s学习笔记】 k8s安装和基本用法",
+    "inLanguage": "zh-CN",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https:\/\/telzhou618.github.io\/posts\/8a64657\/"
+    },"genre": "posts","keywords": "k8s","wordcount":  982 ,
+    "url": "https:\/\/telzhou618.github.io\/posts\/8a64657\/","datePublished": "2024-05-06T18:25:28+08:00","dateModified": "2024-05-06T18:25:28+08:00","publisher": {
+      "@type": "Organization",
+      "name": ""},"author": {
+        "@type": "Person",
+        "name": "telzhou618"
+      },"description": ""
+  }
+  </script></head>
+  <body data-header-desktop="sticky" data-header-mobile="auto"><script>(window.localStorage?.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('data-theme', 'dark');</script><div class="wrapper" data-page-style="normal"><header class="desktop animate__faster" id="header-desktop">
+  <div class="header-wrapper" data-github-corner="right">
+    <div class="header-title">
+      <a href="/" title="扁舟的博客"><span class="header-title-text">扁舟的博客</span></a><span class="header-subtitle"></span></div>
+    <nav>
+      <ul class="menu"><li class="menu-item active">
+              <a
+                class="menu-link"
+                href="/posts/"
+                title="Posts"
+                
+              >文章</a></li><li class="menu-item">
+              <a
+                class="menu-link"
+                href="/"
+                
+                
+              >归档</a></li><li class="menu-item">
+              <a
+                class="menu-link"
+                href="/categories/"
+                title="Categories"
+                
+              >分类</a></li><li class="menu-item">
+              <a
+                class="menu-link"
+                href="/tags/"
+                title="Tags"
+                
+              >标签</a></li><li class="menu-item">
+              <a
+                class="menu-link"
+                href="/about/"
+                title="About me"
+                
+              >关于</a></li><li class="menu-item delimiter"></li><li class="menu-item search" id="search-desktop">
+            <input type="text" placeholder="搜索文章标题或内容……" id="search-input-desktop">
+            <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+              <i class="fa-solid fa-search fa-fw" aria-hidden="true"></i>
+            </a>
+            <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+              <i class="fa-solid fa-times-circle fa-fw" aria-hidden="true"></i>
+            </a>
+            <span class="search-button search-loading" id="search-loading-desktop">
+              <i class="fa-solid fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+            </span>
+          </li><li class="menu-item theme-switch" title="切换主题">
+          <i class="fa-solid fa-adjust fa-fw" aria-hidden="true"></i>
+        </li></ul>
+    </nav>
+  </div>
+</header><header class="mobile animate__faster" id="header-mobile">
+  <div class="header-container">
+    <div class="header-wrapper">
+      <div class="header-title">
+        <a href="/" title="扁舟的博客"><span class="header-title-text">扁舟的博客</span></a><span class="header-subtitle"></span></div>
+      <div class="menu-toggle" id="menu-toggle-mobile">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+    <nav>
+      <ul class="menu" id="menu-mobile"><li class="search-wrapper">
+            <div class="search mobile" id="search-mobile">
+              <input type="text" placeholder="搜索文章标题或内容……" id="search-input-mobile">
+              <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                <i class="fa-solid fa-search fa-fw" aria-hidden="true"></i>
+              </a>
+              <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                <i class="fa-solid fa-times-circle fa-fw" aria-hidden="true"></i>
+              </a>
+              <span class="search-button search-loading" id="search-loading-mobile">
+                <i class="fa-solid fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+              </span>
+            </div>
+            <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+              取消
+            </a>
+          </li><li
+              class="menu-item active"
+            ><a
+                  class="menu-link"
+                  href="/posts/"
+                  title="Posts"
+                  
+                >文章</a></li><li
+              class="menu-item"
+            ><a
+                  class="menu-link"
+                  href="/"
+                  
+                  
+                >归档</a></li><li
+              class="menu-item"
+            ><a
+                  class="menu-link"
+                  href="/categories/"
+                  title="Categories"
+                  
+                >分类</a></li><li
+              class="menu-item"
+            ><a
+                  class="menu-link"
+                  href="/tags/"
+                  title="Tags"
+                  
+                >标签</a></li><li
+              class="menu-item"
+            ><a
+                  class="menu-link"
+                  href="/about/"
+                  title="About me"
+                  
+                >关于</a></li><li class="menu-item menu-system">
+          <span class="menu-system-item theme-switch" title="切换主题"><i class="fa-solid fa-adjust fa-fw" aria-hidden="true"></i></span></li>
+      </ul>
+    </nav>
+  </div>
+</header><div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+  </div>
+  <div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+  </div><main class="container"><aside class="aside-collection animate__animated animate__fadeIn animate__faster" aria-label="合集"></aside>
+
+  <article class="page single">
+    <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span>【k8s学习笔记】 k8s安装和基本用法</span>
+      </h1></div><div class="post-meta">
+      <div class="post-meta-line"><span class="post-author"><a href="https://github.com/telzhou618" title="作者"target="_blank" rel="external nofollow noopener noreferrer author" class="author"><img loading="lazy" src="https://raw.gitmirror.com/telzhou618/images/main/img03/20240423112108.png" alt="telzhou618" data-title="telzhou618" class="avatar" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/>&nbsp;telzhou618</a></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/devops/" class="post-category" title="分类 - devops"><i class="fa-regular fa-folder fa-fw" aria-hidden="true"></i> devops</a></span></div><div class="post-meta-line"><span title="发布于 2024-05-06 18:25:28"><i class="fa-solid fa-calendar-days fa-fw me-1" aria-hidden="true"></i><time datetime="2024-05-06">2024-05-06</time></span>&nbsp;<span title="982 字"><i class="fa-solid fa-pencil-alt fa-fw me-1" aria-hidden="true"></i>约 1000 字</span>&nbsp;<span><i class="fa-regular fa-clock fa-fw me-1" aria-hidden="true"></i>预计阅读 2 分钟</span>&nbsp;</div>
+    </div><div class="details toc" id="toc-static" data-kept="false">
+        <div class="details-summary toc-title">
+          <span>目录</span>
+          <span><i class="details-icon fa-solid fa-angle-right" aria-hidden="true"></i></span>
+        </div>
+        <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#安装-k8s">安装 k8s</a>
+      <ul>
+        <li><a href="#准备工作">准备工作</a></li>
+        <li><a href="#初始化集群">初始化集群</a></li>
+        <li><a href="#验证集群">验证集群</a></li>
+      </ul>
+    </li>
+    <li><a href="#安装-tomcat">安装 tomcat</a></li>
+    <li><a href="#其他操作命令">其他操作命令</a></li>
+  </ul>
+</nav></div>
+      </div><div class="content" id="content"><h2 id="安装-k8s" class="heading-element">
+  <a href="#%e5%ae%89%e8%a3%85-k8s" class="heading-mark"></a>安装 k8s</h2><p>准备三台机器, 系统为 centos7, 如下</p>
+<table>
+<thead>
+<tr>
+<th>机器IP</th>
+<th>hostname</th>
+<th>角色</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>192.168.1.20</td>
+<td>k8s-master</td>
+<td>master</td>
+</tr>
+<tr>
+<td>192.168.1.21</td>
+<td>k8s-node1</td>
+<td>worker</td>
+</tr>
+<tr>
+<td>192.168.1.22</td>
+<td>k8s-node2</td>
+<td>worker</td>
+</tr>
+</tbody>
+</table>
+<h3 id="准备工作" class="heading-element">
+  <a href="#%e5%87%86%e5%a4%87%e5%b7%a5%e4%bd%9c" class="heading-mark"></a>准备工作</h3><p>安装前期准备，以下8个步骤在三台机器都要执行。</p>
+<ol>
+<li>关闭防火墙</li>
+</ol>
+<div class="highlight" id="id-1"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">systemctl stop firewalld
+</span></span><span class="line"><span class="cl">systemctl disable firewalld</span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="2">
+<li>关闭 selinux</li>
+</ol>
+<div class="highlight" id="id-2"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">sed -i <span class="s1">&#39;s/enforcing/disabled/&#39;</span> /etc/selinux/config <span class="c1"># 永久关闭</span>
+</span></span><span class="line"><span class="cl">setenforce <span class="m">0</span> <span class="c1"># 临时关闭</span></span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="3">
+<li>关闭 swap</li>
+</ol>
+<div class="highlight" id="id-3"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">vim /etc/fstab <span class="c1"># 永久关闭</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#注释掉swap这行，需要重启生效</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># /dev/mapper/centos-swap swap                    swap    defaults </span></span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="4">
+<li>设置机器hostname</li>
+</ol>
+<div class="highlight" id="id-4"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">hostnamectl set-hostname &lt;hostname&gt;
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">192.168.1.20：k8s-master
+</span></span><span class="line"><span class="cl">192.168.1.21：k8s-node1
+</span></span><span class="line"><span class="cl">192.168.1.22：k8s-node2</span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="5">
+<li>设置时间同步</li>
+</ol>
+<div class="highlight" id="id-5"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"><span class="c1"># 设置时区为亚洲上海</span>
+</span></span><span class="line"><span class="cl">timedatectl set-timezone Asia/Shanghai
+</span></span><span class="line"><span class="cl">timedatectl status <span class="c1"># 查看状态</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 同步时间</span>
+</span></span><span class="line"><span class="cl">yum install ntpdate -y
+</span></span><span class="line"><span class="cl">ntpdate time.windows.com</span></span></code></pre></td></tr></table>
+</div>
+</div><blockquote>
+<p>这一步成败的关键，三台机器的时间要同步</p>
+</blockquote>
+<ol start="6">
+<li>重启机器,让以上所有设置生效</li>
+</ol>
+<div class="highlight" id="id-6"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">reboot</span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="7">
+<li>安装 docker, 这是k8s所需要的</li>
+</ol>
+<div class="highlight" id="id-7"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"><span class="c1"># 安装utiles 拥有 yum-config-manager 工具</span>
+</span></span><span class="line"><span class="cl">yum install -y yum-utils
+</span></span><span class="line"><span class="cl"><span class="c1"># 设置 docker yum 源</span>
+</span></span><span class="line"><span class="cl">yum-config-manager --add-repo http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo
+</span></span><span class="line"><span class="cl">yum makecache fast
+</span></span><span class="line"><span class="cl"><span class="c1"># 查看 docker-ce 版本</span>
+</span></span><span class="line"><span class="cl">yum list docker-ce --showduplicates <span class="p">|</span> sort -r
+</span></span><span class="line"><span class="cl"><span class="c1"># 安装</span>
+</span></span><span class="line"><span class="cl">yum install -y docker-ce-3:19.03.9-3.el7.x86_64 <span class="c1"># 这是指定版本安装</span>
+</span></span><span class="line"><span class="cl">开启启动
+</span></span><span class="line"><span class="cl">systemctl start docker <span class="o">&amp;&amp;</span> systemctl <span class="nb">enable</span> docker</span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="8">
+<li>安装 kubelet, kubeadm, kubectl</li>
+</ol>
+<div class="highlight" id="id-8"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"><span class="c1"># 添加 k8s yum 源</span>
+</span></span><span class="line"><span class="cl">cat &gt; /etc/yum.repos.d/kubernetes.repo <span class="s">&lt;&lt; EOF
+</span></span></span><span class="line"><span class="cl"><span class="s">[kubernetes]
+</span></span></span><span class="line"><span class="cl"><span class="s">name=Kubernetes
+</span></span></span><span class="line"><span class="cl"><span class="s">baseurl=https://mirrors.aliyun.com/kubernetes/yum/repos/kubernetes-el7-x86_64
+</span></span></span><span class="line"><span class="cl"><span class="s">enabled=1
+</span></span></span><span class="line"><span class="cl"><span class="s">gpgcheck=0
+</span></span></span><span class="line"><span class="cl"><span class="s">repo_gpgcheck=0
+</span></span></span><span class="line"><span class="cl"><span class="s">gpgkey=https://mirrors.aliyun.com/kubernetes/yum/doc/yum-key.gpg
+</span></span></span><span class="line"><span class="cl"><span class="s">https://mirrors.aliyun.com/kubernetes/yum/doc/rpm-package-key.gpg
+</span></span></span><span class="line"><span class="cl"><span class="s">EOF</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 查看所有版本</span>
+</span></span><span class="line"><span class="cl">yum list kubelet --showduplicates <span class="p">|</span> sort -r
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 安装kubelet、kubeadm、kubectl 指定版本</span>
+</span></span><span class="line"><span class="cl">yum install -y kubelet-1.18.0 kubeadm-1.18.0 kubectl-1.18.0
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 开机启动</span>
+</span></span><span class="line"><span class="cl">systemctl <span class="nb">enable</span> kubelet <span class="o">&amp;&amp;</span> systemctl start kubelet</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="初始化集群" class="heading-element">
+  <a href="#%e5%88%9d%e5%a7%8b%e5%8c%96%e9%9b%86%e7%be%a4" class="heading-mark"></a>初始化集群</h3><ol>
+<li>初始化集群，在 master 节点执行</li>
+</ol>
+<div class="highlight" id="id-9"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">kubeadm init --apiserver-advertise-address<span class="o">=</span>192.168.1.20 --image-repository registry.aliyuncs.com/google_containers --kubernetes-version v1.18.0 --service-cidr<span class="o">=</span>10.96.0.0/12 --pod-network-cidr<span class="o">=</span>10.244.0.0/16</span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="2">
+<li>根据初始化结果执行以下操作，在 master 节点执行</li>
+</ol>
+<div class="highlight" id="id-10"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"><span class="c1">#配置使用 kubectl 命令工具(类似docker这个命令)，执行上图第二个红框里的命令</span>
+</span></span><span class="line"><span class="cl">mkdir -p <span class="nv">$HOME</span>/.kube
+</span></span><span class="line"><span class="cl">sudo cp -i /etc/kubernetes/admin.conf <span class="nv">$HOME</span>/.kube/config
+</span></span><span class="line"><span class="cl">sudo chown <span class="k">$(</span>id -u<span class="k">)</span>:<span class="k">$(</span>id -g<span class="k">)</span> <span class="nv">$HOME</span>/.kube/config
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">#查看kubectl是否能正常使用</span>
+</span></span><span class="line"><span class="cl">kubectl get nodes
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">#安装 Pod 网络插件</span>
+</span></span><span class="line"><span class="cl">kubectl apply -f https://docs.projectcalico.org/manifests/calico.yaml
+</span></span><span class="line"><span class="cl"><span class="c1"># 如果上面这个calico网络插件安装不成功可以试下下面这个</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kubeflannel.yml</span></span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="3">
+<li>将worker节点加入到集群，分别在node1和node2上执行以下操作</li>
+</ol>
+<div class="highlight" id="id-11"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"><span class="c1"># 将node节点加入进master节点的集群里</span>
+</span></span><span class="line"><span class="cl">kubeadm join 192.168.1.20:6443 --token hbovty.6x82bkdlsk6dfy32 <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>    --discovery-token-ca-cert-hash sha256:659511b431f276b2a5f47397677b1dff74838ae5eb18e24135e6dae1b8c45840</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="验证集群" class="heading-element">
+  <a href="#%e9%aa%8c%e8%af%81%e9%9b%86%e7%be%a4" class="heading-mark"></a>验证集群</h3><div class="highlight" id="id-12"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">kubectl get nodes</span></span></code></pre></td></tr></table>
+</div>
+</div><p><img loading="lazy" src="https://raw.gitmirror.com/telzhou618/images/main/img03/20240506190815.png" alt="https://raw.gitmirror.com/telzhou618/images/main/img03/20240506190815.png" srcset="https://raw.gitmirror.com/telzhou618/images/main/img03/20240506190815.png?size=small, https://raw.gitmirror.com/telzhou618/images/main/img03/20240506190815.png?size=medium 1.5x, https://raw.gitmirror.com/telzhou618/images/main/img03/20240506190815.png?size=large 2x" data-title="https://raw.gitmirror.com/telzhou618/images/main/img03/20240506190815.png" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></p>
+<h2 id="安装-tomcat" class="heading-element">
+  <a href="#%e5%ae%89%e8%a3%85-tomcat" class="heading-mark"></a>安装 tomcat</h2><ol>
+<li>运行 deployment</li>
+</ol>
+<div class="highlight" id="id-13"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">kubectl create deployment my-tomcat --image<span class="o">=</span>tomcat:7.0.75-alpine</span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="2">
+<li>暴露 service</li>
+</ol>
+<div class="highlight" id="id-14"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">kubectl expose deployment my-tomcat --name<span class="o">=</span>tomcat --port<span class="o">=</span><span class="m">8080</span> --type<span class="o">=</span>NodePort</span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="3">
+<li>验证, 浏览器输入http://192.168.1.21:31520 查看</li>
+</ol>
+<p><img loading="lazy" src="https://raw.gitmirror.com/telzhou618/images/main/img03/20240506192139.png" alt="https://raw.gitmirror.com/telzhou618/images/main/img03/20240506192139.png" srcset="https://raw.gitmirror.com/telzhou618/images/main/img03/20240506192139.png?size=small, https://raw.gitmirror.com/telzhou618/images/main/img03/20240506192139.png?size=medium 1.5x, https://raw.gitmirror.com/telzhou618/images/main/img03/20240506192139.png?size=large 2x" data-title="https://raw.gitmirror.com/telzhou618/images/main/img03/20240506192139.png" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></p>
+<h2 id="其他操作命令" class="heading-element">
+  <a href="#%e5%85%b6%e4%bb%96%e6%93%8d%e4%bd%9c%e5%91%bd%e4%bb%a4" class="heading-mark"></a>其他操作命令</h2><ol>
+<li>创建部署</li>
+</ol>
+<div class="highlight" id="id-15"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">kubectl create deployment my-tomcat --image<span class="o">=</span>tomcat:7.0.75-alpine</span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="2">
+<li>查看pod 日志</li>
+</ol>
+<div class="highlight" id="id-16"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">kubectl logs my-tomcat-685b8fd9c9-rw42d<span class="o">(</span>pod名称<span class="o">)</span></span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="3">
+<li>进入Pod 容器</li>
+</ol>
+<div class="highlight" id="id-17"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">kubectl <span class="nb">exec</span> my-tomcat-685b8fd9c9-rw42d -- sh</span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="4">
+<li>暴露服务</li>
+</ol>
+<div class="highlight" id="id-18"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">kubectl expose deployment my-tomcat --name<span class="o">=</span>tomcat --port<span class="o">=</span><span class="m">8080</span> --type<span class="o">=</span>NodePort</span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="5">
+<li>删除 pod,service,deployment</li>
+</ol>
+<div class="highlight" id="id-19"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">kubectl delete pod pod-name -n <span class="o">[</span>namespace<span class="o">]</span>
+</span></span><span class="line"><span class="cl">kubectl delete service service-name -n <span class="o">[</span>namespace<span class="o">]</span>
+</span></span><span class="line"><span class="cl">kubectl delete deployment deplotment-name -n <span class="o">[</span>namespace<span class="o">]</span></span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="6">
+<li>扩容</li>
+</ol>
+<div class="highlight" id="id-20"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">kubectl scale --replicas<span class="o">=</span><span class="m">5</span> deployment my-tomcat</span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="7">
+<li>查看 Pod 详细信息</li>
+</ol>
+<div class="highlight" id="id-21"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">kubectl describe pod my-tomcat-547db86547-4btmd</span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="8">
+<li>回滚</li>
+</ol>
+<div class="highlight" id="id-22"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"><span class="c1"># 查看历史版本</span>
+</span></span><span class="line"><span class="cl">kubectl rollout <span class="nb">history</span> deploy my-tomcat 
+</span></span><span class="line"><span class="cl"><span class="c1"># 回滚到上一个版本</span>
+</span></span><span class="line"><span class="cl">kubectl rollout undo deployment my-tomcat     <span class="c1">#--to-revision 参数可以指定回退的版本</span></span></span></code></pre></td></tr></table>
+</div>
+</div></div><div class="post-footer" id="post-footer">
+  <div class="post-info">
+    <div class="post-info-line">
+      <div class="post-info-mod">
+        <span title="更新于 2024-05-06 18:25:28">更新于 2024-05-06&nbsp;</span>
+      </div><div class="post-info-license">
+            <span><a rel="license external nofollow noopener noreferrer" href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a></span>
+          </div></div><div class="post-info-line">
+        <div class="post-info-md"><span><a href="/posts/8a64657/index.md" title="阅读原始文档" class="link-to-markdown">阅读原始文档</a></span><span><a href="https://github.com/telzhou618/hugo-blog/blob/main/content/posts%5ck8s-install.md?plain=1" title="查看源码"target="_blank" rel="external nofollow noopener noreferrer" class="link-to-source">查看源码</a></span><span><a href="https://github.com/telzhou618/hugo-blog/edit/main/content/posts%5ck8s-install.md" title="编辑此页"target="_blank" rel="external nofollow noopener noreferrer" class="link-to-edit">编辑此页</a></span><span><a href="https://github.com/telzhou618/hugo-blog/issues/new?title=[BUG]%20%E3%80%90k8s%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E3%80%91&#43;k8s%E5%AE%89%E8%A3%85%E5%92%8C%E5%9F%BA%E6%9C%AC%E7%94%A8%E6%B3%95&amp;body=%7cField%7cValue%7c%0A%7c-%7c-%7c%0A%7cTitle%7c%E3%80%90k8s%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E3%80%91&#43;k8s%E5%AE%89%E8%A3%85%E5%92%8C%E5%9F%BA%E6%9C%AC%E7%94%A8%E6%B3%95%7c%0A%7cURL%7chttps://telzhou618.github.io/posts/8a64657/%7c%0A%7cFilename%7chttps://github.com/telzhou618/hugo-blog/blob/main/content/posts%5ck8s-install.md?plain=1%7c" title="报告问题"target="_blank" rel="external nofollow noopener noreferrer" class="link-to-report">报告问题</a></span></div>
+        <div class="post-info-share">
+          <span><a href="javascript:void(0);" title="分享到 Twitter" data-sharer="twitter" data-url="https://telzhou618.github.io/posts/8a64657/" data-title="【k8s学习笔记】 k8s安装和基本用法" data-hashtags="k8s"><i class="fa-brands fa-twitter fa-fw" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="https://telzhou618.github.io/posts/8a64657/" data-hashtag="k8s"><i class="fa-brands fa-facebook-square fa-fw" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="https://telzhou618.github.io/posts/8a64657/" data-title="【k8s学习笔记】 k8s安装和基本用法"><i class="fa-brands fa-weibo fa-fw" aria-hidden="true"></i></a>
+  </span>
+        </div>
+      </div></div>
+
+  <div class="post-info-more">
+    <section class="post-tags"><i class="fa-solid fa-tags fa-fw me-1" aria-hidden="true"></i><a href="/tags/k8s/" class="post-tag" title="标签 - k8s">k8s</a></section>
+    <section>
+      <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+    </section>
+  </div>
+
+  <div class="post-nav"><a href="/posts/57808a3/" class="post-nav-item" rel="prev" title="centos 网络错误问题解决"><i class="fa-solid fa-angle-left fa-fw" aria-hidden="true"></i>centos 网络错误问题解决</a>
+      <a href="/posts/fbb3944/" class="post-nav-item" rel="next" title="【k8s学习笔记】 Kubekey安装k8s和kubesphere">【k8s学习笔记】 Kubekey安装k8s和kubesphere<i class="fa-solid fa-angle-right fa-fw" aria-hidden="true"></i></a></div>
+</div>
+</article>
+
+  <aside class="toc" id="toc-auto" aria-label="目录"><h2 class="toc-title">目录&nbsp;<i class="toc-icon fa-solid fa-angle-down fa-fw" aria-hidden="true"></i></h2>
+      <div class="toc-content" id="toc-content-auto"></div></aside></main><footer class="footer">
+    <div class="footer-container"><div class="footer-line powered">由 <a href="https://gohugo.io/" target="_blank" rel="external nofollow noopener noreferrer" title="Hugo 0.121.1"><img class="hugo-icon" src="/images/hugo.min.svg" alt="Hugo logo" /> Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/hugo-fixit/FixIt" target="_blank" rel="external" title="FixIt v0.3.2"><img class="fixit-icon" src="/images/fixit.min.svg" alt="FixIt logo" /> FixIt</a>
+        </div><div class="footer-line copyright" itemscope itemtype="http://schema.org/CreativeWork"><i class="fa-regular fa-copyright fa-fw" aria-hidden="true"></i>
+            <span itemprop="copyrightYear">2024</span><span class="author" itemprop="copyrightHolder">
+              <a href="https://github.com/telzhou618"target="_blank" rel="external nofollow noopener noreferrer">telzhou618</a></span></div></div>
+  </footer></div><div class="widgets"><div class="fixed-buttons animate__faster d-none"><div class="fixed-button back-to-top" role="button" aria-label="回到顶部"><i class="fa-solid fa-arrow-up fa-fw" aria-hidden="true"></i><span class="variant-numeric d-none">0%</span>
+        </div></div><a href="https://github.com/telzhou618" title="View my GitHub"target="_blank" rel="external nofollow" class="github-corner right d-none-mobile"><svg viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><div id="mask"></div><div class="reading-progress-bar" style="left: 0;top: 0;"></div><noscript>
+    <div class="noscript-warning">FixIt 主题在启用 JavaScript 的情况下效果最佳。</div>
+  </noscript>
+</div><link rel="preload" href="/lib/katex/katex.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/katex/katex.min.css"></noscript><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><link rel="stylesheet" href="/lib/pace/themes/blue/pace-theme-minimal.css"><script src="/lib/autocomplete/autocomplete.min.js" defer></script><script src="/lib/fuse/fuse.min.js" defer></script><script src="/lib/sharer/sharer.min.js" async defer></script><script src="/lib/katex/katex.min.js" defer></script><script src="/lib/katex/auto-render.min.js" defer></script><script src="/lib/katex/copy-tex.min.js" defer></script><script src="/lib/katex/mhchem.min.js" defer></script><script src="/lib/cookieconsent/cookieconsent.min.js" defer></script><script src="/lib/pace/pace.min.js" async defer></script><script>window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":20},"comment":{"enable":false},"cookieconsent":{"content":{"dismiss":"同意","link":"了解更多","message":"本网站使用 Cookies 来改善您的浏览体验。"},"enable":true,"palette":{"button":{"background":"#f0f0f0"},"popup":{"background":"#1aa3ff"}},"theme":"edgeless"},"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":true,"left":"\\begin{equation}","right":"\\end{equation}"},{"display":true,"left":"\\begin{equation*}","right":"\\end{equation*}"},{"display":true,"left":"\\begin{align}","right":"\\end{align}"},{"display":true,"left":"\\begin{align*}","right":"\\end{align*}"},{"display":true,"left":"\\begin{alignat}","right":"\\end{alignat}"},{"display":true,"left":"\\begin{alignat*}","right":"\\end{alignat*}"},{"display":true,"left":"\\begin{gather}","right":"\\end{gather}"},{"display":true,"left":"\\begin{CD}","right":"\\end{CD}"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"search":{"distance":100,"findAllMatches":false,"fuseIndexURL":"/index.json","highlightTag":"em","ignoreFieldNorm":false,"ignoreLocation":false,"isCaseSensitive":false,"location":0,"maxResultLength":10,"minMatchCharLength":2,"noResultsFound":"没有找到结果","snippetLength":30,"threshold":0.3,"type":"fuse","useExtendedSearch":false}};</script><script src="/js/theme.min.js" defer></script></body>
+</html>
