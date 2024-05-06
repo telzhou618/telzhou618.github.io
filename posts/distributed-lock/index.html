@@ -7,11 +7,11 @@
     <meta name="robots" content="noodp" />
     <title>Redis 或 Zookeeper 实现分布式锁 - 扁舟的博客</title><meta name="author" content="telzhou618">
 <meta name="author-link" content="https://github.com/telzhou618">
-<meta name="description" content="分布式锁是为了解决跨进程、跨服务应用在高并发场景下造成线程不安全的问题的一种同步加锁的技术方案，在互联网公司有广泛的使用场景，如秒杀项目减库" /><meta name="keywords" content='java' /><meta itemprop="name" content="Redis 或 Zookeeper 实现分布式锁">
+<meta name="description" content="分布式锁是为了解决跨进程、跨服务应用在高并发场景下造成线程不安全的问题的一种同步加锁的技术方案，在互联网公司有广泛的使用场景，如秒杀项目减库" /><meta name="keywords" content='lock, java' /><meta itemprop="name" content="Redis 或 Zookeeper 实现分布式锁">
 <meta itemprop="description" content="分布式锁是为了解决跨进程、跨服务应用在高并发场景下造成线程不安全的问题的一种同步加锁的技术方案，在互联网公司有广泛的使用场景，如秒杀项目减库"><meta itemprop="datePublished" content="2022-06-28T11:44:07+08:00" />
 <meta itemprop="dateModified" content="2022-06-28T11:44:07+08:00" />
 <meta itemprop="wordCount" content="953">
-<meta itemprop="keywords" content="java," /><meta property="og:title" content="Redis 或 Zookeeper 实现分布式锁" />
+<meta itemprop="keywords" content="lock,java," /><meta property="og:title" content="Redis 或 Zookeeper 实现分布式锁" />
 <meta property="og:description" content="分布式锁是为了解决跨进程、跨服务应用在高并发场景下造成线程不安全的问题的一种同步加锁的技术方案，在互联网公司有广泛的使用场景，如秒杀项目减库" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://telzhou618.github.io/posts/distributed-lock/" /><meta property="article:section" content="posts" />
@@ -34,7 +34,7 @@
     "mainEntityOfPage": {
       "@type": "WebPage",
       "@id": "https:\/\/telzhou618.github.io\/posts\/distributed-lock\/"
-    },"genre": "posts","keywords": "java","wordcount":  953 ,
+    },"genre": "posts","keywords": "lock, java","wordcount":  953 ,
     "url": "https:\/\/telzhou618.github.io\/posts\/distributed-lock\/","datePublished": "2022-06-28T11:44:07+08:00","dateModified": "2022-06-28T11:44:07+08:00","publisher": {
       "@type": "Organization",
       "name": ""},"author": {
@@ -477,15 +477,15 @@
           </div></div><div class="post-info-line">
         <div class="post-info-md"><span><a href="/posts/distributed-lock/index.md" title="阅读原始文档" class="link-to-markdown">阅读原始文档</a></span><span><a href="https://github.com/telzhou618/hugo-blog/blob/main/content/posts%5cdistributed-lock.md?plain=1" title="查看源码"target="_blank" rel="external nofollow noopener noreferrer" class="link-to-source">查看源码</a></span><span><a href="https://github.com/telzhou618/hugo-blog/edit/main/content/posts%5cdistributed-lock.md" title="编辑此页"target="_blank" rel="external nofollow noopener noreferrer" class="link-to-edit">编辑此页</a></span><span><a href="https://github.com/telzhou618/hugo-blog/issues/new?title=[BUG]%20Redis&#43;%E6%88%96&#43;Zookeeper&#43;%E5%AE%9E%E7%8E%B0%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81&amp;body=%7cField%7cValue%7c%0A%7c-%7c-%7c%0A%7cTitle%7cRedis&#43;%E6%88%96&#43;Zookeeper&#43;%E5%AE%9E%E7%8E%B0%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81%7c%0A%7cURL%7chttps://telzhou618.github.io/posts/distributed-lock/%7c%0A%7cFilename%7chttps://github.com/telzhou618/hugo-blog/blob/main/content/posts%5cdistributed-lock.md?plain=1%7c" title="报告问题"target="_blank" rel="external nofollow noopener noreferrer" class="link-to-report">报告问题</a></span></div>
         <div class="post-info-share">
-          <span><a href="javascript:void(0);" title="分享到 Twitter" data-sharer="twitter" data-url="https://telzhou618.github.io/posts/distributed-lock/" data-title="Redis 或 Zookeeper 实现分布式锁" data-hashtags="java"><i class="fa-brands fa-twitter fa-fw" aria-hidden="true"></i></a>
-  <a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="https://telzhou618.github.io/posts/distributed-lock/" data-hashtag="java"><i class="fa-brands fa-facebook-square fa-fw" aria-hidden="true"></i></a>
+          <span><a href="javascript:void(0);" title="分享到 Twitter" data-sharer="twitter" data-url="https://telzhou618.github.io/posts/distributed-lock/" data-title="Redis 或 Zookeeper 实现分布式锁" data-hashtags="lock,java"><i class="fa-brands fa-twitter fa-fw" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="https://telzhou618.github.io/posts/distributed-lock/" data-hashtag="lock"><i class="fa-brands fa-facebook-square fa-fw" aria-hidden="true"></i></a>
   <a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="https://telzhou618.github.io/posts/distributed-lock/" data-title="Redis 或 Zookeeper 实现分布式锁"><i class="fa-brands fa-weibo fa-fw" aria-hidden="true"></i></a>
   </span>
         </div>
       </div></div>
 
   <div class="post-info-more">
-    <section class="post-tags"><i class="fa-solid fa-tags fa-fw me-1" aria-hidden="true"></i><a href="/tags/java/" class="post-tag" title="标签 - java">java</a></section>
+    <section class="post-tags"><i class="fa-solid fa-tags fa-fw me-1" aria-hidden="true"></i><a href="/tags/lock/" class="post-tag" title="标签 - lock">lock</a><a href="/tags/java/" class="post-tag" title="标签 - java">java</a></section>
     <section>
       <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
     </section>

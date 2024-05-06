@@ -1,7 +1,5 @@
-# 【k8s学习笔记】 Kubekey安装k8s和kubesphere
+# k8s学习笔记 - Kubekey安装k8s和kubesphere
 
-
-&lt;!--more--&gt;
 
 ## Kubekey 一键安装k8s
 

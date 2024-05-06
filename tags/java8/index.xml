@@ -1,0 +1,16 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+  <channel>
+    <title>java8 - 标签 - 扁舟的博客</title>
+    <link>https://telzhou618.github.io/tags/java8/</link>
+    <description>java8 - 标签 | 扁舟的博客</description>
+    <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>telzhou618@qq.com (telzhou618)</managingEditor>
+      <webMaster>telzhou618@qq.com (telzhou618)</webMaster><lastBuildDate>Tue, 28 Jun 2022 11:44:07 &#43;0800</lastBuildDate><atom:link href="https://telzhou618.github.io/tags/java8/" rel="self" type="application/rss+xml" /><item>
+  <title>JAVA8 debug 技巧</title>
+  <link>https://telzhou618.github.io/posts/java8-debug/</link>
+  <pubDate>Tue, 28 Jun 2022 11:44:07 &#43;0800</pubDate>
+  <author>telzhou618</author>
+  <guid>https://telzhou618.github.io/posts/java8-debug/</guid>
+  <description><![CDATA[调试按钮说明 Stream 调试实例代码： 1 2 3 4 5 6 7 // 1.Stream 调试 List&lt;Integer&gt; list1 = Lists.newArrayList(1, 5, 3, 2, 4); List&lt;Integer&gt; list2 = list1.stream() .filter(o -&gt; o &gt; 2) .sorted() .collect(Collectors.toList()); System.out.println(list2); 在 stram() 处设置断点，debug 运行。 可以看到Debug]]></description>
+</item>
+</channel>
+</rss>

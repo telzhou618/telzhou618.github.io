@@ -1,7 +1,5 @@
-# centos 网络错误问题解决
+# Centos 网络错误问题解决
 
-
-&lt;!--more--&gt;
 
 虚拟机 centos 启动后网络无法启动报错
 

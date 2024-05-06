@@ -21,14 +21,6 @@
   <description><![CDATA[Redis分布式架构 Redis 是什么Redis 是一个高性能的基于内存实现的K-V存储数据库 。 Redis 的优点 性能极高，Redis能读的速度是110000次/]]></description>
 </item>
 <item>
-  <title>CentOS 安装Docker</title>
-  <link>https://telzhou618.github.io/posts/docker-install/</link>
-  <pubDate>Tue, 11 Apr 2023 10:08:32 &#43;0800</pubDate>
-  <author>telzhou618</author>
-  <guid>https://telzhou618.github.io/posts/docker-install/</guid>
-  <description><![CDATA[docker 安装卸载旧的docker 1 sudo yum remove -y docker* 安装 yum-utils 1 yum install -y yum-utils 设置docker 源 1 2 yum-config-manager --add-repo http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo yum makecache fast 查看docker所有版本 1 yum list docker-ce --showduplicates | sort -r 安装dock]]></description>
-</item>
-<item>
   <title>CentOS 安装和使用最新版 Nginx</title>
   <link>https://telzhou618.github.io/posts/nginx/</link>
   <pubDate>Thu, 23 Mar 2023 00:23:32 &#43;0800</pubDate>

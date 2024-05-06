@@ -4,7 +4,15 @@
     <link>https://telzhou618.github.io/tags/ssh/</link>
     <description>ssh - 标签 | 扁舟的博客</description>
     <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>telzhou618@qq.com (telzhou618)</managingEditor>
-      <webMaster>telzhou618@qq.com (telzhou618)</webMaster><lastBuildDate>Sun, 23 Apr 2023 09:34:26 &#43;0800</lastBuildDate><atom:link href="https://telzhou618.github.io/tags/ssh/" rel="self" type="application/rss+xml" /><item>
+      <webMaster>telzhou618@qq.com (telzhou618)</webMaster><lastBuildDate>Tue, 02 May 2023 13:17:07 &#43;0800</lastBuildDate><atom:link href="https://telzhou618.github.io/tags/ssh/" rel="self" type="application/rss+xml" /><item>
+  <title>Centos ssh 免密登录配置</title>
+  <link>https://telzhou618.github.io/posts/f460746/</link>
+  <pubDate>Tue, 02 May 2023 13:17:07 &#43;0800</pubDate>
+  <author>telzhou618</author>
+  <guid>https://telzhou618.github.io/posts/f460746/</guid>
+  <description><![CDATA[ssh 免密登录配置 生成公钥秘钥对 1 ssh-keygen -t rsa -b 4096 -C &#34;telzhou618@qq.com&#34; 在文件在 ~/.ssh 文件夹下，会生成两个文件id_rsa是私钥，id_rsa.pub是公钥。 2. 使用ssh复]]></description>
+</item>
+<item>
   <title>SSK key 免密访问 gitlab 配置</title>
   <link>https://telzhou618.github.io/posts/ssh-key/</link>
   <pubDate>Sun, 23 Apr 2023 09:34:26 &#43;0800</pubDate>

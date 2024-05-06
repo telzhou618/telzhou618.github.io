@@ -12,21 +12,5 @@
   <guid>https://telzhou618.github.io/posts/linux/</guid>
   <description><![CDATA[less从文件开头查看少量内容命令，命令格式：less [参数] 文件 。 参数： 1 2 3 4 5 6 7 8 9 10 11 12 13 - /字符串：向下搜索 - ?字符串：向上搜索]]></description>
 </item>
-<item>
-  <title>Mac 更换控制台 shell</title>
-  <link>https://telzhou618.github.io/posts/shell-change/</link>
-  <pubDate>Wed, 28 Jun 2023 11:37:30 &#43;0800</pubDate>
-  <author>telzhou618</author>
-  <guid>https://telzhou618.github.io/posts/shell-change/</guid>
-  <description><![CDATA[shell 常用命令 1 2 3 4 5 more /etc/shells # 查查有多少个shell echo $SHELL # 查看当前shell chsh -s /bin/bash # 切换到 bash chsh -s /bin/zsh # 切换到zsh chsh -s /usr/local/bin/fish #切换到fish]]></description>
-</item>
-<item>
-  <title>Centos ssh 免密登录配置</title>
-  <link>https://telzhou618.github.io/posts/f460746/</link>
-  <pubDate>Tue, 02 May 2023 13:17:07 &#43;0800</pubDate>
-  <author>telzhou618</author>
-  <guid>https://telzhou618.github.io/posts/f460746/</guid>
-  <description><![CDATA[ssh 免密登录配置 生成公钥秘钥对 1 ssh-keygen -t rsa -b 4096 -C &#34;telzhou618@qq.com&#34; 在文件在 ~/.ssh 文件夹下，会生成两个文件id_rsa是私钥，id_rsa.pub是公钥。 2. 使用ssh复]]></description>
-</item>
 </channel>
 </rss>

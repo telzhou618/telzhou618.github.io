@@ -1,0 +1,24 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+  <channel>
+    <title>mac - 标签 - 扁舟的博客</title>
+    <link>https://telzhou618.github.io/tags/mac/</link>
+    <description>mac - 标签 | 扁舟的博客</description>
+    <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>telzhou618@qq.com (telzhou618)</managingEditor>
+      <webMaster>telzhou618@qq.com (telzhou618)</webMaster><lastBuildDate>Wed, 28 Jun 2023 11:40:09 &#43;0800</lastBuildDate><atom:link href="https://telzhou618.github.io/tags/mac/" rel="self" type="application/rss+xml" /><item>
+  <title>Mac 修改环境变量</title>
+  <link>https://telzhou618.github.io/posts/modify-env/</link>
+  <pubDate>Wed, 28 Jun 2023 11:40:09 &#43;0800</pubDate>
+  <author>telzhou618</author>
+  <guid>https://telzhou618.github.io/posts/modify-env/</guid>
+  <description><![CDATA[环境变量文件存储位置 1 2 3 4 5 6 &gt; /etc/paths （全局建议修改这个文件 ） &gt; /etc/profile （建议不修改这个文件 ） &gt; /etc/bashrc （一般在这个文件中添加系统级环境变量） &gt; ~/.profile 文件为系]]></description>
+</item>
+<item>
+  <title>Mac 更换控制台 shell</title>
+  <link>https://telzhou618.github.io/posts/shell-change/</link>
+  <pubDate>Wed, 28 Jun 2023 11:37:30 &#43;0800</pubDate>
+  <author>telzhou618</author>
+  <guid>https://telzhou618.github.io/posts/shell-change/</guid>
+  <description><![CDATA[shell 常用命令 1 2 3 4 5 more /etc/shells # 查查有多少个shell echo $SHELL # 查看当前shell chsh -s /bin/bash # 切换到 bash chsh -s /bin/zsh # 切换到zsh chsh -s /usr/local/bin/fish #切换到fish]]></description>
+</item>
+</channel>
+</rss>

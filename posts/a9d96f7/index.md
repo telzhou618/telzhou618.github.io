@@ -1,9 +1,7 @@
-# 【k8s学习笔记】 Kubesphere CI/CD流谁线自动化部署
+# k8s学习笔记 - Kubesphere CI/CD流谁线自动化部署
 
 
-&lt;!--more--&gt;
-
-## 准备一个 springboot 项目
+## 准备一个 spring-boot 项目
 
 项目如下，是一个简单的springboot项目
 
@@ -31,7 +29,6 @@ public class DemoApplication {
 		SpringApplication.run(DemoApplication.class, args);
 	}
 }
-
 ```
 
 单元测试类 DemoApplicationTests.java 

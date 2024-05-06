@@ -12,13 +12,5 @@
   <guid>https://telzhou618.github.io/posts/homebrew/</guid>
   <description><![CDATA[mac 软件包管理工具 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 brew install #[包名] 安装包。 brew uninstall #[包名] 卸载包。 brew search #[包名] 查询包。 brew list #列出已安装的软件。 brew update]]></description>
 </item>
-<item>
-  <title>Mac 修改环境变量</title>
-  <link>https://telzhou618.github.io/posts/modify-env/</link>
-  <pubDate>Wed, 28 Jun 2023 11:40:09 &#43;0800</pubDate>
-  <author>telzhou618</author>
-  <guid>https://telzhou618.github.io/posts/modify-env/</guid>
-  <description><![CDATA[环境变量文件存储位置 1 2 3 4 5 6 &gt; /etc/paths （全局建议修改这个文件 ） &gt; /etc/profile （建议不修改这个文件 ） &gt; /etc/bashrc （一般在这个文件中添加系统级环境变量） &gt; ~/.profile 文件为系]]></description>
-</item>
 </channel>
 </rss>

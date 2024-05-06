@@ -7,11 +7,11 @@
     <meta name="robots" content="noodp" />
     <title>Jenkins 的三种安装方式 - 扁舟的博客</title><meta name="author" content="telzhou618">
 <meta name="author-link" content="https://github.com/telzhou618">
-<meta name="description" content="docker 安装JK下载镜像 1 docker pull jenkins 启动 1 docker run -d -p 8088:8080 -p 50000:50000 -v /docker/jenkins_home:/var/jenkins_home jenkins 报错了，挂在的目录 /docker/jenkins_home 无权限 解决方案：更改宿主机挂载目录的权限,使用 chmod 命令将 /docker/jenkins_home 目录的权限更" /><meta name="keywords" content='draft' /><meta itemprop="name" content="Jenkins 的三种安装方式">
+<meta name="description" content="docker 安装JK下载镜像 1 docker pull jenkins 启动 1 docker run -d -p 8088:8080 -p 50000:50000 -v /docker/jenkins_home:/var/jenkins_home jenkins 报错了，挂在的目录 /docker/jenkins_home 无权限 解决方案：更改宿主机挂载目录的权限,使用 chmod 命令将 /docker/jenkins_home 目录的权限更" /><meta name="keywords" content='jenkins' /><meta itemprop="name" content="Jenkins 的三种安装方式">
 <meta itemprop="description" content="docker 安装JK下载镜像 1 docker pull jenkins 启动 1 docker run -d -p 8088:8080 -p 50000:50000 -v /docker/jenkins_home:/var/jenkins_home jenkins 报错了，挂在的目录 /docker/jenkins_home 无权限 解决方案：更改宿主机挂载目录的权限,使用 chmod 命令将 /docker/jenkins_home 目录的权限更"><meta itemprop="datePublished" content="2024-03-24T00:48:45+08:00" />
 <meta itemprop="dateModified" content="2024-03-24T00:48:45+08:00" />
 <meta itemprop="wordCount" content="1173">
-<meta itemprop="keywords" content="draft," /><meta property="og:title" content="Jenkins 的三种安装方式" />
+<meta itemprop="keywords" content="jenkins," /><meta property="og:title" content="Jenkins 的三种安装方式" />
 <meta property="og:description" content="docker 安装JK下载镜像 1 docker pull jenkins 启动 1 docker run -d -p 8088:8080 -p 50000:50000 -v /docker/jenkins_home:/var/jenkins_home jenkins 报错了，挂在的目录 /docker/jenkins_home 无权限 解决方案：更改宿主机挂载目录的权限,使用 chmod 命令将 /docker/jenkins_home 目录的权限更" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://telzhou618.github.io/posts/704c8ae/" /><meta property="article:section" content="posts" />
@@ -34,7 +34,7 @@
     "mainEntityOfPage": {
       "@type": "WebPage",
       "@id": "https:\/\/telzhou618.github.io\/posts\/704c8ae\/"
-    },"genre": "posts","keywords": "draft","wordcount":  1173 ,
+    },"genre": "posts","keywords": "jenkins","wordcount":  1173 ,
     "url": "https:\/\/telzhou618.github.io\/posts\/704c8ae\/","datePublished": "2024-03-24T00:48:45+08:00","dateModified": "2024-03-24T00:48:45+08:00","publisher": {
       "@type": "Organization",
       "name": ""},"author": {
@@ -170,7 +170,7 @@
   <article class="page single">
     <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span>Jenkins 的三种安装方式</span>
       </h1></div><div class="post-meta">
-      <div class="post-meta-line"><span class="post-author"><a href="https://github.com/telzhou618" title="作者"target="_blank" rel="external nofollow noopener noreferrer author" class="author"><img loading="lazy" src="https://raw.gitmirror.com/telzhou618/images/main/img03/20240423112108.png" alt="telzhou618" data-title="telzhou618" class="avatar" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/>&nbsp;telzhou618</a></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/draft/" class="post-category" title="分类 - draft"><i class="fa-regular fa-folder fa-fw" aria-hidden="true"></i> draft</a></span></div><div class="post-meta-line"><span title="发布于 2024-03-24 00:48:45"><i class="fa-solid fa-calendar-days fa-fw me-1" aria-hidden="true"></i><time datetime="2024-03-24">2024-03-24</time></span>&nbsp;<span title="1173 字"><i class="fa-solid fa-pencil-alt fa-fw me-1" aria-hidden="true"></i>约 1200 字</span>&nbsp;<span><i class="fa-regular fa-clock fa-fw me-1" aria-hidden="true"></i>预计阅读 3 分钟</span>&nbsp;</div>
+      <div class="post-meta-line"><span class="post-author"><a href="https://github.com/telzhou618" title="作者"target="_blank" rel="external nofollow noopener noreferrer author" class="author"><img loading="lazy" src="https://raw.gitmirror.com/telzhou618/images/main/img03/20240423112108.png" alt="telzhou618" data-title="telzhou618" class="avatar" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/>&nbsp;telzhou618</a></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/devops/" class="post-category" title="分类 - devops"><i class="fa-regular fa-folder fa-fw" aria-hidden="true"></i> devops</a></span></div><div class="post-meta-line"><span title="发布于 2024-03-24 00:48:45"><i class="fa-solid fa-calendar-days fa-fw me-1" aria-hidden="true"></i><time datetime="2024-03-24">2024-03-24</time></span>&nbsp;<span title="1173 字"><i class="fa-solid fa-pencil-alt fa-fw me-1" aria-hidden="true"></i>约 1200 字</span>&nbsp;<span><i class="fa-regular fa-clock fa-fw me-1" aria-hidden="true"></i>预计阅读 3 分钟</span>&nbsp;</div>
     </div><div class="details toc" id="toc-static" data-kept="false">
         <div class="details-summary toc-title">
           <span>目录</span>
@@ -526,15 +526,15 @@ ok, 下面安装jenkins。</p>
           </div></div><div class="post-info-line">
         <div class="post-info-md"><span><a href="/posts/704c8ae/index.md" title="阅读原始文档" class="link-to-markdown">阅读原始文档</a></span><span><a href="https://github.com/telzhou618/hugo-blog/blob/main/content/posts%5cjenkins.md?plain=1" title="查看源码"target="_blank" rel="external nofollow noopener noreferrer" class="link-to-source">查看源码</a></span><span><a href="https://github.com/telzhou618/hugo-blog/edit/main/content/posts%5cjenkins.md" title="编辑此页"target="_blank" rel="external nofollow noopener noreferrer" class="link-to-edit">编辑此页</a></span><span><a href="https://github.com/telzhou618/hugo-blog/issues/new?title=[BUG]%20Jenkins&#43;%E7%9A%84%E4%B8%89%E7%A7%8D%E5%AE%89%E8%A3%85%E6%96%B9%E5%BC%8F&amp;body=%7cField%7cValue%7c%0A%7c-%7c-%7c%0A%7cTitle%7cJenkins&#43;%E7%9A%84%E4%B8%89%E7%A7%8D%E5%AE%89%E8%A3%85%E6%96%B9%E5%BC%8F%7c%0A%7cURL%7chttps://telzhou618.github.io/posts/704c8ae/%7c%0A%7cFilename%7chttps://github.com/telzhou618/hugo-blog/blob/main/content/posts%5cjenkins.md?plain=1%7c" title="报告问题"target="_blank" rel="external nofollow noopener noreferrer" class="link-to-report">报告问题</a></span></div>
         <div class="post-info-share">
-          <span><a href="javascript:void(0);" title="分享到 Twitter" data-sharer="twitter" data-url="https://telzhou618.github.io/posts/704c8ae/" data-title="Jenkins 的三种安装方式" data-hashtags="draft"><i class="fa-brands fa-twitter fa-fw" aria-hidden="true"></i></a>
-  <a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="https://telzhou618.github.io/posts/704c8ae/" data-hashtag="draft"><i class="fa-brands fa-facebook-square fa-fw" aria-hidden="true"></i></a>
+          <span><a href="javascript:void(0);" title="分享到 Twitter" data-sharer="twitter" data-url="https://telzhou618.github.io/posts/704c8ae/" data-title="Jenkins 的三种安装方式" data-hashtags="jenkins"><i class="fa-brands fa-twitter fa-fw" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="https://telzhou618.github.io/posts/704c8ae/" data-hashtag="jenkins"><i class="fa-brands fa-facebook-square fa-fw" aria-hidden="true"></i></a>
   <a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="https://telzhou618.github.io/posts/704c8ae/" data-title="Jenkins 的三种安装方式"><i class="fa-brands fa-weibo fa-fw" aria-hidden="true"></i></a>
   </span>
         </div>
       </div></div>
 
   <div class="post-info-more">
-    <section class="post-tags"><i class="fa-solid fa-tags fa-fw me-1" aria-hidden="true"></i><a href="/tags/draft/" class="post-tag" title="标签 - draft">draft</a></section>
+    <section class="post-tags"><i class="fa-solid fa-tags fa-fw me-1" aria-hidden="true"></i><a href="/tags/jenkins/" class="post-tag" title="标签 - jenkins">jenkins</a></section>
     <section>
       <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
     </section>
