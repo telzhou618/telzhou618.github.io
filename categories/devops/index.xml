@@ -37,12 +37,20 @@
   <description><![CDATA[docker 安装JK下载镜像 1 docker pull jenkins 启动 1 docker run -d -p 8088:8080 -p 50000:50000 -v /docker/jenkins_home:/var/jenkins_home jenkins 报错了，挂在的目录 /docker/jenkins_home 无权限 解决方案：更改宿主机挂载目录的权限,使用 chmod 命令将 /docker/jenkins_home 目录的权限更]]></description>
 </item>
 <item>
-  <title>Docker &amp; Docker-compose</title>
+  <title>Docker 入门</title>
   <link>https://telzhou618.github.io/posts/docker/</link>
   <pubDate>Wed, 28 Jun 2023 14:21:07 &#43;0800</pubDate>
   <author>telzhou618</author>
   <guid>https://telzhou618.github.io/posts/docker/</guid>
   <description><![CDATA[Docker 架构 Docker架构 Docker 主要组件包括 Client、Daemon、Images、Container、Registry。 Client ： docker客户端 D]]></description>
+</item>
+<item>
+  <title>Docker-Compose 容器编排</title>
+  <link>https://telzhou618.github.io/posts/docker-compose/</link>
+  <pubDate>Wed, 28 Jun 2023 14:21:07 &#43;0800</pubDate>
+  <author>telzhou618</author>
+  <guid>https://telzhou618.github.io/posts/docker-compose/</guid>
+  <description><![CDATA[Docker-Compose可以批量管理多个容器。 编写 docker-compose 文件 以Redis为例，执行 vi docker-compose-redis.yml。 1 2 3]]></description>
 </item>
 <item>
   <title>SSK key 免密访问 gitlab 配置</title>
@@ -53,7 +61,7 @@
   <description><![CDATA[安装最新 git安装在最新yum源,ius源官方：https://ius.io/setup 1 2 3 yum install \ https://repo.ius.io/ius-release-el7.rpm \ https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm 安装 git 1 2 3 yum remove git yum install -y git236 git --version ssh-gen 命]]></description>
 </item>
 <item>
-  <title>CentOS 安装Docker</title>
+  <title>CentOS 安装 Docker</title>
   <link>https://telzhou618.github.io/posts/docker-install/</link>
   <pubDate>Tue, 11 Apr 2023 10:08:32 &#43;0800</pubDate>
   <author>telzhou618</author>

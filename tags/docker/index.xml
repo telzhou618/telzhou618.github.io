@@ -5,7 +5,7 @@
     <description>docker - 标签 | 扁舟的博客</description>
     <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>telzhou618@qq.com (telzhou618)</managingEditor>
       <webMaster>telzhou618@qq.com (telzhou618)</webMaster><lastBuildDate>Wed, 28 Jun 2023 14:21:07 &#43;0800</lastBuildDate><atom:link href="https://telzhou618.github.io/tags/docker/" rel="self" type="application/rss+xml" /><item>
-  <title>Docker &amp; Docker-compose</title>
+  <title>Docker 入门</title>
   <link>https://telzhou618.github.io/posts/docker/</link>
   <pubDate>Wed, 28 Jun 2023 14:21:07 &#43;0800</pubDate>
   <author>telzhou618</author>
@@ -13,7 +13,15 @@
   <description><![CDATA[Docker 架构 Docker架构 Docker 主要组件包括 Client、Daemon、Images、Container、Registry。 Client ： docker客户端 D]]></description>
 </item>
 <item>
-  <title>CentOS 安装Docker</title>
+  <title>Docker-Compose 容器编排</title>
+  <link>https://telzhou618.github.io/posts/docker-compose/</link>
+  <pubDate>Wed, 28 Jun 2023 14:21:07 &#43;0800</pubDate>
+  <author>telzhou618</author>
+  <guid>https://telzhou618.github.io/posts/docker-compose/</guid>
+  <description><![CDATA[Docker-Compose可以批量管理多个容器。 编写 docker-compose 文件 以Redis为例，执行 vi docker-compose-redis.yml。 1 2 3]]></description>
+</item>
+<item>
+  <title>CentOS 安装 Docker</title>
   <link>https://telzhou618.github.io/posts/docker-install/</link>
   <pubDate>Tue, 11 Apr 2023 10:08:32 &#43;0800</pubDate>
   <author>telzhou618</author>
