@@ -5,7 +5,7 @@
 
 项目如下，是一个简单的springboot项目
 
-![](https://raw.gitmirror.com/telzhou618/images/main/img03/20240506222151.png)
+![](https://raw.gitmirror.com/telzhou618/images/main/img03/20240507020330.png)
 
 定义一个简单接口, 返回 helloworld
 
@@ -30,7 +30,6 @@ public class DemoApplication {
 	}
 }
 ```
-
 单元测试类 DemoApplicationTests.java 
 
 ```java
