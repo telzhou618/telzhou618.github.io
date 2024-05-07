@@ -4,10 +4,10 @@
     <link>https://telzhou618.github.io/tags/jenkins/</link>
     <description>jenkins - 标签 | 扁舟的博客</description>
     <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>telzhou618@qq.com (telzhou618)</managingEditor>
-      <webMaster>telzhou618@qq.com (telzhou618)</webMaster><lastBuildDate>Sun, 24 Mar 2024 00:48:45 &#43;0800</lastBuildDate><atom:link href="https://telzhou618.github.io/tags/jenkins/" rel="self" type="application/rss+xml" /><item>
+      <webMaster>telzhou618@qq.com (telzhou618)</webMaster><lastBuildDate>Sat, 02 Mar 2024 00:00:00 &#43;0000</lastBuildDate><atom:link href="https://telzhou618.github.io/tags/jenkins/" rel="self" type="application/rss+xml" /><item>
   <title>Jenkins 的三种安装方式</title>
   <link>https://telzhou618.github.io/posts/704c8ae/</link>
-  <pubDate>Sun, 24 Mar 2024 00:48:45 &#43;0800</pubDate>
+  <pubDate>Sat, 02 Mar 2024 00:00:00 &#43;0000</pubDate>
   <author>telzhou618</author>
   <guid>https://telzhou618.github.io/posts/704c8ae/</guid>
   <description><![CDATA[docker 安装JK下载镜像 1 docker pull jenkins 启动 1 docker run -d -p 8088:8080 -p 50000:50000 -v /docker/jenkins_home:/var/jenkins_home jenkins 报错了，挂在的目录 /docker/jenkins_home 无权限 解决方案：更改宿主机挂载目录的权限,使用 chmod 命令将 /docker/jenkins_home 目录的权限更]]></description>
