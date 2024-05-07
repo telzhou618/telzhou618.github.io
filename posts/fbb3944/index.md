@@ -1,11 +1,16 @@
 # k8s学习笔记 - Kubekey安装k8s和kubesphere
 
 
-## Kubekey 一键安装k8s
+![](https://raw.gitmirror.com/telzhou618/images/main/img03/20240507164822.png)
+
+
+
+## Kubekey 一键安装k8s集群
+&lt;!--more--&gt;
 
 ### 准备工作
 
-三台虚拟机, 系统为 centos7, 如下
+三台虚拟机, 系统为 centos7, 如下:
 
 | 机器IP         | hostname   | 角色     |
 | ------------ | ---------- | ------ |
@@ -13,7 +18,8 @@
 | 192.168.1.21 | k8s-node1  | worker |
 | 192.168.1.22 | k8s-node2  | worker |
 
-执行如下操作
+
+执行如下操作前置操作
 
 ```shell
 1、关闭防火墙
